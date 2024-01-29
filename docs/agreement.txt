@@ -1,6 +1,6 @@
 
 -----------------------------------------------------------------------------------------------------------------------------------------------------------
-Group Members:
+Group Members & Signatures:
 
 Alex (Wei Le) Zeng
 Zack Steine
@@ -8,6 +8,7 @@ Juno Zhang
 Ethan Cook
 Neil Y Wang
 Sean Shekhtman
+Francis Ayyad
 -----------------------------------------------------------------------------------------------------------------------------------------------------------
 Communication Methods:
 
@@ -20,6 +21,21 @@ GitHub Issues
     - One hour in-person; Monday 3-4pm.
 
 Frequent Update Communication in Discord.
+
+-----------------------------------------------------------------------------------------------------------------------------------------------------------
+Expected Response Time:
+
+Max 48 hours to respond.
+
+-----------------------------------------------------------------------------------------------------------------------------------------------------------
+Contingency Plans:
+
+Backup Scrum Master: Zack
+
+Personal Time Requested: If personal leave is required, please let everyone know
+through sending a message on discord. The group will divide the work of the requested
+individual, and based off of "code reviews" and "updates" text channels on discord, the group
+will obtain an understanding of the work/user stories and plan accordingly.
 -----------------------------------------------------------------------------------------------------------------------------------------------------------
 Version Control:
 
@@ -37,7 +53,7 @@ MERN:
 -----------------------------------------------------------------------------------------------------------------------------------------------------------
 Definition of "Done":
 
-Draft: Implemented and works as intended.
+"Draft": Implemented and works as intended.
 
-Done: Drafted and tested.
+"Done": Drafted and tested.
 -----------------------------------------------------------------------------------------------------------------------------------------------------------
