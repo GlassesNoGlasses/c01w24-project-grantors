@@ -39,3 +39,25 @@ to enlist as one!) and bouncing different ideas to look for the most efficient (
 ![Francis' Portrait](./images/Francis.jpg)
 
 Hey, I'm Francis Ayyad. I'm a third year Computer Science student Specializing in Software Engineering and minoring in statistics. I have some web development expreience with PHP gained through my co-op experience. My favoirte programming language is C since I am probbably best at this language from University. In my free time, I enjoy watching football/soccer games and supporting FC Barcelona!
+
+Student Number: 1008091985
+email: francis.ayyad@mail.utoronto.ca
+UTORID: ayyadfra
+
+
+## Juno Zhang
+
+1007925872
+zha11325
+juno.zhang@mail.utoronto.ca
+
+![Juno's Portrait](./images/juno.jpg)
+
+Hi! My name is Juno, and I am a third year Computer Scienece student at the University of Toronto Scarborough.
+I enjoy systems programming and generally working in low-level environments. I have experience working with
+computer hardware, etching PCB boards and tinkering with Arduino kits. In my spare time, I am interested in
+printmaking, and I also self-publish comics, which inspires me to explore intersections between visual arts 
+and technology. 
+
+
+ 
