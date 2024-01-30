@@ -60,5 +60,12 @@ computer hardware, etching PCB boards and tinkering with Arduino kits. In my spa
 printmaking, and I also self-publish comics, which inspires me to explore intersections between visual arts 
 and technology. 
 
+## Alex Zeng
 
- 
+<img src="./images/alex.JPEG" alt="drawing" width="350"/>
+
+Hello there, I'm Alex! I am currently in my third year of my Computer Science Specialist and Statistic Minor. I think Computer Science is a fascinating field of study given the wide coverage from fundamentals on how a computer functions to advanced topics such as artificial intelligence. I have experience working with Agile deveopment in languages such as Python, JavaScript, and C++. Recently, I've gained in interest in artificial intelligence and machine learning as I think these are technologies that will shape the future. I hope I could put my knowledge to good use for this project!
+
+Student Number: 1008064381
+email: a.zeng@mail.utoronto.ca
+UTORID: zengwe11
