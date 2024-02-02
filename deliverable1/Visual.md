@@ -1,3 +1,5 @@
+### Lucy, 18
+
 [Image of Lucy](./images/Lucy_Visual.png)
 
 Lucy is a 18 year old high-school student, currently in the process of applying for universities. Because she wants to study outside of her province, Lucy is looking for grants to help pay for tuition and living costs. Lucy has Deuteranopia, also known as red-green colour-blindness as well as peripheral vision loss, which limits her field of vision.
