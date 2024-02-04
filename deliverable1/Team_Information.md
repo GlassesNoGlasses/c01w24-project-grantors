@@ -69,3 +69,14 @@ Hello there, I'm Alex! I am currently in my third year of my Computer Science Sp
 Student Number: 1008064381
 email: a.zeng@mail.utoronto.ca
 UTORID: zengwe11
+
+
+## Neil Wang
+
+<img src="./images/neil.jpg" alt="drawing" width="350"/>
+
+Hey there! My name is Neil and I'm currently a third year Computer Science student at UTSC. Specializing in software engineering, I enjoy designing practical applications that I can use in my day-to-day life. I'm currently working on creating a website analytics extension for google to track how I spend my time on the internet. Coming from a full-stack background, I am proficient in both front-end (JavaScript, React.js, etc.) and back-end (Ruby, NoSQL, etc.) technologies. I look forward to building a web application to help the grant process!
+
+Student Number: 1007731983
+email: neily.wang@mail.utoronto.ca
+UTORID: wangnei3

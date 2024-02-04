@@ -1,6 +1,6 @@
 <h1>Phyros, 17</h1>
 
-![Phyros' Portrait](./images/Phyros_Physical.webp)
+![Phyros' Portrait](../images/Phyros_Physical.webp)
 
 Phyros is a 17 year old football player born in Minnesota, US.
 He's happy and sociable with a plethora of friends in Harding High School.
