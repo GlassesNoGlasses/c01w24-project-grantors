@@ -48,8 +48,8 @@ UTORID: ayyadfra
 
 ## Juno Zhang
 
-1007925872
 zha11325
+
 juno.zhang@mail.utoronto.ca
 
 ![Juno's Portrait](./images/juno.jpg)
@@ -70,6 +70,18 @@ Student Number: 1008064381
 email: a.zeng@mail.utoronto.ca
 UTORID: zengwe11
 
+## Zack Steine
+Student Number: 1007533313
+email: zack.steine@mail.utoronto.ca
+UTORID: steineza
+
+![Zack's Portrait](./images/zack.jpg)
+
+Hi everyone, I'm Zack. I'm in my third year at the University of Toronto where I am doing a Computer Science Specialist and Statistics Major. 
+I am interested in the theory of statistics and using it to solve complex problems with machine learning. My experience is mainly from
+my 16 month coop as a Java developer, but I am also doing a project course right now on a webapp in Angular. In my free time I like to
+watch hockey, pet cats, go to the gym, and eat food that I cook and bake. 
+
 
 ## Neil Wang
 
@@ -80,3 +92,4 @@ Hey there! My name is Neil and I'm currently a third year Computer Science stude
 Student Number: 1007731983
 email: neily.wang@mail.utoronto.ca
 UTORID: wangnei3
+
