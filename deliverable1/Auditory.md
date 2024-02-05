@@ -1,6 +1,6 @@
 # Charles, 25
 
-![Image of Charles](./images/Charles_Auditory.jpg)
+<img src="./images/Charles_Auditory.jpg" style="width: 50%;" alt="Image of Charles">
 
 Charles, a 25-year-old male, is navigating life with an auditory disability. He is an outstanding student excelling in arts and sciences, passionate about continuing his education to gain a postgraduate degree in Business Management. His dream is to create his own personal business. However, his condition poses unique challenges, especially when accessing digital information and services. Currently, Charles is on a journey to enhance his career opportunities through further education and professional development courses. He is diligent in researching and applying for relevant grants and resources that could aid his career growth. However, Charles encounters several barriers on websites and digital platforms that significantly hinder his ability to gather information and complete applications smoothly.
 
