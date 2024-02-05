@@ -81,3 +81,15 @@ Hi everyone, I'm Zack. I'm in my third year at the University of Toronto where I
 I am interested in the theory of statistics and using it to solve complex problems with machine learning. My experience is mainly from
 my 16 month coop as a Java developer, but I am also doing a project course right now on a webapp in Angular. In my free time I like to
 watch hockey, pet cats, go to the gym, and eat food that I cook and bake. 
+
+
+## Neil Wang
+
+<img src="./images/neil.jpg" alt="drawing" width="350"/>
+
+Hey there! My name is Neil and I'm currently a third year Computer Science student at UTSC. Specializing in software engineering, I enjoy designing practical applications that I can use in my day-to-day life. I'm currently working on creating a website analytics extension for google to track how I spend my time on the internet. Coming from a full-stack background, I am proficient in both front-end (JavaScript, React.js, etc.) and back-end (Ruby, NoSQL, etc.) technologies. I look forward to building a web application to help the grant process!
+
+Student Number: 1007731983
+email: neily.wang@mail.utoronto.ca
+UTORID: wangnei3
+
