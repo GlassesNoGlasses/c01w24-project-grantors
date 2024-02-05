@@ -73,7 +73,7 @@ UTORID: zengwe11
 ## Zack Steine
 Student Number: 1007533313
 email: zack.steine@mail.utoronto.ca
-UTORID: zsteine
+UTORID: steineza
 
 ![Zack's Portrait](./images/zack.jpg)
 
