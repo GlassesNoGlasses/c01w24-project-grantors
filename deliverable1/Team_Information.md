@@ -48,8 +48,8 @@ UTORID: ayyadfra
 
 ## Juno Zhang
 
-1007925872
 zha11325
+
 juno.zhang@mail.utoronto.ca
 
 ![Juno's Portrait](./images/juno.jpg)
