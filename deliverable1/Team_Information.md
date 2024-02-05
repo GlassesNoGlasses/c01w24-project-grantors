@@ -69,3 +69,15 @@ Hello there, I'm Alex! I am currently in my third year of my Computer Science Sp
 Student Number: 1008064381
 email: a.zeng@mail.utoronto.ca
 UTORID: zengwe11
+
+## Zack Steine
+Student Number: 1007533313
+email: zack.steine@mail.utoronto.ca
+UTORID: zsteine
+
+![Zack's Portrait](./images/zack.jpg)
+
+Hi everyone, I'm Zack. I'm in my third year at the University of Toronto where I am doing a Computer Science Specialist and Statistics Major. 
+I am interested in the theory of statistics and using it to solve complex problems with machine learning. My experience is mainly from
+my 16 month coop as a Java developer, but I am also doing a project course right now on a webapp in Angular. In my free time I like to
+watch hockey, pet cats, go to the gym, and eat food that I cook and bake. 
