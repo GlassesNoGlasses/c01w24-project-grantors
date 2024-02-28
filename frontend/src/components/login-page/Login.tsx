@@ -4,7 +4,7 @@ import './Login.css';
 import emailIcon from '../../images/iconMail.png';
 import passwordIcon from '../../images/iconPassword.png';
 
-const Login: React.FC<LoginProps> = ({ errorMessage }) => { // Correctly destructure the props here
+const Login: React.FC<LoginProps> = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
@@ -33,7 +33,6 @@ const Login: React.FC<LoginProps> = ({ errorMessage }) => { // Correctly destruc
     <div className="login-container">
       <div className="login-box">
         <h3 className="title">Log in to your account</h3>
-        {errorMessage && <div className="error-message">{errorMessage}</div>} {/* Display the error message if it exists */}
         <form onSubmit={handleSubmit}>
           <div className="input-group">
             <img src={emailIcon} alt="Email" className="input-icon" />
