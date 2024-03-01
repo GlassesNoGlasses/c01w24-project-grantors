@@ -1,5 +1,6 @@
 .login-container {
   @apply flex items-center justify-center min-h-screen bg-gray-100;
+  background-color: rgb(141, 229, 100);
 }
 
 .login-box {
@@ -25,12 +26,27 @@
 
 .submit-btn {
   @apply px-4 py-2 mt-4 text-white bg-green-500 rounded-lg hover:bg-green-600 sm:px-6 sm:py-3;
+  width: 100%;
 }
 
 .forgot-password {
   @apply text-sm text-green-500 hover:underline sm:text-base text-green-600;
+  display: flex;
+  float: right;
+}
+
+.feedback-container{
+  height: 2.5vh;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .input-feedback {
   color : red;
+}
+
+.form-footer-container {
+  margin-top: 5%;
 }

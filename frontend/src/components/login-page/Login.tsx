@@ -3,7 +3,7 @@ import { LoginProps } from './LoginProps';
 import './Login.css';
 import emailIcon from '../../images/iconMail.png';
 import passwordIcon from '../../images/iconPassword.png';
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 
 const SERVER_PORT:number = 8000;
@@ -29,13 +29,13 @@ const Login: React.FC<LoginProps> = () => {
   
       switch (response.status) {
         case 404:
-          setFeedback("User Not Found")
+          setFeedback("user does not exist, perhaps you would like to sign up?")
           break;
         case 400:
           setFeedback("Missing Required Fields")
           break;
         case 401:
-          setFeedback("Invalid Credentials")
+          setFeedback("invalid credentials, please try again.")
           break;
         case 500:
           throw new Error('Failed to login');
@@ -89,12 +89,19 @@ const Login: React.FC<LoginProps> = () => {
               required
             />
           </div>
-          
-          <div className="flex items-baseline justify-between">
-            <button type="submit" className="submit-btn">Login</button>
+          <div className="feedback-container">
             <span className='input-feedback align-center'>{feedback}</span>
+          </div>
+          <div className="flex items-baseline justify-center align-center">
+            <button type="submit" className="submit-btn">Login</button>
+          </div>
+          <div className='form-footer-container'>
+            <Link to="/signup">
+              <span style={{ textDecoration: 'underline' }}>Sign Up</span>
+            </Link>
             <a href="#" className="forgot-password">Forgot password?</a>
           </div>
+          
         </form>
       </div>
     </div>
