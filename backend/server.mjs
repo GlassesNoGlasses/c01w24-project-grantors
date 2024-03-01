@@ -1,5 +1,6 @@
 import express from 'express';
 import { MongoClient, ObjectId } from "mongodb";
+import cors from "cors";
 
 const app = express();
 const PORT = 8000;
@@ -28,6 +29,8 @@ connectToMongo();
 app.listen(PORT, () => {
   console.log(`Server is running on http://localhost:${PORT}`);
 });
+
+app.use(cors());
 
 // Routes
 app.get('/', (req, res) => {
@@ -59,7 +62,7 @@ app.post('/login', express.json(), async (req, res) => {
       }
       return res.status(200).send({ admin:email.isAdmin});
     } else if (!(uname.password === password)){
-      return res.status(404).json({'error' : 'Incorrect Credentials'});
+      return res.status(401).json({'error' : 'Incorrect Credentials'});
     }
 
     return res.status(200).send({ admin:uname.isAdmin});
