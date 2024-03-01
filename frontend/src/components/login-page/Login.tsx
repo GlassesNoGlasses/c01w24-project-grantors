@@ -3,6 +3,8 @@ import { LoginProps } from './LoginProps';
 import './Login.css';
 import emailIcon from '../../images/iconMail.png';
 import passwordIcon from '../../images/iconPassword.png';
+import { useNavigate } from "react-router-dom";
+
 
 const SERVER_PORT:number = 8000;
 
@@ -10,6 +12,8 @@ const Login: React.FC<LoginProps> = () => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [feedback, setFeedback] = useState('');
+  const navigate = useNavigate();
+  
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -31,7 +35,7 @@ const Login: React.FC<LoginProps> = () => {
           setFeedback("Missing Required Fields")
           break;
         case 401:
-          setFeedback("Incorrect Credentials")
+          setFeedback("Invalid Credentials")
           break;
         case 500:
           throw new Error('Failed to login');
@@ -41,9 +45,11 @@ const Login: React.FC<LoginProps> = () => {
             if (data["admin"]) {
               console.log(`Welcome Admin ${username}`)
               setFeedback('')
+              navigate("/admin-dashboard");
             } else {
               console.log(`Welcome User ${username}`)
               setFeedback('')
+              navigate("/dashboard");
             }
         }) 
           break;
