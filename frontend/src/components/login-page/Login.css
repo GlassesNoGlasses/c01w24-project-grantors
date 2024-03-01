@@ -30,3 +30,7 @@
 .forgot-password {
   @apply text-sm text-green-500 hover:underline sm:text-base text-green-600;
 }
+
+.input-feedback {
+  color : red;
+}

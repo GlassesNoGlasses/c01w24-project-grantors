@@ -9,6 +9,7 @@ const SERVER_PORT:number = 8000;
 const Login: React.FC<LoginProps> = () => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
+  const [feedback, setFeedback] = useState('');
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -24,18 +25,27 @@ const Login: React.FC<LoginProps> = () => {
   
       switch (response.status) {
         case 404:
-          console.log("User Not Found")
+          setFeedback("User Not Found")
           break;
         case 400:
-          console.log("Missing Required Fields")
+          setFeedback("Missing Required Fields")
           break;
         case 401:
-          console.log("Incorrect Credentials")
+          setFeedback("Incorrect Credentials")
           break;
         case 500:
           throw new Error('Failed to login');
         case 200:
           console.log('Login successful');
+          await response.json().then((data) => {
+            if (data["admin"]) {
+              console.log(`Welcome Admin ${username}`)
+              setFeedback('')
+            } else {
+              console.log(`Welcome User ${username}`)
+              setFeedback('')
+            }
+        }) 
           break;
       }
       
@@ -73,8 +83,10 @@ const Login: React.FC<LoginProps> = () => {
               required
             />
           </div>
+          
           <div className="flex items-baseline justify-between">
             <button type="submit" className="submit-btn">Login</button>
+            <span className='input-feedback align-center'>{feedback}</span>
             <a href="#" className="forgot-password">Forgot password?</a>
           </div>
         </form>
