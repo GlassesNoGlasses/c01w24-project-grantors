@@ -3,6 +3,13 @@ import { AdminDashboardProps } from './AdminDashboardProps'
 
 const AdminDashboard = ({
   }: AdminDashboardProps) => {
+    /*
+    TODO:
+    - View grants
+    - Logout button
+    - Edit Top navigation
+
+    */
 
     
   return (

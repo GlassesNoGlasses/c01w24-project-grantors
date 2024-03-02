@@ -30,6 +30,7 @@ const Home = ({
   return (
     <div>
       {RenderHomepage()}
+      <button onClick={() => setUser(testAdmin)}>Admin</button>
     </div>
   )
 }
