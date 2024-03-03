@@ -29,7 +29,7 @@ const AdminDashboard = ({
           <ButtonIcon imageSrc={logoutIcon} label={"Log Out"} callback={() => setUser(null)}/>
         </Link>
       </div>
-      <div className='flex justify-evenly items-center'>
+      <div className='flex justify-evenly items-center h-1/4'>
         <ApplicationIcon imageSrc={list} label={"View Hosted Grants"}/>
         <ApplicationIcon imageSrc={search} label={"Review Applications"}/>
       </div>
@@ -39,13 +39,3 @@ const AdminDashboard = ({
 
 export default AdminDashboard
 
-// Styling
-const styles = {
-  applicationOptionStyles: {
-    display: "flex",
-    height: "40%",
-    width: "100%",
-    justifyContent: "space-evenly",
-    alignItems: "center",
-  }
-}
