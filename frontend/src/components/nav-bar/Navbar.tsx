@@ -56,7 +56,7 @@ const Navbar = ({
   };
 
   return (
-    <div style={{height: "100%", width: "100%"}}>
+    <div className="w-full h-full">
       <nav className='nav-bar' style={styles.navBarStyles}>
         <div className='nav-container' style={styles.navContainerStyles}>
           <Link to="/" className='nav-brand'>
