@@ -83,10 +83,10 @@ app.post("/signup", express.json(), async (req, res) => {
     const { username, email, password, firstName, lastName, isAdmin} = req.body;
 
     // Basic body request check
-    if (!username || !password) {
+    if (!username || !password || !email) {
       return res
         .status(400)
-        .json({ error: "Username and password both needed to register." });
+        .json({ error: "Username and email and password are all needed to register." });
     }
 
     // Checking if username does not already exist in database
