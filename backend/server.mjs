@@ -6,7 +6,7 @@ import jwt from "jsonwebtoken";
 const app = express();
 const PORT = 8000;
 const MONGO_URL = "mongodb://127.0.0.1:27017";
-const DB_NAME = "data";
+const DB_NAME = "grantors";
 const COLLECTIONS = {
   users: "users",
 };
