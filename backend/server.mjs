@@ -47,7 +47,7 @@ app.post('/login', express.json(), async (req, res) => {
     if (!username || !password) {
       return res
         .status(400)
-        .json({ error: "Username and password both needed to login." });
+        .json({ 'error': "Username and password both needed to login." });
     }
 
     const collection = db.collection("users");
