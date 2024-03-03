@@ -2,8 +2,6 @@ import { NavbarProps } from './NavbarProps'
 import { Link, Outlet } from 'react-router-dom'
 import logoImage from '../../images/grantors-logo.png'
 import { useUserContext } from '../contexts/userContext'
-import AdminNav from './admin-nav/AdminNav'
-import ClientNav from './client-nav/ClientNav'
 
 const Navbar = ({}: NavbarProps) => {
 
@@ -31,46 +29,61 @@ const Navbar = ({}: NavbarProps) => {
       </Link>
     )
   }
+
+  const SignOutButton = () => {
+    return (
+      <Link className='p-2 px-5 m-2 bg-red-500 hover:bg-red-600 active:bg-red-700
+        text-white font-bold rounded-lg shadow-md transition-colors duration-150 ease-in
+        text-base'
+        to='/'>
+        Sign Out
+      </Link>
+    )
+  }
   
 
   const AdminTopNaviation = (): JSX.Element =>  {
     return (
-      <nav className='nav-bar' style={styles.navBarStyles}>
-        <div className='nav-container' style={styles.navContainerStyles}>
-          <Link to="/" className='nav-brand'>
-            <img src={logoImage} className='nav-logo'/>
-          </Link>
-          <AdminNav user={user}/>
+      <>
+        <Link className='text-base hover:underline' to="/">Create Grants</Link>
+        <Link className='text-base hover:underline' to="/about">About</Link>
+        <Link className='text-base hover:underline' to="/services">Services</Link>
+        <Link className='text-base hover:underline' to="/gallery">Gallery</Link>
+        <Link className='text-base hover:underline' to="/contact">Contact</Link>
+        <div className='flex flex-row gap-4 items-center'>
+          <p className='text-base'>{user?.username}</p>
+          <SignOutButton />
         </div>
-    </nav>
+      </>
     )
   };
 
   const ClientTopNavigation = (): JSX.Element =>  {
     return (
-      <nav className='nav-bar' style={styles.navBarStyles}>
-        <div className='nav-container' style={styles.navContainerStyles}>
-          <Link to="/" className='nav-brand'>
-            <img src={logoImage} className='nav-logo'/>
-          </Link>
-          <ClientNav user={user}/>
+      <>
+        <Link className='text-base hover:underline' to="/">Grants</Link>
+        <Link className='text-base hover:underline' to="/about">About</Link>
+        <Link className='text-base hover:underline' to="/services">Services</Link>
+        <Link className='text-base hover:underline' to="/gallery">Gallery</Link>
+        <Link className='text-base hover:underline' to="/contact">Contact</Link>
+        <div className='flex flex-row gap-4 items-center'>
+          <p className='text-base'>{user?.username}</p>
+          <SignOutButton />
         </div>
-    </nav>)
+      </>
+    )
   };
 
   const DefaultTopNavigation = (): JSX.Element => {
     return (
-      <nav className='flex flex-col sm:flex-row justify-between items-center sm:pr-8 border-b-2 border-black'>
-        <Link to="/" className='nav-brand'>
-          <img src={logoImage} className='nav-logo'/>
-        </Link>
+      <>
         <Link className='text-base hover:underline' to="/about">About</Link>
         <Link className='text-base hover:underline' to="/services">Services</Link>
         <Link className='text-base hover:underline' to="/gallery">Gallery</Link>
         <Link className='text-base hover:underline' to="/contact">Contact</Link>
         <LoginButton />
         <SignUpButton />
-      </nav>
+      </>
     )
   };
 
@@ -84,34 +97,15 @@ const Navbar = ({}: NavbarProps) => {
 
   return (
     <div className='h-full w-full'>
-      {SetTopNavigation()}
+      <nav className='flex flex-col sm:flex-row justify-between items-center sm:pr-8 border-b-2 border-black'>
+        <Link to="/" className='nav-brand'>
+          <img src={logoImage} className='nav-logo'/>
+        </Link>
+        {SetTopNavigation()}
+      </nav>
       <Outlet />
     </div>
   )
 }
 
 export default Navbar
-
-const styles = {
-  navBarStyles: {
-    height: "fit-content",
-    width: "100%",
-  },
-  navContainerStyles: {
-    height: "fit-content",
-    width: "100%",
-    display: "flex",
-    flexDirection: "row" as "row",
-    justifyContent: "space-evenly",
-    alignItems: "center",
-    borderBottom: "black",
-    borderStyle: "solid"
-  },
-  navInformationStyles: {
-    display: "inline-flex",
-    height: "100%",
-    width: "90%",
-    flexDirection: "row" as "row",
-    justifyContent: "space-evenly",
-  }
-}
