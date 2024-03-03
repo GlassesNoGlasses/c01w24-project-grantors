@@ -45,7 +45,7 @@ const Login: React.FC<LoginProps> = () => {
             if (data["admin"]) {
               console.log(`Welcome Admin ${username}`)
               setFeedback('')
-              navigate("/admin-dashboard");
+              navigate("/admin/dashboard");
             } else {
               console.log(`Welcome User ${username}`)
               setFeedback('')

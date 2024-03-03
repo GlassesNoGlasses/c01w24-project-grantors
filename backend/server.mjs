@@ -1,11 +1,13 @@
 import express from 'express';
 import { MongoClient, ObjectId } from "mongodb";
 import cors from "cors";
+import bcrypt from "bcrypt";
 
 const app = express();
 const PORT = 8000;
 const MONGO_URL = "mongodb://localhost:27017";
 const DB_NAME = "grantors";
+
 
 // Connect to MongoDB
 let db;
@@ -57,11 +59,11 @@ app.post('/login', express.json(), async (req, res) => {
     }
 
     if (!uname) {
-      if (!(email.password === password)) {
+      if (!(await bcrypt.compare(password, email.password))) {
         return res.status(401).json({'error' : 'Incorrect Credentials'});
       }
       return res.status(200).send({ admin:email.isAdmin});
-    } else if (!(uname.password === password)){
+    } else if (!(await bcrypt.compare(password, uname.password))){
       return res.status(401).json({'error' : 'Incorrect Credentials'});
     }
 
