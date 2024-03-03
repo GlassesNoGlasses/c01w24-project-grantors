@@ -16,8 +16,13 @@ module.exports = {
       '3xl': '2.5rem',
       '4xl': '3rem',
       '5xl': '4rem',
+      '6xl': '5rem'
     },
-    extend: {},
+    extend: {
+      colors: {
+        'grantor-green': 'rgb(141, 229, 100)',
+      }
+    },
   },
   plugins: [],
 }
