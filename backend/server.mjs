@@ -62,12 +62,12 @@ app.post('/login', express.json(), async (req, res) => {
       if (!(await bcrypt.compare(password, email.password))) {
         return res.status(401).json({'error' : 'Incorrect Credentials'});
       }
-      return res.status(200).send({ admin:email.isAdmin});
+      return res.status(200).send({ admin:email.isAdmin, loginType: 1});
     } else if (!(await bcrypt.compare(password, uname.password))){
       return res.status(401).json({'error' : 'Incorrect Credentials'});
     }
 
-    return res.status(200).send({ admin:uname.isAdmin});
+    return res.status(200).send({ admin:uname.isAdmin, loginType: 2 });
 
   } catch {
     res.status(500).send('Server Error with Logging In');

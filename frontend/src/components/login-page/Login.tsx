@@ -4,6 +4,8 @@ import './Login.css';
 import emailIcon from '../../images/iconMail.png';
 import passwordIcon from '../../images/iconPassword.png';
 import { Link, useNavigate } from "react-router-dom";
+import { useUserContext } from '../contexts/userContext';
+import { User } from '../interfaces/user';
 
 
 const SERVER_PORT:number = 8000;
@@ -13,6 +15,18 @@ const Login: React.FC<LoginProps> = () => {
   const [password, setPassword] = useState('');
   const [feedback, setFeedback] = useState('');
   const navigate = useNavigate();
+
+  const {user, setUser} = useUserContext();
+
+  const InstantiateUser = (username: string, password: string, isAdmin: boolean, loginType: number): User => {
+    if (loginType === 1) {
+      return {accountID: null, isAdmin: isAdmin, username: null, firstName: null,
+        lastName: null, email: username, password: password};
+    } 
+    return {accountID: null, isAdmin: isAdmin, username: username, firstName: null,
+        lastName: null, email: null, password: password};
+
+  };
   
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
@@ -42,15 +56,14 @@ const Login: React.FC<LoginProps> = () => {
         case 200:
           console.log('Login successful');
           await response.json().then((data) => {
-            if (data["admin"]) {
-              console.log(`Welcome Admin ${username}`)
-              setFeedback('')
-              navigate("/admin/dashboard");
-            } else {
-              console.log(`Welcome User ${username}`)
-              setFeedback('')
-              navigate("/dashboard");
+            if (data["loginType"] > 2 || data["loginType"] < 1) {
+              throw new Error('Invalid loginType: ', data["loginType"]);
             }
+
+            console.log(`Welcome ${username}`)
+            setFeedback('')
+            setUser(InstantiateUser(username, password, data["admin"], data["loginType"]))
+            navigate("/");
         }) 
           break;
       }
