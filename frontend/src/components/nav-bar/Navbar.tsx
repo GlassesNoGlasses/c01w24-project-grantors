@@ -1,20 +1,14 @@
-import React from 'react'
 import { NavbarProps } from './NavbarProps'
 import { Link, Outlet } from 'react-router-dom'
 import logoImage from '../../images/grantors-logo.png'
 import { useUserContext } from '../contexts/userContext'
-import { UserType } from '../interfaces/user'
 import AdminNav from './admin-nav/AdminNav'
+import ClientNav from './client-nav/ClientNav'
 
-const Navbar = ({
-  prop1,
-  prop2,
-  prop3
-}: NavbarProps) => {
+const Navbar = ({}: NavbarProps) => {
 
   // Get User Context
   const {user} = useUserContext();
-
 
   const LoginButton = () => {
     return (
@@ -59,7 +53,7 @@ const Navbar = ({
           <Link to="/" className='nav-brand'>
             <img src={logoImage} className='nav-logo'/>
           </Link>
-          <AdminNav user={user}/>
+          <ClientNav user={user}/>
         </div>
     </nav>)
   };
@@ -68,7 +62,7 @@ const Navbar = ({
     return (
       <nav className='flex flex-col sm:flex-row justify-between items-center sm:pr-8 border-b-2 border-black'>
         <Link to="/" className='nav-brand'>
-          <img src='/grantors-logo.png' className='nav-logo'/>
+          <img src={logoImage} className='nav-logo'/>
         </Link>
         <Link className='text-base hover:underline' to="/about">About</Link>
         <Link className='text-base hover:underline' to="/services">Services</Link>
@@ -81,18 +75,15 @@ const Navbar = ({
   };
 
   const SetTopNavigation = (): JSX.Element => {
-    switch (user?.type) {
-      case UserType.Admin:
-        return AdminTopNaviation();
-      case UserType.Client:
-        return ClientTopNavigation();
-      default:
-        return DefaultTopNavigation();
+    if (!user) {
+      return DefaultTopNavigation();
     }
+
+    return user.isAdmin ? AdminTopNaviation() : ClientTopNavigation();
   };
 
   return (
-    <div>
+    <div className='h-full w-full'>
       {SetTopNavigation()}
       <Outlet />
     </div>
@@ -123,5 +114,4 @@ const styles = {
     flexDirection: "row" as "row",
     justifyContent: "space-evenly",
   }
-  
 }

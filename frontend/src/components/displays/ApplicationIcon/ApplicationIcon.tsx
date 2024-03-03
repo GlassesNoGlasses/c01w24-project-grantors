@@ -26,13 +26,12 @@ const styles = {
         alignItems: "center",
         backgroundColor: "white",
         padding: "2%",
-        height: "80%",
+        height: "85%",
         aspectRatio: "3 / 2",
         borderRadius: "5%"
     },
     imageStyles: {
         maxHeight: "200px",
         maxWidth: "200px",
-        marginBottom: "5%"
     }
 }

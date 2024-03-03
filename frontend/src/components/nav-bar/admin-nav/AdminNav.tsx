@@ -8,7 +8,7 @@ const AdminNav = ({
 }: AdminNavProps) => {
     
     const GenerateUserTitle = (): JSX.Element => {
-        const title = `Loggin in as: ${user?.username} `;
+        const title = `${user?.username} `;
 
         return (
             <h2 style={{fontSize: "x-large"}}>
