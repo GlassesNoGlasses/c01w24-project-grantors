@@ -12,7 +12,7 @@ function App() {
     <div className="App" style={AppStyle}>
       {UserContextProvider(
         <Routes>
-            <Route path="/" element={<Navbar prop1="test" prop2={[]} prop3={false}/>}>
+            <Route path="/" element={<Navbar />}>
               <Route index element={<Home />} />
               <Route path="about" element={<Home />} />
               <Route path="services" element={<Home />} />

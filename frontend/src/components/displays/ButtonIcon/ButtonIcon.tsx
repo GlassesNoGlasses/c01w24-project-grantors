@@ -8,27 +8,24 @@ const ButtonIcon = ({
     callback,
 }: ButtonIconProps) => {
 
-  return (
-    <div>
-        <button style={styles.buttonStyles} onClick={callback}>
-            <div className={`icone-${imageSrc}`} style={styles.imageStyes}>
+    return (
+        <button className='flex flex-col items-center justify-center' onClick={callback}>
+            <div className='bg-white' style={styles.imageStyes}>
                 {imageSrc ? (
                     <img src={imageSrc}></img>
                 ) : (
                     heroicon
-                )}
+                ) }
             </div>
-            <span style={{fontSize: "x-large", color: "white", fontWeight: "bold"}}>{label ? label : ""}</span>
+            <p className='text-xl text-white font-bold'>{label ? label : ""}</p>
         </button>
-    </div>
-  )
+    )
 }
 
 export default ButtonIcon
 
 const styles = {
     imageStyes: {
-        background: "white",
         borderRadius: "50%",
         padding: "15%",
         height: "16vh",

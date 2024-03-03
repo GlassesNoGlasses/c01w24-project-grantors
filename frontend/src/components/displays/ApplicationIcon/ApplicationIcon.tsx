@@ -8,37 +8,17 @@ const ApplicationIcon = ({
     label
 }: ApplicationIconProps) => {
   return (
-    <div className={`application-${label}`} style={styles.applicationContainerStyles}>
-        <button>
-            <div className={`icone-${imageSrc}`} style={styles.imageStyles}>
-                {imageSrc ? (
-                    <img src={imageSrc}></img>
-                    ) : (
-                        heroicon
-                    ) }
-            </div>
-            <span style={{fontSize: "x-large", fontWeight: "bold"}}>{label}</span>
-        </button>
-    </div>
+    <button className='flex flex-col items-center bg-white rounded-lg p-4 px-6 gap-2'>
+        <div className='max-h-48 max-w-48'>
+            {imageSrc ? (
+                <img src={imageSrc}></img>
+                ) : (
+                heroicon
+            )}
+        </div>
+        <p className='text-lg font-bold'>{label}</p>
+    </button>
   )
 }
 
 export default ApplicationIcon
-
-const styles = {
-    applicationContainerStyles: {
-        display: "flex",
-        flexDirection: "column" as "column",
-        alignItems: "center",
-        backgroundColor: "white",
-        padding: "2%",
-        height: "80%",
-        aspectRatio: "3 / 2",
-        borderRadius: "5%"
-    },
-    imageStyles: {
-        maxHeight: "200px",
-        maxWidth: "200px",
-        marginBottom: "5%"
-    }
-}

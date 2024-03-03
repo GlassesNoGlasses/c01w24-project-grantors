@@ -18,22 +18,10 @@ const AdminDashboard = ({
     // States used
     const {user, setUser} = useUserContext();
 
-    const GenerateWelcomeMessage = (): JSX.Element => {
-      const message = `Welcome: ${user?.username}!`;
-
-      return (
-        <div style={styles.userIntroStyle}>
-          {message}
-        </div>
-      )
-    }
-
   return (
-    <div className="dashboard-container" style={styles.dashboardContainer}>
-      <div className="admin-intro">
-          {GenerateWelcomeMessage()}
-      </div>
-      <div className="admin-options" style={styles.iconOptionStyles}>
+    <div className='h-full bg-grantor-green flex flex-col gap-28'>
+      <h2 className='text-6xl underline text-white pl-8'>Welcome: {user?.username}!</h2>
+      <div className='flex justify-evenly items-center'>
         <ButtonIcon imageSrc={addIcon} label={"New Grant"}/>
         <ButtonIcon imageSrc={userIcon} label={"My Account"}/>
         <ButtonIcon imageSrc={settingsIcon} label={"Settings"}/>
@@ -41,7 +29,7 @@ const AdminDashboard = ({
           <ButtonIcon imageSrc={logoutIcon} label={"Log Out"} callback={() => setUser(null)}/>
         </Link>
       </div>
-      <div className="application-options" style={styles.applicationOptionStyles}>
+      <div className='flex justify-evenly items-center'>
         <ApplicationIcon imageSrc={list} label={"View Hosted Grants"}/>
         <ApplicationIcon imageSrc={search} label={"Review Applications"}/>
       </div>
@@ -53,27 +41,6 @@ export default AdminDashboard
 
 // Styling
 const styles = {
-  dashboardContainer: {
-    height: "100%",
-    width: "100%",
-    backgroundColor: "rgb(141, 229, 100)",
-    overflowY: "auto" as "auto"
-  },
-  userIntroStyle: {
-    fontSize: "5vw",
-    textDecoration: "underline",
-    textAlign: "left" as "left",
-    color: "white",
-    paddingLeft: "2%",
-    fontWeight: "bold",
-  },
-  iconOptionStyles: {
-    display: "flex",
-    height: "30%",
-    width: "100%",
-    justifyContent: "space-evenly",
-    alignItems: "center",
-  },
   applicationOptionStyles: {
     display: "flex",
     height: "40%",
