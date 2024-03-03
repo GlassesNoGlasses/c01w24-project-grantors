@@ -26,4 +26,10 @@
   .submit-btn {
     @apply px-4 py-2 mt-4 text-white bg-green-500 rounded-lg hover:bg-green-600 sm:px-6 sm:py-3;
   }
+
+  .is-admin-button {
+    @apply mr-2 text-blue-700;
+  }
+  
+  
   
