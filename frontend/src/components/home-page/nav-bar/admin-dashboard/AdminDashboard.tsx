@@ -20,7 +20,7 @@ const AdminDashboard = ({
 
   return (
     <div className='h-full bg-grantor-green flex flex-col gap-28'>
-      <h2 className='text-6xl underline text-white pl-8'>Welcome: {user?.username}!</h2>
+      <h2 className='text-6xl underline text-white pl-8'>Welcome, {user?.username}!</h2>
       <div className='flex justify-evenly items-center'>
         <ButtonIcon imageSrc={addIcon} label={"New Grant"}/>
         <ButtonIcon imageSrc={userIcon} label={"My Account"}/>
@@ -29,7 +29,7 @@ const AdminDashboard = ({
           <ButtonIcon imageSrc={logoutIcon} label={"Log Out"} callback={() => setUser(null)}/>
         </Link>
       </div>
-      <div className='flex justify-evenly items-center'>
+      <div className='flex justify-evenly items-center h-1/4'>
         <ApplicationIcon imageSrc={list} label={"View Hosted Grants"}/>
         <ApplicationIcon imageSrc={search} label={"Review Applications"}/>
       </div>
@@ -39,13 +39,3 @@ const AdminDashboard = ({
 
 export default AdminDashboard
 
-// Styling
-const styles = {
-  applicationOptionStyles: {
-    display: "flex",
-    height: "40%",
-    width: "100%",
-    justifyContent: "space-evenly",
-    alignItems: "center",
-  }
-}

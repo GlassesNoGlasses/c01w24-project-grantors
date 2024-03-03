@@ -6,7 +6,11 @@ import { useUserContext } from '../contexts/userContext'
 const Navbar = ({}: NavbarProps) => {
 
   // Get User Context
-  const {user} = useUserContext();
+  const {user, setUser} = useUserContext();
+
+  const LogOut = () => {
+    setUser(null);
+  }
 
   const LoginButton = () => {
     return (
@@ -36,7 +40,7 @@ const Navbar = ({}: NavbarProps) => {
         text-white font-bold rounded-lg shadow-md transition-colors duration-150 ease-in
         text-base'
         to='/'>
-        Sign Out
+        <button onClick={LogOut}>Sign Out</button>
       </Link>
     )
   }

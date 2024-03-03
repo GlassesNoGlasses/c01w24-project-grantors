@@ -1,16 +1,16 @@
 import express from 'express';
 import { MongoClient, ObjectId } from "mongodb";
+import cors from "cors";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 
 const app = express();
 const PORT = 8000;
-const MONGO_URL = "mongodb://127.0.0.1:27017";
+const MONGO_URL = "mongodb://localhost:27017";
 const DB_NAME = "grantors";
 const COLLECTIONS = {
   users: "users",
 };
-
 
 // Connect to MongoDB
 let db;
@@ -35,14 +35,52 @@ app.listen(PORT, () => {
   console.log(`Server is running on http://localhost:${PORT}`);
 });
 
+app.use(cors());
+
 // Routes
 app.get('/', (req, res) => {
     res.json({ message: 'Hello World!' });
 });
 
-app.post("/registerUser", express.json(), async (req, res) => {
+app.post('/login', express.json(), async (req, res) => {
   try {
-    const {accountID, username, email, password, firstName, lastName, isAdmin} = req.body;
+
+    const { username, password } = req.body;
+
+    if (!username || !password) {
+      return res
+        .status(400)
+        .json({ 'error': "Username and password both needed to login." });
+    }
+
+    const collection = db.collection("users");
+    const uname = await collection.findOne({ username:username});
+    const email = await collection.findOne({ email:username});
+
+    if (!uname && !email) {
+      return res.status(404).json({'error' : 'User Not Found'});
+    }
+
+    if (!uname) {
+      if (!(await bcrypt.compare(password, email.password))) {
+        return res.status(401).json({'error' : 'Incorrect Credentials'});
+      }
+      return res.status(200).send({ admin:email.isAdmin, loginType: 1});
+    } else if (!(await bcrypt.compare(password, uname.password))){
+      return res.status(401).json({'error' : 'Incorrect Credentials'});
+    }
+
+    return res.status(200).send({ admin:uname.isAdmin, loginType: 2 });
+
+  } catch {
+    res.status(500).send('Server Error with Logging In');
+  }
+});
+  
+  
+app.post("/signup", express.json(), async (req, res) => {
+  try {
+    const { username, email, password, firstName, lastName, isAdmin} = req.body;
 
     // Basic body request check
     if (!username || !password) {
@@ -54,16 +92,16 @@ app.post("/registerUser", express.json(), async (req, res) => {
     // Checking if username does not already exist in database
     const userCollection = db.collection(COLLECTIONS.users);
     const existingUser = await userCollection.findOne({ username });
-    if (existingUser) {
-      return res.status(400).json({ error: "Username already exists." });
+    const existingEmail = await userCollection.findOne({ email });
+    if (existingUser || existingEmail) {
+      return res.status(400).json({ error: "User already exists." });
     }
 
     // Creating hashed password 
     // and storing user info in database
     const hashedPassword = await bcrypt.hash(password, 10);
     await userCollection.insertOne({
-      accountID: accountID,
-      username,
+      username: username,
       email: email,
       password: hashedPassword,
       firstName: firstName,

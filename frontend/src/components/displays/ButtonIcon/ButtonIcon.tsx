@@ -27,15 +27,9 @@ export default ButtonIcon
 const styles = {
     imageStyes: {
         borderRadius: "50%",
-        padding: "15%",
+        padding: "20%",
         height: "16vh",
         aspectRatio: "1 / 1"
     },
-    buttonStyles: {
-        display: "flex",
-        flexDirection: "column" as "column",
-        alignItems: "center",
-        justifyContent: "center" 
-    }
 }
 
