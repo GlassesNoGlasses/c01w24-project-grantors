@@ -23,19 +23,12 @@ const RenderHomepage = () => {
 };
 
 return (
-  <div style={styles.homeContainerStyles}>
+  <div className='h-full w-full'>
     {RenderHomepage()}
     <button onClick={() => setUser(testAdmin)}>Admin</button>
     <button onClick={() => setUser(testClient)}>Client</button>
   </div>
   )
 };
-
-const styles = {
-  homeContainerStyles: {
-    height: "100%",
-    width: "100%",
-  }
-}
 
 export default Home
