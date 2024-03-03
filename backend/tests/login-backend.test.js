@@ -1,5 +1,55 @@
 const SERVER_URL = "http://localhost:8000";
 
+test("/login - 400 Fields Missing Test", async() => {
+  
+  const attemptLogin1 = await fetch(`${SERVER_URL}/login`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    
+  });
+
+  const body1 = await attemptLogin1.json();
+
+  expect(attemptLogin1.status).toBe(400);
+  expect(body1['error']).toBe('Username and password both needed to login.');
+
+  const username = 'not_registered'
+
+  const attemptLogin2 = await fetch(`${SERVER_URL}/login`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        username: username
+      }),
+  });
+
+  const body2 = await attemptLogin2.json();
+
+  expect(attemptLogin2.status).toBe(400);
+  expect(body2['error']).toBe('Username and password both needed to login.');
+
+  const password = 'password'
+
+  const attemptLogin3 = await fetch(`${SERVER_URL}/login`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        password: password
+      }),
+  });
+
+  const body3 = await attemptLogin3.json();
+
+  expect(attemptLogin3.status).toBe(400);
+  expect(body3['error']).toBe('Username and password both needed to login.');
+});
+
 test("/login - 404 Username Not Found Test", async() => {
     const username = 'not_registered'
     const password = 'does_not_exist';
@@ -19,7 +69,7 @@ test("/login - 404 Username Not Found Test", async() => {
 
     expect(attemptLogin.status).toBe(404);
     expect(body['error']).toBe('User Not Found');
-  });
+});
 
 test("/login - 404 Email Not Found Test", async() => {
   const email = 'null@mail.com'
@@ -127,7 +177,7 @@ test("/login - 200 Log In As Admin Using Email Test", async() => {
 });
 
 test("/login - 200 Log In As A Normal User Using Username Test", async() => {
-  const username = 'rawad' // rawad is an admin
+  const username = 'rawad' // rawad is not an admin
   const password = '123'; // correct password
 
   const attemptLogin = await fetch(`${SERVER_URL}/login`, {
@@ -148,7 +198,7 @@ test("/login - 200 Log In As A Normal User Using Username Test", async() => {
 });
 
 test("/login - 200 Log In As A Normal User Using Email Test", async() => {
-  const email = 'rawad@abou' // rawad is an admin
+  const email = 'rawad@abou' // rawad is not an admin
   const password = '123'; // correct password
 
   const attemptLogin = await fetch(`${SERVER_URL}/login`, {
