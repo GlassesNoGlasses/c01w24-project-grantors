@@ -56,7 +56,7 @@ const Navbar = ({
   };
 
   return (
-    <div>
+    <div style={{height: "100%", width: "100%"}}>
       <nav className='nav-bar' style={styles.navBarStyles}>
         <div className='nav-container' style={styles.navContainerStyles}>
           <Link to="/" className='nav-brand'>
@@ -85,7 +85,8 @@ const styles = {
     justifyContent: "space-evenly",
     alignItems: "center",
     borderBottom: "black",
-    borderStyle: "solid"
+    borderStyle: "solid",
+    borderSize: "thick"
   },
   navInformationStyles: {
     display: "inline-flex",
@@ -94,5 +95,4 @@ const styles = {
     flexDirection: "row" as "row",
     justifyContent: "space-evenly",
   }
-  
 }

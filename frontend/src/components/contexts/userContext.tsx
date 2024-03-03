@@ -19,7 +19,7 @@ export function UserContextProvider (children: React.ReactNode) : JSX.Element {
 
     const value = useMemo(() => ({ user, setUser }), [user, setUser]);
 
-    return <UserContext.Provider value={value}> {children} </UserContext.Provider>;
+    return <UserContext.Provider value={value}>{children}</UserContext.Provider>;
 }
 
 export const useUserContext = () => React.useContext(UserContext);

@@ -28,11 +28,19 @@ const Home = ({
   };
 
   return (
-    <div>
+    <div style={styles.homeContainerStyles}>
       {RenderHomepage()}
       <button onClick={() => setUser(testAdmin)}>Admin</button>
+      <button onClick={() => setUser(testClient)}>Client</button>
     </div>
   )
+};
+
+const styles = {
+  homeContainerStyles: {
+    height: "100%",
+    width: "100%",
+  }
 }
 
 export default Home

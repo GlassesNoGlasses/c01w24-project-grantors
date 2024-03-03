@@ -8,7 +8,7 @@ const AdminNav = ({
 }: AdminNavProps) => {
     
     const GenerateUserTitle = (): JSX.Element => {
-        const title = `Welcome, ${user?.username}!`;
+        const title = `Loggin in as: ${user?.username} `;
 
         return (
             <h2 style={{fontSize: "x-large"}}>
@@ -23,7 +23,6 @@ const AdminNav = ({
             <div>
                 {GenerateUserTitle()}
             </div>
-            <br></br>
             <div>
                 <NavBarSettings />
             </div>
@@ -40,6 +39,6 @@ const styles = {
         width: "100%",
         justifyContent: "flex-end",
         alignItems: "center",
-        paddingLeft: "2%",
+        paddingRight: "2%",
     }
 }
