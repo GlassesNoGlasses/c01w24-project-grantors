@@ -3,6 +3,7 @@ import { ButtonIconProps } from './ButtonIconProps'
 
 const ButtonIcon = ({
     imageSrc,
+    heroicon,
     label,
     callback,
 }: ButtonIconProps) => {
@@ -11,7 +12,11 @@ const ButtonIcon = ({
     <div>
         <button style={styles.buttonStyles} onClick={callback}>
             <div className={`icone-${imageSrc}`} style={styles.imageStyes}>
-                <img src={imageSrc}></img>
+                {imageSrc ? (
+                    <img src={imageSrc}></img>
+                ) : (
+                    heroicon
+                )}
             </div>
             <span style={{fontSize: "x-large", color: "white", fontWeight: "bold"}}>{label ? label : ""}</span>
         </button>
@@ -25,7 +30,7 @@ const styles = {
     imageStyes: {
         background: "white",
         borderRadius: "50%",
-        padding: "25%",
+        padding: "15%",
         height: "16vh",
         aspectRatio: "1 / 1"
     },
