@@ -1,0 +1,41 @@
+Tasks Assigned to Each Member:
+
+Neil:
+    - Designed and created the prototype homepage as a base of reference.
+    - Added basic routing to required webpages for others to use.
+    - Implemented a global context variable, allowing components to access the current User of the website and route according to user type (Admin, Client, Not logged in).
+    - Developed the admin dashboard and respective components, implementing basic routing and a homepage to Users of admin type only.
+
+Alex:
+    - Prototyped the homepage UI using Figma to assist Neil with implementing the base structure.
+    - Implement backend API to process and validate login information passed in JSON body from the frontend.
+    - Routed users after successful login to their corresponding dashboards in the frontend on whether they are registered as an admin or normal applicant.
+    - Assisted Neil in frontend development for the admin dashboard by offering solutions to component implementation and experimenting alongside him.
+    - Conducted unit testing using Jest to test login and sign up api to ensure correct and valid functionality.
+
+Ethan:
+    - Design and implemented landing page.
+    - Develop styling best practices and standards for the project.
+    - Configured tailwind to use custom fonts and font sizes fit for the accessible nature of the project.
+    - Edited some components to use tailwind styling instead of regular CSS.
+
+Zack:
+    - Created client dashboard.
+    - Update button components to take hero icons as icon source.
+
+Francis:
+    - Designed and implemented a login page with intuitive design, and icons for accessibility.
+    - Made the login component design to allow appealing design, and refactored code to match with other group members tailwind style.
+    - Send username and password fields to the backend for validation check.
+    - Assisted Alex, with potential starting ideas for backend, as Alex completed the backend.
+
+Juno:
+    - Created backend MongoDB API POST endpoint to handlebase backend sign-up logic.
+    - Wrote basic white box test with Jest to confirm expected behaviour of valid inputs.
+
+Sean:
+    - Drew up drafts of the SignUp page and presented them to group.
+    - Took feedback on the drafts of the SignUp page.
+    - Created the SignUp page.
+    - Showed how to accept optional fields to group (i.e., if a user wants to sign up as Admin, they could be prompted for additional info. Not in main yet. Perhaps next sprint?).
+    - Coordinated w/ Alex and Francis (guys tasked w/ Login) to make comprehensive designs for the Login and Frontend pages.

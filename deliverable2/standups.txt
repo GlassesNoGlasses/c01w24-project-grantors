@@ -1,0 +1,256 @@
+###########################################################################
+Reading Week February 17th - 25th:
+
+###### Main Topics Discussed #######
+- Planned out website homepage.
+- Dicussed git protocols and guideines.
+- Introduction and research of frameworks (Tailwind, REACT, TypeScript).
+
+########## Member Updates ########## 
+
+Neil:
+    - Developed prototype of the website’s homepage.
+    - Researched and implemented REACT routing between webpages and components.
+
+Juno:
+
+Alex:
+    - Completed home page design and prototype using Figma.
+    - Identified necessary components required in layout.
+
+Francis:
+    - Studied how to implement frontend styling, to implement my frontend tasks.
+
+Ethan:
+    - Studied react and tailwind documentation.
+
+Sean:
+    - Studied basic frontend development (to get my feet wet).
+    - Drew some drafts of what the SignUp page would look like.
+
+Zack:
+    - Watched tutorials on tailwind and react.
+
+###########################################################################
+Monday February 26th
+
+###### Main Topics Discussed #######
+- Discussed Sprint backlogue.
+- Planning Poker.
+- Task assignments.
+
+########## Member Updates ########## 
+
+Neil:
+    - Showcased demo of the homepage prototype.
+    - Worked on Admin Dashboard user story basic display.
+
+Juno:
+    - Created branches to begin work on user signup story with Sean.
+
+Alex:
+    - Worked on model logic behind login fields.
+    - Proposed model to team members working on login and sign up.
+
+Francis:
+    - Worked on the frontend of the Login user story by implementing the form.
+
+Ethan:
+    - Worked on Home Page design.
+
+Sean:
+    - Presenting drafts of the SignUp page to the group.
+Zack:
+    - Sick.
+
+###########################################################################
+Tuesday February 27th
+
+###### Main Topics Discussed #######
+- Task Updates.
+- Framework inquries (Tailwind, TypeScript).
+- Planning of database.
+
+########## Member Updates ########## 
+
+Neil:
+    - Researched Tailwind documentation.
+    - Started implementation of React context states for component use.
+
+Juno:
+    - Reviewed C01 Lab 2 for MongoDB backend endpoint format.
+
+Alex:
+    - Researched proper way to implement an backend api for login using StackOverflow.
+
+Francis:
+    - Worked and improved on the UI and did shadows for boxes etc..
+
+Ethan:
+    - Worked on home page.
+
+Sean:
+    - Finalized SignUp page design & started coding up the basic frontend of SignUp.
+Zack:
+    - Sick.
+
+###########################################################################
+Wednesday February 28th
+
+###### Main Topics Discussed #######
+- Task Updates.
+- Estimated deadline (Saturday March 2nd).
+
+########## Member Updates ########## 
+
+Neil:
+    - Full implemented React context variable for interface of type User.
+    - Allow for components to easily access whoever is currently logged in to the website.
+
+Juno:
+    - Reviewed C01 Lab 2 for MongoDB backend endpoint format.
+
+Alex: 
+    - Communicated with Francis and began implementing backend for login.
+
+Francis:
+    - Communicated with Alex and started planning for potential routing to admin and user pages.
+
+Ethan:
+    - Worked on home page.
+
+Sean:
+    - Researched alignments in css/tailwind. (e.g., justify-center).
+Zack:
+    - Sick.
+
+###########################################################################
+Thursday February 29th
+
+###### Main Topics Discussed #######
+- Task Updates.
+- Frontend/Backend group dicussions.
+
+########## Member Updates ########## 
+
+Neil:
+    - Added the navigation bar for admins and UI.
+    - Added dynamic routing for navigation bars based on user type (i.e. Admin, Client, etc.).
+
+Juno:
+    - Reviewed C01 Lab 2 for MongoDB backend endpoint format.
+
+Alex:
+    - Completed backend api for login and explained to Francis in our extra meeting.
+    - Refactored frontend UI layout for a more intuitive navigation.
+
+Francis:
+    - Meeting with Alex, to discuss backend implementations and how frontend and backend would interact, minor fixes in frontend.
+
+Ethan:
+    - Converted navigation bar to use tailwind styling.
+
+Sean:
+    - Aligned “Sign Up” button to center of box.
+Zack:
+    - Sick.
+
+###########################################################################
+Friday March 1
+
+###### Main Topics Discussed #######
+- Task Updates.
+- Discussion of backlog and help from group mates on complex tasks.
+
+########## Member Updates ########## 
+
+Neil:
+    - Worked on design of admin dashboard.
+    - Continued UI implementation of the admin dashboard and routing.
+    - Assisted Alex with frontend styling issues.
+
+Juno:
+    - Midterm.
+
+Alex:
+    - Included input feedback on errors in the frontend.
+    - Add button to sign up in the login interface for the frontend.
+
+Francis:
+    - Minor fixes in frontend.
+
+Ethan:
+    - Added content to home page.
+
+Sean:
+    - Made textboxes for Email and Password.
+
+Zack:
+    - Sick
+
+###########################################################################
+Saturday March 2
+
+###### Main Topics Discussed #######
+- Task Updates.
+- Deliverable 2 documentation detailing.
+
+########## Member Updates ########## 
+
+
+Neil:
+    - Finished the admin dashboard.
+    - Added dynamic routing between different dashboards.
+
+Juno:
+    - Worked on backend API logic.
+
+Alex:
+    - Finished UI design prototype in Figma for user and admin dashboard.
+    - Assisted Neil with styling issues in person.
+
+Francis:
+    - Discussed potential changes with Alex for login and with the group as part of the final meeting.
+
+Ethan:
+    - Changed pages that weren’t using tailwind to use tailwind.
+
+Sean:
+    - Discussed potential changes to SignUp pages w/ group.
+
+Zack:
+    - Started outline of client dashboard.
+
+###########################################################################
+Sunday March 3
+
+###### Main Topics Discussed #######
+- Task Updates.
+- Finished Sprint.
+- Sprint Retrospective.
+
+########## Member Updates ########## 
+
+Neil:
+    - Finished deliverable 2 documentation and required files.
+    - Assisted in resolving pull requests and merge conflicts from group members.
+    - Assisted in routing issues.
+
+Juno:
+    - Worked on backend API logic + Jest testing suite.
+
+Alex:
+    - Conducted unit test using Jest for login and sign up API.
+    - Merged login feature branch to development branch.
+
+Francis:
+    - Refactored frontend design to be compatible with other existing frontend components.
+
+Ethan:
+    - Worked on integrating pages together (routing buttons, etc.).
+
+Sean:
+    - Researched more into how the Frontend/Backend connection works for SignUp pages.
+
+Zack:
+    - Completed client dashboard.
