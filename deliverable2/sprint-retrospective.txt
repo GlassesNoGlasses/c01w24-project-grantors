@@ -1,0 +1,37 @@
+Retrospective Link on Confluence: https://c01-project.atlassian.net/wiki/spaces/C/pages/4653059/Retrospective%3A+CPG+Sprint+1
+
+Retrospective Draft:
+
+What has gone well and should be maintained:
+
+- The difficulty of tasks was estimated and divided up evenly.
+- Branching was done well with no major errors and merge conflicts.
+- All sprint targets were met.
+
+
+Improvements to be made for the next sprint:
+
+Styling: 
+    Problem: styling of components should be kept consistent.
+    Solution:
+        Use Tailwind for styling from now on.
+        Old files with invalid styling will be modified.
+Interconnection of user stories and tasks:
+    Problem: 
+        Some features of tasks depend on each other and need a cohesive structure.
+        Lack of communication between individuals working on interconnected tasks exacerbates the problem.
+            For example: login and signup user stories need to agree on how to store a user in the database.
+    Solution:
+        Have early discussions on the potential commonalities of tasks in order to obtain a cohesive solution.
+        Assign an individual the responsibility of creating a prototype, which will then serve as the foundation for common features that others can base their implementations on.
+        Will be done through Jira with labeling common features as “IMPORTANT” and assigning an individual to the task.
+        “IMPORTANT” tasks must be completed early in the sprint (i.e. 1-3 days at start).
+        Frontend and backend separation of tasks and user stories should be kept minimal and only done if the workload of one side heavily outweighs the other.
+            Otherwise, an individual is responsible for both the frontend and backend to reduce dependencies during implementation.
+
+Deciding on Datatypes:
+    Problem: People begin working without a clear and decided structure for a datatype. (e.g., storing a user in the db)
+    Solution: 
+        All group members working with a datatype must come up and agree with all the fields of the datatype FIRST.
+        If unsure whether a field is necessary, prefer to include it. Space is not an issue and the field can always be removed.
+
