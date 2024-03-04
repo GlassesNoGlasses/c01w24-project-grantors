@@ -1,0 +1,39 @@
+
+name: Run Backend Test
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main", "dev" ]
+
+jobs:
+  build:
+    name: Backend test
+    runs-on: ubuntu-latest
+
+    defaults:
+      run:
+        working-directory: ./backend
+
+    strategy:
+      matrix:
+        node-version: [21.x]
+        mongodb-version: ['7.0.5', '7.0', '6.0']
+
+    steps:
+    - uses: actions/checkout@v3
+    
+    - name: Use Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v3
+      with:
+        node-version: ${{ matrix.node-version }}
+
+    - name: Start MongoDB
+      uses: supercharge/mongodb-github-action@1.10.0
+      with:
+        mongodb-version: ${{ matrix.mongodb-version }}
+        mongodb-port: 8000
+      
+    - run: npm i
+    - run: npm run dev & npm test
