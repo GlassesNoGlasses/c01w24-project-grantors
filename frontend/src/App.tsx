@@ -4,6 +4,7 @@ import Home from "./components/home-page/nav-bar/Home";
 import Login from "./components/login-page/Login";
 import SignUp from "./components/signup-page/SignUp";
 import { UserContextProvider } from "./components/contexts/userContext";
+import GrantBrowse from "./components/grant-browse/GrantBrowse";
 
 
 function App() {
@@ -20,6 +21,7 @@ function App() {
               <Route path="contact" element={<Home />} />
               <Route path="login" element={<Login />} />
               <Route path="signup" element={<SignUp />} />
+              <Route path="grants" element={<GrantBrowse />} />
             </Route>
           </Routes>
         )}
