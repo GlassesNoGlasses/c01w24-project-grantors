@@ -1,30 +1,11 @@
+import {admins, users} from './data.js'
+
 const SERVER_URL = "http://localhost:8000";
 
-const myAdmins = [
-    {
-        "isAdmin": true,
-        "username": "alex",
-        "firstName": "alex",
-        "lastName": "zeng",
-        "email": "alex@mail",
-        "password": "123"
-    }
-];
-
-const myUsers = [
-    {
-        "isAdmin": false,
-        "username": "rawad",
-        "firstName": "rawad",
-        "lastName": "assi",
-        "email": "rawad@abou",
-        "password": "123"
-    }
-];
-
-const SignUpAdmins = async () => {
+const SignUpAdmins = () => {
     try {
-        myAdmins.forEach(async (admin) => {
+        admins.forEach(async (admin) => {
+            console.log(admin);
             await fetch(`${SERVER_URL}/signup`, {
                 method: "POST",
                 headers: {
@@ -45,9 +26,10 @@ const SignUpAdmins = async () => {
     };
 };
 
-const SignUpUsers = async () => {
+const SignUpUsers = () => {
     try {
-        myUsers.forEach(async (user) => {
+        users.forEach(async (user) => {
+            console.log(user);
             const resp = await fetch(`${SERVER_URL}/signup`, {
                 method: "POST",
                 headers: {
@@ -68,9 +50,14 @@ const SignUpUsers = async () => {
     };
 };
 
-const Start = async () => {
-    await SignUpAdmins();
-    await SignUpUsers();
+export const SetUpDB = () => {
+    try {
+        SignUpAdmins();
+        SignUpUsers();
+    } catch (error) {
+        console.error("Error with populating DB: ", error);
+    }
 };
 
-Start();
+SetUpDB();
+

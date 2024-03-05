@@ -3,10 +3,11 @@
   "version": "1.0.0",
   "description": "",
   "main": "server.mjs",
+  "type": "module",
   "scripts": {
     "start": "node server.mjs",
     "dev": "nodemon server.mjs",
-    "test": "node ./test-helpers/populateDB.js && jest"
+    "test": "jest"
   },
   "author": "",
   "license": "ISC",
