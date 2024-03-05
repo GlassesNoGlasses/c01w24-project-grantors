@@ -1,13 +1,13 @@
 const SERVER_URL = "http://localhost:8000";
 
-test("/signup - 201 Successful Registration", async() => {
+const username = 'neil';
+const email = "neil@mail.com";
+const password = "123";
+const firstName = "Neil";
+const lastName = "Wang";
+const isAdmin = false;
 
-  username = 'neil',
-  email = "neil@mail.com",
-  password = "123",
-  firstName = "Neil",
-  lastName = "Wang",
-  isAdmin = false
+test("/signup - 201 Successful Registration", async() => {
   
   const signup = await fetch(`${SERVER_URL}/signup`, {
       method: "POST",
@@ -15,7 +15,7 @@ test("/signup - 201 Successful Registration", async() => {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        username,
+        username: username,
         email: email,
         password: password,
         firstName: firstName,
@@ -32,20 +32,13 @@ test("/signup - 201 Successful Registration", async() => {
 
 test("/signup - 400 User Already in Database", async() => {
 
-  username = 'neil',
-  email = "neil@mail.com",
-  password = "123",
-  firstName = "Neil",
-  lastName = "Wang",
-  isAdmin = false
-  
   const signup = await fetch(`${SERVER_URL}/signup`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        username,
+        username: username,
         email: email,
         password: password,
         firstName: firstName,
@@ -62,12 +55,6 @@ test("/signup - 400 User Already in Database", async() => {
 
 describe("/signup - 400 Test Missing Fields", () => {
   test("/signup - 400 Missing Email", async() => {
-
-    username = 'neil',
-    password = "123",
-    firstName = "Neil",
-    lastName = "Wang",
-    isAdmin = false
     
     const signup = await fetch(`${SERVER_URL}/signup`, {
         method: "POST",
@@ -89,12 +76,6 @@ describe("/signup - 400 Test Missing Fields", () => {
     expect(body['error']).toBe('Username and email and password are all needed to register.');
   }),
   test("/signup - 400 Missing Username", async() => {
-
-    email = "neil@mail.com",
-    password = "123",
-    firstName = "Neil",
-    lastName = "Wang",
-    isAdmin = false
     
     const signup = await fetch(`${SERVER_URL}/signup`, {
         method: "POST",
@@ -116,12 +97,6 @@ describe("/signup - 400 Test Missing Fields", () => {
     expect(body['error']).toBe('Username and email and password are all needed to register.');
   }),
   test("/signup - 400 Missing Password", async() => {
-
-    username = 'neil',
-    email = "neil@mail.com",
-    firstName = "Neil",
-    lastName = "Wang",
-    isAdmin = false
     
     const signup = await fetch(`${SERVER_URL}/signup`, {
         method: "POST",
@@ -129,7 +104,7 @@ describe("/signup - 400 Test Missing Fields", () => {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          username,
+          username: username,
           email: email,
           firstName: firstName,
           lastName: lastName,
@@ -143,5 +118,3 @@ describe("/signup - 400 Test Missing Fields", () => {
     expect(body['error']).toBe('Username and email and password are all needed to register.');
   })
 })
-
-
