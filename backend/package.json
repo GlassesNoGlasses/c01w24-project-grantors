@@ -6,7 +6,7 @@
   "scripts": {
     "start": "node server.mjs",
     "dev": "nodemon server.mjs",
-    "test": "jest"
+    "test": "node ./test-helpers/populateDB.js && jest"
   },
   "author": "",
   "license": "ISC",
