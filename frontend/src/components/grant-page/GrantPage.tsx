@@ -37,8 +37,9 @@ const GrantFound = ({ grant }: { grant: Grant }) => {
 
 const GrantNotFound = () => {
     return (
-        <div>
-            <h1>Grant Not Found</h1>
+        <div className="flex flex-col gap-3 p-1 px-3">
+            <h1 className="text-4xl font-bold">Grant Not Found</h1>
+            <p className="text-base">The grant you are looking for does not exist.</p>
         </div>
     );
 }
