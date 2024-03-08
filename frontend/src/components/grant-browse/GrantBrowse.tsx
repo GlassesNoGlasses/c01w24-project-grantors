@@ -3,6 +3,7 @@ import { useUserContext } from "../contexts/userContext";
 import { useEffect, useState } from "react";
 import { Grant } from "../interfaces/Grant";
 import GrantList from "../grant-list/GrantList";
+import mockGrants from "./mockGrants";
 
 const GrantBrowse = ({}: GrantBrowseProps) => {
     const { user } = useUserContext();
@@ -10,63 +11,7 @@ const GrantBrowse = ({}: GrantBrowseProps) => {
 }
 
 const UserGrantBrowse = () => {
-    const [grants, setGrants] = useState<Grant[]>([
-        {
-            id: 1,
-            title: "Community Accessibility Grant",
-            description: "This grant aims to fund projects that improve accessibility for people with disabilities within local communities.",
-            posted: new Date("2024-02-15"),
-            deadline: new Date("2024-03-31"),
-            amount: 5000,
-            organization: "Local Community Foundation",
-            category: "Community Development",
-            contact: "John Doe, johndoe@example.com"
-        },
-        {
-            id: 2,
-            title: "Educational Accessibility Initiative",
-            description: "Funding available for educational institutions seeking to implement accessibility enhancements for students with disabilities.",
-            posted: new Date("2024-02-20"),
-            deadline: new Date("2024-04-15"),
-            amount: 10000,
-            organization: "Education Enhancement Fund",
-            category: "Education",
-            contact: "Jane Smith, janesmith@example.com"
-        },
-        {
-            id: 3,
-            title: "Accessible Technology Research Grant",
-            description: "This grant supports research projects focused on developing innovative accessible technologies for people with disabilities.",
-            posted: new Date("2024-02-25"),
-            deadline: new Date("2024-05-30"),
-            amount: 15000,
-            organization: "Tech Innovations Foundation",
-            category: "Technology",
-            contact: "Alex Johnson, alexjohnson@example.com"
-        },
-        {
-            id: 4,
-            title: "Employment Accessibility Grant",
-            description: "Funding available for businesses implementing accessibility measures to improve employment opportunities for people with disabilities.",
-            posted: new Date("2024-03-01"),
-            deadline: new Date("2024-06-15"),
-            amount: 7500,
-            organization: "Employment Equality Agency",
-            category: "Employment",
-            contact: "Michael Brown, michaelbrown@example.com"
-        },
-        {
-            id: 5,
-            title: "Accessible Healthcare Services Grant",
-            description: "This grant aims to support healthcare facilities in making their services more accessible to patients with disabilities.",
-            posted: new Date("2024-03-05"),
-            deadline: new Date("2024-07-31"),
-            amount: 12000,
-            organization: "Healthcare Access Foundation",
-            category: "Healthcare",
-            contact: "Emily Davis, emilydavis@example.com"
-        }
-    ]);
+    const [grants, setGrants] = useState<Grant[]>(mockGrants);
 
     const [filteredGrants, setFilteredGrants] = useState<Grant[]>(grants);
 
@@ -103,9 +48,9 @@ const GrantFilter = ({ grants, setGrants }: {
                 return false;
             if (category !== "" && !grant.category.toLowerCase().includes(category.toLowerCase()))
                 return false;
-            if (minAmount !== 0 && grant.amount < minAmount)
+            if (minAmount !== 0 && grant.maxAmount < minAmount)
                 return false;
-            if (maxAmount !== 0 && grant.amount > maxAmount)
+            if (maxAmount !== 0 && grant.minAmount > maxAmount)
                 return false;
             if (postedAfter !== null && grant.posted < postedAfter)
                 return false;

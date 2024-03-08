@@ -21,7 +21,7 @@ const GrantItem = ({ grant }: { grant: Grant }) => {
                 bg-slate-50 active:bg-slate-100 hover:shadow-md">
             <div className="flex flex-row justify-between items-center">
                 <h1 className="text-2xl font-bold">{grant.title}</h1>
-                <h2 className="text-lg">{`CAD $${grant.amount.toString()}`}</h2>
+                <h2 className="text-lg">{`CAD $${grant.minAmount.toString()} - $${grant.maxAmount.toString()}`}</h2>
             </div>
             <div className="flex flex-row justify-between">
                 <h3 className="text-lg">{grant.organization}</h3>
