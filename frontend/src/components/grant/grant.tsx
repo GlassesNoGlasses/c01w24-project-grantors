@@ -1,6 +1,10 @@
 import React, { useState } from 'react';
 import { Grant, GrantQuestion } from '../interfaces/Grant';
 
+// const initialQuestions: GrantQuestion[] = [
+//     { id: 1, question: "What is the primary goal of your project?", answer: null },
+//     { id: 2, question: "How will you measure the success of your project?", answer: null }
+// ];
 
 const GrantForm: React.FC = () => {
     const initialGrantState: Grant = {
@@ -15,6 +19,7 @@ const GrantForm: React.FC = () => {
         category: '',
         contact: '',
         questions: [],
+        publish: false
     };
 
     const [grant, setGrant] = useState<Grant>(initialGrantState);
@@ -30,7 +35,6 @@ const GrantForm: React.FC = () => {
 
     const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        console.log(' grant:', grant);
     };
 
     const handleQuestionChange = (id: number, answer: string) => {
@@ -38,6 +42,10 @@ const GrantForm: React.FC = () => {
             q.id === id ? { ...q, answer } : q
         );
         setGrant({ ...grant, questions: updatedQuestions });
+    };
+
+    const formatDateToYYYYMMDD = (date: Date) => {
+        return new Date(date).toISOString().split('T')[0];
     };
 
     return (
@@ -75,7 +83,8 @@ const GrantForm: React.FC = () => {
                     {/* Deadline */}
                     <div>
                         <label htmlFor="deadline" className="block text-gray-700 font-medium mb-2">Deadline</label>
-                        <input type="date" name="deadline" id="deadline" value={grant.deadline.toString().slice(0, 10)}
+                        <input type="date" name="deadline" id="deadline" value={formatDateToYYYYMMDD(grant.deadline)}
+                            onChange={(e) => setGrant({ ...grant, deadline: new Date(e.target.value) })}
                             className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent" />
                     </div>
                     
@@ -113,7 +122,7 @@ const GrantForm: React.FC = () => {
                                         type="text" 
                                         id={`question-${question.id}`}
                                         name={`question-${question.id}`}
-                                        value={question.answer || ''} // Handling potential null answers
+                                        value={question.answer || ''}
                                         onChange={(e) => handleQuestionChange(question.id, e.target.value)}
                                         className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent"
                                         required 

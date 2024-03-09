@@ -15,5 +15,6 @@ export interface Grant {
     organization: string;
     category: string;
     contact: string;
-    questions: GrantQuestion[]; 
+    questions: GrantQuestion[];
+    publish: boolean;
 }
