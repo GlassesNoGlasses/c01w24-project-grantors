@@ -5,7 +5,7 @@ import emailIcon from '../../images/iconMail.png';
 import passwordIcon from '../../images/iconPassword.png';
 import { Link, useNavigate } from "react-router-dom";
 import { useUserContext } from '../contexts/userContext';
-import { User } from '../interfaces/user';
+import { User } from '../interfaces/User';
 
 
 const SERVER_PORT:number = 8000;
