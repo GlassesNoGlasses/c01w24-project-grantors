@@ -1,0 +1,21 @@
+# Use Node image for npm to install dependencies
+FROM node:20.0.0-alpine AS backend
+
+# Set working directory
+WORKDIR /app/backend
+
+# Copy backend package files
+COPY backend/package*.json ./
+
+# Install dependencies as needed
+RUN npm install
+
+# Copy in source code
+COPY ./backend .
+
+# Expose a port for backend server
+EXPOSE 8000
+
+# Run backend
+CMD ["node", "server.mjs"]
+
