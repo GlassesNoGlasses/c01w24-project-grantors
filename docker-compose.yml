@@ -17,10 +17,10 @@ services:
       - "27017:27017"
 
   nginx:
-      restart: unless-stopped
       build:
         context: .
         dockerfile: Dockerfile_frontend
+      restart: unless-stopped
       ports:
         - "3000:80"
       depends_on:
