@@ -53,24 +53,23 @@ app.post('/login', express.json(), async (req, res) => {
         .json({ 'error': "Username and password both needed to login." });
     }
 
+    // username could be the user's username or their email, so we will check both
     const collection = db.collection("users");
     const uname = await collection.findOne({ username:username});
     const email = await collection.findOne({ email:username});
 
-    if (!uname && !email) {
+    const user = uname ? uname : email;
+
+    if (!user) {
       return res.status(404).json({'error' : 'User Not Found'});
     }
 
-    if (!uname) {
-      if (!(await bcrypt.compare(password, email.password))) {
-        return res.status(401).json({'error' : 'Incorrect Credentials'});
-      }
-      return res.status(200).send({ admin:email.isAdmin, loginType: 1});
-    } else if (!(await bcrypt.compare(password, uname.password))){
+    if (!(await bcrypt.compare(password, user.password))) {
       return res.status(401).json({'error' : 'Incorrect Credentials'});
     }
 
-    return res.status(200).send({ admin:uname.isAdmin, loginType: 2 });
+    return res.status(200).send({ id:user._id, username:user.username, email:user.email,
+      firstName:user.firstName, lastName:user.lastName, isAdmin:user.isAdmin, });
 
   } catch {
     res.status(500).send('Server Error with Logging In');
