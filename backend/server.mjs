@@ -129,3 +129,47 @@ app.post("/signup", express.json(), async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 });
+
+app.get("/getApplications", express.json(), async (req, res) => {
+  const { organization } = req.body();
+
+  verifyRequestAuth(req, async (err, decoded) => {
+    if (err) {
+        return res.status(401).send("Unauthorized.");
+    }
+
+    if (!organization) {
+      // If no organization was provided, get the org from auth token
+      const userCollection = db.collection(COLLECTIONS.users);
+      const user = await userCollection.findOne({ _id: decoded });
+      if (!user) {
+        return res.status(400).send("Organization not provided.")
+      }
+
+      organization = user.organization;
+    }
+
+    const applicationCollection = db.collection(COLLECTIONS.applications)
+
+    // Looks up all applications, where the associate grant belongs to the organization
+    const pipeline = [
+      {
+        $lookup: {
+          from: COLLECTIONS.grants,
+          localField: 'grantID',
+          foreignField: '_id',
+          as: 'grant',
+        }
+      },
+      {
+        $match: {
+          'grant.organization': organization
+        }
+      }
+    ]
+
+    const applications = await applicationCollection.aggregate(pipeline).toArray();
+
+    res.json({ applications: applications });
+  });
+});
