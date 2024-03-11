@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { AdminDashboardProps } from './AdminDashboardProps'
 import { useUserContext } from '../../../contexts/userContext'
 import ButtonIcon from '../../../displays/ButtonIcon/ButtonIcon';
@@ -9,14 +9,21 @@ import settingsIcon from '../../../../images/settings.svg'
 import ApplicationIcon from '../../../displays/ApplicationIcon/ApplicationIcon';
 import list from '../../../../images/list.png'
 import search from '../../../../images/search.png'
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 const AdminDashboard = ({
 
   }: AdminDashboardProps) => {
+  const {user, setUser} = useUserContext();
+  const [encodedOrg, setEncodedOrg] = useState('');
 
-    // States used
-    const {user, setUser} = useUserContext();
+  useEffect(() => {
+    if (user?.organization) {
+      return setEncodedOrg(encodeURIComponent(user.organization));
+    } else {
+      return setEncodedOrg('');
+    }
+  }, [user]);
 
   return (
     <div className='h-full bg-grantor-green flex flex-col gap-28'>
@@ -31,7 +38,9 @@ const AdminDashboard = ({
       </div>
       <div className='flex justify-evenly items-center h-1/4'>
         <ApplicationIcon imageSrc={list} label={"View Hosted Grants"}/>
-        <ApplicationIcon imageSrc={search} label={"Review Applications"}/>
+        <Link to={`${encodedOrg}/applications`}>
+          <ApplicationIcon imageSrc={search} label={"Review Applications"}/>
+        </Link>
       </div>
     </div>
   )

@@ -5,6 +5,7 @@ import Login from "./components/login-page/Login";
 import SignUp from "./components/signup-page/SignUp";
 import { UserContextProvider } from "./components/contexts/userContext";
 import GrantBrowse from "./components/grant-browse/GrantBrowse";
+import AdminApplicationList from "./components/home-page/nav-bar/admin-dashboard/AdminApplicationList";
 
 
 function App() {
@@ -22,6 +23,7 @@ function App() {
               <Route path="login" element={<Login />} />
               <Route path="signup" element={<SignUp />} />
               <Route path="grants" element={<GrantBrowse />} />
+              <Route path=":organization/applications" element={<AdminApplicationList/>} />
             </Route>
           </Routes>
         )}
