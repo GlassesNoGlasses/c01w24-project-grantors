@@ -1,6 +1,9 @@
 # CSCC01-Project
 The project repository CSC C01.
 
+## How to run with Docker
+Run `docker-compose up`. If you want to rebuild images (i.e after changes to the code), do `docker-compose up --build` instead.
+
 ## How to run frontend
 Initialize
 ```bash
