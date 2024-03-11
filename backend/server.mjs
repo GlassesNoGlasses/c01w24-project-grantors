@@ -116,3 +116,42 @@ app.post("/signup", express.json(), async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 });
+
+// app.post("/createGrant", express.json(), async (req, res) => {
+//   try {
+//     const { username, email, password, firstName, lastName, isAdmin} = req.body;
+
+//     // Basic body request check
+//     if (!username || !password || !email) {
+//       return res
+//         .status(400)
+//         .json({ error: "Username and email and password are all needed to register." });
+//     }
+
+//     // Checking if username does not already exist in database
+//     const userCollection = db.collection(COLLECTIONS.users);
+//     const existingUser = await userCollection.findOne({ username });
+//     const existingEmail = await userCollection.findOne({ email });
+//     if (existingUser || existingEmail) {
+//       return res.status(400).json({ error: "User already exists." });
+//     }
+
+//     // Creating hashed password 
+//     // and storing user info in database
+//     const hashedPassword = await bcrypt.hash(password, 10);
+//     await userCollection.insertOne({
+//       username: username,
+//       email: email,
+//       password: hashedPassword,
+//       firstName: firstName,
+//       lastName: lastName,
+//       isAdmin: isAdmin
+//     });
+
+//     // Returning JSON Web Token
+//     const token = jwt.sign({ username }, "secret-key", { expiresIn: "1h" });
+//     res.status(201).json({ response: "User registered successfully.", token });
+//   } catch (error) {
+//     res.status(500).json({ error: error.message });
+//   }
+// });
