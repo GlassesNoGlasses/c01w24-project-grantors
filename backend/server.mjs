@@ -134,7 +134,7 @@ app.post("/createGrant", express.json(), async (req, res) => {
       organization: organization,
       category: category,
       contact: contact,
-      questions: JSON.stringify(questions),
+      questions: questions,
       publish: false
     });
 

@@ -3,6 +3,7 @@ import { useState } from 'react';
 import { Grant, GrantQuestion } from '../interfaces/Grant' 
 
 let ID = 0
+const SERVER_PORT = 8000
 
 const GrantForm: React.FC = () => {
     const initialGrantState: Grant = {
@@ -22,6 +23,7 @@ const GrantForm: React.FC = () => {
 
     const [grant, setGrant] = useState<Grant>(initialGrantState);
     const [question, setQuestion] = useState<string>('');
+    const [feedback, setFeedback] = useState<string>("");
 
     const handleQuestionSubmit = () => {
         const addQuestion = (prev: GrantQuestion[], newQuesion: string): GrantQuestion[] => {
@@ -31,6 +33,29 @@ const GrantForm: React.FC = () => {
         setGrant({ ...grant, questions: addQuestion(grant.questions, question)});
         setQuestion('')
     };
+
+    const saveGrant = async() => {
+        try {
+            const response = await fetch(`http://localhost:${SERVER_PORT}/createGrant`, {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+              },
+              body: JSON.stringify({ 'title': grant.title, 'description': grant.description, 'deadline': grant.deadline, 
+                'minAmount': grant.minAmount, "maxAmount": grant.maxAmount, 'organization': grant.organization,
+                'category': grant.category, "contact": grant.contact, 'questions': grant.questions, }),
+            });
+        
+            
+            console.log('Successfully saved grant');
+            setFeedback(`Successfully saved grant`);
+            
+        
+          } catch (error) {
+            console.error('error creating grant:', (error as Error).message);
+            setFeedback(`error creating grant`)
+          }
+    }
 
     const handleQChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
         const { name, value } = e.target;
@@ -157,7 +182,7 @@ const GrantForm: React.FC = () => {
                     <div className='flex justify-between gap-8 mt-10'>
                         <button type='button' className='p-2 bg-red-600 text-white pl-5 pr-5 rounded-lg hover:bg-red-800' onClick={() => console.log('deleted')}>Delete</button>
                         <div className='flex justify-end'>
-                            <button type='button' className='p-2 bg-blue-600 text-white pl-5 pr-5 rounded-lg hover:bg-blue-800 mr-10' onClick={() => console.log('saved')}>Save</button>
+                            <button type='button' className='p-2 bg-blue-600 text-white pl-5 pr-5 rounded-lg hover:bg-blue-800 mr-10' onClick={saveGrant}>Save</button>
                             <button type='submit' className='p-2 bg-green-600 text-white pl-5 pr-5 rounded-lg hover:bg-green-800'>Publish</button>
                         </div>
                     </div>
