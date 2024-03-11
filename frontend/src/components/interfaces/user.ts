@@ -1,4 +1,4 @@
-
+import { Grant } from "../interfaces/Grant";
 /* Inferface of Users to be used. */
 export interface User {
     accountID: string,
@@ -8,4 +8,5 @@ export interface User {
     lastName: string | null,
     email: string, 
     password: string | null,
+    favoriteGrants: number[]
 }

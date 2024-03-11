@@ -84,7 +84,7 @@ app.post('/login', express.json(), async (req, res) => {
   
 app.post("/signup", express.json(), async (req, res) => {
   try {
-    const { username, email, password, firstName, lastName, isAdmin} = req.body;
+    const { username, email, password, firstName, lastName, isAdmin, favoriteGrants} = req.body;
 
     // Basic body request check
     if (!username || !password || !email) {
@@ -110,7 +110,8 @@ app.post("/signup", express.json(), async (req, res) => {
       password: hashedPassword,
       firstName: firstName,
       lastName: lastName,
-      isAdmin: isAdmin
+      isAdmin: isAdmin,
+      favoriteGrants: favoriteGrants
     });
 
     // Returning JSON Web Token
@@ -118,5 +119,31 @@ app.post("/signup", express.json(), async (req, res) => {
     res.status(201).json({ response: "User registered successfully.", token });
   } catch (error) {
     res.status(500).json({ error: error.message });
+  }
+});
+
+app.patch('/users/:userId/favorites', express.json(), async (req, res) => {
+  const userId = req.params.userId;
+  const { favoriteGrants } = req.body;
+
+  if (!userId || !Array.isArray(favoriteGrants)) {
+    return res.status(400).json({ error: "Invalid request." });
+  }
+
+  try {
+    const userCollection = db.collection(COLLECTIONS.users);
+    const result = await userCollection.updateOne(
+      { _id: new ObjectId(userId) },
+      { $set: { favoriteGrants: favoriteGrants } }
+    );
+
+    if (result.modifiedCount === 0) {
+      return res.status(404).json({ error: "User not found or data not changed." });
+    }
+
+    res.status(200).json({ message: "Favorites updated successfully." });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Internal server error." });
   }
 });

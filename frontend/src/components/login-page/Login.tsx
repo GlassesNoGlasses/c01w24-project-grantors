@@ -21,7 +21,7 @@ const Login: React.FC<LoginProps> = () => {
   const InstantiateUser = (accountID: string, isAdmin: boolean, username: string, firstName: string,
     lastName: string, email: string): User => {
     return {accountID: accountID, isAdmin: isAdmin, username: username, firstName: firstName,
-        lastName: lastName, email: email, password: null};
+        lastName: lastName, email: email, password: null, favoriteGrants: []};
   };
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {

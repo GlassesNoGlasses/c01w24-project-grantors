@@ -13,6 +13,7 @@ const SignUp: React.FC<SignUpProps> = () => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [isAdmin, setIsAdmin] = useState(false);
+  const [favoriteGrants, setFavoriteGrants] = useState([]);
   const [feedback, setFeedback] = useState<string>("");
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
@@ -25,7 +26,7 @@ const SignUp: React.FC<SignUpProps> = () => {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({ 'email': email, 'username': username,'password': password, 
-          'firstName': firstName, "lastName": lastName, 'isAdmin': isAdmin }),
+          'firstName': firstName, "lastName": lastName, 'isAdmin': isAdmin, 'favoriteGrants': favoriteGrants }),
       });
   
       if (!response.ok) {
