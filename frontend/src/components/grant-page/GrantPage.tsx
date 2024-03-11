@@ -1,7 +1,6 @@
 import { Link, useParams } from "react-router-dom";
 import { GrantPageProps } from "./GrantPageProps";
 import mockGrants from "../grant-browse/mockGrants";
-import { useEffect, useState } from "react";
 import { Grant } from "../interfaces/Grant";
 
 const GrantPage = ({}: GrantPageProps) => {

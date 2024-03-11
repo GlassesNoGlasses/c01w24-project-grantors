@@ -22,7 +22,11 @@ const ClientDashboard = ({}: ClientDashboardProps) => {
         </Link>
       </div>
       <div className="application-buttons flex justify-around items-center h-2/5">
-        <ApplicationIcon heroicon={<ListBulletIcon className="h-40 w-40"/>} label="View Available Grants" />
+        <Link to="/grants">
+          <ApplicationIcon
+            heroicon={<ListBulletIcon className="h-40 w-40"/>}
+            label="View Available Grants" />
+        </Link>
         <ApplicationIcon imageSrc={search} label="My Applications" />
       </div>
     </div>
