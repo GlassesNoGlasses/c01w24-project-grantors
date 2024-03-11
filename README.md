@@ -1,6 +1,11 @@
 # CSCC01-Project
 The project repository CSC C01.
 
+## How to run with Docker
+Run `docker-compose up`. If you want to rebuild images (i.e after changes to the code), do `docker-compose up --build` instead.
+
+If you have previously started up a mongodb server on port 127017, and want to connect to the database in the container, change the mongodb port in `docker-compose` from `27017:27017` to `27018:27017`, or delete the remote database first, and connect via compass on the address `mongodb://localhost:27018`. Otherwise compass will connect to the database you opened locally.
+
 ## How to run frontend
 Initialize
 ```bash
