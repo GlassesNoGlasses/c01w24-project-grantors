@@ -10,6 +10,8 @@ const MONGO_URL = "mongodb://localhost:27017";
 const DB_NAME = "grantors";
 const COLLECTIONS = {
   users: "users",
+  applications: "applications",
+  grants: "grants",
 };
 
 // Connect to MongoDB
@@ -42,6 +44,11 @@ app.get('/', (req, res) => {
     res.json({ message: 'Hello World!' });
 });
 
+function verifyRequestAuth(req, callback) {
+  const token = req.headers.authorization.split(" ")[1];
+  jwt.verify(token, "secret-key", callback);
+}
+
 app.post('/login', express.json(), async (req, res) => {
   try {
 
@@ -68,10 +75,16 @@ app.post('/login', express.json(), async (req, res) => {
       return res.status(401).json({'error' : 'Incorrect Credentials'});
     }
 
-    return res.status(200).send({ id:user._id, username:user.username, email:user.email,
-      firstName:user.firstName, lastName:user.lastName, isAdmin:user.isAdmin, });
+    const userID = user._id;
 
-  } catch {
+    const token = jwt.sign({ userID },  "secret-key", { expiresIn: "1h" });
+
+    return res.status(200).send({ id: user._id, username: user.username, 
+      email: user.email, firstName: user.firstName, lastName: user.lastName,
+      isAdmin: user.isAdmin, organization: user.organization, token: token });
+
+  } catch (err) {
+    console.log(err)
     res.status(500).send('Server Error with Logging In');
   }
 });
@@ -79,7 +92,7 @@ app.post('/login', express.json(), async (req, res) => {
   
 app.post("/signup", express.json(), async (req, res) => {
   try {
-    const { username, email, password, firstName, lastName, isAdmin} = req.body;
+    const { username, email, password, firstName, lastName, isAdmin, organization} = req.body;
 
     // Basic body request check
     if (!username || !password || !email) {
@@ -105,7 +118,8 @@ app.post("/signup", express.json(), async (req, res) => {
       password: hashedPassword,
       firstName: firstName,
       lastName: lastName,
-      isAdmin: isAdmin
+      isAdmin: isAdmin,
+      organization: organization,
     });
 
     // Returning JSON Web Token

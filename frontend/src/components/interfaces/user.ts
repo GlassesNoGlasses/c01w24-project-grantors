@@ -7,5 +7,6 @@ export interface User {
     firstName: string | null,
     lastName: string | null,
     email: string, 
-    password: string | null,
+    organization?: string,
+    authToken: string,
 }
