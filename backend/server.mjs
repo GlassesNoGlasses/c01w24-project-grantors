@@ -143,3 +143,25 @@ app.post("/createGrant", express.json(), async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 });
+
+app.get("/getGrant/:grantId", express.json(), async(req, res) => {
+  try {
+
+    const grantId = req.params.grantId;
+    const grantCollection = db.collection(COLLECTIONS.grants);
+
+    const data = await grantCollection.findOne({
+      _id: new ObjectId(grantId)
+    });
+
+    if (!data) {
+      return res
+        .status(404)
+        .json({ error: "Unable to find grant with given ID." });
+    }
+
+    res.status(200).json({ response: data });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+})

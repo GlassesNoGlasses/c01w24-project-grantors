@@ -25,6 +25,25 @@ const GrantForm: React.FC = () => {
     const [question, setQuestion] = useState<string>('');
     const [feedback, setFeedback] = useState<string>("");
 
+    const getSavedGrant = async(id: string) => {
+        try {
+            const response = await fetch(`http://localhost:${SERVER_PORT}/getGrant/${id}`, {
+              method: 'GET',
+              headers: {
+                'Content-Type': 'application/json',
+              },
+            });
+            
+            await response.json().then((data) => {
+                console.log(data)
+            })
+        } catch (error) {
+        console.error('error creating grant:', (error as Error).message);
+        setFeedback(`error creating grant`)
+        }
+    }
+    
+
     const handleQuestionSubmit = () => {
         const addQuestion = (prev: GrantQuestion[], newQuesion: string): GrantQuestion[] => {
             return [...prev, {id: ID++, question: newQuesion, answer: null}]
@@ -187,7 +206,7 @@ const GrantForm: React.FC = () => {
                         </div>
                     </div>
                 </form>
-                
+                <button type='button' onClick={() => getSavedGrant('65ef27538cf8496fab274208')}>fetch</button>
             </div>
         </div>
     );
