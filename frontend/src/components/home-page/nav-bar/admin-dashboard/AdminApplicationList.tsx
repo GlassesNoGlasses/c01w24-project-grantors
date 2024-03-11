@@ -63,8 +63,10 @@ const AdminApplicationList = ({}: AdminApplicationListProps) => {
 
         applications.sort((app1: Application, app2: Application) => {
             const ascendingMult = sortAscending ? 1 : -1;
-            if (sortColumn == "Date"){
+            if (sortColumn === "Date"){
                 return (Number(app1.submissionDate) - Number(app2.submissionDate)) * ascendingMult;
+            } else if (sortColumn === "Grant Title") {
+                return  app1.grantTitle < app2.grantTitle ? -ascendingMult : ascendingMult;
             }
             return (app1.userID - app2.userID) * ascendingMult;
         });
