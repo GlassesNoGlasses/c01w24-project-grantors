@@ -5,7 +5,7 @@ import Login from "./components/login-page/Login";
 import SignUp from "./components/signup-page/SignUp";
 import GrantForm from "./components/grant/grant";
 import { UserContextProvider } from "./components/contexts/userContext";
-import CreateGrant from "./components/create-grant/CreateGrant";
+import {CreateGrant, EditGrant} from "./components/admin-grant-managment";
 
 
 function App() {
@@ -24,6 +24,7 @@ function App() {
               <Route path="signup" element={<SignUp />} />
               <Route path="grant" element={<GrantForm />} />
               <Route path="createGrant" element={<CreateGrant />} />
+              <Route path="editGrant/:grantId" element={<EditGrant />} />
             </Route>
           </Routes>
         )}

@@ -25,6 +25,9 @@ const AdminDashboard = ({
         <Link to='/createGrant'>
           <ButtonIcon imageSrc={addIcon} label={"New Grant"}/>
         </ Link>
+        <Link to='editGrant/65efdd2439d78f5ec7a0da94'>
+          edit note 
+        </Link>
         <ButtonIcon imageSrc={userIcon} label={"My Account"}/>
         <ButtonIcon imageSrc={settingsIcon} label={"Settings"}/>
         <Link to="/">

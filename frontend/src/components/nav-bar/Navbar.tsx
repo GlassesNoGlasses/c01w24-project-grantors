@@ -49,7 +49,7 @@ const Navbar = ({}: NavbarProps) => {
   const AdminTopNaviation = (): JSX.Element =>  {
     return (
       <>
-        <Link className='text-base hover:underline' to="/">Create Grants</Link>
+        <Link className='text-base hover:underline' to="/createGrant">Create Grants</Link>
         <Link className='text-base hover:underline' to="/about">About</Link>
         <Link className='text-base hover:underline' to="/services">Services</Link>
         <Link className='text-base hover:underline' to="/gallery">Gallery</Link>

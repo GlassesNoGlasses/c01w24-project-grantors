@@ -119,12 +119,12 @@ app.post("/signup", express.json(), async (req, res) => {
 
 app.post("/createGrant", express.json(), async (req, res) => {
   try {
-    const { title, description, deadline, minAmount, maxAmount,
-      organization, category, contact, questions } = req.body;
+    const { accId, title, description, deadline, minAmount, maxAmount,
+      organization, category, contact, questions, publish } = req.body;
     
     const grantCollection = db.collection(COLLECTIONS.grants);
 
-    await grantCollection.insertOne({
+    const {acknowledged, insertedId} = await grantCollection.insertOne({
       title: title,
       description: description,
       deadline: deadline,
@@ -134,10 +134,41 @@ app.post("/createGrant", express.json(), async (req, res) => {
       category: category,
       contact: contact,
       questions: questions,
-      publish: false
+      publish: publish,
+      owner: accId
     });
 
-    res.status(201).json({ response: "Grant Saved."});
+    res.status(201).json({ response: "Grant Saved.", id: insertedId});
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+app.put("/editGrant/:grantId", express.json(), async (req, res) => {
+  try {
+    const { accId, title, description, deadline, minAmount, maxAmount,
+      organization, category, contact, questions, publish } = req.body;
+    
+    const grantCollection = db.collection(COLLECTIONS.grants);
+    const grantId = req.params.grantId
+
+    await grantCollection.updateOne(
+      { _id: new ObjectId(grantId)},
+      {$set: {
+      title: title,
+      description: description,
+      deadline: deadline,
+      minAmount: minAmount,
+      maxAmount: maxAmount,
+      organization: organization,
+      category: category,
+      contact: contact,
+      questions: questions,
+      publish: publish,
+      owner: accId
+    }});
+    
+    res.status(201).json({ response: "Grant Edited.", id: grantId});
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
@@ -145,28 +176,37 @@ app.post("/createGrant", express.json(), async (req, res) => {
 
 app.put('/addGrantToAdminList', express.json(), async(req, res) => {
   try {
-    const { accId, title, description, deadline, minAmount, maxAmount,
+    const { accId, grantId, title, description, deadline, minAmount, maxAmount,
       organization, category, contact, questions } = req.body;
     
     const userCollection = db.collection(COLLECTIONS.users);
 
-    userData = await userCollection.findOne({ _id:new ObjectId(accId)});
+    const grant = { _id: new ObjectId(grantId), 
+                  title: title,
+                  description: description,
+                  deadline: deadline,
+                  minAmount: minAmount,
+                  maxAmount: maxAmount,
+                  organization: organization,
+                  category: category,
+                  contact: contact,
+                  questions: questions,
+                  publish: false,
+                  owner: accId }
 
-    await grantCollection.insertOne({
-      title: title,
-      description: description,
-      deadline: deadline,
-      minAmount: minAmount,
-      maxAmount: maxAmount,
-      organization: organization,
-      category: category,
-      contact: contact,
-      questions: questions,
-      publish: false
-    });
+    const data = await userCollection.findOne({_id: new ObjectId(accId)})
 
-    res.status(201).json({ response: "Grant Saved."});
+    const grants = data.grants
+
+    const newGrants = !grants ? [grant] : [...(grants.filter(prev => prev._id != grantId)), grant]
+
+    await userCollection.updateOne({ _id: new ObjectId(accId)},
+                                  {$set: { grants: newGrants }})
+    
+    
+    res.status(201).json({ response: "Grant Saved to Admin Account."});
   } catch (error) {
+    console.log(error.message)
     res.status(500).json({ error: error.message });
   }
 })
@@ -188,6 +228,34 @@ app.get("/getGrant/:grantId", express.json(), async(req, res) => {
     }
 
     res.status(200).json({ response: data });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+})
+
+app.delete("/deleteGrant/:grantId", express.json(), async(req, res) => {
+  try {
+
+    const { accId } = req.body 
+
+    const grantId = req.params.grantId;
+    const grantCollection = db.collection(COLLECTIONS.grants);
+    const userCollection = db.collection(COLLECTIONS.users);
+
+    await grantCollection.deleteOne({
+      _id: new ObjectId(grantId)
+    })
+
+    const data = await userCollection.findOne({_id: new ObjectId(accId)})
+    const grants = data.grants
+    const newGrants = grants.length == 1 ? [] : [...(grants.filter(prev => prev._id != grantId))]
+
+    console.log(newGrants)
+
+    await userCollection.updateOne({ _id: new ObjectId(accId)},
+                                  {$set: { grants: newGrants }})
+
+    res.status(200).json({ response: `grant ${grantId} deleted` });
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
