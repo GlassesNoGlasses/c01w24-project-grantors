@@ -6,7 +6,12 @@ import jwt from "jsonwebtoken";
 
 const app = express();
 const PORT = 8000;
-const MONGO_URL = "mongodb://localhost:27017";
+let MONGO_URL;
+if (process.env.ENV === 'Docker') {
+  MONGO_URL = 'mongodb://mongodb:27017';
+} else {
+  MONGO_URL = 'mongodb://127.0.0.1:27017';
+}
 const DB_NAME = "grantors";
 const COLLECTIONS = {
   users: "users",
