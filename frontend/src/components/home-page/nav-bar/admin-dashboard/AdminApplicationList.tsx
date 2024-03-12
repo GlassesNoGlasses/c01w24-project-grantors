@@ -79,11 +79,11 @@ const AdminApplicationList = ({}: AdminApplicationListProps) => {
     return (
         <div className="flex flex-col h-full items-start justify-start px-5 bg-grantor-green">
             <span className="text-2xl pl-2">Applications</span>
-            <Table items={applications}
-                columns={columns}
-                itemsPerPageOptions={itemsPerPageOptions}
-                defaultIPP={10}
-                defaultSort={columns[2]}
+            <Table items={applications.filter((app) => app.submitted)}
+                   columns={columns}
+                   itemsPerPageOptions={itemsPerPageOptions}
+                   defaultIPP={10}
+                   defaultSort={columns[2]}
             />
         </div>
     )

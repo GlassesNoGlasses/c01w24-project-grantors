@@ -73,4 +73,16 @@ export const mockApplications: Application[] = [
         awarded: 0, 
         responses: [],
     },
+    {
+        id: 7,
+        userID: 5,
+        grantID: 6,
+        grantTitle: "UTAPS",
+        grantCategory: "Education", 
+        submitted: false,
+        submissionDate: new Date(),
+        status: ApplicationStatus.inProgress,
+        awarded: 0, 
+        responses: [],
+    },
 ]
