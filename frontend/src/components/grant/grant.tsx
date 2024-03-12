@@ -19,7 +19,8 @@ const GrantForm: React.FC = () => {
         category: '',
         contact: '',
         questions: [],
-        publish: false
+        publish: false,
+        owner: null
     };
 
     const [grant, setGrant] = useState<Grant>(initialGrantState);

@@ -17,14 +17,10 @@ const Login: React.FC<LoginProps> = () => {
 
   const {user, setUser} = useUserContext();
 
-  const InstantiateUser = (username: string, password: string, isAdmin: boolean, loginType: number): User => {
-    if (loginType === 1) {
-      return {accountID: null, isAdmin: isAdmin, username: null, firstName: null,
-        lastName: null, email: username, password: password};
-    } 
-    return {accountID: null, isAdmin: isAdmin, username: username, firstName: null,
-        lastName: null, email: null, password: password};
-
+  const InstantiateUser = (accountID: string, isAdmin: boolean, username: string, firstName: string,
+    lastName: string, email: string): User => {
+    return {accountID: accountID, isAdmin: isAdmin, username: username, firstName: firstName,
+        lastName: lastName, email: email, password: null};
   };
   
 
@@ -55,15 +51,13 @@ const Login: React.FC<LoginProps> = () => {
         case 200:
           console.log('Login successful');
           await response.json().then((data) => {
-            if (data["loginType"] > 2 || data["loginType"] < 1) {
-              throw new Error('Invalid loginType: ', data["loginType"]);
-            }
-
-            console.log(`Welcome ${username}`)
-            setFeedback('')
-            setUser(InstantiateUser(username, password, data["admin"], data["loginType"]))
+            console.log(`Welcome ${data['username']}`);
+            setFeedback('');
+            setUser(InstantiateUser(data['id'], data['isAdmin'], data['username'],
+                                    data['firstName'], data['lastName'], data['email']));
             navigate("/");
-        }) 
+          });
+    
           break;
       }
       

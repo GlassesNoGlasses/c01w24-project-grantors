@@ -1,11 +1,15 @@
 import React from 'react'
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { useUserContext } from '../contexts/userContext';
 import { Grant, GrantQuestion } from '../interfaces/Grant' 
 
 let ID = 0
 const SERVER_PORT = 8000
 
 const GrantForm: React.FC = () => {
+    const {user} = useUserContext();
+
     const initialGrantState: Grant = {
         id: Date.now(),
         title: '',
@@ -18,12 +22,21 @@ const GrantForm: React.FC = () => {
         category: '',
         contact: '',
         questions: [],
-        publish: false
+        publish: false,
+        owner: user ? user.accountID : null
     };
+
+    console.log(user)
 
     const [grant, setGrant] = useState<Grant>(initialGrantState);
     const [question, setQuestion] = useState<string>('');
     const [feedback, setFeedback] = useState<string>("");
+
+    if (!user) {
+        return (
+            <div className='flex font-bold text-xl justify-center mt-10'>Access Denied: Invalid Permission</div>
+        )
+    }
 
     const getSavedGrant = async(id: string) => {
         try {

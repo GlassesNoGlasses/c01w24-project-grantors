@@ -7,9 +7,7 @@ export interface User {
     firstName: String | null,
     lastName: String | null,
     email: String | null, 
-    password: String,
+    password: String | null,
+    grants?: Grant[]
 }
 
-export interface Admin extends User {
-    grants: Grant[]
-}

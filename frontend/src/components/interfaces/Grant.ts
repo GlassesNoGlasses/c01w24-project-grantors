@@ -17,4 +17,5 @@ export interface Grant {
     contact: string;
     questions: GrantQuestion[];
     publish: boolean;
+    owner: string | null; // admin user id
 }
