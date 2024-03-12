@@ -44,7 +44,7 @@ const GrantForm: React.FC<GrantFormProps> = ({ type, port }) => {
             
             await response.json().then((data) => {
                 const { title, description, deadline, minAmount, maxAmount,
-                    organization, category, contact, questions } = data['response']
+                    organization, category, contact, questions, publish, owner } = data['response']
                 
                 setGrant( { 
                     id: Date.now(),
@@ -58,8 +58,8 @@ const GrantForm: React.FC<GrantFormProps> = ({ type, port }) => {
                     category: category,
                     contact: contact,
                     questions: questions,
-                    publish: false,
-                    owner: user ? user.accountID : null
+                    publish: publish,
+                    owner: owner
                     } )
                 
             })
@@ -81,6 +81,7 @@ const GrantForm: React.FC<GrantFormProps> = ({ type, port }) => {
       }, []);
 
     
+    
     const [question, setQuestion] = useState<string>('');
     const [feedback, setFeedback] = useState("");
     const navigate = useNavigate()
@@ -89,6 +90,20 @@ const GrantForm: React.FC<GrantFormProps> = ({ type, port }) => {
         return (
             <div className='flex font-bold text-xl justify-center mt-10'>Access Denied: Invalid Permission</div>
         )
+    }
+
+    if (grant.owner != user.accountID) {
+        return (
+            <div className='flex font-bold text-xl justify-center mt-10'>
+                Unauthorized: Permission Denied
+            </div>)
+    }
+
+    if (grant.publish) {
+        return (
+            <div className='flex font-bold text-xl justify-center mt-10'>
+                Bad Request: Grant Cannot Be Editted Once Published
+            </div>)
     }
 
     const deleteGrant = async(id: string) => {
@@ -190,12 +205,15 @@ const GrantForm: React.FC<GrantFormProps> = ({ type, port }) => {
                 },
                 body: JSON.stringify({ 'accId': user.accountID, 'grantId': GRANTID, 'title': grant.title, 'description': grant.description, 'deadline': grant.deadline, 
                     'minAmount': grant.minAmount, "maxAmount": grant.maxAmount, 'organization': grant.organization,
-                    'category': grant.category, "contact": grant.contact, 'questions': grant.questions, }),
+                    'category': grant.category, "contact": grant.contact, 'questions': grant.questions, "publish": publish }),
             });
-        
             
-            console.log(response.status);
-            setFeedback(``);
+            if (publish){
+                setFeedback(`Grant Published!`);
+            } else {
+                setFeedback(`Grant Saved!`);
+            }
+            
             if (type == 'create') setGrant(initialGrantState)
         } catch (error) {
             console.error('error creating grant:', (error as Error).message);
@@ -215,6 +233,7 @@ const GrantForm: React.FC<GrantFormProps> = ({ type, port }) => {
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
         const { name, value } = e.target;
         setGrant({ ...grant, [name]: value });
+        setFeedback('')
     };
 
     const handleAmountChange = (name: 'minAmount' | 'maxAmount', value: number) => {
@@ -225,13 +244,6 @@ const GrantForm: React.FC<GrantFormProps> = ({ type, port }) => {
         e.preventDefault();
         saveGrant(true)
         console.log('submitted')
-    };
-
-    const handleQuestionChange = (id: number, answer: string) => {
-        const updatedQuestions = grant.questions.map(q => 
-            q.id === id ? { ...q, answer } : q
-        );
-        setGrant({ ...grant, questions: updatedQuestions });
     };
 
     const formatDateToYYYYMMDD = (date: Date) => {
@@ -326,8 +338,10 @@ const GrantForm: React.FC<GrantFormProps> = ({ type, port }) => {
                         </div>
                     )}
 
+                    <div className='h-[40px] flex justify-center items-center'>{feedback}</div>
+
         
-                    <div className={`flex ${type === 'create' ? 'justify-end' : 'justify-between'} gap-8 mt-10`}>
+                    <div className={`flex ${type === 'create' ? 'justify-end' : 'justify-between'} gap-8 `}>
                         {type === 'create' ? <></> : <button type='button' className='p-2 bg-red-600 text-white pl-5 pr-5 rounded-lg hover:bg-red-800' onClick={() => deleteGrant(grantID)}>Delete</button>}
                         <div className='flex justify-end'>
                             <button type='button' className='p-2 bg-blue-600 text-white pl-5 pr-5 rounded-lg hover:bg-blue-800 mr-10' onClick={() => saveGrant(false)}>Save</button>

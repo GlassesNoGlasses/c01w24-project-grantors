@@ -177,7 +177,7 @@ app.put("/editGrant/:grantId", express.json(), async (req, res) => {
 app.put('/addGrantToAdminList', express.json(), async(req, res) => {
   try {
     const { accId, grantId, title, description, deadline, minAmount, maxAmount,
-      organization, category, contact, questions } = req.body;
+      organization, category, contact, questions, publish } = req.body;
     
     const userCollection = db.collection(COLLECTIONS.users);
 
@@ -191,7 +191,7 @@ app.put('/addGrantToAdminList', express.json(), async(req, res) => {
                   category: category,
                   contact: contact,
                   questions: questions,
-                  publish: false,
+                  publish: publish,
                   owner: accId }
 
     const data = await userCollection.findOne({_id: new ObjectId(accId)})

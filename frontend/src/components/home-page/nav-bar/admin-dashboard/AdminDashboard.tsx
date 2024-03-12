@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { AdminDashboardProps } from './AdminDashboardProps'
 import { useUserContext } from '../../../contexts/userContext'
 import ButtonIcon from '../../../displays/ButtonIcon/ButtonIcon';
@@ -17,17 +17,26 @@ const AdminDashboard = ({
 
     // States used
     const {user, setUser} = useUserContext();
+    const [grantId, setGrantId] = useState('')
+
+    const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+      setGrantId(event.target.value);
+    };
 
   return (
     <div className='h-full bg-grantor-green flex flex-col gap-28'>
       <h2 className='text-6xl underline text-white pl-8'>Welcome, {user?.username}!</h2>
       <div className='flex justify-evenly items-center'>
+        <div>
         <Link to='/createGrant'>
           <ButtonIcon imageSrc={addIcon} label={"New Grant"}/>
         </ Link>
-        <Link to='editGrant/65efdd2439d78f5ec7a0da94'>
-          edit note 
-        </Link>
+        <input type="text" onChange={handleChange} value={grantId}/>
+          <Link to={`editGrant/${grantId}`}>
+            edit grant 
+          </Link>
+        </div>
+        
         <ButtonIcon imageSrc={userIcon} label={"My Account"}/>
         <ButtonIcon imageSrc={settingsIcon} label={"Settings"}/>
         <Link to="/">
