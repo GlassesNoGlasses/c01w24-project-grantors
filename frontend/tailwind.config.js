@@ -21,6 +21,7 @@ module.exports = {
     extend: {
       colors: {
         'grantor-green': 'rgb(141, 229, 100)',
+        'dim': 'rgb(0, 0, 0, 0.5)',
       }
     },
   },
