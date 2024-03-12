@@ -10,12 +10,15 @@ interface GrantFormProps {
 }
 
 const GrantForm: React.FC<GrantFormProps> = ({ type, port }) => {
+
     const {user} = useUserContext();
     
+    // extract the grantId from url
     let { grantId } = useParams()
     const grantID = !grantId ? '' : grantId
 
-    let initialGrantState: Grant = {
+    // default grant object
+    const initialGrantState: Grant = {
         id: Date.now(),
         title: '',
         description: '',
@@ -31,8 +34,11 @@ const GrantForm: React.FC<GrantFormProps> = ({ type, port }) => {
         owner: user ? user.accountID : null
     };
 
+    // set initial form to conform to default empty grant
     const [grant, setGrant] = useState<Grant>(initialGrantState);
 
+    // function to retrieve a grant saved in the server, set the grant form to fill with the
+    // requested grant
     const getSavedGrant = async(id: string) => {
         try {
             const response = await fetch(`http://localhost:${port}/getGrant/${id}`, {
@@ -69,6 +75,7 @@ const GrantForm: React.FC<GrantFormProps> = ({ type, port }) => {
         }
     }
 
+    // retrieve the grant if in edit mode only when mounting
     useEffect(() => {
        
         if (type != 'create') {
@@ -81,17 +88,19 @@ const GrantForm: React.FC<GrantFormProps> = ({ type, port }) => {
       }, []);
 
     
-    
+    // state variables
     const [question, setQuestion] = useState<string>('');
     const [feedback, setFeedback] = useState("");
     const navigate = useNavigate()
-
-    if (!user) {
+    
+    // no user logged in or not admin
+    if (!user || user.isAdmin) {
         return (
             <div className='flex font-bold text-xl justify-center mt-10'>Access Denied: Invalid Permission</div>
         )
     }
 
+    // not the owner of the grant
     if (grant.owner != user.accountID) {
         return (
             <div className='flex font-bold text-xl justify-center mt-10'>
@@ -99,6 +108,7 @@ const GrantForm: React.FC<GrantFormProps> = ({ type, port }) => {
             </div>)
     }
 
+    // grant already published and cannot be editted
     if (grant.publish) {
         return (
             <div className='flex font-bold text-xl justify-center mt-10'>
@@ -106,6 +116,7 @@ const GrantForm: React.FC<GrantFormProps> = ({ type, port }) => {
             </div>)
     }
 
+    // function to delete a grant in the server with given id
     const deleteGrant = async(id: string) => {
         try {
             const response = await fetch(`http://localhost:${port}/deleteGrant/${id}`, {
@@ -124,7 +135,7 @@ const GrantForm: React.FC<GrantFormProps> = ({ type, port }) => {
         }
     }
     
-
+    // handler for when a question is added in the form
     const handleQuestionSubmit = () => {
         if (question == '') return;
 
@@ -142,6 +153,7 @@ const GrantForm: React.FC<GrantFormProps> = ({ type, port }) => {
         setQuestion('')
     };
 
+    // function to save grant when publish==false or publish grant otherwise
     const saveGrant = async(publish: boolean) => {
         let GRANTID = 0
 
@@ -221,31 +233,37 @@ const GrantForm: React.FC<GrantFormProps> = ({ type, port }) => {
         }
     }
 
-    const handleQChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-        const { name, value } = e.target;
+    // when question input changes, update the question state
+    const handleQuestionChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+        const { value } = e.target;
         setQuestion(value)
     };
 
+    // remove a question by filtering it out
     const handleRemoveQuestion = (id: number) => {
         setGrant({ ...grant, questions: grant.questions.filter(q => q.id != id)})
     }
 
+    // when general input changes, update the corresponding field
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
         const { name, value } = e.target;
         setGrant({ ...grant, [name]: value });
         setFeedback('')
     };
 
+    // when amount input changes, update the corresponding field
     const handleAmountChange = (name: 'minAmount' | 'maxAmount', value: number) => {
         setGrant({ ...grant, [name]: value });
     };
 
+    // handle when the form is published when all required fields are provided
     const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         saveGrant(true)
         console.log('submitted')
     };
 
+    // formatter for dates
     const formatDateToYYYYMMDD = (date: Date) => {
         return new Date(date).toISOString().split('T')[0];
     };
@@ -317,7 +335,7 @@ const GrantForm: React.FC<GrantFormProps> = ({ type, port }) => {
                         <label htmlFor="question" className="block text-gray-700 font-medium mb-2">Add a Question for Applicants</label>
 
                         <div className='flex items-center'>
-                            <input type="text" name="question" value={question} onChange={handleQChange}
+                            <input type="text" name="question" value={question} onChange={handleQuestionChange}
                                 className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent mr-4" />
                             <button type='button' className='p-2 bg-green-600 text-white pl-5 pr-5 rounded-lg hover:bg-green-800' onClick={handleQuestionSubmit}>add</button>
                         </div>
@@ -350,7 +368,6 @@ const GrantForm: React.FC<GrantFormProps> = ({ type, port }) => {
                     </div>
                    
                 </form>
-                {/* <button type='button' onClick={() => getSavedGrant('65ef27538cf8496fab274208')}>fetch</button> */}
             </div>
         </div>
     );
