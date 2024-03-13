@@ -94,7 +94,7 @@ const GrantForm: React.FC<GrantFormProps> = ({ type, port }) => {
     const navigate = useNavigate()
     
     // no user logged in or not admin
-    if (!user || user.isAdmin) {
+    if (!user || !user.isAdmin) {
         return (
             <div className='flex font-bold text-xl justify-center mt-10'>Access Denied: Invalid Permission</div>
         )

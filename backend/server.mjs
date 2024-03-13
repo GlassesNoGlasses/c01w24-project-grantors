@@ -100,7 +100,7 @@ app.post("/signup", express.json(), async (req, res) => {
     // Creating hashed password 
     // and storing user info in database
     const hashedPassword = await bcrypt.hash(password, 10);
-    await userCollection.insertOne({
+    const {insertedId} = await userCollection.insertOne({
       username: username,
       email: email,
       password: hashedPassword,
@@ -111,7 +111,7 @@ app.post("/signup", express.json(), async (req, res) => {
 
     // Returning JSON Web Token
     const token = jwt.sign({ username }, "secret-key", { expiresIn: "1h" });
-    res.status(201).json({ response: "User registered successfully.", token });
+    res.status(201).json({ response: "User registered successfully.", token, id: insertedId});
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
@@ -119,12 +119,14 @@ app.post("/signup", express.json(), async (req, res) => {
 
 app.post("/createGrant", express.json(), async (req, res) => {
   try {
+
+    // frontend guarantees that all these fields are provided so omit param check
     const { accId, title, description, deadline, minAmount, maxAmount,
       organization, category, contact, questions, publish } = req.body;
     
     const grantCollection = db.collection(COLLECTIONS.grants);
 
-    const {acknowledged, insertedId} = await grantCollection.insertOne({
+    const {insertedId} = await grantCollection.insertOne({
       title: title,
       description: description,
       deadline: deadline,
@@ -249,8 +251,6 @@ app.delete("/deleteGrant/:grantId", express.json(), async(req, res) => {
     const data = await userCollection.findOne({_id: new ObjectId(accId)})
     const grants = data.grants
     const newGrants = grants.length == 1 ? [] : [...(grants.filter(prev => prev._id != grantId))]
-
-    console.log(newGrants)
 
     await userCollection.updateOne({ _id: new ObjectId(accId)},
                                   {$set: { grants: newGrants }})
