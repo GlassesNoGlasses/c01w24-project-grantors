@@ -4,14 +4,13 @@ import { GrantQuestion } from "../interfaces/Grant";
 
 const GrantQuestionList = ({ questions }: QuestionListProps) => {
     return (
-        <form onSubmit={handleSubmit}>
+        <div>
             {questions.map((question, index) => (
                 <li key={index}>
                     <QuestionItem grantQuestion={question} />
                 </li>
             ))}
-            <button type="submit" className="submit-btn">Submit Form</button>
-        </form>
+        </div>
     );
 };
 
@@ -24,15 +23,14 @@ const QuestionItem = ({grantQuestion}: {grantQuestion: GrantQuestion}) => {
             <input
                 type="text"
                 value={answer}
+                placeholder="Type your answer here."
                 onChange={(e) => setInputValue(e.target.value)}
             />
          </div>
     );
 }
 
-const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-}
+
 
 
 export default GrantQuestionList;
