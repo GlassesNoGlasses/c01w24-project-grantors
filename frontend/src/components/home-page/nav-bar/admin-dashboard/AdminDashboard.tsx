@@ -14,8 +14,15 @@ import { Link, useNavigate } from 'react-router-dom';
 const AdminDashboard = ({
 
   }: AdminDashboardProps) => {
-  const {user, setUser} = useUserContext();
-  const [encodedOrg, setEncodedOrg] = useState('');
+
+    // States used
+    const {user, setUser} = useUserContext();
+    const [grantId, setGrantId] = useState('');
+    const [encodedOrg, setEncodedOrg] = useState('');
+
+    const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+      setGrantId(event.target.value);
+    };
 
   useEffect(() => {
     if (user?.organization) {
@@ -29,7 +36,16 @@ const AdminDashboard = ({
     <div className='h-full bg-grantor-green flex flex-col gap-28'>
       <h2 className='text-6xl underline text-white pl-8'>Welcome, {user?.username}!</h2>
       <div className='flex justify-evenly items-center'>
-        <ButtonIcon imageSrc={addIcon} label={"New Grant"}/>
+        <div>
+        <Link to='/createGrant'>
+          <ButtonIcon imageSrc={addIcon} label={"New Grant"}/>
+        </ Link>
+        <input type="text" onChange={handleChange} value={grantId}/>
+          <Link to={`editGrant/${grantId}`}>
+            edit grant 
+          </Link>
+        </div>
+        
         <ButtonIcon imageSrc={userIcon} label={"My Account"}/>
         <ButtonIcon imageSrc={settingsIcon} label={"Settings"}/>
         <Link to="/">

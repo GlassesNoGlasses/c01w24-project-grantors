@@ -19,7 +19,7 @@ export const users =
         "firstName": "rawad",
         "lastName": "assi",
         "email": "rawad@abou",
-        "password": "123"
+        "password": "123",
     },
 
     {
