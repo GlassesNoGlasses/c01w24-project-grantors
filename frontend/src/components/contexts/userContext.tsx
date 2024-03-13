@@ -1,6 +1,6 @@
 import React, { createContext, useMemo, useState } from "react"
 import { Dispatch, SetStateAction } from "react"
-import { User } from "../interfaces/user";
+import { User } from "../interfaces/User";
 
 interface UserContextType {
     user: User | null,

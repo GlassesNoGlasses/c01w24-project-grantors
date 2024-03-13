@@ -5,10 +5,9 @@ import emailIcon from '../../images/iconMail.png';
 import passwordIcon from '../../images/iconPassword.png';
 import { Link, useNavigate } from "react-router-dom";
 import { useUserContext } from '../contexts/userContext';
-import { User } from '../interfaces/user';
-
-
-const SERVER_PORT:number = 8000;
+import { User } from '../interfaces/User';
+import { ServerLoginResponse } from '../interfaces/ServerLoginResponse';
+import { SERVER_PORT } from '../../constants/ServerConstants'
 
 const Login: React.FC<LoginProps> = () => {
   const [username, setUsername] = useState('');
@@ -18,10 +17,15 @@ const Login: React.FC<LoginProps> = () => {
 
   const {user, setUser} = useUserContext();
 
-  const InstantiateUser = (accountID: string, isAdmin: boolean, username: string, firstName: string,
-    lastName: string, email: string): User => {
-    return {accountID: accountID, isAdmin: isAdmin, username: username, firstName: firstName,
-        lastName: lastName, email: email, password: null};
+  const InstantiateUser = (response: ServerLoginResponse): User => {
+    if (response.isAdmin) {
+      return {accountID: response.accountID, isAdmin: true, username: response.username,
+        firstName: response.firstName, lastName: response.lastName, email: response.email,
+        organization: response.organization, authToken: response.authToken };
+    }
+    return {accountID: response.accountID, isAdmin: false, username: response.username, 
+      firstName: response.firstName, lastName: response.lastName, email: response.email,
+      authToken: response.authToken }
   };
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
@@ -51,10 +55,9 @@ const Login: React.FC<LoginProps> = () => {
         case 200:
           console.log('Login successful');
           await response.json().then((data) => {
-            console.log(`Welcome ${data[username]}`);
+            console.log(`Welcome ${data['username']}`);
             setFeedback('');
-            setUser(InstantiateUser(data['id'], data['isAdmin'], data['username'],
-                                    data['firstName'], data['lastName'], data['email']));
+            setUser(InstantiateUser(data));
             navigate("/");
           });
           break;

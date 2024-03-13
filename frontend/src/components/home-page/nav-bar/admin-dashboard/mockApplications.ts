@@ -1,39 +1,6 @@
+import { Application, ApplicationStatus } from "../../../interfaces/Application";
 
-export const admins = 
-[
-    {
-        "isAdmin": true,
-        "username": "alex",
-        "firstName": "alex",
-        "lastName": "zeng",
-        "email": "alex@mail",
-        "password": "123"
-    }
-];
-
-export const users = 
-[
-    {
-        "isAdmin": false,
-        "username": "rawad",
-        "firstName": "rawad",
-        "lastName": "assi",
-        "email": "rawad@abou",
-        "password": "123"
-    },
-
-    {
-        "username": "neil",
-        "email": "neil@mail.com",
-        "password": "123",
-        "firstName": "Neil",
-        "lastName": "Wang",
-        "isAdmin": false
-    }
-];
-
-export const applications = 
-[
+export const mockApplications: Application[] = [
     {
         id: 1,
         userID: 2,
@@ -41,8 +8,8 @@ export const applications =
         grantTitle: "Community Accessibility Grant",
         grantCategory: "Community Development", 
         submitted: true,
-        submissionDate: new Date(),
-        status: "Submitted",
+        submissionDate: new Date(new Date().getDate() - 1),
+        status: ApplicationStatus.submitted,
         awarded: 0,
         responses: [],
     },
@@ -54,7 +21,7 @@ export const applications =
         grantCategory: "Education", 
         submitted: true,
         submissionDate: new Date(),
-        status: "Submitted",
+        status: ApplicationStatus.submitted,
         awarded: 0, 
         responses: [],
     },
@@ -66,7 +33,7 @@ export const applications =
         grantCategory: "Technology", 
         submitted: true,
         submissionDate: new Date(),
-        status: "Submitted",
+        status: ApplicationStatus.submitted,
         awarded: 0, 
         responses: [],
     },
@@ -78,7 +45,7 @@ export const applications =
         grantCategory: "Education", 
         submitted: true,
         submissionDate: new Date(),
-        status: "In Progress",
+        status: ApplicationStatus.inProgress,
         awarded: 0, 
         responses: [],
     },
@@ -90,7 +57,7 @@ export const applications =
         grantCategory: "Employment", 
         submitted: true,
         submissionDate: new Date(),
-        status: "Submitted",
+        status: ApplicationStatus.submitted,
         awarded: 0, 
         responses: [],
     },
@@ -102,7 +69,19 @@ export const applications =
         grantCategory: "Healthcare", 
         submitted: true,
         submissionDate: new Date(),
-        status: "In Progress",
+        status: ApplicationStatus.inProgress,
+        awarded: 0, 
+        responses: [],
+    },
+    {
+        id: 7,
+        userID: 5,
+        grantID: 6,
+        grantTitle: "UTAPS",
+        grantCategory: "Education", 
+        submitted: false,
+        submissionDate: new Date(),
+        status: ApplicationStatus.inProgress,
         awarded: 0, 
         responses: [],
     },
