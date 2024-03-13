@@ -6,11 +6,17 @@ import jwt from "jsonwebtoken";
 
 const app = express();
 const PORT = 8000;
-const MONGO_URL = "mongodb://localhost:27017";
+let MONGO_URL;
+if (process.env.ENV === 'Docker') {
+  MONGO_URL = 'mongodb://mongodb:27017';
+} else {
+  MONGO_URL = 'mongodb://127.0.0.1:27017';
+}
 const DB_NAME = "grantors";
 const COLLECTIONS = {
   users: "users",
-  grants: "grants"
+  applications: "applications",
+  grants: "grants",
 };
 
 // Connect to MongoDB
@@ -43,6 +49,11 @@ app.get('/', (req, res) => {
     res.json({ message: 'Hello World!' });
 });
 
+function verifyRequestAuth(req, callback) {
+  const token = req.headers.authorization.split(" ")[1];
+  jwt.verify(token, "secret-key", callback);
+}
+
 app.post('/login', express.json(), async (req, res) => {
   try {
 
@@ -68,11 +79,17 @@ app.post('/login', express.json(), async (req, res) => {
     if (!(await bcrypt.compare(password, user.password))) {
       return res.status(401).json({'error' : 'Incorrect Credentials'});
     }
-    
-    return res.status(200).send({ id:user._id, username:user.username, email:user.email,
-      firstName:user.firstName, lastName:user.lastName, isAdmin:user.isAdmin, user: user});
 
-  } catch {
+    const userID = user._id;
+
+    const token = jwt.sign({ userID },  "secret-key", { expiresIn: "1h" });
+
+    return res.status(200).send({ accountID: user._id, username: user.username, 
+      email: user.email, firstName: user.firstName, lastName: user.lastName,
+      isAdmin: user.isAdmin, organization: user.organization, token: token });
+
+  } catch (err) {
+    console.log(err)
     res.status(500).send('Server Error with Logging In');
   }
 });
@@ -80,7 +97,7 @@ app.post('/login', express.json(), async (req, res) => {
   
 app.post("/signup", express.json(), async (req, res) => {
   try {
-    const { username, email, password, firstName, lastName, isAdmin} = req.body;
+    const { username, email, password, firstName, lastName, isAdmin, organization} = req.body;
 
     // Basic body request check
     if (!username || !password || !email) {
@@ -106,7 +123,8 @@ app.post("/signup", express.json(), async (req, res) => {
       password: hashedPassword,
       firstName: firstName,
       lastName: lastName,
-      isAdmin: isAdmin
+      isAdmin: isAdmin,
+      organization: organization,
     });
 
     // Returning JSON Web Token
@@ -197,8 +215,9 @@ app.put('/addGrantToAdminList', express.json(), async(req, res) => {
                   owner: accId }
 
     const data = await userCollection.findOne({_id: new ObjectId(accId)})
-
+    
     const grants = data.grants
+    
 
     const newGrants = !grants ? [grant] : [...(grants.filter(prev => prev._id != grantId)), grant]
 
@@ -260,3 +279,47 @@ app.delete("/deleteGrant/:grantId", express.json(), async(req, res) => {
     res.status(500).json({ error: error.message });
   }
 })
+
+app.get("/getApplications", express.json(), async (req, res) => {
+  const { organization } = req.body();
+
+  verifyRequestAuth(req, async (err, decoded) => {
+    if (err) {
+        return res.status(401).send("Unauthorized.");
+    }
+
+    if (!organization) {
+      // If no organization was provided, get the org from auth token
+      const userCollection = db.collection(COLLECTIONS.users);
+      const user = await userCollection.findOne({ _id: decoded });
+      if (!user) {
+        return res.status(400).send("Organization not provided.")
+      }
+
+      organization = user.organization;
+    }
+
+    const applicationCollection = db.collection(COLLECTIONS.applications)
+
+    // Looks up all applications, where the associate grant belongs to the organization
+    const pipeline = [
+      {
+        $lookup: {
+          from: COLLECTIONS.grants,
+          localField: 'grantID',
+          foreignField: '_id',
+          as: 'grant',
+        }
+      },
+      {
+        $match: {
+          'grant.organization': organization
+        }
+      }
+    ]
+
+    const applications = await applicationCollection.aggregate(pipeline).toArray();
+
+    res.json({ applications: applications });
+  });
+});

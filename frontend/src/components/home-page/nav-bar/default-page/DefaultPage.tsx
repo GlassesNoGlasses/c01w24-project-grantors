@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom'
 import happy_person from '../../../../images/happy_person.png'
 import grant_signing from '../../../../images/grant_signing.png'
 
-const DefaultPage = ({}) => {
+const DefaultPage = () => {
   const CreateAccountButton = () => {
     return (
       <Link className='p-2 px-5 m-2 bg-green-500 hover:bg-green-600 active:bg-green-700

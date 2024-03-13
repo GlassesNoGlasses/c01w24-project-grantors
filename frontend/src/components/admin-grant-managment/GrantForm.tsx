@@ -219,6 +219,8 @@ const GrantForm: React.FC<GrantFormProps> = ({ type, port }) => {
                     'minAmount': grant.minAmount, "maxAmount": grant.maxAmount, 'organization': grant.organization,
                     'category': grant.category, "contact": grant.contact, 'questions': grant.questions, "publish": publish }),
             });
+
+            console.log(user)
             
             if (publish){
                 setFeedback(`Grant Published!`);

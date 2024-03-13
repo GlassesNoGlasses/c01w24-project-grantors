@@ -10,8 +10,8 @@ export interface Grant {
     description: string;
     posted: Date;
     deadline: Date;
-    minAmount: number;
-    maxAmount: number;
+    minAmount: Number;
+    maxAmount: Number;
     organization: string;
     category: string;
     contact: string;
