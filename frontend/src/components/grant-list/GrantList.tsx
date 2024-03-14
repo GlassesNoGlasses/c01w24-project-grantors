@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 import { GrantListProps } from "./GrantListProps";
 import { Grant } from "../interfaces/Grant";
+import { GrantItemProps } from "./GrantItemProps";
 
 const GrantList = ({ grants }: GrantListProps) => {
     return (
@@ -14,9 +15,9 @@ const GrantList = ({ grants }: GrantListProps) => {
     );
 }
 
-const GrantItem = ({ grant }: { grant: Grant }) => {
+export const GrantItem = ({ grant, link }: GrantItemProps) => {
     return (
-        <Link to={`/grants/${grant.id}`}
+        <Link to={link ? link : `/grants/${grant.id}`}
             className="flex flex-col gap-3 p-1 px-3 rounded-md shadow-sm border
                 bg-slate-50 active:bg-slate-100 hover:shadow-md">
             <div className="flex flex-row justify-between items-center">
@@ -24,12 +25,12 @@ const GrantItem = ({ grant }: { grant: Grant }) => {
                 <h2 className="text-lg">{`CAD $${grant.minAmount.toString()} - $${grant.maxAmount.toString()}`}</h2>
             </div>
             <div className="flex flex-row justify-between">
-                <h3 className="text-lg">{grant.organization}</h3>
-                <h4 className="text-base">{grant.category}</h4>
+                <h3 className="text-lg">{`Org: ${grant.organization}`}</h3>
+                <h4 className="text-base">{`Categories: ${grant.category}`}</h4>
             </div>
             <div className="flex flex-col">
-                <p className="text-sm">{`Posted: ${grant.posted.toDateString()}`}</p>
-                <p className="text-sm">{`Deadline: ${grant.deadline.toDateString()}`}</p>
+                <p className="text-sm">{`Posted: ${grant.posted ? grant.posted.toDateString() : 'N/A'}`}</p>
+                <p className="text-sm">{`Deadline: ${grant.deadline ? grant.deadline.toDateString() : 'N/A'}`}</p>
             </div>    
             <p className="text-base">{grant.description}</p>
         </Link>

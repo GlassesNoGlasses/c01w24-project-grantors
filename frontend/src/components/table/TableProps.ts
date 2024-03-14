@@ -1,3 +1,5 @@
+import { LinkProps } from "../interfaces/LinkProps";
+
 export interface Column<T> {
     key: keyof T,
     title: string,
@@ -11,4 +13,5 @@ export interface TableProps<T> {
     itemsPerPageOptions: number[],
     defaultIPP: number,
     defaultSort: Column<T>,
+    link?: LinkProps<T>,
 };
