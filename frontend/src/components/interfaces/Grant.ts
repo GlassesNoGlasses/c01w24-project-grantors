@@ -1,3 +1,9 @@
+export interface GrantQuestion {
+    id: number;
+    question: string;
+    answer: string | null;
+}
+
 export interface Grant {
     id: number;
     title: string;
@@ -10,10 +16,6 @@ export interface Grant {
     category: string;
     contact: string;
     questions: GrantQuestion[];
-}
-
-export interface GrantQuestion {
-    id: number;
-    question: string;
-    answer: string | null;
+    publish: boolean;
+    owner: string | null; // admin user id
 }
