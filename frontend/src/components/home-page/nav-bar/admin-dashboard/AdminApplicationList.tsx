@@ -46,21 +46,17 @@ const AdminApplicationList = ({}: AdminApplicationListProps) => {
         }
 
         const fetchApplications = async () => {
-            if (!user?.authToken) {
-                return; //setApplications([]);
-            }
-            const res = await fetch(`http://localhost:${SERVER_PORT}/getApplications`, {
+            const res = await fetch(`http://localhost:${SERVER_PORT}/getOrgApplications/${organization}`, {
                 method: 'GET',
                 headers: {
                   'Content-Type': 'application/json',
                   'Authorization': `Bearer ${user?.authToken}`
                 },
-                body: JSON.stringify({ organization: user.organization }),
               });
 
             if (res.ok) {
                 await res.json().then((data) => {
-                    //return setApplications(data.applications);
+                    return setApplications(data.applications);
                 });
             } else {
                 // Bad response, logout the user and redirect
@@ -70,7 +66,7 @@ const AdminApplicationList = ({}: AdminApplicationListProps) => {
             }
         }
 
-        fetchApplications();
+        //fetchApplications();
     }, [user, navigate]);
 
     return (
