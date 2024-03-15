@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Column, TableProps } from './TableProps';
 import { ChevronDownIcon } from '@heroicons/react/24/solid';
+import { Link, useNavigate } from 'react-router-dom';
 
 function Table<T>(
     {
@@ -9,6 +10,7 @@ function Table<T>(
         itemsPerPageOptions,
         defaultIPP,
         defaultSort,
+        link,
     }: TableProps<T>) {
     const [ pageItems, setPageItems ] = useState<T[]>(items.slice(0, defaultIPP));
     const [ currentPage, setCurrentPage ] = useState<number>(0);
@@ -17,6 +19,8 @@ function Table<T>(
     
     const [ sortColumn, setSortColumn ] = useState<Column<T>>(defaultSort);
     const [ sortAscending, setSortAscending ] = useState<boolean>(false);
+
+    const navigate =  useNavigate();
 
     useEffect(() => {
         items.sort((item1: T, item2: T) => {
@@ -65,6 +69,12 @@ function Table<T>(
         return options;
     };
 
+    const handleItemClick = (item: T) => {
+        if (link) {
+            navigate(link.to + (link.key ? item[link.key] : ''));
+        }
+    }
+
     return (
         <div className="flex flex-col w-full items-start justify-start">
             <table className="w-full bg-slate-50 text-left rounded-lg">
@@ -81,13 +91,13 @@ function Table<T>(
                     </tr>
                 </thead>
                 <tbody className="divide-y-4">
-                    {pageItems.map((item) => (
-                        <tr className="hover:bg-slate-300">
+                    {pageItems.map((item) =>
+                        <tr className="hover:bg-slate-300" onClick={() => handleItemClick(item)}>
                             {columns.map((column) => (
                                 <td className="text-base px-2 py-1">{column.format(item)}</td>
                             ))}
                         </tr>
-                    ))}
+                    )}
                 </tbody>
             </table>
             <div className="p-2">Showing {currentPage * itemsPerPage + 1}-{Math.min((currentPage + 1) * itemsPerPage, items.length)} of {items.length}</div>

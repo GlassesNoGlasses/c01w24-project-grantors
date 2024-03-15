@@ -189,7 +189,7 @@ app.post("/createGrant", express.json(), async (req, res) => {
   try {
 
     // frontend guarantees that all these fields are provided so omit param check
-    const { accId, title, description, deadline, minAmount, maxAmount,
+    const { accId, title, description, deadline, posted, minAmount, maxAmount,
       organization, category, contact, questions, publish } = req.body;
     
     const grantCollection = db.collection(COLLECTIONS.grants);
@@ -197,6 +197,7 @@ app.post("/createGrant", express.json(), async (req, res) => {
     const {insertedId} = await grantCollection.insertOne({
       title: title,
       description: description,
+      posted: posted,
       deadline: deadline,
       minAmount: minAmount,
       maxAmount: maxAmount,
@@ -329,6 +330,34 @@ app.delete("/deleteGrant/:grantId", express.json(), async(req, res) => {
     res.status(500).json({ error: error.message });
   }
 })
+
+app.get("/getAdminGrants/:adminID", express.json(), async (req, res) => {
+  try {
+
+    const accountID = req.params.adminID;
+
+    const adminID = accountID.toString();
+    const grantCollection = db.collection(COLLECTIONS.grants);
+
+    const data = await grantCollection.find({
+      owner: adminID
+    }).toArray();
+
+    if (!data) {
+      return res.status(404).send(`Unable to find grants for admin: ${adminID}`);
+    }
+
+    const grants = data.length <= 0 ? [] : data.map((grant) => {
+      return {...grant, id: grant._id}
+    });
+    res.status(200).json({ response: grants });
+    
+  } catch (error) {
+    console.log("Error getting all grants: ", error);
+    res.status(500).json({ error: error.message }); 
+  }
+});
+
 
 app.get("/getApplications", express.json(), async (req, res) => {
   const { organization } = req.body();
