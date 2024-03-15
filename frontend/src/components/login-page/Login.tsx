@@ -1,14 +1,12 @@
 import React, { useState } from 'react';
 import { LoginProps } from './LoginProps';
-import './Login.css';
 import emailIcon from '../../images/iconMail.png';
 import passwordIcon from '../../images/iconPassword.png';
 import { Link, useNavigate } from "react-router-dom";
 import { useUserContext } from '../contexts/userContext';
-import { User } from '../interfaces/user';
-
-
-const SERVER_PORT:number = 8000;
+import { User } from '../interfaces/User';
+import { ServerLoginResponse } from '../interfaces/ServerLoginResponse';
+import { SERVER_PORT } from '../../constants/ServerConstants'
 
 const Login: React.FC<LoginProps> = () => {
   const [username, setUsername] = useState('');
@@ -18,10 +16,15 @@ const Login: React.FC<LoginProps> = () => {
 
   const {user, setUser} = useUserContext();
 
-  const InstantiateUser = (accountID: string, isAdmin: boolean, username: string, firstName: string,
-    lastName: string, email: string): User => {
-    return {accountID: accountID, isAdmin: isAdmin, username: username, firstName: firstName,
-        lastName: lastName, email: email, password: null};
+  const InstantiateUser = (response: ServerLoginResponse): User => {
+    if (response.isAdmin) {
+      return {accountID: response.accountID, isAdmin: true, username: response.username,
+        firstName: response.firstName, lastName: response.lastName, email: response.email,
+        organization: response.organization, authToken: response.authToken};
+    }
+    return {accountID: response.accountID, isAdmin: false, username: response.username, 
+      firstName: response.firstName, lastName: response.lastName, email: response.email,
+      authToken: response.authToken, favoriteGrants: []};
   };
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
@@ -51,10 +54,9 @@ const Login: React.FC<LoginProps> = () => {
         case 200:
           console.log('Login successful');
           await response.json().then((data) => {
-            console.log(`Welcome ${data[username]}`);
+            console.log(`Welcome ${data['username']}`);
             setFeedback('');
-            setUser(InstantiateUser(data['id'], data['isAdmin'], data['username'],
-                                    data['firstName'], data['lastName'], data['email']));
+            setUser(InstantiateUser(data));
             navigate("/");
           });
           break;
@@ -66,51 +68,60 @@ const Login: React.FC<LoginProps> = () => {
   };
 
   return (
-    <div className="login-container">
-      <div className="login-box">
-        <h3 className="title">Log in to your account</h3>
-        <form onSubmit={handleSubmit}>
-          <div className="input-group">
-            <img src={emailIcon} alt="Email" className="input-icon" />
+    <div className="flex items-center justify-center min-h-screen bg-gray-100" style={{ backgroundColor: 'rgb(141, 229, 100)' }}>
+      <div 
+        className="w-full max-w-xs px-4 py-6 mx-auto bg-white shadow rounded-lg 
+          sm:px-6 sm:py-8 md:max-w-sm lg:max-w-md xl:max-w-lg 2xl:max-w-xl flex flex-col gap-4"
+        style={{ boxShadow: '-10px 10px 30px 0 rgba(0, 0, 0, 0.1)' }}>
+        <h3 className="text-xl font-bold text-center sm:text-2xl text-gray-700">Log in to your account</h3>
+        <form className='flex flex-col gap-4' onSubmit={handleSubmit}>
+          <div className="flex items-center mt-4">
+            <img src={emailIcon} alt="Email"
+              className="mr-2 h-5 w-5 flex-shrink-0 text-green-500" />
             <input
               type="text"
               id="email"
               placeholder="Enter email or username"
               value={username}
               onChange={(e) => setUsername(e.target.value)}
-              className="form-input"
+              className="form-input w-full px-3 py-2 mt-2 border border-gray-200 rounded-full focus:outline-none
+                focus:ring focus:ring-green-600 sm:px-4 sm:py-3"
+              style={{ boxShadow: 'inset -4px 4px 6px rgba(0, 0, 0, 0.1)' }}
               required
             />
           </div>
-          <div className="input-group">
-            <img src={passwordIcon} alt="Password" className="input-icon" />
+          <div className="flex items-center mt-4">
+            <img src={passwordIcon} alt="Password"
+              className="mr-2 h-5 w-5 flex-shrink-0 text-green-500" />
             <input
               type="password"
               id="password"
               placeholder="Enter password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              className="form-input"
+              className="form-input w-full px-3 py-2 mt-2 border border-gray-200 rounded-full focus:outline-none
+                focus:ring focus:ring-green-600 sm:px-4 sm:py-3"
+              style={{ boxShadow: 'inset -4px 4px 6px rgba(0, 0, 0, 0.1)' }}
               required
             />
           </div>
-          <div className="feedback-container">
-            <span className='input-feedback align-center'>{feedback}</span>
+          <div className="feedback-container" style={{ height: '2.5vh', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+            <span className="input-feedback" style={{ color: 'red' }}>{feedback}</span>
           </div>
-          <div className="flex items-baseline justify-center align-center">
-            <button type="submit" className="submit-btn">Login</button>
+          <div className="flex justify-center">
+            <button
+              type="submit" 
+              className="submit-btn px-4 py-2 mt-4 text-white bg-green-500 rounded-lg hover:bg-green-600 sm:px-6 sm:py-3"
+              style={{ width: '100%' }}>Login</button>
           </div>
-          <div className='form-footer-container'>
-            <Link to="/signup">
-              <span style={{ textDecoration: 'underline' }}>Sign Up</span>
-            </Link>
-            <a href="#" className="forgot-password">Forgot password?</a>
+          <div className="form-footer-container" style={{ marginTop: '5%' }}>
+            <Link to="/signup" className="underline" style={{ textDecoration: 'underline' }}>Sign Up</Link>
+            <a href="#" className="forgot-password text-sm text-green-500 hover:underline sm:text-base" style={{ display: 'flex', float: 'right', color: 'rgb(34, 197, 94)' }}>Forgot password?</a>
           </div>
-          
         </form>
       </div>
     </div>
-  );
+    )
 };
 
 export default Login;
