@@ -254,6 +254,29 @@ app.get("/getGrant/:grantId", express.json(), async(req, res) => {
   }
 })
 
+app.get("/getGrants/:grantIds", express.json(), async(req, res) => {
+  try {
+
+    const encodedGrantIDs = req.params.grantIDs;
+    const grantIDs = encodedGrantIDs.split(',').map(item => parseInt(item));
+    const grantCollection = db.collection(COLLECTIONS.grants);
+
+    const data = await grantCollection.find({
+      _id: { $in: grantIDs}
+    });
+
+    if (!data) {
+      return res
+        .status(404)
+        .json({ error: "Unable to find grants with given IDs." });
+    }
+
+    res.status(200).json({ response: data });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+})
+
 app.delete("/deleteGrant/:grantId", express.json(), async(req, res) => {
   try {
 
