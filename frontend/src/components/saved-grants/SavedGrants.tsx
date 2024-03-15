@@ -16,7 +16,7 @@ const UserGrantBrowse = () => {
     useEffect(() => {
         if (user?.favoriteGrants) {
             const favorites = mockGrants.filter(grant => 
-                user.favoriteGrants.includes(grant.id)
+                user.favoriteGrants?.includes(grant.id)
             );
             setFilteredGrants(favorites);
         }

@@ -23,7 +23,7 @@ const GrantItem = ({ grant }: { grant: Grant }) => {
     const [isFavorite, setIsFavorite] = useState(false);
 
     useEffect(() => {
-      const isFav = user?.favoriteGrants.includes(grant.id);
+      const isFav = user?.favoriteGrants?.includes(grant.id);
       setIsFavorite(isFav ?? false);
   }, [user, grant.id]);
   
@@ -34,10 +34,10 @@ const GrantItem = ({ grant }: { grant: Grant }) => {
         return;
     }
 
-    const isCurrentlyFavorite = user.favoriteGrants.includes(grant.id);
+    const isCurrentlyFavorite = user.favoriteGrants?.includes(grant.id);
     const updatedFavorites = isCurrentlyFavorite
-        ? user.favoriteGrants.filter(favGrantId => favGrantId !== grant.id)
-        : [...user.favoriteGrants, grant.id];
+        ? user.favoriteGrants?.filter(favGrantId => favGrantId !== grant.id)
+        : [...(user.favoriteGrants ? user.favoriteGrants : []), grant.id];
     try {
         const response = await fetch(`http://localhost:${8000}/users/${user.accountID}/favorites`, {
             method: 'PATCH',
