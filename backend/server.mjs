@@ -15,6 +15,7 @@ if (process.env.ENV === 'Docker') {
 const DB_NAME = "grantors";
 const COLLECTIONS = {
   users: "users",
+  user_grant_submissions: "user_grant_submissions",
   applications: "applications",
   grants: "grants",
 };
@@ -94,10 +95,33 @@ app.post('/login', express.json(), async (req, res) => {
   }
 });
   
+app.post("/sendForm", express.json(), async (req, res) => {
+  try {
+    const {username, grantId, data} = req.body;
+    if (!username || !grantId) {
+      return res
+        .status(400)
+        .json({error: "Form sent without username or grantId"})
+    }
+
+    const userSubmissionsDatabase = db.collection("user_grant_submissions");
+    await userSubmissionsDatabase.insertOne({
+      username: username,
+      grantId: grantId,
+      data: data
+    });
+
+    res.status(201).json({response: "Form submitted succesfully."});
+  }
+  catch (error)
+  {
+    res.status(500).json({ error: error.message });
+  }
+});
   
 app.post("/signup", express.json(), async (req, res) => {
   try {
-    const { username, email, password, firstName, lastName, isAdmin, organization} = req.body;
+    const { username, email, password, firstName, lastName, isAdmin, organization, favoriteGrants} = req.body;
 
     // Basic body request check
     if (!username || !password || !email) {
@@ -124,6 +148,7 @@ app.post("/signup", express.json(), async (req, res) => {
       firstName: firstName,
       lastName: lastName,
       isAdmin: isAdmin,
+      favoriteGrants: favoriteGrants,
       organization: organization,
     });
 
@@ -135,10 +160,35 @@ app.post("/signup", express.json(), async (req, res) => {
   }
 });
 
+app.patch('/users/:userId/favorites', express.json(), async (req, res) => {
+  const userId = req.params.userId;
+  const { favoriteGrants } = req.body;
+
+  if (!userId || !Array.isArray(favoriteGrants)) {
+    return res.status(400).json({ error: "Invalid request." });
+  }
+
+  try {
+    const userCollection = db.collection(COLLECTIONS.users);
+    const result = await userCollection.updateOne(
+      { _id: new ObjectId(userId) },
+      { $set: { favoriteGrants: favoriteGrants } }
+    );
+
+    if (result.modifiedCount === 0) {
+      return res.status(404).json({ error: "User not found or data not changed." });
+    }
+
+    res.status(200).json({ message: "Favorites updated successfully." });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Internal server error." });
+  }
+})
 app.post("/createGrant", express.json(), async (req, res) => {
   try {
     // frontend guarantees that all these fields are provided so omit param check
-    const { accId, title, description, deadline, minAmount, maxAmount,
+    const { accId, title, description, deadline, posted, minAmount, maxAmount,
       organization, category, contact, questions, publish } = req.body;
     
     const grantCollection = db.collection(COLLECTIONS.grants);
@@ -146,6 +196,7 @@ app.post("/createGrant", express.json(), async (req, res) => {
     const {insertedId} = await grantCollection.insertOne({
       title: title,
       description: description,
+      posted: posted,
       deadline: deadline,
       minAmount: minAmount,
       maxAmount: maxAmount,
@@ -301,6 +352,34 @@ app.delete("/deleteGrant/:grantId", express.json(), async(req, res) => {
     res.status(500).json({ error: error.message });
   }
 })
+
+app.get("/getAdminGrants/:adminID", express.json(), async (req, res) => {
+  try {
+
+    const accountID = req.params.adminID;
+
+    const adminID = accountID.toString();
+    const grantCollection = db.collection(COLLECTIONS.grants);
+
+    const data = await grantCollection.find({
+      owner: adminID
+    }).toArray();
+
+    if (!data) {
+      return res.status(404).send(`Unable to find grants for admin: ${adminID}`);
+    }
+
+    const grants = data.length <= 0 ? [] : data.map((grant) => {
+      return {...grant, id: grant._id}
+    });
+    res.status(200).json({ response: grants });
+    
+  } catch (error) {
+    console.log("Error getting all grants: ", error);
+    res.status(500).json({ error: error.message }); 
+  }
+});
+
 
 app.get("/getApplications", express.json(), async (req, res) => {
   const { organization } = req.body();

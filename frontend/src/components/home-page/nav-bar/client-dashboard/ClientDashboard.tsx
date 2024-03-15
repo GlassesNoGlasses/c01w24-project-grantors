@@ -14,7 +14,9 @@ const ClientDashboard = ({}: ClientDashboardProps) => {
     <div className="dashboard-container bg-grantor-green w-full h-full">
       <div className="welcome-message underline px-10 bold text-white text-6xl">Welcome{user ? ", " + user.username + "!" : ""}</div>
       <div className="client-butons flex justify-around items-center p-10">
-        <ButtonIcon heroicon={<StarIcon />} label="Saved Grants"/>
+        <Link to="/saved">
+          <ButtonIcon heroicon={<StarIcon />} label="Saved Grants"/>
+        </Link>
         <ButtonIcon heroicon={<UserIcon />} label="Account"/>
         <ButtonIcon heroicon={<Cog6ToothIcon className=""/>} label="Settings"/>
         <Link to="/">
