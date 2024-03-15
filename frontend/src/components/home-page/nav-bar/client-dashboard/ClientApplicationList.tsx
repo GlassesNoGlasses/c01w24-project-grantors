@@ -6,6 +6,7 @@ import { Column } from "../../../table/TableProps";
 import Table from "../../../table/Table";
 import { SERVER_PORT } from "../../../../constants/ServerConstants";
 import { Grant } from "../../../interfaces/Grant";
+import { useNavigate } from "react-router-dom";
 
 type TableData = [Application, Grant | undefined];
 
@@ -14,6 +15,8 @@ const ClientApplicationList = ({}) => {
     const [ applications, setApplications ] = useState<Application[]>(mockApplications);
     const [ grants, setGrants ] = useState<Grant[]>();
     const [ tableData, setTableData ] = useState<TableData[]>([]);
+
+    const navigate = useNavigate();
 
     const itemsPerPageOptions: number[] = [5,10,20,50,100];
     const columns: Column<TableData>[] = [
@@ -46,30 +49,27 @@ const ClientApplicationList = ({}) => {
 
     useEffect(() => {
         const fetchApplications = async () => {
-            if (!user?.authToken) {
-                return; //setApplications([]);
-            }
-            const res = await fetch(`http://localhost:${SERVER_PORT}/getApplications`, {
+            const res = await fetch(`http://localhost:${SERVER_PORT}/getUserApplications/${user?.accountID}`, {
                 method: 'GET',
                 headers: {
                   'Content-Type': 'application/json',
                   'Authorization': `Bearer ${user?.authToken}`
                 },
-                body: JSON.stringify({ organization: user.organization }),
               });
 
             if (res.ok) {
                 await res.json().then((data) => {
-                    //return setApplications(data.applications);
+                    return setApplications(data.applications);
                 });
             } else {
                 // Bad response, logout the user and redirect
                 console.log(res);
                 setUser(null);
+                navigate('/login')
             }
         }
 
-        fetchApplications();
+        //fetchApplications();
     }, [user]);
 
     useEffect(() => {
