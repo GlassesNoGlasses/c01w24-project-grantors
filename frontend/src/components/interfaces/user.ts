@@ -8,5 +8,6 @@ export interface User {
     lastName: string | null,
     email: string, 
     password: string | null,
-    favoriteGrants: number[]
+    favoriteGrants: number[],
+    organization?: string
 }
