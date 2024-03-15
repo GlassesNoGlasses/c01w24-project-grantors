@@ -284,7 +284,6 @@ app.put('/addGrantToAdminList', express.json(), async(req, res) => {
 
 app.get("/getGrant/:grantId", express.json(), async(req, res) => {
   try {
-
     const grantId = req.params.grantId;
     const grantCollection = db.collection(COLLECTIONS.grants);
 
@@ -380,6 +379,65 @@ app.get("/getAdminGrants/:adminID", express.json(), async (req, res) => {
   }
 });
 
+app.post("/submitApplication", express.json(), async (req, res) => {
+  try {
+    const { 
+      userID,
+      grantID,
+      grantTitle, 
+      grantCategory,
+      submitted,
+      submissionDate,
+      status,
+      awarded,
+      responses, } = req.body;
+
+    const applicationCollection = db.collection(COLLECTIONS.applications);
+    const existingApplication = await applicationCollection.findOne({
+      userID: userID,
+      grantID: grantID,
+    });
+
+    if (existingApplication) {
+      // User's application for this grant already exists, so update it
+      const update = await applicationCollection.updateOne(
+        {_id: existingApplication._id},
+        {$set: {
+                submitted: submitted,
+                submissionDate: submissionDate,
+                status: status,
+                awarded: awarded,
+                responses: responses,
+              }});
+        if (update.modifiedCount === 1) {
+          return res.status(201).json({ response: "Application submitted successfully." });
+        }
+        return res.status(500).json( {error: "Failed to submit application."} );
+    }
+
+    const inserted = await applicationCollection.insertOne(
+      {
+        userID: userID,
+        grantID: grantID,
+        grantTitle: grantTitle,
+        grantCategory: grantCategory,
+        submitted: submitted,
+        submissionDate: submissionDate,
+        status: status,
+        awarded: awarded,
+        responses: responses,
+      }
+    );
+
+    if (inserted.insertedCount === 1) {
+      return res.status(201).json({ response: "Application submitted successfully.", insertedID: inserted.insertedId });
+    }
+    return res.status(500).json({ error: "Failed to submit application." });
+  } catch (error) {
+    console.error("Error submitting application:", error.message);
+    return res.status(500).json({ error: error.message});
+  }
+});
 
 app.get("/getApplications", express.json(), async (req, res) => {
   const { organization } = req.body();
