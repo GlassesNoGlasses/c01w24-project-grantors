@@ -13,7 +13,7 @@ function Table<T>(
     const [ pageItems, setPageItems ] = useState<T[]>(items.slice(0, defaultIPP));
     const [ currentPage, setCurrentPage ] = useState<number>(0);
     const [ itemsPerPage, setItemsPerPage ] = useState<number>(defaultIPP);
-    const [ maxPage, setMaxPage ] = useState(Math.ceil(items.length / itemsPerPage) - 1);
+    const [ maxPage, setMaxPage ] = useState(Math.max(Math.ceil(items.length / itemsPerPage) - 1, 0));
     
     const [ sortColumn, setSortColumn ] = useState<Column<T>>(defaultSort);
     const [ sortAscending, setSortAscending ] = useState<boolean>(false);
@@ -29,14 +29,15 @@ function Table<T>(
 
         setPageItems(items.slice(startIndex, endIndex));
 
-    }, [itemsPerPage, currentPage, sortColumn, sortAscending]);
+    }, [items, itemsPerPage, currentPage, sortColumn, sortAscending]);
 
     useEffect(() => {
-        setMaxPage(Math.ceil(items.length / itemsPerPage) - 1);
+        console.log()
+        setMaxPage(Math.max(Math.ceil(items.length / itemsPerPage) - 1, 0));
         if (currentPage > maxPage) {
             setCurrentPage(maxPage)
         }
-    }, [itemsPerPage, maxPage]);
+    }, [items, itemsPerPage]);
 
     const goToPage = (page: number) => {
         if (page > maxPage) {
