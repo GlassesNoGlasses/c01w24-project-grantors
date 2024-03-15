@@ -137,7 +137,6 @@ app.post("/signup", express.json(), async (req, res) => {
 
 app.post("/createGrant", express.json(), async (req, res) => {
   try {
-
     // frontend guarantees that all these fields are provided so omit param check
     const { accId, title, description, deadline, minAmount, maxAmount,
       organization, category, contact, questions, publish } = req.body;

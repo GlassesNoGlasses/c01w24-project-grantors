@@ -1,4 +1,4 @@
-import {admins, users} from './data.js'
+import {admins, users, applications, grants} from './data.js'
 
 const SERVER_URL = "http://localhost:8000";
 
@@ -50,10 +50,42 @@ const SignUpUsers = () => {
     };
 };
 
+const PopulateGrants = () => {
+    try {
+        grants.forEach(async (grant) => {
+            console.log(`${SERVER_URL}/createGrant`);
+            const resp = await fetch(`${SERVER_URL}/createGrant`, {
+                method: "POST",
+                headers: {
+                  "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                    title: grant.title,
+                    description: grant.description,
+                    deadline: grant.deadline,
+                    minAmount: grant.minAmount,
+                    maxAmount: grant.maxAmount,
+                    organization: grant.organization,
+                    category: grant.category,
+                    contact: grant.contact,
+                    questions: grant.questions,
+                    publish: grant.publish,
+                    owner: grant.accId
+                }),
+            });
+            console.log(resp);
+        });
+    } catch (error) {
+        console.error("Could not populate Users to DB.");
+    };
+};
+
 export const SetUpDB = () => {
     try {
         SignUpAdmins();
         SignUpUsers();
+        PopulateGrants();
+        //PopulateApplications();
     } catch (error) {
         console.error("Error with populating DB: ", error);
     }
