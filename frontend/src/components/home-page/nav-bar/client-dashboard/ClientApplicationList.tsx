@@ -5,40 +5,42 @@ import { mockApplications } from "../admin-dashboard/mockApplications";
 import { Column } from "../../../table/TableProps";
 import Table from "../../../table/Table";
 import { SERVER_PORT } from "../../../../constants/ServerConstants";
+import { Grant } from "../../../interfaces/Grant";
+
+type TableData = [Application, Grant | undefined];
 
 const ClientApplicationList = ({}) => {
     const { user, setUser } = useUserContext();
     const [ applications, setApplications ] = useState<Application[]>(mockApplications);
+    const [ grants, setGrants ] = useState<Grant[]>();
+    const [ tableData, setTableData ] = useState<TableData[]>([]);
 
     const itemsPerPageOptions: number[] = [5,10,20,50,100];
-    const columns: Column<Application>[] = [
+    const columns: Column<TableData>[] = [
         {
-            key: "grantTitle",
             title: "Grant Titlte",
-            format: (application: Application) => application.grantTitle,
-            sort: (app1: Application, app2: Application) => app1.grantTitle < app2.grantTitle ? -1 : 1,
+            format: (data: TableData) => data[0].grantTitle,
+            sort: (data1: TableData, data2: TableData) => data1[0].grantTitle < data2[0].grantTitle ? -1 : 1,
         },
         {
-            key: "status",
             title: "Status",
-            format: (application: Application) => application.status,
-            sort: (app1: Application, app2: Application) => {
-                if (app1.status === app2.status) return 0;
-                if (app1.status === ApplicationStatus.inProgress) return 1;
+            format: (data: TableData) => data[0].status,
+            sort: (data1: TableData, data2: TableData) => {
+                if (data1[0].status === data2[0].status) return 0;
+                if (data1[0].status === ApplicationStatus.inProgress) return 1;
                 return -1;
             },
         },
         {
-            key: "submissionDate",
-            title: "Date",
-            format: (application: Application) => {
-                return application.submissionDate.toLocaleDateString('en-GB', {
+            title: "Deadline",
+            format: (data: TableData) => {
+                return data[1] ? data[1].deadline.toLocaleDateString('en-GB', {
                     day: '2-digit',
                     month: 'short',
                     year: 'numeric'
-                })
+                }) : "";
             },
-            sort: (app1: Application, app2: Application) => Number(app1.submissionDate) - Number(app2.submissionDate),
+            sort: (data1: TableData, data2: TableData) => Number(data1[1]?.deadline) - Number(data2[1]?.deadline),
         },
     ];
 
@@ -48,7 +50,7 @@ const ClientApplicationList = ({}) => {
                 return; //setApplications([]);
             }
             const res = await fetch(`http://localhost:${SERVER_PORT}/getApplications`, {
-                method: 'POST',
+                method: 'GET',
                 headers: {
                   'Content-Type': 'application/json',
                   'Authorization': `Bearer ${user?.authToken}`
@@ -63,17 +65,50 @@ const ClientApplicationList = ({}) => {
             } else {
                 // Bad response, logout the user and redirect
                 console.log(res);
-                setUser(null)
+                setUser(null);
             }
         }
 
         fetchApplications();
     }, [user]);
 
+    useEffect(() => {
+        const grantIDs: number[] = applications.map((app: Application) => app.grantID);
+        const encodedGrantIDs: string = encodeURIComponent(grantIDs.join(','));
+        const fetchGrants = async () => {
+            const res = await fetch(`http://localhost:${SERVER_PORT}/getGrants/${encodedGrantIDs}`, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            });
+
+            if (res.ok) {
+                await res.json().then((data) => {
+                    return setGrants(data);
+                })
+            } else {
+                console.log(res);
+                setUser(null);
+            }
+        }
+
+        //fetchGrants();
+
+    }, [applications]);
+
+    useEffect(() => {
+        // Table data is made of applications and grant pairs
+        setTableData(applications.map((app: Application) => {
+            return [app, grants?.find(grant => grant.id === app.grantID)];
+        }));
+
+    }, [applications, grants])
+
     return (
         <div className="flex flex-col h-full items-start justify-start px-5 bg-grantor-green">
             <span className="text-2xl pl-2">Applications</span>
-            <Table items={applications}
+            <Table items={tableData}
                    columns={columns}
                    itemsPerPageOptions={itemsPerPageOptions}
                    defaultIPP={10}
