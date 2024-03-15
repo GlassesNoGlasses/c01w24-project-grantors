@@ -17,19 +17,16 @@ const AdminApplicationList = ({}: AdminApplicationListProps) => {
     const itemsPerPageOptions: number[] = [5,10,20,50,100];
     const columns: Column<Application>[] = [
         {
-            key: "grantTitle",
             title: "Grant Titlte",
             format: (application: Application) => application.grantTitle,
             sort: (app1: Application, app2: Application) => app1.grantTitle < app2.grantTitle ? -1 : 1,
         },
         {
-            key: "userID",
             title: "Applicant",
             format: (application: Application) => String(application.userID),
             sort: (app1: Application, app2: Application) => app1.userID - app2.userID,
         },
         {
-            key: "submissionDate",
             title: "Date",
             format: (application: Application) => {
                 return application.submissionDate.toLocaleDateString('en-GB', {
@@ -53,7 +50,7 @@ const AdminApplicationList = ({}: AdminApplicationListProps) => {
                 return; //setApplications([]);
             }
             const res = await fetch(`http://localhost:${SERVER_PORT}/getApplications`, {
-                method: 'POST',
+                method: 'GET',
                 headers: {
                   'Content-Type': 'application/json',
                   'Authorization': `Bearer ${user?.authToken}`
@@ -79,7 +76,7 @@ const AdminApplicationList = ({}: AdminApplicationListProps) => {
     return (
         <div className="flex flex-col h-full items-start justify-start px-5 bg-grantor-green">
             <span className="text-2xl pl-2">Applications</span>
-            <Table items={applications.filter((app) => app.submitted)}
+            <Table<Application> items={applications.filter((app) => app.submitted)}
                    columns={columns}
                    itemsPerPageOptions={itemsPerPageOptions}
                    defaultIPP={10}
