@@ -107,7 +107,7 @@ const ClientApplicationList = ({}) => {
 
     return (
         <div className="flex flex-col h-full items-start justify-start px-5 bg-grantor-green">
-            <span className="text-2xl pl-2">Applications</span>
+            <span className="text-2xl pl-2">My Applications</span>
             <Table items={tableData}
                    columns={columns}
                    itemsPerPageOptions={itemsPerPageOptions}

@@ -71,7 +71,7 @@ const AdminApplicationList = ({}: AdminApplicationListProps) => {
 
     return (
         <div className="flex flex-col h-full items-start justify-start px-5 bg-grantor-green">
-            <span className="text-2xl pl-2">Applications</span>
+            <span className="text-2xl pl-2">{organization} Grant Applications</span>
             <Table<Application> items={applications.filter((app) => app.submitted)}
                    columns={columns}
                    itemsPerPageOptions={itemsPerPageOptions}
