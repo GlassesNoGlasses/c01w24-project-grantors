@@ -15,6 +15,7 @@ if (process.env.ENV === 'Docker') {
 const DB_NAME = "grantors";
 const COLLECTIONS = {
   users: "users",
+  user_grant_submissions: "user_grant_submissions",
   applications: "applications",
   grants: "grants",
 };
@@ -94,6 +95,29 @@ app.post('/login', express.json(), async (req, res) => {
   }
 });
   
+app.post("/sendForm", express.json(), async (req, res) => {
+  try {
+    const {username, grantId, data} = req.body;
+    if (!username || !grantId) {
+      return res
+        .status(400)
+        .json({error: "Form sent without username or grantId"})
+    }
+
+    const userSubmissionsDatabase = db.collection("user_grant_submissions");
+    await userSubmissionsDatabase.insertOne({
+      username: username,
+      grantId: grantId,
+      data: data
+    });
+
+    res.status(201).json({response: "Form submitted succesfully."});
+  }
+  catch (error)
+  {
+    res.status(500).json({ error: error.message });
+  }
+});
   
 app.post("/signup", express.json(), async (req, res) => {
   try {

@@ -54,8 +54,7 @@ const ApplyButton = ({ grantId }: { grantId: String }) => {
       )
 }
 
-
-const getGrant = (grantId: String | undefined) => {
+ export const getGrant = (grantId: String | undefined) => {
     if (grantId === undefined || Number.isNaN(Number(grantId)))
         return undefined;
 
