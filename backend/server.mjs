@@ -439,8 +439,8 @@ app.post("/submitApplication", express.json(), async (req, res) => {
   }
 });
 
-app.get("/getApplications", express.json(), async (req, res) => {
-  const { organization } = req.body();
+app.get("/getOrgApplications/:organization", express.json(), async (req, res) => {
+  const organization = req.params.organization;
 
   verifyRequestAuth(req, async (err, decoded) => {
     if (err) {
@@ -478,6 +478,32 @@ app.get("/getApplications", express.json(), async (req, res) => {
     ]
 
     const applications = await applicationCollection.aggregate(pipeline).toArray();
+
+    res.json({ applications: applications });
+  });
+});
+
+app.get("/getUserApplications/:userID", express.json(), async (req, res) => {
+  const userID = req.params.userID;
+
+  verifyRequestAuth(req, async (err, decoded) => {
+    if (err) {
+        return res.status(401).send("Unauthorized.");
+    }
+
+    if (!userID) {
+      // If no organization was provided, get the org from auth token
+      const userCollection = db.collection(COLLECTIONS.users);
+      const user = await userCollection.findOne({ _id: decoded });
+      if (!user) {
+        return res.status(400).send("userID not provided.")
+      }
+
+      userID = user._id;
+    }
+
+    const applicationCollection = db.collection(COLLECTIONS.applications)
+    const applications = (await applicationCollection.find({ userID: { $eq: userID } })).toArray();
 
     res.json({ applications: applications });
   });
