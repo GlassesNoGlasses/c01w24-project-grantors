@@ -91,7 +91,7 @@ app.post('/login', express.json(), async (req, res) => {
 
     return res.status(200).send({ accountID: user._id, username: user.username, 
       email: user.email, firstName: user.firstName, lastName: user.lastName,
-      isAdmin: user.isAdmin, organization: user.organization, token: token });
+      isAdmin: user.isAdmin, organization: user.organization, authToken: token });
 
   } catch (err) {
     console.log(err)
