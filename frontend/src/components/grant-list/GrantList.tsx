@@ -5,6 +5,7 @@ import { Grant } from "../interfaces/Grant";
 import { GrantItemProps } from "./GrantItemProps";
 import { useUserContext } from "../contexts/userContext";
 import { StarIcon } from '@heroicons/react/24/solid';
+import { SERVER_PORT } from '../../constants/ServerConstants';
 
 
 const GrantList = ({ grants }: GrantListProps) => {
@@ -40,7 +41,7 @@ export const GrantItem = ({ grant, link }: GrantItemProps) => {
         ? user.favoriteGrants?.filter(favGrantId => favGrantId !== grant.id)
         : [...(user.favoriteGrants ? user.favoriteGrants : []), grant.id];
     try {
-        const response = await fetch(`http://localhost:${8000}/users/${user.accountID}/favorites`, {
+        const response = await fetch(`http://localhost:${SERVER_PORT}/users/${user.accountID}/favorites`, {
             method: 'PATCH',
             headers: {
                 'Content-Type': 'application/json',
