@@ -55,6 +55,10 @@ function verifyRequestAuth(req, callback) {
   jwt.verify(token, "secret-key", callback);
 }
 
+function dbGrantToFrontendGrant(grant) {
+  return {...grant, id: grant._id};
+}
+
 app.post('/login', express.json(), async (req, res) => {
   try {
 
@@ -289,17 +293,17 @@ app.get("/getGrant/:grantId", express.json(), async(req, res) => {
     const grantId = req.params.grantId;
     const grantCollection = db.collection(COLLECTIONS.grants);
 
-    const data = await grantCollection.findOne({
+    const grant = await grantCollection.findOne({
       _id: new ObjectId(grantId)
     });
 
-    if (!data) {
+    if (!grant) {
       return res
         .status(404)
         .json({ error: "Unable to find grant with given ID." });
     }
 
-    res.status(200).json({ response: data });
+    res.status(200).json({ response: dbGrantToFrontendGrant(grant) });
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
@@ -348,7 +352,7 @@ app.get("/getAdminGrants/:adminID", express.json(), async (req, res) => {
     }
 
     const grants = data.length <= 0 ? [] : data.map((grant) => {
-      return {...grant, id: grant._id}
+      return dbGrantToFrontendGrant(grant)
     });
     res.status(200).json({ response: grants });
     
@@ -364,7 +368,7 @@ app.get("/getAllPublishedGrants", express.json(), async (req, res) => {
     const publishedGrantsData = await grantCollection.find({ publish: true }).toArray();
 
     const grants = publishedGrantsData.map((grant) => {
-      return {id: grant._id, ...grant}
+      return dbGrantToFrontendGrant(grant)
     });
 
     res.status(200).json({ response: grants });
