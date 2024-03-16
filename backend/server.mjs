@@ -358,6 +358,22 @@ app.get("/getAdminGrants/:adminID", express.json(), async (req, res) => {
   }
 });
 
+app.get("/getAllPublishedGrants", express.json(), async (req, res) => {
+  try {
+    const grantCollection = db.collection(COLLECTIONS.grants);
+    const publishedGrantsData = await grantCollection.find({ publish: true }).toArray();
+
+    const grants = publishedGrantsData.map((grant) => {
+      return {id: grant._id, ...grant}
+    });
+
+    res.status(200).json({ response: grants });
+  } catch (error) {
+    console.log("Error getting all published grants:", error);
+    res.status(500).json({ error: error.message });
+  }
+});
+
 
 app.get("/getApplications", express.json(), async (req, res) => {
   const { organization } = req.body();
