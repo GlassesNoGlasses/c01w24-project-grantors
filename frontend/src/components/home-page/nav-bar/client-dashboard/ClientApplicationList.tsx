@@ -1,11 +1,11 @@
 import { useEffect, useState } from "react";
 import { useUserContext } from "../../../contexts/userContext";
-import { Application, ApplicationStatus } from "../../../interfaces/Application";
+import { Application, ApplicationStatus } from "../../../../interfaces/Application";
 import { mockApplications } from "../admin-dashboard/mockApplications";
 import { Column } from "../../../table/TableProps";
 import Table from "../../../table/Table";
 import { SERVER_PORT } from "../../../../constants/ServerConstants";
-import { Grant } from "../../../interfaces/Grant";
+import { Grant } from "../../../../interfaces/Grant";
 import { useNavigate } from "react-router-dom";
 
 type TableData = [Application, Grant | undefined];

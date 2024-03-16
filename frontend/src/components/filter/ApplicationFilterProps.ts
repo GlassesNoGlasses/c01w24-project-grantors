@@ -1,4 +1,4 @@
-import { Application } from "../interfaces/Application";
+import { Application } from "../../interfaces/Application";
 
 export interface ApplicationFilterProps {
     applications: Application[],
