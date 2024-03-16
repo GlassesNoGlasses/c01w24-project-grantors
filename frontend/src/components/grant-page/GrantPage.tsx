@@ -4,6 +4,7 @@ import mockGrants from "../grant-browse/mockGrants";
 import { Grant } from "../interfaces/Grant";
 import { useState } from "react";
 import React from "react";
+import { SERVER_PORT } from "../../constants/ServerConstants";
 
 const GrantPage = ({}: GrantPageProps) => {
     const { grantId } = useParams();
