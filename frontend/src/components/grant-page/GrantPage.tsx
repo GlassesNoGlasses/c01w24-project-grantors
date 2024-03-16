@@ -5,8 +5,6 @@ import { Grant } from "../interfaces/Grant";
 import { useState } from "react";
 import React from "react";
 
-const PORT = 8000;
-
 const GrantPage = ({}: GrantPageProps) => {
     const { grantId } = useParams();
     const [grant, setGrant] = useState<Grant | undefined>(undefined);
@@ -17,7 +15,7 @@ const GrantPage = ({}: GrantPageProps) => {
 
     const fetchGrant = async (grantId: String | undefined) => {
         try {
-            const response = await fetch(`http://localhost:${PORT}/getGrant/${grantId}`, {
+            const response = await fetch(`http://localhost:${SERVER_PORT}/getGrant/${grantId}`, {
                 method: 'GET',
                 headers: {
                 'Content-Type': 'application/json',

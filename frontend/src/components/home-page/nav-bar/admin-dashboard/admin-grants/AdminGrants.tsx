@@ -9,10 +9,9 @@ import { TabItem } from '../../../../tabs/TabProps';
 import { Column } from '../../../../table/TableProps';
 import Table from '../../../../table/Table';
 import { LinkProps } from '../../../../interfaces/LinkProps';
+import { SERVER_PORT } from '../../../../../constants/ServerConstants';
 
 const AdminGrants = () => {
-    const PORT = 8000;
-
     // States and contexts
     const {user} = useUserContext();
     const [publishedGrants, setPublishedGrants] = useState<Grant[]>([]);
@@ -103,7 +102,7 @@ const AdminGrants = () => {
     // Fetch all grants created by the admin with adminid
     const fetchAdminGrants = async () => {
         try {
-            const response = await fetch(`http://localhost:${PORT}/getAdminGrants/${adminId}`, {
+            const response = await fetch(`http://localhost:${SERVER_PORT}/getAdminGrants/${adminId}`, {
               method: 'GET',
               headers: {
                 'Content-Type': 'application/json',

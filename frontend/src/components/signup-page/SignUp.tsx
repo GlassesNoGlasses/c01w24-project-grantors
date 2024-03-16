@@ -6,8 +6,7 @@ import passwordIcon from '../../images/iconPassword.png';
 import { BuildingOfficeIcon } from '@heroicons/react/24/outline';
 import { Modal } from '../modal/Modal';
 import { Link } from 'react-router-dom';
-
-const SERVER_PORT = 8000;
+import { SERVER_PORT } from '../../constants/ServerConstants';
 
 const SignUp: React.FC<SignUpProps> = () => {
   const [firstName, setFirstName] = useState('');
