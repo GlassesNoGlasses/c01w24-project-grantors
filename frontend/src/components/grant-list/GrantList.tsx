@@ -7,7 +7,6 @@ import { useUserContext } from "../contexts/userContext";
 import { StarIcon } from '@heroicons/react/24/solid';
 import { SERVER_PORT } from '../../constants/ServerConstants';
 
-
 const GrantList = ({ grants }: GrantListProps) => {
     return (
         <ul className="flex flex-col gap-3">
@@ -27,40 +26,37 @@ export const GrantItem = ({ grant, link }: GrantItemProps) => {
     useEffect(() => {
       const isFav = user?.favoriteGrants?.includes(grant.id);
       setIsFavorite(isFav ?? false);
-  }, [user, grant.id]);
+    }, [user, grant.id]);
   
-
-  const toggleFavorite = async () => {
-    if (!user || !grant.id) {
-        console.log("No user logged in or invalid grant.");
-        return;
-    }
-
-    const isCurrentlyFavorite = user.favoriteGrants?.includes(grant.id);
-    const updatedFavorites = isCurrentlyFavorite
-        ? user.favoriteGrants?.filter(favGrantId => favGrantId !== grant.id)
-        : [...(user.favoriteGrants ? user.favoriteGrants : []), grant.id];
-    try {
-        const response = await fetch(`http://localhost:${SERVER_PORT}/users/${user.accountID}/favorites`, {
-            method: 'PATCH',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({ favoriteGrants: updatedFavorites }),
-        });
-
-        if (!response.ok) {
-            throw new Error('Failed to update favorites');
+    const toggleFavorite = async () => {
+        if (!user || !grant.id) {
+            console.log("No user logged in or invalid grant.");
+            return;
         }
 
-        setUser({ ...user, favoriteGrants: updatedFavorites });
-        setIsFavorite(!isCurrentlyFavorite);
-    } catch (error) {
-        console.error('Error updating favorites:', error);
-    }
-};
+        const isCurrentlyFavorite = user.favoriteGrants?.includes(grant.id);
+        const updatedFavorites = isCurrentlyFavorite
+            ? user.favoriteGrants?.filter(favGrantId => favGrantId !== grant.id)
+            : [...(user.favoriteGrants ? user.favoriteGrants : []), grant.id];
+        try {
+            const response = await fetch(`http://localhost:${SERVER_PORT}/users/${user.accountID}/favorites`, {
+                method: 'PATCH',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ favoriteGrants: updatedFavorites }),
+            });
 
-      
+            if (!response.ok) {
+                throw new Error('Failed to update favorites');
+            }
+
+            setUser({ ...user, favoriteGrants: updatedFavorites });
+            setIsFavorite(!isCurrentlyFavorite);
+        } catch (error) {
+            console.error('Error updating favorites:', error);
+        }
+    };
 
     return (
         <Link to={link ? link : `/grants/${grant.id}`}
@@ -86,7 +82,7 @@ export const GrantItem = ({ grant, link }: GrantItemProps) => {
             </div>    
             <p className="text-base">{grant.description}</p>
         </Link>
-    )
+    );
 }
 
 export default GrantList;
