@@ -3,7 +3,7 @@ import { useUserContext } from "../contexts/userContext";
 import { useEffect, useState } from "react";
 import { Grant } from "../interfaces/Grant";
 import GrantList from "../grant-list/GrantList";
-import mockGrants from "./mockGrants";
+import { SERVER_PORT } from "../../constants/ServerConstants";
 
 const GrantBrowse = ({}: GrantBrowseProps) => {
     const { user } = useUserContext();
@@ -11,9 +11,49 @@ const GrantBrowse = ({}: GrantBrowseProps) => {
 }
 
 const UserGrantBrowse = () => {
-    const [grants, setGrants] = useState<Grant[]>(mockGrants);
+    const [grants, setGrants] = useState<Grant[]>([]);
 
     const [filteredGrants, setFilteredGrants] = useState<Grant[]>(grants);
+
+    useEffect(() => {
+        fetchGrants();
+    }, []);
+
+    useEffect(() => {
+        setFilteredGrants(grants)
+    }, [grants])
+
+    // Fetch all grants
+    const fetchGrants = async () => {
+        try {
+            const response = await fetch(`http://localhost:${SERVER_PORT}/getAllPublishedGrants`, {
+              method: 'GET',
+              headers: {
+                'Content-Type': 'application/json',
+              },
+            });
+
+            if (!response.ok) {
+                await response.json().then((data) => {
+                    console.error("Server error fetching grants.", data.error);
+                    return;
+                });
+            }
+
+            await response.json().then((data) => {
+                const fetchedGrants: Grant[] = data.response;
+                console.log("Fetched Grants: ", fetchedGrants);
+
+                const grants: Grant[] = fetchedGrants.map((grant: Grant) => {
+                    return {...grant, deadline: new Date(grant.deadline), posted: new Date(grant.posted)}
+                });
+
+                setGrants(grants);
+            })
+        } catch (error) {
+            console.error('Error fetching grants:', (error as Error).message);
+        }
+    }
 
     return (
         <div className="flex flex-col lg:flex-row gap-3 p-2">
