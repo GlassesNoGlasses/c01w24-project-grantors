@@ -1,54 +1,28 @@
 import { Link, useParams } from "react-router-dom";
 import { GrantPageProps } from "./GrantPageProps";
 import mockGrants from "../grant-browse/mockGrants";
-import { Grant } from "../interfaces/Grant";
+import { Grant } from "../../interfaces/Grant";
 import { useState } from "react";
 import React from "react";
 import { SERVER_PORT } from "../../constants/ServerConstants";
+import { fetchGrant } from "../../controllers/GrantsController";
 
 const GrantPage = ({}: GrantPageProps) => {
     const { grantId } = useParams();
     const [grant, setGrant] = useState<Grant | undefined>(undefined);
 
     React.useEffect(() => {
-        fetchGrant(grantId);
+        if (grantId) {
+            fetchGrant(grantId).then((grant: Grant | undefined) => {
+                if (grant) {
+                    console.log(grant);
+                    setGrant(grant);
+                }
+            });
+        }
     }, []);
 
-    const fetchGrant = async (grantId: String | undefined) => {
-        try {
-            const response = await fetch(`http://localhost:${SERVER_PORT}/getGrant/${grantId}`, {
-                method: 'GET',
-                headers: {
-                'Content-Type': 'application/json',
-                },
-            });
-            
-            await response.json().then((data): void => {
-                const { _id, title, description, deadline, minAmount, maxAmount,
-                    organization, category, contact, questions, publish, owner } = data['response']
-                
-                setGrant ({ 
-                    id: _id,
-                    title: title,
-                    posted: new Date(),
-                    description: description,
-                    deadline: new Date(deadline),
-                    minAmount: minAmount,
-                    maxAmount: maxAmount,
-                    organization: organization,
-                    category: category,
-                    contact: contact,
-                    questions: questions,
-                    publish: publish,
-                    owner: owner
-                    })
-            })
-        } catch (error) {
-            console.error('error creating grant:', (error as Error).message);
-        }
-    }
-
-    return grant === undefined ? <GrantNotFound /> : <GrantFound grant={grant} />;
+    return grant ? <GrantFound grant={grant} /> : <GrantNotFound /> ;
 };
 
 const GrantFound = ({ grant }: { grant: Grant }) => {
@@ -92,13 +66,6 @@ const ApplyButton = ({ grantId }: { grantId: String }) => {
           Apply Now
         </Link>
       )
-}
-
- export const getGrant = (grantId: String | undefined) => {
-    if (grantId === undefined || Number.isNaN(Number(grantId)))
-        return undefined;
-
-    return mockGrants.find(grant => grant.id === Number(grantId));
 }
 
 export default GrantPage;

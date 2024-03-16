@@ -1,28 +1,39 @@
 import { useParams } from 'react-router-dom';
-import { Grant, GrantQuestion } from "../interfaces/Grant";
-import  { getGrant } from "../grant-page/GrantPage";
+import { Grant, GrantQuestion } from "../../interfaces/Grant";
 import { GrantPageApplyProps } from './GrantPageApplyProps';
 import GrantForm from "../grant-form/GrantForm";
 import { useUserContext } from '../contexts/userContext'
+import { fetchGrant } from '../../controllers/GrantsController';
+import { useEffect, useState } from 'react';
 
 const GrantPageApply = ({}: GrantPageApplyProps) => {
 
     const {user, setUser} = useUserContext();
     const {grantId} = useParams();
-    const questions: undefined | GrantQuestion[] = getQuestions(grantId);
-    
+    const [ questions, setQuestions] = useState<GrantQuestion[]>([]);
+
+    useEffect(() => {
+        if (grantId) {
+            getQuestions(grantId).then((grantQuestions: GrantQuestion[] | undefined) => {
+                if (grantQuestions) {
+                    setQuestions(grantQuestions);
+                }
+            })
+        }
+    }, []);
+
+    const getQuestions = async (grantId: String): Promise<GrantQuestion[] | undefined> => {
+
+        const grant: Grant | undefined = await fetchGrant(grantId);
+
+        return grant ? grant.questions : undefined;
+    }
+
+    const ErrorGrantQuestionList = () => {
+        return <div>oh no! something went wrong</div>;
+    }
+
     return questions === undefined ? <ErrorGrantQuestionList /> : <GrantForm username={user?.username} grantId={grantId} questions={questions}/>;
 };
-
-const getQuestions = (grantId: String | undefined) => {
-
-    const grant: Grant | undefined = getGrant(grantId);
-    
-    return grant === undefined ? undefined : grant.questions;
-}
-
-const ErrorGrantQuestionList = () => {
-    return <div>oh no! something went wrong</div>;
-}
 
 export default GrantPageApply;
