@@ -1,4 +1,4 @@
-import { Grant } from "../interfaces/Grant";
+import { Grant } from "../../interfaces/Grant";
 
 export interface GrantListProps {
     grants: Grant[];

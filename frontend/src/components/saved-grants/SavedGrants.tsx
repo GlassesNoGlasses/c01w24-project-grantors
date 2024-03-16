@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useUserContext } from "../contexts/userContext";
-import { Grant } from "../interfaces/Grant";
+import { Grant } from "../../interfaces/Grant";
 import GrantList from "../grant-list/GrantList";
 import mockGrants from "../grant-browse/mockGrants";
 

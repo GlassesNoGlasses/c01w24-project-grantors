@@ -2,13 +2,13 @@
 import React, { useState } from 'react'
 import { useUserContext } from '../../../../contexts/userContext'
 import { Link } from 'react-router-dom';
-import { Grant } from '../../../../interfaces/Grant';
+import { Grant } from '../../../../../interfaces/Grant';
 import { GrantItem } from '../../../../grant-list/GrantList';
 import Tab from '../../../../tabs/Tab';
 import { TabItem } from '../../../../tabs/TabProps';
 import { Column } from '../../../../table/TableProps';
 import Table from '../../../../table/Table';
-import { LinkProps } from '../../../../interfaces/LinkProps';
+import { LinkProps } from '../../../../../interfaces/LinkProps';
 import { SERVER_PORT } from '../../../../../constants/ServerConstants';
 
 const AdminGrants = () => {

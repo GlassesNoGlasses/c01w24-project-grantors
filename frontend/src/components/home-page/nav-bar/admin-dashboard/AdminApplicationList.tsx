@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useUserContext } from '../../../contexts/userContext';
 import { AdminApplicationListProps } from './AdminApplicationListProps';
-import { Application } from '../../../interfaces/Application';
+import { Application } from '../../../../interfaces/Application';
 import { SERVER_PORT } from '../../../../constants/ServerConstants';
 import { useParams, Navigate, useNavigate } from 'react-router-dom';
 import { mockApplications } from './mockApplications';

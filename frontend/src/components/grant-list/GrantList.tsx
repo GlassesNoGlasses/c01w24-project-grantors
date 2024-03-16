@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Link } from "react-router-dom";
 import { GrantListProps } from "./GrantListProps";
-import { Grant } from "../interfaces/Grant";
+import { Grant } from "../../interfaces/Grant";
 import { GrantItemProps } from "./GrantItemProps";
 import { useUserContext } from "../contexts/userContext";
 import { StarIcon } from '@heroicons/react/24/solid';

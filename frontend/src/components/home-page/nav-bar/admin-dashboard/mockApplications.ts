@@ -1,4 +1,4 @@
-import { Application, ApplicationStatus } from "../../../interfaces/Application";
+import { Application, ApplicationStatus } from "../../../../interfaces/Application";
 
 export const mockApplications: Application[] = [
     {

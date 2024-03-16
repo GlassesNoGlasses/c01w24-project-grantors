@@ -1,4 +1,4 @@
-import { LinkProps } from "../interfaces/LinkProps";
+import { LinkProps } from "../../interfaces/LinkProps";
 
 export interface Column<T> {
     key: keyof T,

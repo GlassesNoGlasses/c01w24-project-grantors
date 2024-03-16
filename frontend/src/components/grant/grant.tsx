@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Grant, GrantQuestion } from '../interfaces/Grant';
+import { Grant, GrantQuestion } from '../../interfaces/Grant';
 
 // const initialQuestions: GrantQuestion[] = [
 //     { id: 1, question: "What is the primary goal of your project?", answer: null },

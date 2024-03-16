@@ -4,8 +4,8 @@ import emailIcon from '../../images/iconMail.png';
 import passwordIcon from '../../images/iconPassword.png';
 import { Link, useNavigate } from "react-router-dom";
 import { useUserContext } from '../contexts/userContext';
-import { User } from '../interfaces/User';
-import { ServerLoginResponse } from '../interfaces/ServerLoginResponse';
+import { User } from '../../interfaces/User';
+import { ServerLoginResponse } from '../../interfaces/ServerResponses/LoginResponse';
 import { SERVER_PORT } from '../../constants/ServerConstants'
 
 const Login: React.FC<LoginProps> = () => {

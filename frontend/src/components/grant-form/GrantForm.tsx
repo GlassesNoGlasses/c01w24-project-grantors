@@ -1,7 +1,7 @@
 import { Link, useParams } from "react-router-dom";
 import React, { useState } from 'react';
 import { QuestionListProps } from "./GrantFormProps";
-import { Grant, GrantQuestion } from "../interfaces/Grant";
+import { Grant, GrantQuestion } from "../../interfaces/Grant";
 import { SERVER_PORT } from "../../constants/ServerConstants";
 
 const GrantQuestionList = ({ username, grantId, questions }: QuestionListProps) => {

@@ -1,3 +1,3 @@
-import { GrantQuestion } from "../interfaces/Grant";
+import { GrantQuestion } from "../../interfaces/Grant";
 
 export interface GrantPageApplyProps {}

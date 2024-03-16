@@ -1,4 +1,4 @@
-import { Grant } from "../interfaces/Grant";
+import { Grant } from "./Grant";
 /* Inferface of Users to be used. */
 
 export interface User {

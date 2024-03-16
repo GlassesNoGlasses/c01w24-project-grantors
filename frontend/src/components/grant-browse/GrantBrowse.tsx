@@ -1,7 +1,7 @@
 import { GrantBrowseProps } from "./GrantBrowseProps";
 import { useUserContext } from "../contexts/userContext";
 import { useEffect, useState } from "react";
-import { Grant } from "../interfaces/Grant";
+import { Grant } from "../../interfaces/Grant";
 import GrantList from "../grant-list/GrantList";
 import { SERVER_PORT } from "../../constants/ServerConstants";
 
