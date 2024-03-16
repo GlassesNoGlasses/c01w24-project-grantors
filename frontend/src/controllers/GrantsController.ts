@@ -19,7 +19,10 @@ export async function fetchGrant(grantId: String): Promise<Grant | undefined> {
         }
 
         return await response.json().then((data: GetGrantResponse) => {
-            return data.response;
+            const grant = data.response;
+            if (grant) {
+                return {...grant, deadline: new Date(grant.deadline), posted: new Date(grant.posted)};
+            }
         });
     } catch (error) {
         console.error('error creating grant:', (error as Error).message);
