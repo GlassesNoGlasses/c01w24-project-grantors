@@ -1,14 +1,9 @@
 import React, { useState } from 'react';
-import { Grant, GrantQuestion } from '../../interfaces/Grant';
-
-// const initialQuestions: GrantQuestion[] = [
-//     { id: 1, question: "What is the primary goal of your project?", answer: null },
-//     { id: 2, question: "How will you measure the success of your project?", answer: null }
-// ];
+import { Grant } from '../../interfaces/Grant';
 
 const GrantForm: React.FC = () => {
     const initialGrantState: Grant = {
-        id: Date.now(),
+        id: '',
         title: '',
         description: '',
         posted: new Date(),

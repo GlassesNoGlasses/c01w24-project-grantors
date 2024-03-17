@@ -1,6 +1,6 @@
 import { SERVER_PORT } from "../constants/ServerConstants";
 import { Grant } from "../interfaces/Grant";
-import { GetGrantResponse } from "../interfaces/ServerResponse";
+import { GetGrantResponse, GetGrantsResponse } from "../interfaces/ServerResponse";
 
 export async function fetchGrant(grantId: String): Promise<Grant | undefined> {
     try {
@@ -26,6 +26,28 @@ export async function fetchGrant(grantId: String): Promise<Grant | undefined> {
         });
     } catch (error) {
         console.error('error creating grant:', (error as Error).message);
+    }
+}
+
+export async function fetchGrants(grantIDs: string[]): Promise<Grant[] | undefined> {
+    const encodedGrantIDs: string = encodeURIComponent(grantIDs.join(','));
+    const res = await fetch(`http://localhost:${SERVER_PORT}/getGrants/${encodedGrantIDs}`, {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+    });
+
+    if (res.ok) {
+        return await res.json().then((data: GetGrantsResponse) => {
+            if (data.response) {
+                return data.response.map((grant) => {
+                    return {...grant, deadline: new Date(grant.deadline), posted: new Date(grant.posted)};
+                });
+            }
+        });
+    } else {
+        console.error("Error fetching grants", res);
     }
 }
 

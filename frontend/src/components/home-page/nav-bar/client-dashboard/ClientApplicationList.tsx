@@ -6,7 +6,8 @@ import Table from "../../../table/Table";
 import { SERVER_PORT } from "../../../../constants/ServerConstants";
 import { Grant } from "../../../../interfaces/Grant";
 import { useNavigate } from "react-router-dom";
-import { GetGrantsResponse, GetUserApplicationsResponse } from "../../../../interfaces/ServerResponse";
+import { GetUserApplicationsResponse } from "../../../../interfaces/ServerResponse";
+import { fetchGrants } from "../../../../controllers/GrantsController";
 
 type TableData = [Application, Grant | undefined];
 
@@ -76,33 +77,13 @@ const ClientApplicationList = ({}) => {
 
     useEffect(() => {
         if (applications.length) {
-            const grantIDs: number[] = applications.map((app: Application) => app.grantID);
-            const encodedGrantIDs: string = encodeURIComponent(grantIDs.join(','));
-            const fetchGrants = async () => {
-                const res = await fetch(`http://localhost:${SERVER_PORT}/getGrants/${encodedGrantIDs}`, {
-                    method: 'GET',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                });
+            const grantIDs: string[] = applications.map((app: Application) => app.grantID);
 
-                if (res.ok) {
-                    await res.json().then((data: GetGrantsResponse) => {
-                        if (data.response) {
-                            const grants = data.response.map((grant) => {
-                                return {...grant, deadline: new Date(grant.deadline), posted: new Date(grant.posted)};
-                            });
-                            
-                            return setGrants(grants);
-                        }
-                    });
-                } else {
-                    console.error(res);
-                    setUser(null);
+            fetchGrants(grantIDs).then((grants: Grant[] | undefined) => {
+                if (grants) {
+                    setGrants(grants);
                 }
-            }
-
-            fetchGrants();
+            });
         }
         
     }, [applications]);

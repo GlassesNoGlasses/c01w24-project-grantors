@@ -11,5 +11,5 @@ export interface User {
     grants?: Grant[]
     organization?: string,
     authToken: string,
-    favoriteGrants?: number[]
+    favoriteGrants?: string[]
 }

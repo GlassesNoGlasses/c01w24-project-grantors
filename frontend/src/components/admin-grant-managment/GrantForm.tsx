@@ -18,7 +18,7 @@ const GrantForm: React.FC<GrantFormProps> = ({ type, port }) => {
 
     // default grant object
     const initialGrantState: Grant = {
-        id: -1,
+        id: '',
         title: '',
         description: '',
         posted: new Date(),
