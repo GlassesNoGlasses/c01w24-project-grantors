@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
-import { QuestionListProps } from "./GrantFormProps";
+import { GrantFormProps } from "./GrantFormProps";
 import { GrantQuestion } from "../../interfaces/Grant";
 import { SERVER_PORT } from "../../constants/ServerConstants";
 import { ApplicationStatus } from '../../interfaces/Application';
 
-const GrantQuestionList = ({ user, grant }: QuestionListProps) => {
+const GrantForm = ({ user, grant }: GrantFormProps) => {
     const [questionList, setQuestionList] = useState<GrantQuestion[]>(grant.questions);
 
     const setAnswer = (index: number, answer: string) => {
@@ -58,10 +58,10 @@ const GrantQuestionList = ({ user, grant }: QuestionListProps) => {
 
     return (
         <div>
-            <form onSubmit={handleSubmit} id="grantform">
+            <form onSubmit={handleSubmit} id="grantform" className='m-5 ml-10 mr-10'>
                 {questionList.map((questionElement, index) => (
                     <li key={index} className='list-none'>
-                         <div className="flex flex-row justify-between items-center">
+                         <div className="flex flex-col gap-1 p-5 px-3">
                             <label className='text-base'>{questionElement.question}</label>
                             <textarea
                                 className='outline outline-2 p-1 pb-10 mt-3 ml-5 mr-5'
@@ -78,16 +78,16 @@ const GrantQuestionList = ({ user, grant }: QuestionListProps) => {
                         className='p-2 px-5 m-7 mr-1 bg-red-500 hover:bg-red-600 active:bg-red-700
                         text-white font-bold rounded-lg shadow-md transition-colors duration-150 ease-in
                         text-lg' 
-                        type='submit' 
-                        name="cancel">
-                        Cancel
+                        type='button' 
+                        name="back">
+                        Back
                     </button>
                     
                     <button 
                         className='p-2 px-5 m-7 mr-1 bg-green-500 hover:bg-green-600 active:bg-green-700
                         text-white font-bold rounded-lg shadow-md transition-colors duration-150 ease-in
                         text-lg' 
-                        type='submit' 
+                        type='button' 
                         name="save">
                         Save
                     </button>
@@ -105,6 +105,7 @@ const GrantQuestionList = ({ user, grant }: QuestionListProps) => {
             </form>
         </div>
     );
+
 };
 
-export default GrantQuestionList;
+export default GrantForm;
