@@ -25,7 +25,7 @@ const GrantForm: React.FC<GrantFormProps> = ({ type, port }) => {
         deadline: new Date(),
         minAmount: 0,
         maxAmount: 100000,
-        organization: '',
+        organization: user?.organization ? user.organization : '',
         category: '',
         contact: '',
         questions: [],
