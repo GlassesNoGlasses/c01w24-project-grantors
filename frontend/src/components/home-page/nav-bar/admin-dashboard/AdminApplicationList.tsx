@@ -45,7 +45,7 @@ const AdminApplicationList = ({}: AdminApplicationListProps) => {
         }
 
         const fetchApplications = async () => {
-            const res = await fetch(`http://localhost:${SERVER_PORT}/getOrgApplications/${organization}`, {
+            const res = await fetch(`http://localhost:${SERVER_PORT}/organization/${organization}/applications`, {
                 method: 'GET',
                 headers: {
                   'Content-Type': 'application/json',

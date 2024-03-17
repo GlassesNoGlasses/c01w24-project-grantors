@@ -431,6 +431,8 @@ app.get("/getOrgGrants/:organization", express.json(), async (req, res) => {
   }
 });
 
+
+
 app.get("/getAllPublishedGrants", express.json(), async (req, res) => {
   try {
     const grantCollection = db.collection(COLLECTIONS.grants);
@@ -509,7 +511,7 @@ app.post("/submitApplication", express.json(), async (req, res) => {
   }
 });
 
-app.get("/getOrgApplications/:organization", express.json(), async (req, res) => {
+app.get("/organization/:organization/applications", express.json(), async (req, res) => {
   const organization = req.params.organization;
 
   verifyRequestAuth(req, async (err, decoded) => {
