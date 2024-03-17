@@ -18,7 +18,7 @@ const AdminGrants = () => {
     const [unpublishedGrants, setUnpublishedGrants] = useState<Grant[]>([]);
     const [published, setPublished] = useState<boolean>(true);
 
-    const adminId = user?.accountID;
+    const organization = user?.organization;
 
     // Tab
     const tabItems: TabItem[] = [
@@ -92,10 +92,10 @@ const AdminGrants = () => {
         console.log(published);
     }, [publishedGrants, unpublishedGrants, published]);
 
-    // Fetch all grants created by the admin with adminid
+    // Fetch all grants created by the admin's organization
     const fetchAdminGrants = async () => {
         try {
-            const response = await fetch(`http://localhost:${SERVER_PORT}/getAdminGrants/${adminId}`, {
+            const response = await fetch(`http://localhost:${SERVER_PORT}/getOrgGrants/${organization}`, {
               method: 'GET',
               headers: {
                 'Content-Type': 'application/json',

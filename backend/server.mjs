@@ -356,20 +356,19 @@ app.delete("/deleteGrant/:grantId", express.json(), async(req, res) => {
   }
 })
 
-app.get("/getAdminGrants/:adminID", express.json(), async (req, res) => {
+app.get("/getOrgGrants/:organization", express.json(), async (req, res) => {
   try {
 
-    const accountID = req.params.adminID;
+    const organization = req.params.organization;
 
-    const adminID = accountID.toString();
     const grantCollection = db.collection(COLLECTIONS.grants);
 
     const data = await grantCollection.find({
-      owner: adminID
+      organization: organization
     }).toArray();
 
     if (!data) {
-      return res.status(404).send(`Unable to find grants for admin: ${adminID}`);
+      return res.status(404).send(`Unable to find grants for organization: ${organization}`);
     }
 
     const grants = data.length <= 0 ? [] : data.map((grant) => {
