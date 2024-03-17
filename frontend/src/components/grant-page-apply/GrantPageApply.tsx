@@ -10,30 +10,27 @@ const GrantPageApply = ({}: GrantPageApplyProps) => {
 
     const {user, setUser} = useUserContext();
     const {grantId} = useParams();
-    const [ questions, setQuestions] = useState<GrantQuestion[]>([]);
+    const [grant, setGrant] = useState<Grant | undefined>(undefined);
 
     useEffect(() => {
         if (grantId) {
-            getQuestions(grantId).then((grantQuestions: GrantQuestion[] | undefined) => {
-                if (grantQuestions) {
-                    setQuestions(grantQuestions);
+            fetchGrant(grantId).then((grant: Grant | undefined) => {
+                if (grant) {
+                    setGrant(grant);
                 }
-            })
+            });
         }
     }, []);
-
-    const getQuestions = async (grantId: String): Promise<GrantQuestion[] | undefined> => {
-
-        const grant: Grant | undefined = await fetchGrant(grantId);
-
-        return grant ? grant.questions : undefined;
-    }
 
     const ErrorGrantQuestionList = () => {
         return <div>oh no! something went wrong</div>;
     }
 
-    return questions.length === 0 ? <ErrorGrantQuestionList /> : <GrantForm username={user?.username} grantId={grantId} questions={questions}/>;
+    if (!user || !grant) {
+        return <ErrorGrantQuestionList />;
+    }
+
+    return <GrantForm user={user} grant={grant}/>;
 };
 
 export default GrantPageApply;
