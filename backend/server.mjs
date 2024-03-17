@@ -432,7 +432,7 @@ app.post("/submitApplication", express.json(), async (req, res) => {
         if (update.modifiedCount === 1) {
           return res.status(201).json({ response: "Application submitted successfully." });
         }
-        return res.status(500).json( {error: "Failed to submit application."} );
+        return res.status(500).json( {error: "Failed to update application."} );
     }
 
     const inserted = await applicationCollection.insertOne(
@@ -452,7 +452,7 @@ app.post("/submitApplication", express.json(), async (req, res) => {
     if (inserted.insertedCount === 1) {
       return res.status(201).json({ response: "Application submitted successfully.", insertedID: inserted.insertedId });
     }
-    return res.status(500).json({ error: "Failed to submit application." });
+    return res.status(500).json({ error: "Failed to insert application." });
   } catch (error) {
     console.error("Error submitting application:", error.message);
     return res.status(500).json({ error: error.message});
@@ -483,9 +483,14 @@ app.get("/getOrgApplications/:organization", express.json(), async (req, res) =>
     // Looks up all applications, where the associate grant belongs to the organization
     const pipeline = [
       {
+        $addFields: {
+          grantObjectId: { $toObjectId: "$grantID" }
+        }
+      },
+      {
         $lookup: {
           from: COLLECTIONS.grants,
-          localField: 'grantID',
+          localField: 'grantObjectId',
           foreignField: '_id',
           as: 'grant',
         }
