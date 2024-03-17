@@ -53,7 +53,7 @@ const Login: React.FC<LoginProps> = () => {
           throw new Error('Failed to login');
         case 200:
           console.log('Login successful');
-          await response.json().then((data) => {
+          await response.json().then((data: ServerLoginResponse) => {
             console.log(`Welcome ${data['username']}`);
             setFeedback('');
             setUser(InstantiateUser(data));
