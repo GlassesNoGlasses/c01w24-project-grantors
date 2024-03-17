@@ -75,7 +75,7 @@ const GrantForm: React.FC<GrantFormProps> = ({ type, port }) => {
     }
 
     // not the owner of the grant
-    if (grant.owner != user.accountID) {
+    if (grant.organization != user.organization) {
         return (
             <div className='flex font-bold text-xl justify-center mt-10'>
                 Unauthorized: Permission Denied
