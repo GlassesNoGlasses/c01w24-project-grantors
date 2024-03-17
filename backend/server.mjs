@@ -17,6 +17,7 @@ const COLLECTIONS = {
   users: "users",
   applications: "applications",
   grants: "grants",
+  favouriteGrants: "favouriteGrants",
 };
 
 // Connect to MongoDB
@@ -93,14 +94,14 @@ app.post('/login', express.json(), async (req, res) => {
       isAdmin: user.isAdmin, organization: user.organization, authToken: token });
 
   } catch (err) {
-    console.log(err)
+    console.error(err)
     res.status(500).send('Server Error with Logging In');
   }
 });
   
 app.post("/signup", express.json(), async (req, res) => {
   try {
-    const { username, email, password, firstName, lastName, isAdmin, organization, favoriteGrants} = req.body;
+    const { username, email, password, firstName, lastName, isAdmin, organization } = req.body;
 
     // Basic body request check
     if (!username || !password || !email) {
@@ -127,7 +128,6 @@ app.post("/signup", express.json(), async (req, res) => {
       firstName: firstName,
       lastName: lastName,
       isAdmin: isAdmin,
-      favoriteGrants: favoriteGrants,
       organization: organization,
     });
 
@@ -139,19 +139,62 @@ app.post("/signup", express.json(), async (req, res) => {
   }
 });
 
-app.patch('/users/:userId/favorites', express.json(), async (req, res) => {
+app.patch('/users/:userId/favourites/toggle', express.json(), async (req, res) => {
   const userId = req.params.userId;
-  const { favoriteGrants } = req.body;
+  const { grantID } = req.body;
 
-  if (!userId || !Array.isArray(favoriteGrants)) {
+  if (!userId || !grantID) {
     return res.status(400).json({ error: "Invalid request." });
   }
 
+  const userIdObj = new ObjectId(userId);
+
   try {
-    const userCollection = db.collection(COLLECTIONS.users);
-    const result = await userCollection.updateOne(
-      { _id: new ObjectId(userId) },
-      { $set: { favoriteGrants: favoriteGrants } }
+    const favouriteGrantsCollection = db.collection(COLLECTIONS.favouriteGrants);
+
+    const favourite = await favouriteGrantsCollection.findOne({_id: userIdObj});
+    if (!favourite) {
+      // user has no favourite array so create one
+      const insert = await favouriteGrantsCollection.insertOne(
+        {
+          _id: userIdObj,
+          favourites: [grantID],
+        });
+
+      if (!insert.insertedCount) {
+        return res.status(500).json({ error: "Failed to toggle favourite" });
+      }
+
+      return res.status(200).json({ response: "Successfully toggled favourite" });
+    }
+
+    const alreadyFavourite = await favouriteGrantsCollection.findOne(
+      {
+        _id: userIdObj,
+        favourites: { $in: [grantID] ,}
+      });
+
+    if (alreadyFavourite) {
+      const update = await favouriteGrantsCollection.updateOne(
+        {
+          _id: userIdObj,
+        },
+        {
+          $pull: { favourites: grantID },
+        },
+      );
+
+      if (!update.modifiedCount) {
+        return res.status(500).json({ error: "Failed to create favourites array." })
+      }
+      return res.status(200).json({ response: "Successfully toggled favourite" });
+    }
+
+    const result = await favouriteGrantsCollection.updateOne(
+      { _id: userIdObj },
+      {
+        $push: { favourites: grantID },
+      },
     );
 
     if (result.modifiedCount === 0) {
@@ -163,7 +206,35 @@ app.patch('/users/:userId/favorites', express.json(), async (req, res) => {
     console.error(error);
     res.status(500).json({ error: "Internal server error." });
   }
-})
+});
+
+app.get('/users/:userId/favourites', express.json(), async (req, res) => {
+  const userId = req.params.userId;
+
+  if (!userId) {
+    return res.status(400).json({ error: "Invalid request." });
+  }
+
+  try {
+    const favouriteGrantsCollection = db.collection(COLLECTIONS.favouriteGrants);
+    const result = await favouriteGrantsCollection.findOne({
+      _id: new ObjectId(userId)
+    });
+
+    const favourites = result ? result.favourites.map((grantId) => new ObjectId(grantId)) : [];
+
+    const grantsCollection = db.collection(COLLECTIONS.grants);
+    const grants = await grantsCollection.find({
+      _id: { $in: favourites }
+    }).toArray();
+
+    res.status(200).json({ response: grants.map(grant => dbGrantToFrontendGrant(grant)) });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Internal server error." });
+  }
+});
+
 app.post("/createGrant", express.json(), async (req, res) => {
   try {
     // frontend guarantees that all these fields are provided so omit param check
@@ -256,7 +327,7 @@ app.put('/addGrantToAdminList', express.json(), async(req, res) => {
     
     res.status(201).json({ response: "Grant Saved to Admin Account."});
   } catch (error) {
-    console.log(error.message)
+    console.error(error.message)
     res.status(500).json({ error: error.message });
   }
 })
@@ -303,7 +374,7 @@ app.get("/getGrants/:grantIds", express.json(), async(req, res) => {
 
     res.status(200).json({ response: grants });
   } catch (error) {
-    console.log("Error getting grants", error);
+    console.error("Error getting grants", error);
     res.status(500).json({ error: error.message });
   }
 })
@@ -355,7 +426,7 @@ app.get("/getOrgGrants/:organization", express.json(), async (req, res) => {
     res.status(200).json({ response: grants });
     
   } catch (error) {
-    console.log("Error getting all grants: ", error);
+    console.error("Error getting all grants: ", error);
     res.status(500).json({ error: error.message }); 
   }
 });
@@ -371,7 +442,7 @@ app.get("/getAllPublishedGrants", express.json(), async (req, res) => {
 
     res.status(200).json({ response: grants });
   } catch (error) {
-    console.log("Error getting all published grants:", error);
+    console.error("Error getting all published grants:", error);
     res.status(500).json({ error: error.message });
   }
 });
@@ -409,6 +480,7 @@ app.post("/submitApplication", express.json(), async (req, res) => {
         if (update.modifiedCount === 1) {
           return res.status(201).json({ response: "Application submitted successfully." });
         }
+
         return res.status(500).json( {error: "Failed to update application."} );
     }
 
@@ -426,9 +498,10 @@ app.post("/submitApplication", express.json(), async (req, res) => {
       }
     );
 
-    if (inserted.insertedCount === 1) {
+    if (inserted.insertedId) {
       return res.status(201).json({ response: "Application submitted successfully.", insertedID: inserted.insertedId });
     }
+
     return res.status(500).json({ error: "Failed to insert application." });
   } catch (error) {
     console.error("Error submitting application:", error.message);

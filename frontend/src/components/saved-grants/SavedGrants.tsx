@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useUserContext } from "../contexts/userContext";
 import { Grant } from "../../interfaces/Grant";
 import GrantList from "../grant-list/GrantList";
-import mockGrants from "../grant-browse/mockGrants";
+import { fetchFavouriteGrants } from "../../controllers/GrantsController";
 
 const SavedGrants = () => {
     const { user } = useUserContext();
@@ -14,17 +14,18 @@ const UserGrantBrowse = () => {
     const [filteredGrants, setFilteredGrants] = useState<Grant[]>([]);
 
     useEffect(() => {
-        if (user?.favoriteGrants) {
-            const favorites = mockGrants.filter(grant => 
-                user.favoriteGrants?.includes(grant.id)
-            );
-            setFilteredGrants(favorites);
+        if (user) {
+            fetchFavouriteGrants(user.accountID).then((grants: Grant[] | undefined) => {
+                if (grants) {
+                    setFilteredGrants(grants);
+                }
+            });
         }
     }, [user]);
 
     return (
         <div className="flex flex-col lg:flex-row gap-3 p-2">
-            <GrantList grants={filteredGrants} />
+            <GrantList grants={filteredGrants} favouriteGrants={filteredGrants.map((grant) => grant.id)} />
         </div>
     );
 }

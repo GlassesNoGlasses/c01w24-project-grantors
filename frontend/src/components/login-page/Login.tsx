@@ -24,7 +24,7 @@ const Login: React.FC<LoginProps> = () => {
     }
     return {accountID: response.accountID, isAdmin: false, username: response.username, 
       firstName: response.firstName, lastName: response.lastName, email: response.email,
-      authToken: response.authToken, favoriteGrants: []};
+      authToken: response.authToken};
   };
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {

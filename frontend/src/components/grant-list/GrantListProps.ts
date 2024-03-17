@@ -1,5 +1,6 @@
 import { Grant } from "../../interfaces/Grant";
 
 export interface GrantListProps {
-    grants: Grant[];
+    grants: Grant[],
+    favouriteGrants: string[],
 }

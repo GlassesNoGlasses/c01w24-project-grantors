@@ -15,7 +15,6 @@ const SignUp: React.FC<SignUpProps> = () => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [isAdmin, setIsAdmin] = useState(false);
-  const [favoriteGrants, setFavoriteGrants] = useState([]);
   const [organization, setOrganization] = useState('');
   const [feedback, setFeedback] = useState<string>("");
   const [showModal, setShowModal] = useState<boolean>(false);
@@ -31,7 +30,7 @@ const SignUp: React.FC<SignUpProps> = () => {
         },
         body: JSON.stringify({ 'email': email, 'username': username,'password': password, 
           'firstName': firstName, "lastName": lastName, 'isAdmin': isAdmin,
-          'organization':  organization, 'favoriteGrants': favoriteGrants }),
+          'organization':  organization }),
       });
   
       if (!response.ok) {

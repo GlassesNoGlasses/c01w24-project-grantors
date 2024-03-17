@@ -1,61 +1,38 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { Link } from "react-router-dom";
 import { GrantListProps } from "./GrantListProps";
-import { Grant } from "../../interfaces/Grant";
 import { GrantItemProps } from "./GrantItemProps";
 import { useUserContext } from "../contexts/userContext";
 import { StarIcon } from '@heroicons/react/24/solid';
-import { SERVER_PORT } from '../../constants/ServerConstants';
+import { toggleFavouriteGrant } from '../../controllers/GrantsController';
 
-const GrantList = ({ grants }: GrantListProps) => {
+const GrantList = ({ grants, favouriteGrants }: GrantListProps) => {
     return (
         <ul className="flex flex-col gap-3">
             {grants.map((grant, index) => (
                 <li key={index}>
-                    <GrantItem grant={grant} />
+                    <GrantItem grant={grant} favourite={favouriteGrants.includes(grant.id)} />
                 </li>
             ))}
         </ul>
     );
 }
 
-export const GrantItem = ({ grant, link }: GrantItemProps) => {
+export const GrantItem = ({ grant, link, favourite }: GrantItemProps) => {
     const { user, setUser } = useUserContext();
-    const [isFavorite, setIsFavorite] = useState(false);
+    const [isFavourite, setIsFavourite] = useState(favourite);
 
-    useEffect(() => {
-      const isFav = user?.favoriteGrants?.includes(grant.id);
-      setIsFavorite(isFav ?? false);
-    }, [user, grant.id]);
-  
     const toggleFavorite = async () => {
         if (!user || !grant.id) {
             console.log("No user logged in or invalid grant.");
             return;
         }
 
-        const isCurrentlyFavorite = user.favoriteGrants?.includes(grant.id);
-        const updatedFavorites = isCurrentlyFavorite
-            ? user.favoriteGrants?.filter(favGrantId => favGrantId !== grant.id)
-            : [...(user.favoriteGrants ? user.favoriteGrants : []), grant.id];
-        try {
-            const response = await fetch(`http://localhost:${SERVER_PORT}/users/${user.accountID}/favorites`, {
-                method: 'PATCH',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({ favoriteGrants: updatedFavorites }),
-            });
-
-            if (!response.ok) {
-                throw new Error('Failed to update favorites');
+        await toggleFavouriteGrant(user.accountID, grant.id).then((success: boolean) => {
+            if (success) {
+                setIsFavourite(!isFavourite);
             }
-
-            setUser({ ...user, favoriteGrants: updatedFavorites });
-            setIsFavorite(!isCurrentlyFavorite);
-        } catch (error) {
-            console.error('Error updating favorites:', error);
-        }
+        });
     };
 
     return (
@@ -69,7 +46,7 @@ export const GrantItem = ({ grant, link }: GrantItemProps) => {
                   e.preventDefault();
                   toggleFavorite(); 
                 }}>
-                    <StarIcon className={`h-6 w-6 ${isFavorite ? 'text-yellow-500' : 'text-gray-500'}`} />
+                    <StarIcon className={`h-6 w-6 ${isFavourite ? 'text-yellow-500' : 'text-gray-500'}`} />
                 </button>
             </div>
             <div className="flex flex-row justify-between">

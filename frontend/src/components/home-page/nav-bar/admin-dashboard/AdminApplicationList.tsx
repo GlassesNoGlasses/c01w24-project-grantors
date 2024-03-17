@@ -55,7 +55,7 @@ const AdminApplicationList = ({}: AdminApplicationListProps) => {
 
             if (res.ok) {
                 await res.json().then((data) => {
-                    const applications = data.applications.map((application: Application) => {
+                    const applications = data.response.map((application: Application) => {
                         return {...application, submissionDate: new Date(application.submissionDate)};
                     });
                     return setApplications(applications);

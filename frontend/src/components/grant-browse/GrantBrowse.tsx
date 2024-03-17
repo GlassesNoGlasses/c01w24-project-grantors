@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { Grant } from "../../interfaces/Grant";
 import GrantList from "../grant-list/GrantList";
 import { SERVER_PORT } from "../../constants/ServerConstants";
+import { fetchFavouriteGrants } from "../../controllers/GrantsController";
 
 const GrantBrowse = ({}: GrantBrowseProps) => {
     const { user } = useUserContext();
@@ -11,13 +12,21 @@ const GrantBrowse = ({}: GrantBrowseProps) => {
 }
 
 const UserGrantBrowse = () => {
+    const { user } = useUserContext();
     const [grants, setGrants] = useState<Grant[]>([]);
 
     const [filteredGrants, setFilteredGrants] = useState<Grant[]>(grants);
+    const [favouriteGrants, setFavouriteGrants] = useState<string[]>([]);
 
     useEffect(() => {
-        fetchGrants();
-    }, []);
+        if (user) {
+            fetchGrants();
+            fetchFavouriteGrants(user.accountID).then((grants: Grant[]) => {
+                setFavouriteGrants(grants.map((grant: Grant) => grant.id));
+            });
+        }
+
+    }, [user]);
 
     useEffect(() => {
         setFilteredGrants(grants)
@@ -58,7 +67,7 @@ const UserGrantBrowse = () => {
     return (
         <div className="flex flex-col lg:flex-row gap-3 p-2">
             <GrantFilter grants={grants} setGrants={setFilteredGrants} />
-            <GrantList grants={filteredGrants} />
+            <GrantList grants={filteredGrants} favouriteGrants={favouriteGrants} />
         </div>
     )
 }

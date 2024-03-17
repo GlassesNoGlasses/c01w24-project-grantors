@@ -14,15 +14,20 @@ export interface ServerLoginResponse {
 
 export interface GetGrantResponse {
     response?: Grant,    
-    error?: string
+    error?: string,
 };
 
 export interface GetGrantsResponse {
     response?: Grant[],    
-    error?: string
+    error?: string,
 };
 
 export interface GetUserApplicationsResponse {
-    response?: Application[]
-    error?: string
+    response?: Application[],
+    error?: string,
+}
+
+export interface GetFavouriteGrantsResponse {
+    response?: Grant[],
+    error?: string,
 }
