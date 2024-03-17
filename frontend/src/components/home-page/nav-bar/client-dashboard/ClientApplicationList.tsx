@@ -3,11 +3,9 @@ import { useUserContext } from "../../../contexts/userContext";
 import { Application, ApplicationStatus } from "../../../../interfaces/Application";
 import { Column } from "../../../table/TableProps";
 import Table from "../../../table/Table";
-import { SERVER_PORT } from "../../../../constants/ServerConstants";
 import { Grant } from "../../../../interfaces/Grant";
-import { useNavigate } from "react-router-dom";
-import { GetUserApplicationsResponse } from "../../../../interfaces/ServerResponse";
 import { fetchGrants } from "../../../../controllers/GrantsController";
+import { fetchApplications } from "../../../../controllers/ApplicationsController";
 
 type TableData = [Application, Grant | undefined];
 
@@ -16,8 +14,6 @@ const ClientApplicationList = ({}) => {
     const [ applications, setApplications ] = useState<Application[]>([]);
     const [ grants, setGrants ] = useState<Grant[]>();
     const [ tableData, setTableData ] = useState<TableData[]>([]);
-
-    const navigate = useNavigate();
 
     const itemsPerPageOptions: number[] = [5,10,20,50,100];
     const columns: Column<TableData>[] = [
@@ -49,30 +45,14 @@ const ClientApplicationList = ({}) => {
     ];
 
     useEffect(() => {
-        const fetchApplications = async () => {
-            const res = await fetch(`http://localhost:${SERVER_PORT}/getUserApplications/${user?.accountID}`, {
-                method: 'GET',
-                headers: {
-                  'Content-Type': 'application/json',
-                  'Authorization': `Bearer ${user?.authToken}`
-                },
-              });
-
-            if (res.ok) {
-                await res.json().then((data: GetUserApplicationsResponse) => {
-                    if (data.response) {
-                        return setApplications(data.response);
-                    }
-                });
-            } else {
-                // Bad response, logout the user and redirect
-                console.log(res);
-                setUser(null);
-                navigate('/login')
-            }
+        if (user) {
+            fetchApplications(user).then((applications: Application[] | undefined) => {
+                if (applications) {
+                    setApplications(applications);
+                }
+            });
         }
 
-        fetchApplications();
     }, [user]);
 
     useEffect(() => {
