@@ -1,6 +1,5 @@
+import { SERVER_PORT } from '../../constants/ServerConstants'
 import GrantForm from './GrantForm'
-
-const SERVER_PORT = 8000
 
 const EditGrant = () => {
   return (

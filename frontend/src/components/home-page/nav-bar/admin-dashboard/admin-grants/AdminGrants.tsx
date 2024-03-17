@@ -2,24 +2,23 @@
 import React, { useState } from 'react'
 import { useUserContext } from '../../../../contexts/userContext'
 import { Link } from 'react-router-dom';
-import { Grant } from '../../../../interfaces/Grant';
+import { Grant } from '../../../../../interfaces/Grant';
 import { GrantItem } from '../../../../grant-list/GrantList';
 import Tab from '../../../../tabs/Tab';
 import { TabItem } from '../../../../tabs/TabProps';
 import { Column } from '../../../../table/TableProps';
 import Table from '../../../../table/Table';
-import { LinkProps } from '../../../../interfaces/LinkProps';
+import { LinkProps } from '../../../../../interfaces/LinkProps';
+import { fetchOrgGrants } from '../../../../../controllers/GrantsController';
 
 const AdminGrants = () => {
-    const PORT = 8000;
-
     // States and contexts
     const {user} = useUserContext();
     const [publishedGrants, setPublishedGrants] = useState<Grant[]>([]);
     const [unpublishedGrants, setUnpublishedGrants] = useState<Grant[]>([]);
     const [published, setPublished] = useState<boolean>(true);
 
-    const adminId = user?.accountID;
+    const organization = user?.organization;
 
     // Tab
     const tabItems: TabItem[] = [
@@ -82,8 +81,14 @@ const AdminGrants = () => {
     ];
 
     React.useEffect(() => {
-        console.log("Fetching Admin Grants");
-        fetchAdminGrants();
+        // Fetch all grants created by the admin's organization
+        if (organization){
+            console.log("Fetching Admin Grants");
+            fetchOrgGrants(organization).then((grants: Grant[]) => {
+                setPublishedGrants(grants.filter((grant: Grant) => grant.publish));
+                setUnpublishedGrants(grants.filter((grant: Grant) => !grant.publish));
+            });
+        }
     }, []);
 
     React.useEffect(() => {
@@ -92,32 +97,6 @@ const AdminGrants = () => {
         console.log(unpublishedGrants);
         console.log(published);
     }, [publishedGrants, unpublishedGrants, published]);
-
-    // Fetch all grants created by the admin with adminid
-    const fetchAdminGrants = async () => {
-        try {
-            const response = await fetch(`http://localhost:${PORT}/getAdminGrants/${adminId}`, {
-              method: 'GET',
-              headers: {
-                'Content-Type': 'application/json',
-              },
-            });
-            
-            await response.json().then((data) => {
-                const fetchedGrants: Grant[] = data['response'];
-                console.log("Fetched Grants: ", fetchedGrants);
-
-                const grants: Grant[] = fetchedGrants.map((grant: Grant) => {
-                    return {...grant, deadline: new Date(grant.deadline), posted: new Date(grant.posted)}
-                });
-
-                setPublishedGrants(grants.filter((grant: Grant) => grant.publish));
-                setUnpublishedGrants(grants.filter((grant: Grant) => !grant.publish));
-            })
-        } catch (error) {
-            console.error('error creating grant:', (error as Error).message);
-        }
-    }
 
     const NoGrantsDisplay = (): JSX.Element => {
         const status = published ? 'published' : 'unpublished';

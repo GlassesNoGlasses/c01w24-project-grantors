@@ -9,7 +9,7 @@ export enum ApplicationStatus {
 export interface Application {
     id: number,
     userID: number,
-    grantID: number,
+    grantID: string,
     grantTitle: string, 
     grantCategory: string,
     submitted: boolean,

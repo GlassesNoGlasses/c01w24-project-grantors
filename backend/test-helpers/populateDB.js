@@ -59,17 +59,7 @@ const PopulateGrants = () => {
                   "Content-Type": "application/json",
                 },
                 body: JSON.stringify({
-                    title: grant.title,
-                    description: grant.description,
-                    deadline: grant.deadline,
-                    minAmount: grant.minAmount,
-                    maxAmount: grant.maxAmount,
-                    organization: grant.organization,
-                    category: grant.category,
-                    contact: grant.contact,
-                    questions: grant.questions,
-                    publish: grant.publish,
-                    owner: grant.accId
+                    ...grant
                 }),
             });
             console.log(await resp.json());

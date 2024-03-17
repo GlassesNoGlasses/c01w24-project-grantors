@@ -1,10 +1,10 @@
-import { Application, ApplicationStatus } from "../../../interfaces/Application";
+import { Application, ApplicationStatus } from "../../../../interfaces/Application";
 
 export const mockApplications: Application[] = [
     {
         id: 1,
         userID: 2,
-        grantID: 1,
+        grantID: "1",
         grantTitle: "Community Accessibility Grant",
         grantCategory: "Community Development", 
         submitted: true,
@@ -16,7 +16,7 @@ export const mockApplications: Application[] = [
     {
         id: 2,
         userID: 2,
-        grantID: 2,
+        grantID: "2",
         grantTitle: "Educational Accessibility Initiative",
         grantCategory: "Education", 
         submitted: true,
@@ -28,7 +28,7 @@ export const mockApplications: Application[] = [
     {
         id: 3,
         userID: 1,
-        grantID: 3,
+        grantID: "3",
         grantTitle: "Accessible Technology Research Grant",
         grantCategory: "Technology", 
         submitted: true,
@@ -40,7 +40,7 @@ export const mockApplications: Application[] = [
     {
         id: 4,
         userID: 1,
-        grantID: 2,
+        grantID: "2",
         grantTitle: "Educational Accessibility Initiative",
         grantCategory: "Education", 
         submitted: true,
@@ -52,7 +52,7 @@ export const mockApplications: Application[] = [
     {
         id: 5,
         userID: 3,
-        grantID: 4,
+        grantID: "4",
         grantTitle: "Employment Accessibility Grant",
         grantCategory: "Employment", 
         submitted: true,
@@ -64,7 +64,7 @@ export const mockApplications: Application[] = [
     {
         id: 6,
         userID: 3,
-        grantID: 5,
+        grantID: "5",
         grantTitle: "Accessible Healthcare Services Grant",
         grantCategory: "Healthcare", 
         submitted: true,
@@ -76,7 +76,7 @@ export const mockApplications: Application[] = [
     {
         id: 7,
         userID: 5,
-        grantID: 6,
+        grantID: "6",
         grantTitle: "UTAPS",
         grantCategory: "Education", 
         submitted: false,

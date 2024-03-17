@@ -1,9 +1,7 @@
-import { GrantQuestion } from "../interfaces/Grant";
+import { Grant } from "../../interfaces/Grant";
+import { User } from "../../interfaces/User";
 
 export interface QuestionListProps {
-    username: String | undefined | null
-    grantId: String | undefined;
-    questions: GrantQuestion[];
-   
-    
+    user: User,
+    grant: Grant,
 }

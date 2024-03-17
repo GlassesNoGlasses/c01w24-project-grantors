@@ -2,8 +2,9 @@ import React from 'react'
 import { useState, useEffect} from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useUserContext } from '../contexts/userContext';
-import { Grant, GrantQuestion } from '../interfaces/Grant' 
+import { Grant, GrantQuestion } from '../../interfaces/Grant' 
 import { GrantFormProps } from './GrantFormProps';
+import { fetchGrant } from '../../controllers/GrantsController';
 
 
 const GrantForm: React.FC<GrantFormProps> = ({ type, port }) => {
@@ -17,14 +18,14 @@ const GrantForm: React.FC<GrantFormProps> = ({ type, port }) => {
 
     // default grant object
     const initialGrantState: Grant = {
-        id: -1,
+        id: '',
         title: '',
         description: '',
         posted: new Date(),
         deadline: new Date(),
         minAmount: 0,
         maxAmount: 100000,
-        organization: '',
+        organization: user?.organization ? user.organization : '',
         category: '',
         contact: '',
         questions: [],
@@ -38,38 +39,13 @@ const GrantForm: React.FC<GrantFormProps> = ({ type, port }) => {
     // function to retrieve a grant saved in the server, set the grant form to fill with the
     // requested grant
     const getSavedGrant = async(id: string) => {
-        try {
-            const response = await fetch(`http://localhost:${port}/getGrant/${id}`, {
-              method: 'GET',
-              headers: {
-                'Content-Type': 'application/json',
-              },
-            });
-            
-            await response.json().then((data) => {
-                const { _id, title, description, deadline, minAmount, maxAmount,
-                    organization, category, contact, questions, publish, owner } = data['response']
-                
-                setGrant( { 
-                    id: _id,
-                    title: title,
-                    posted: new Date(),
-                    description: description,
-                    deadline: deadline,
-                    minAmount: minAmount,
-                    maxAmount: maxAmount,
-                    organization: organization,
-                    category: category,
-                    contact: contact,
-                    questions: questions,
-                    publish: publish,
-                    owner: owner
-                    } )
-                
-            })
-        } catch (error) {
-        console.error('error creating grant:', (error as Error).message);
-            setFeedback(`error creating grant`)
+
+        const grant: Grant | undefined = await fetchGrant(id);
+        if (grant) {
+            setGrant(grant);
+        } else {
+            console.error("error creating grant:");
+            setFeedback("error creating grant");
         }
     }
 
@@ -99,7 +75,7 @@ const GrantForm: React.FC<GrantFormProps> = ({ type, port }) => {
     }
 
     // not the owner of the grant
-    if (grant.owner != user.accountID) {
+    if (grant.organization != user.organization) {
         return (
             <div className='flex font-bold text-xl justify-center mt-10'>
                 Unauthorized: Permission Denied
