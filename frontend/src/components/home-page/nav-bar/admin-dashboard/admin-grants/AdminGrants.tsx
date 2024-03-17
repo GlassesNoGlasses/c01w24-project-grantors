@@ -9,7 +9,7 @@ import { TabItem } from '../../../../tabs/TabProps';
 import { Column } from '../../../../table/TableProps';
 import Table from '../../../../table/Table';
 import { LinkProps } from '../../../../../interfaces/LinkProps';
-import { SERVER_PORT } from '../../../../../constants/ServerConstants';
+import { fetchOrgGrants } from '../../../../../controllers/GrantsController';
 
 const AdminGrants = () => {
     // States and contexts
@@ -81,8 +81,14 @@ const AdminGrants = () => {
     ];
 
     React.useEffect(() => {
-        console.log("Fetching Admin Grants");
-        fetchAdminGrants();
+        // Fetch all grants created by the admin's organization
+        if (organization){
+            console.log("Fetching Admin Grants");
+            fetchOrgGrants(organization).then((grants: Grant[]) => {
+                setPublishedGrants(grants.filter((grant: Grant) => grant.publish));
+                setUnpublishedGrants(grants.filter((grant: Grant) => !grant.publish));
+            });
+        }
     }, []);
 
     React.useEffect(() => {
@@ -91,32 +97,6 @@ const AdminGrants = () => {
         console.log(unpublishedGrants);
         console.log(published);
     }, [publishedGrants, unpublishedGrants, published]);
-
-    // Fetch all grants created by the admin's organization
-    const fetchAdminGrants = async () => {
-        try {
-            const response = await fetch(`http://localhost:${SERVER_PORT}/getOrgGrants/${organization}`, {
-              method: 'GET',
-              headers: {
-                'Content-Type': 'application/json',
-              },
-            });
-            
-            await response.json().then((data) => {
-                const fetchedGrants: Grant[] = data['response'];
-                console.log("Fetched Grants: ", fetchedGrants);
-
-                const grants: Grant[] = fetchedGrants.map((grant: Grant) => {
-                    return {...grant, deadline: new Date(grant.deadline), posted: new Date(grant.posted)}
-                });
-
-                setPublishedGrants(grants.filter((grant: Grant) => grant.publish));
-                setUnpublishedGrants(grants.filter((grant: Grant) => !grant.publish));
-            })
-        } catch (error) {
-            console.error('error creating grant:', (error as Error).message);
-        }
-    }
 
     const NoGrantsDisplay = (): JSX.Element => {
         const status = published ? 'published' : 'unpublished';

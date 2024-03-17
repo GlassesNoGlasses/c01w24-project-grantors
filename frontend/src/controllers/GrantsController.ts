@@ -28,3 +28,28 @@ export async function fetchGrant(grantId: String): Promise<Grant | undefined> {
         console.error('error creating grant:', (error as Error).message);
     }
 }
+
+export async function fetchOrgGrants(organization: string): Promise<Grant[]> {
+    try {
+        const response = await fetch(`http://localhost:${SERVER_PORT}/getOrgGrants/${organization}`, {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        });
+        
+        return await response.json().then((data) => {
+            const fetchedGrants: Grant[] = data['response'];
+            console.log("Fetched Grants: ", fetchedGrants);
+
+            const grants: Grant[] = fetchedGrants.map((grant: Grant) => {
+                return {...grant, deadline: new Date(grant.deadline), posted: new Date(grant.posted)}
+            });
+
+            return grants;
+        })
+    } catch (error) {
+        console.error('error creating grant:', (error as Error).message);
+        return [];
+    }
+}
