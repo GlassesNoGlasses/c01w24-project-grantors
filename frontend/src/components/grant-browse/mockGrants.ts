@@ -1,8 +1,8 @@
-import { Grant } from "../interfaces/Grant";
+import { Grant } from "../../interfaces/Grant";
 
 const mockGrants: Grant[] = [
     {
-        id: 1,
+        id: "1",
         title: "Community Accessibility Grant",
         description: "This grant aims to fund projects that improve accessibility for people with disabilities within local communities.",
         posted: new Date("2024-02-15"),
@@ -20,7 +20,7 @@ const mockGrants: Grant[] = [
         owner: 'dsafdsfdsafdsf'
     },
     {
-        id: 2,
+        id: "2",
         title: "Educational Accessibility Initiative",
         description: "Funding available for educational institutions seeking to implement accessibility enhancements for students with disabilities.",
         posted: new Date("2024-02-20"),
@@ -38,7 +38,7 @@ const mockGrants: Grant[] = [
         owner: 'dsafdsfdsafdsf'
     },
     {
-        id: 3,
+        id: "3",
         title: "Accessible Technology Research Grant",
         description: "This grant supports research projects focused on developing innovative accessible technologies for people with disabilities.",
         posted: new Date("2024-02-25"),
@@ -56,7 +56,7 @@ const mockGrants: Grant[] = [
         owner: 'dsafdsfdsafdsf'
     },
     {
-        id: 4,
+        id: "4",
         title: "Employment Accessibility Grant",
         description: "Funding available for businesses implementing accessibility measures to improve employment opportunities for people with disabilities.",
         posted: new Date("2024-03-01"),
@@ -74,7 +74,7 @@ const mockGrants: Grant[] = [
         owner: 'dsafdsfdsafdsf'
     },
     {
-        id: 5,
+        id: "5",
         title: "Accessible Healthcare Services Grant",
         description: "This grant aims to support healthcare facilities in making their services more accessible to patients with disabilities.",
         posted: new Date("2024-03-05"),
@@ -92,7 +92,7 @@ const mockGrants: Grant[] = [
         owner: 'dsafdsfdsafdsf'
     },
     {
-        id: 6,
+        id: "6",
         title: "Transportation Accessibility Grant",
         description: "Funding available for projects aimed at improving transportation accessibility for people with disabilities.",
         posted: new Date("2024-03-10"),
@@ -110,7 +110,7 @@ const mockGrants: Grant[] = [
         owner: 'dsafdsfdsafdsf'
     },
     {
-        id: 7,
+        id: "7",
         title: "Accessible Housing Grant",
         description: "This grant aims to fund projects that enhance the accessibility of housing options for people with disabilities.",
         posted: new Date("2024-03-15"),
@@ -128,7 +128,7 @@ const mockGrants: Grant[] = [
         owner: 'dsafdsfdsafdsf'
     },
     {
-        id: 8,
+        id: "8",
         title: "Accessible Recreational Facilities Grant",
         description: "Funding available for projects aimed at improving accessibility in recreational facilities for people with disabilities.",
         posted: new Date("2024-03-20"),
@@ -146,7 +146,7 @@ const mockGrants: Grant[] = [
         owner: 'dsafdsfdsafdsf'
     },
     {
-        id: 9,
+        id: "9",
         title: "Accessible Arts and Culture Grant",
         description: "This grant supports projects that promote accessibility in arts and cultural activities for people with disabilities.",
         posted: new Date("2024-03-25"),
@@ -164,7 +164,7 @@ const mockGrants: Grant[] = [
         owner: 'dsafdsfdsafdsf'
     },
     {
-        id: 10,
+        id: "10",
         title: "Accessible Sports and Recreation Grant",
         description: "Funding available for projects aimed at improving accessibility in sports and recreational activities for people with disabilities.",
         posted: new Date("2024-04-01"),
@@ -182,7 +182,7 @@ const mockGrants: Grant[] = [
         owner: 'dsafdsfdsafdsf'
     },
     {
-        id: 11,
+        id: "11",
         title: "Accessible Technology Education Grant",
         description: "This grant supports educational initiatives aimed at teaching accessibility principles and technologies to students with disabilities.",
         posted: new Date("2024-04-05"),
@@ -200,7 +200,7 @@ const mockGrants: Grant[] = [
         owner: 'dsafdsfdsafdsf'
     },
     {
-        id: 12,
+        id: "12",
         title: "Accessible Public Spaces Grant",
         description: "Funding available for projects aimed at improving accessibility in public spaces for people with disabilities.",
         posted: new Date("2024-04-10"),
@@ -218,7 +218,7 @@ const mockGrants: Grant[] = [
         owner: 'dsafdsfdsafdsf'
     },
     {
-        id: 13,
+        id: "13",
         title: "Accessible Communication Technologies Grant",
         description: "This grant supports projects aimed at developing and implementing accessible communication technologies for people with disabilities.",
         posted: new Date("2024-04-15"),
@@ -236,7 +236,7 @@ const mockGrants: Grant[] = [
         owner: 'dsafdsfdsafdsf'
     },
     {
-        id: 14,
+        id: "14",
         title: "Accessible Tourism Grant",
         description: "Funding available for projects aimed at improving accessibility in the tourism industry for people with disabilities.",
         posted: new Date("2024-04-20"),
@@ -254,7 +254,7 @@ const mockGrants: Grant[] = [
         owner: 'dsafdsfdsafdsf'
     },
     {
-        id: 15,
+        id: "15",
         title: "Accessible Environmental Conservation Grant",
         description: "This grant supports projects that promote accessibility in environmental conservation efforts for people with disabilities.",
         posted: new Date("2024-04-25"),
@@ -272,7 +272,7 @@ const mockGrants: Grant[] = [
         owner: 'dsafdsfdsafdsf'
     },
     {
-        id: 16,
+        id: "16",
         title: "Accessible Legal Services Grant",
         description: "Funding available for projects aimed at improving accessibility in legal services for people with disabilities.",
         posted: new Date("2024-05-01"),
@@ -290,7 +290,7 @@ const mockGrants: Grant[] = [
         owner: 'dsafdsfdsafdsf'
     },
     {
-        id: 17,
+        id: "17",
         title: "Accessible Social Services Grant",
         description: "This grant aims to fund projects that improve accessibility in social services for people with disabilities.",
         posted: new Date("2024-05-05"),
@@ -308,7 +308,7 @@ const mockGrants: Grant[] = [
         owner: 'dsafdsfdsafdsf'
     },
     {
-        id: 18,
+        id: "18",
         title: "Accessible Emergency Response Grant",
         description: "Funding available for projects aimed at improving accessibility in emergency response services for people with disabilities.",
         posted: new Date("2024-05-10"),
@@ -326,7 +326,7 @@ const mockGrants: Grant[] = [
         owner: 'dsafdsfdsafdsf'
     },
     {
-        id: 19,
+        id: "19",
         title: "Accessible Financial Services Grant",
         description: "This grant supports projects aimed at improving accessibility in financial services for people with disabilities.",
         posted: new Date("2024-05-15"),
@@ -344,7 +344,7 @@ const mockGrants: Grant[] = [
         owner: 'dsafdsfdsafdsf'
     },
     {
-        id: 20,
+        id: "20",
         title: "Accessible Employment Training Grant",
         description: "Funding available for projects aimed at providing employment training opportunities for people with disabilities.",
         posted: new Date("2024-05-20"),

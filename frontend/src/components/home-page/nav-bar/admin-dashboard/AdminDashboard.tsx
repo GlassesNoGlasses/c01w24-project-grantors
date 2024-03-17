@@ -40,12 +40,7 @@ const AdminDashboard = ({
         <Link to='/createGrant'>
           <ButtonIcon imageSrc={addIcon} label={"New Grant"}/>
         </ Link>
-        <input type="text" onChange={handleChange} value={grantId}/>
-          <Link to={`editGrant/${grantId}`}>
-            edit grant 
-          </Link>
         </div>
-        
         <ButtonIcon imageSrc={userIcon} label={"My Account"}/>
         <ButtonIcon imageSrc={settingsIcon} label={"Settings"}/>
         <Link to="/">
@@ -53,7 +48,9 @@ const AdminDashboard = ({
         </Link>
       </div>
       <div className='flex justify-evenly items-center h-1/4'>
-        <ApplicationIcon imageSrc={list} label={"View Hosted Grants"}/>
+        <Link to={`admin/grants`}>
+          <ApplicationIcon imageSrc={list} label={"View Hosted Grants"}/>
+        </Link>
         <Link to={`${encodedOrg}/applications`}>
           <ApplicationIcon imageSrc={search} label={"Review Applications"}/>
         </Link>

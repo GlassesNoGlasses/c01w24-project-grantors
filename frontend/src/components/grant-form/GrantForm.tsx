@@ -1,12 +1,11 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { GrantFormProps } from "./GrantFormProps";
+import { QuestionListProps } from "./GrantFormProps";
+import { GrantQuestion } from "../../interfaces/Grant";
+import { SERVER_PORT } from "../../constants/ServerConstants";
+import { ApplicationStatus } from '../../interfaces/Application';
 
-const SERVER_PORT:number = 8000;
-
-const GrantForm = ({ username, grantId, questions }: GrantFormProps) => {
-    const [questionList, setQuestionList] = useState(questions);
-    const navigate = useNavigate();
+const GrantQuestionList = ({ user, grant }: QuestionListProps) => {
+    const [questionList, setQuestionList] = useState<GrantQuestion[]>(grant.questions);
 
     const setAnswer = (index: number, answer: string) => {
         const newQuestionList = [...questionList];
@@ -15,58 +14,54 @@ const GrantForm = ({ username, grantId, questions }: GrantFormProps) => {
         setQuestionList(newQuestionList);
     }
 
-    const getAnswers = () => 
-    {
-        return questionList.map(function (obj){
-            return obj.answer;
+    const getAnswers = () => {
+        return questionList.map(function (question){
+            return question.answer;
         });
     }
 
     const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
         
-        const name = (event.nativeEvent as any).submitter.name;
-        if ( name === "submit"){
-            if (!questionList ) {
-                return 
-            }
-            try {
-                await fetch(`http://localhost:${SERVER_PORT}/sendForm`,
-                    {method: "POST",
+        if (!questionList) {
+            return 
+        }
+        try {
+            await fetch(`http://localhost:${SERVER_PORT}/submitApplication`,
+                {
+                    method: "POST",
                     headers: {
                         "Content-Type": "application/json"
                     },
                     
-                    body: JSON.stringify({username: username, grantId: grantId, data: getAnswers()})} )
-                .then(async (response) => {
-                    if (!response.ok) {
-                        console.log("Serve failed:", response.status)
-                    } else {
-                        await response.json().then((data) => {
-                            //do nothing
-                        }) 
-                    }
+                    body: JSON.stringify({
+                        userID: user.accountID,
+                        grantID: grant.id,
+                        grantTitle: grant.title,
+                        grantCategory: grant.category,
+                        submitted: true,
+                        submissionDate: new Date(),
+                        status: ApplicationStatus.submitted,
+                        awarded: 0,
+                        responses: getAnswers(),
+                    })
                 })
-            } catch (error) {
-                console.log("Fetch function failed:", error)
-            } 
-
-            navigate('/grants');
-        }
-        else if (name === "cancel"){
-            navigate('/grants');
-        }
-        else if (name === "save"){
-            //add code for save here
-        }
+            .then(async (response) => {
+                if (!response.ok) {
+                    console.log("Server failed:", response.status)
+                }
+            })
+        } catch (error) {
+            console.log("Fetch function failed:", error)
+        } 
     }
 
     return (
         <div>
-            <form onSubmit={handleSubmit} id="grantform" className='m-5 ml-10 mr-10'>
-                {questions.map((questionElement, index) => (
+            <form onSubmit={handleSubmit} id="grantform">
+                {questionList.map((questionElement, index) => (
                     <li key={index} className='list-none'>
-                         <div className="flex flex-col gap-1 p-5 px-3">
+                         <div className="flex flex-row justify-between items-center">
                             <label className='text-base'>{questionElement.question}</label>
                             <textarea
                                 className='outline outline-2 p-1 pb-10 mt-3 ml-5 mr-5'
@@ -112,4 +107,4 @@ const GrantForm = ({ username, grantId, questions }: GrantFormProps) => {
     );
 };
 
-export default GrantForm;
+export default GrantQuestionList;

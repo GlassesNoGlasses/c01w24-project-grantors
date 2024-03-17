@@ -6,8 +6,7 @@ import passwordIcon from '../../images/iconPassword.png';
 import { BuildingOfficeIcon } from '@heroicons/react/24/outline';
 import { Modal } from '../modal/Modal';
 import { Link } from 'react-router-dom';
-
-const SERVER_PORT = 8000;
+import { SERVER_PORT } from '../../constants/ServerConstants';
 
 const SignUp: React.FC<SignUpProps> = () => {
   const [firstName, setFirstName] = useState('');
@@ -16,7 +15,6 @@ const SignUp: React.FC<SignUpProps> = () => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [isAdmin, setIsAdmin] = useState(false);
-  const [favoriteGrants, setFavoriteGrants] = useState([]);
   const [organization, setOrganization] = useState('');
   const [feedback, setFeedback] = useState<string>("");
   const [showModal, setShowModal] = useState<boolean>(false);
@@ -32,7 +30,7 @@ const SignUp: React.FC<SignUpProps> = () => {
         },
         body: JSON.stringify({ 'email': email, 'username': username,'password': password, 
           'firstName': firstName, "lastName": lastName, 'isAdmin': isAdmin,
-          'organization':  organization, 'favoriteGrants': favoriteGrants }),
+          'organization':  organization }),
       });
   
       if (!response.ok) {

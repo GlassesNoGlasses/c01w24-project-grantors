@@ -5,7 +5,7 @@ export interface GrantQuestion {
 }
 
 export interface Grant {
-    id: number;
+    id: string;
     title: string;
     description: string;
     posted: Date;

@@ -1,14 +1,26 @@
 import { Link, useParams } from "react-router-dom";
 import { GrantPageProps } from "./GrantPageProps";
-import mockGrants from "../grant-browse/mockGrants";
-import { Grant } from "../interfaces/Grant";
+import { Grant } from "../../interfaces/Grant";
+import { useState } from "react";
+import React from "react";
+import { fetchGrant } from "../../controllers/GrantsController";
 
 const GrantPage = ({}: GrantPageProps) => {
     const { grantId } = useParams();
+    const [grant, setGrant] = useState<Grant | undefined>(undefined);
 
-    const grant: Grant | undefined = getGrant(grantId);
+    React.useEffect(() => {
+        if (grantId) {
+            fetchGrant(grantId).then((grant: Grant | undefined) => {
+                if (grant) {
+                    console.log(grant);
+                    setGrant(grant);
+                }
+            });
+        }
+    }, []);
 
-    return grant === undefined ? <GrantNotFound /> : <GrantFound grant={grant} />;
+    return grant ? <GrantFound grant={grant} /> : <GrantNotFound /> ;
 };
 
 const GrantFound = ({ grant }: { grant: Grant }) => {
@@ -52,13 +64,6 @@ const ApplyButton = ({ grantId }: { grantId: String }) => {
           Apply Now
         </Link>
       )
-}
-
- export const getGrant = (grantId: String | undefined) => {
-    if (grantId === undefined || Number.isNaN(Number(grantId)))
-        return undefined;
-
-    return mockGrants.find(grant => grant.id === Number(grantId));
 }
 
 export default GrantPage;

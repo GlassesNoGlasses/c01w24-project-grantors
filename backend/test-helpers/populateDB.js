@@ -1,4 +1,4 @@
-import {admins, users} from './data.js'
+import {admins, users, applications, grants} from './data.js'
 
 const SERVER_URL = "http://localhost:8000";
 
@@ -50,10 +50,58 @@ const SignUpUsers = () => {
     };
 };
 
+const PopulateGrants = () => {
+    try {
+        grants.forEach(async (grant) => {
+            const resp = await fetch(`${SERVER_URL}/createGrant`, {
+                method: "POST",
+                headers: {
+                  "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                    ...grant
+                }),
+            });
+            console.log(await resp.json());
+        });
+    } catch (error) {
+        console.error("Could not populate Grants to DB.");
+    };
+};
+
+const PopulateApplications = () => {
+    try {
+        applications.forEach(async (app) => {
+            const resp = await fetch(`${SERVER_URL}/submitApplication`, {
+                method: "POST",
+                headers: {
+                  "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                    userID: app.userID,
+                    grantID: app.grantID,
+                    grantTitle: app.grantTitle,
+                    grantCategory: app.grantCategory, 
+                    submitted: app.submitted,
+                    submissionDate: app.submissionDate,
+                    status: app.status,
+                    awarded: app.awarded, 
+                    responses: app.awarded,
+                }),
+            });
+            console.log(await resp.json());
+        });
+    } catch (error) {
+        console.error("Could not populate Applications to DB.");
+    };
+};
+
 export const SetUpDB = () => {
     try {
         SignUpAdmins();
         SignUpUsers();
+        PopulateGrants();
+        PopulateApplications();
     } catch (error) {
         console.error("Error with populating DB: ", error);
     }
