@@ -33,7 +33,7 @@ const GrantPageApply = ({}: GrantPageApplyProps) => {
         return <div>oh no! something went wrong</div>;
     }
 
-    return questions === undefined ? <ErrorGrantQuestionList /> : <GrantForm username={user?.username} grantId={grantId} questions={questions}/>;
+    return questions.length === 0 ? <ErrorGrantQuestionList /> : <GrantForm username={user?.username} grantId={grantId} questions={questions}/>;
 };
 
 export default GrantPageApply;
