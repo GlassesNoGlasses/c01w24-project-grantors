@@ -285,22 +285,25 @@ app.get("/getGrant/:grantId", express.json(), async(req, res) => {
 app.get("/getGrants/:grantIds", express.json(), async(req, res) => {
   try {
 
-    const encodedGrantIDs = req.params.grantIDs;
-    const grantIDs = encodedGrantIDs.split(',').map(item => parseInt(item));
+    const encodedGrantIDs = req.params.grantIds;
+    const grantIDs = encodedGrantIDs.split(',').map((id) => new ObjectId(id));
     const grantCollection = db.collection(COLLECTIONS.grants);
 
     const data = await grantCollection.find({
       _id: { $in: grantIDs}
-    });
+    }).toArray();
 
-    if (!data) {
+    if (!data.length) {
       return res
         .status(404)
         .json({ error: "Unable to find grants with given IDs." });
     }
 
-    res.status(200).json({ response: data });
+    const grants = data.map((grant) => dbGrantToFrontendGrant(grant));
+
+    res.status(200).json({ response: grants });
   } catch (error) {
+    console.log("Error getting grants", error);
     res.status(500).json({ error: error.message });
   }
 })
@@ -478,7 +481,7 @@ app.get("/getOrgApplications/:organization", express.json(), async (req, res) =>
 
     const applications = await applicationCollection.aggregate(pipeline).toArray();
 
-    res.json({ applications: applications });
+    res.json({ response: applications });
   });
 });
 
@@ -502,8 +505,8 @@ app.get("/getUserApplications/:userID", express.json(), async (req, res) => {
     }
 
     const applicationCollection = db.collection(COLLECTIONS.applications)
-    const applications = (await applicationCollection.find({ userID: { $eq: userID } })).toArray();
+    const applications = await applicationCollection.find({ userID: { $eq: userID } }).toArray();
 
-    res.json({ applications: applications });
+    res.json({ response: applications });
   });
 });
