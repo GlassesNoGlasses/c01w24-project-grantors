@@ -1,6 +1,6 @@
 import { SERVER_PORT } from "../constants/ServerConstants";
 import { Grant } from "../interfaces/Grant";
-import { GetGrantResponse } from "../interfaces/ServerResponses/GetGrantResponse";
+import { GetGrantResponse } from "../interfaces/ServerResponse";
 
 export async function fetchGrant(grantId: String): Promise<Grant | undefined> {
     try {

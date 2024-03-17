@@ -1,10 +1,8 @@
 import { Link, useParams } from "react-router-dom";
 import { GrantPageProps } from "./GrantPageProps";
-import mockGrants from "../grant-browse/mockGrants";
 import { Grant } from "../../interfaces/Grant";
 import { useState } from "react";
 import React from "react";
-import { SERVER_PORT } from "../../constants/ServerConstants";
 import { fetchGrant } from "../../controllers/GrantsController";
 
 const GrantPage = ({}: GrantPageProps) => {
