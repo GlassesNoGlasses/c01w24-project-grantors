@@ -1,0 +1,17 @@
+Jira File: https://c01-project.atlassian.net/wiki/pages/viewpage.action?pageId=6783230
+
+Start Doing:
+    - Merge dev into your branch every time you work on the project.
+    - Complete merge conflicts inside YOUR branch first, then create a pull request.
+    - Evenly distribute tasks based on story points.
+    - Provide updates on major changes.
+    - Consistent file naming convention.
+    - Submit image representation for merge requests.
+
+Stop Doing:
+    - Avoiding and or delaying priority tasks.
+
+Keep Doing:
+    - More collaboration and regular merging of branches.
+    - Keep the review system of GitHub on merge requests.
+    - Informing team of data structures to be used in one’s features.

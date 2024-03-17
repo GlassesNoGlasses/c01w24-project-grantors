@@ -1,6 +1,33 @@
 const SERVER_URL = "http://localhost:8000";
 
 test("/login - 400 Fields Missing Test", async() => {
+  const signup = await fetch(`${SERVER_URL}/signup`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      isAdmin: true,
+      username: "alex",
+      firstName: "alex",
+      lastName: "zeng",
+      email: "alex@mail",
+      password: "123"
+  })});
+
+  const signup2 = await fetch(`${SERVER_URL}/signup`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      isAdmin: false,
+      username: "rawad",
+      firstName: "rawad",
+      lastName: "assi",
+      email: "rawad@abou",
+      password: "123"
+  })});
   
   const attemptLogin1 = await fetch(`${SERVER_URL}/login`, {
       method: "POST",
@@ -152,7 +179,7 @@ test("/login - 200 Log In As Admin Using Username Test", async() => {
   const body = await attemptLogin.json();
 
   expect(attemptLogin.status).toBe(200);
-  expect(body['admin']).toBe(true);
+  expect(body['isAdmin']).toBe(true);
 });
 
 test("/login - 200 Log In As Admin Using Email Test", async() => {
@@ -173,7 +200,7 @@ test("/login - 200 Log In As Admin Using Email Test", async() => {
   const body = await attemptLogin.json();
 
   expect(attemptLogin.status).toBe(200);
-  expect(body['admin']).toBe(true);
+  expect(body['isAdmin']).toBe(true);
 });
 
 test("/login - 200 Log In As A Normal User Using Username Test", async() => {
@@ -194,7 +221,8 @@ test("/login - 200 Log In As A Normal User Using Username Test", async() => {
   const body = await attemptLogin.json();
 
   expect(attemptLogin.status).toBe(200);
-  expect(body['admin']).toBe(false);
+  expect(body['isAdmin']).toBe(false);
+  expect(body['email']).toBe('rawad@abou')
 });
 
 test("/login - 200 Log In As A Normal User Using Email Test", async() => {
@@ -215,5 +243,6 @@ test("/login - 200 Log In As A Normal User Using Email Test", async() => {
   const body = await attemptLogin.json();
 
   expect(attemptLogin.status).toBe(200);
-  expect(body['admin']).toBe(false);
+  expect(body['isAdmin']).toBe(false);
+  expect(body['username']).toBe('rawad');
 });

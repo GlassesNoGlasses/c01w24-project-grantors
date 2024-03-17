@@ -1,0 +1,27 @@
+services:
+  backend:
+    build:
+      context: .
+      dockerfile: Dockerfile_backend
+      target: backend
+    ports:
+      - "8000:8000"
+    environment:
+      - ENV=Docker
+    depends_on:
+      - mongodb
+  
+  mongodb:
+    image: mongo:latest
+    ports:
+      - "27018:27017"
+
+  nginx:
+      build:
+        context: .
+        dockerfile: Dockerfile_frontend
+      restart: unless-stopped
+      ports:
+        - "3000:80"
+      depends_on:
+        - backend

@@ -1,0 +1,278 @@
+Monday March 4th
+
+Neil:
+    Added github workflow for backend jest testing.
+    Worked on creating a general function to pre-populate the database.
+
+Juno:
+    Sick
+
+Alex:
+    Proposed a way for admins to own grants that only they can modify
+
+Francis:
+    Started working in the frontend of the grant object, making sure it looks compatible with current website design.
+
+Ethan:
+    Worked on GrantList frontend component
+    Worked on user grant browsing page
+
+Sean:
+    Debugging frontend/backend desync (No changes can be made/seen from recent commits)
+
+Zack:
+    No update
+
+Tuesday March 5th
+
+Neil:
+    Finished working on pre-populating backend database task.
+
+Juno:
+    Getting up to speed with project code.
+
+Alex:
+    Assisted Francis with identifying fields for grants
+
+Francis:
+    Changed the interface for grant to adapt to new requirements, and continued working on the frontend.
+
+Ethan:
+    Worked on user grant browsing page
+
+Sean:
+    Deleted all previous docker images was the solution to most of my bugs in dev. 5hrs lost. Yippee!
+
+Zack:
+    Initial work on backend support for applications
+
+Wednesday March 6th
+
+Neil:
+    Began work on creating modal component for user feedback.
+
+Juno:
+    Getting up to speed with project code
+
+Alex:
+    Began integrating the grant form given by Francis
+
+Francis:
+    Finished the grant object, which will be used by many through the course of the project.
+
+Ethan:
+    Worked on grant filtering
+
+Sean:
+    Checked up on other team members progress and implementations of their components
+
+Zack:
+    Tested frontend
+    Found issue with logging in with email
+
+
+Thursday March 7th
+Neil:
+    Continued working on modal components.
+Juno:
+    Getting up to speed with project code
+Alex:
+    Started writing backend apis for admin grant management
+Francis:
+    Started planning for the implementation of having grants as favourites.
+Ethan:
+    Researched express.js
+Sean:
+    Refactored own code to be in line w/ others (e.g., variable naming conventions, capitalization in filenames, etc.)
+Zack:
+    Fixed logging in bug
+
+
+Friday March 8th
+
+Neil:
+    Finished working on modal components.
+Juno:
+    Researched Docker
+Alex:
+    Added a way for admins to add custom questions
+Francis:
+    Continued planning from the previous day.
+Ethan:
+    Worked on grant list
+Sean:
+    Helped Francis w/ debugging some routing problems related to Favorites
+Zack:
+    Planned admin application list
+
+
+Saturday March 9th
+
+Neil:
+    Researched on MongoDB APIs.
+Juno:
+    Worked on creating docker-compose and related files
+Alex:
+    Refactored the grant form provided by Francis to include delete and submit buttons
+Francis:
+    Started creating changes to the user interface to have a favorite grants field. And modified the rest of the application to support this change.
+Ethan:
+    Researched mongodb
+Sean:
+    Spoke w/ Ethan about potential changes to coding standards within the context of the project
+Zack:
+    Started admin application list
+
+
+Sunday March 10th
+
+Neil:
+    Aided Alex in grant creation and state changes.
+Juno:
+    Worked on creating docker-compose and related files
+Alex:
+    Implemented save and resume for grant creation
+Francis:
+    Studied Ethan’s implementation of grant browser page to implement my own browsing for favourite grants, while making sure only the user can view it.
+Ethan:
+    Adjusted colour styling of grant browser page
+Sean:
+    Drafted + Discussed milestone tracker implementations w/ the team
+Zack: 
+    Worked on admin application list
+
+
+Monday March 11th
+
+Neil:
+    Began work on the admin grant overview page.
+Juno:
+    Made changes to docker-compose from comments left on pull request. Finished ticket
+Alex:
+    Started testing the backend for admin create grant
+Francis:
+    Worked on adding a favourite functionality.
+Ethan:
+    Merged in interim version of grant browser so Juno could implement grant applications
+Sean:
+    Handed one of my tasks to Juno, as medical complications arose
+Zack:
+    Pagination for admin application list
+
+
+Tuesday March 12th
+
+Neil:
+    Continued work on the admin grant overview page.
+Juno:
+    Watching videos on Tailwind
+Alex: 
+    Finished the testing for admin grant backend apis
+Francis:
+    Debugging and frontend design.
+Ethan:
+    Reviewed and merged Neil’s pull request for the modal
+Sean:
+    Reviewed and merged Neil’s pull request for the modal
+Zack:
+    Refactored application list into Table component
+    Started Client application list
+    Started creating Filter component
+
+
+Wednesday March 13th
+
+Neil:
+    Continued work on the admin grant overview page.
+    Researched Links and table components.
+Juno:
+    Familiarising with code repository and documentation
+Alex:
+    Created a pull request to merge feature
+Francis:
+    Frontend is now completed for the favourite grants just need to make sure it loads in its required page.
+Ethan:
+    Adjusted grant list styling
+Sean:
+    Recovering from left shoulder pain :(
+Zack:
+    Added more backend testing data
+
+
+Thursday March 14th
+
+Neil:
+    Finished work on admin grant overview webpage.
+Juno:
+    Worked on User: Apply Grants ticket
+Alex:
+    Assisted with merge conflict resolution in meeting
+Francis:
+    More debugging, found minor issues.
+Ethan:
+    Helped troubleshoot grant application frontend functionality
+Sean:
+    Refactored Save & Resume code to match team’s agreed format
+Zack:
+    Fixed table component bugs
+    Finished client application list
+    Helped resolve merge conflicts
+
+
+Friday March 15th
+
+Neil:
+    Finalised merge conflicts.
+    Created additional user stories and tasks for sprint backlog.
+Juno:
+    orked on User: Apply Grants ticket
+Alex:
+    Was studying for midterm
+Francis:
+    More debugging, found minor issues.
+Ethan:
+    Helped team member troubleshoot Git and Docker
+Sean:
+    Midterm Study + Helped Neil w/ merge conflicts
+Zack:
+    Started connecting front end components to backend
+
+
+Saturday March 16th
+
+Neil:
+    Midterms :(
+Juno:
+    Midterm :(
+Alex:
+    Midterm ;(
+Francis:
+    C01 Midterm :(((((
+Ethan:
+    Tested backend routes
+Sean:
+    No updates. (C01 Midterm)
+Zack:
+    Made it so admins in the same organization can view and edit the same grants and view applications for the same grants
+    Updated backend test code to insert applications in database
+    Started refactoring backend requests to controllers files
+
+
+Sunday March 17th
+
+Neil:
+    Added deliverable 3 information into documents.
+    Finalised sprint.
+Juno:
+    Styled ticket User: Apply, merge, pull and finished ticket
+    Tested UI
+Alex:
+
+Francis:
+    Started planning for new sprint
+Ethan:
+    Tested frontend UI and user flow
+Sean:
+    Helped Juno debug Login button not visible
+Zack:
+    Finished connecting frontend components to backend

@@ -1,0 +1,52 @@
+
+Neil:
+    - Created admin overview of organization grants webpage.
+    - Designed a dynamic modal allowing for abstract embedded components; able to provide user feedback and redirection.
+    - Created github workflow actions to:
+    - Only allow merging from dev branch to main branch.
+    - Run jest testing checks before pull request is valid.
+    - Added backend function to pre-populate the database.
+
+Alex:
+    - Refactored Grant Form provided by Francis to include buttons for delete, save, and publish
+    - Implemented frontend tor admins to add custom questions for a grant
+    - Wrote backend apis to getGrant, saveGrant, editGrant, deleteGrant, and addGrantToAdmin
+    - Tested the backend for admin grant management
+    - Implemented save and resume feature for admins to come back to a grant they didn’t finish created
+
+Ethan:
+    - Created GrantList component for a unified view of grants between users and admins
+    - Created GrantBrowse component so users can browse and filter grants to find the exact ones they are looking for
+    - Created GrantPage component for viewing grants and all details in a standalone page
+
+Zack:
+    - Created Table component to dynamically display data with custom columns, column sorting functions, pagination
+    - Started Filter component to filter data by custom data field properties
+    - Fixed logging in with email bug
+    - Created application backend testing data
+    - Created AdminApplicationList to display applications for admin’s organization
+    - Created ClientApplicationList to display applications by a client
+    - Connected all frontend components to backend 
+    - Refactored fetch requests to backend into controllers/ folder to conform to MVC better
+    - Refactored frontend grant code to allow for multiple admins in the same organization to view and edit grants together
+    - Created backend endpoint for creating an application
+    - Created backend endpoint for getting all applications for grants for an organization
+
+Francis:
+    - Created the Grant object UI which was a priority task needed for other group members to implement in their own task to keep consistency.
+    - Added some Grant backend functionalities to the grant and added questions field to the interface and its implementation of it being hidden or not depending on context.
+    - Created UI for saving grants.
+    - Modified User interface to include favoriteGrants and modified functionalities from other pages to accommodate these changes.
+    - Given a user, the page loads a saved grant list view where you can still remove saved grants or just browse them.
+
+Juno:
+    - Researched and created docker-compose file and related items to run to deploy app frontend and backend, mostly focusing on how to route frontend and backend requests differently with nginx
+    - Created GrantForm object, which contains the UI and logic necessary for Users to view the questions of a grant form, and apply to the chosen grant. styled with Tailwind.
+    - Created the logic to handle submissions to grants
+    - Created backend endpoints to hand submissions to grants, creating a new collection and data format to store users’ grant submissions.
+    - Created GrantApply, a page to hold all of the components made above
+
+Sean:
+    - Unfortunately I couldn't finalize a single task this sprint. Health complications w/ relation to my left shoulder came at a bad time. As the sprint continued, I got better. Unfortunately again, disaster struck and stress returned my left shoulder back to its previous state (thankfully that was during a weekend.) During the final days of the sprint, I felt I had to push forward and work on my feature. As it so happens, I ate some 2 week old meat that was not supposed to be in the fridge, got a stomach ache that tied me to my bed that day. Hours later, my stomach was back at full speed! Now my head hurt terribly, and so I decided to call it quits for today and implement my feature next sprint. Thank you for understanding.
+    - Despite the harrowing experiences mentioned above, I tried to help the team as best I could. Helping them debug stuff, discuss ideas, etc. 
+
