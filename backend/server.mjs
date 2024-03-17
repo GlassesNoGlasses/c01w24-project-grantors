@@ -187,9 +187,8 @@ app.patch('/users/:userId/favorites', express.json(), async (req, res) => {
 })
 app.post("/createGrant", express.json(), async (req, res) => {
   try {
-
     // frontend guarantees that all these fields are provided so omit param check
-    const { accId, title, description, deadline, minAmount, maxAmount,
+    const { accId, title, description, deadline, posted, minAmount, maxAmount,
       organization, category, contact, questions, publish } = req.body;
     
     const grantCollection = db.collection(COLLECTIONS.grants);
@@ -197,6 +196,7 @@ app.post("/createGrant", express.json(), async (req, res) => {
     const {insertedId} = await grantCollection.insertOne({
       title: title,
       description: description,
+      posted: posted,
       deadline: deadline,
       minAmount: minAmount,
       maxAmount: maxAmount,
@@ -284,7 +284,6 @@ app.put('/addGrantToAdminList', express.json(), async(req, res) => {
 
 app.get("/getGrant/:grantId", express.json(), async(req, res) => {
   try {
-
     const grantId = req.params.grantId;
     const grantCollection = db.collection(COLLECTIONS.grants);
 
@@ -296,6 +295,29 @@ app.get("/getGrant/:grantId", express.json(), async(req, res) => {
       return res
         .status(404)
         .json({ error: "Unable to find grant with given ID." });
+    }
+
+    res.status(200).json({ response: data });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+})
+
+app.get("/getGrants/:grantIds", express.json(), async(req, res) => {
+  try {
+
+    const encodedGrantIDs = req.params.grantIDs;
+    const grantIDs = encodedGrantIDs.split(',').map(item => parseInt(item));
+    const grantCollection = db.collection(COLLECTIONS.grants);
+
+    const data = await grantCollection.find({
+      _id: { $in: grantIDs}
+    });
+
+    if (!data) {
+      return res
+        .status(404)
+        .json({ error: "Unable to find grants with given IDs." });
     }
 
     res.status(200).json({ response: data });
@@ -330,8 +352,95 @@ app.delete("/deleteGrant/:grantId", express.json(), async(req, res) => {
   }
 })
 
-app.get("/getApplications", express.json(), async (req, res) => {
-  const { organization } = req.body();
+app.get("/getAdminGrants/:adminID", express.json(), async (req, res) => {
+  try {
+
+    const accountID = req.params.adminID;
+
+    const adminID = accountID.toString();
+    const grantCollection = db.collection(COLLECTIONS.grants);
+
+    const data = await grantCollection.find({
+      owner: adminID
+    }).toArray();
+
+    if (!data) {
+      return res.status(404).send(`Unable to find grants for admin: ${adminID}`);
+    }
+
+    const grants = data.length <= 0 ? [] : data.map((grant) => {
+      return {...grant, id: grant._id}
+    });
+    res.status(200).json({ response: grants });
+    
+  } catch (error) {
+    console.log("Error getting all grants: ", error);
+    res.status(500).json({ error: error.message }); 
+  }
+});
+
+app.post("/submitApplication", express.json(), async (req, res) => {
+  try {
+    const { 
+      userID,
+      grantID,
+      grantTitle, 
+      grantCategory,
+      submitted,
+      submissionDate,
+      status,
+      awarded,
+      responses, } = req.body;
+
+    const applicationCollection = db.collection(COLLECTIONS.applications);
+    const existingApplication = await applicationCollection.findOne({
+      userID: userID,
+      grantID: grantID,
+    });
+
+    if (existingApplication) {
+      // User's application for this grant already exists, so update it
+      const update = await applicationCollection.updateOne(
+        {_id: existingApplication._id},
+        {$set: {
+                submitted: submitted,
+                submissionDate: submissionDate,
+                status: status,
+                awarded: awarded,
+                responses: responses,
+              }});
+        if (update.modifiedCount === 1) {
+          return res.status(201).json({ response: "Application submitted successfully." });
+        }
+        return res.status(500).json( {error: "Failed to submit application."} );
+    }
+
+    const inserted = await applicationCollection.insertOne(
+      {
+        userID: userID,
+        grantID: grantID,
+        grantTitle: grantTitle,
+        grantCategory: grantCategory,
+        submitted: submitted,
+        submissionDate: submissionDate,
+        status: status,
+        awarded: awarded,
+        responses: responses,
+      }
+    );
+
+    if (inserted.insertedCount === 1) {
+      return res.status(201).json({ response: "Application submitted successfully.", insertedID: inserted.insertedId });
+    }
+    return res.status(500).json({ error: "Failed to submit application." });
+  } catch (error) {
+    console.error("Error submitting application:", error.message);
+    return res.status(500).json({ error: error.message});
+  }
+});
+
+app.get("/getOrgApplications/:organization", express.json(), async (req, res) => {
+  const organization = req.params.organization;
 
   verifyRequestAuth(req, async (err, decoded) => {
     if (err) {
@@ -369,6 +478,32 @@ app.get("/getApplications", express.json(), async (req, res) => {
     ]
 
     const applications = await applicationCollection.aggregate(pipeline).toArray();
+
+    res.json({ applications: applications });
+  });
+});
+
+app.get("/getUserApplications/:userID", express.json(), async (req, res) => {
+  const userID = req.params.userID;
+
+  verifyRequestAuth(req, async (err, decoded) => {
+    if (err) {
+        return res.status(401).send("Unauthorized.");
+    }
+
+    if (!userID) {
+      // If no organization was provided, get the org from auth token
+      const userCollection = db.collection(COLLECTIONS.users);
+      const user = await userCollection.findOne({ _id: decoded });
+      if (!user) {
+        return res.status(400).send("userID not provided.")
+      }
+
+      userID = user._id;
+    }
+
+    const applicationCollection = db.collection(COLLECTIONS.applications)
+    const applications = (await applicationCollection.find({ userID: { $eq: userID } })).toArray();
 
     res.json({ applications: applications });
   });

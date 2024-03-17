@@ -3,11 +3,8 @@ import { useState, useEffect} from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useUserContext } from '../contexts/userContext';
 import { Grant, GrantQuestion } from '../interfaces/Grant' 
+import { GrantFormProps } from './GrantFormProps';
 
-interface GrantFormProps {
-    type: string,
-    port: number
-}
 
 const GrantForm: React.FC<GrantFormProps> = ({ type, port }) => {
 
@@ -15,11 +12,12 @@ const GrantForm: React.FC<GrantFormProps> = ({ type, port }) => {
     
     // extract the grantId from url
     let { grantId } = useParams()
+    console.log(grantId);
     const grantID = !grantId ? '' : grantId
 
     // default grant object
     const initialGrantState: Grant = {
-        id: Date.now(),
+        id: -1,
         title: '',
         description: '',
         posted: new Date(),
@@ -49,11 +47,11 @@ const GrantForm: React.FC<GrantFormProps> = ({ type, port }) => {
             });
             
             await response.json().then((data) => {
-                const { title, description, deadline, minAmount, maxAmount,
+                const { _id, title, description, deadline, minAmount, maxAmount,
                     organization, category, contact, questions, publish, owner } = data['response']
                 
                 setGrant( { 
-                    id: Date.now(),
+                    id: _id,
                     title: title,
                     posted: new Date(),
                     description: description,
@@ -165,7 +163,7 @@ const GrantForm: React.FC<GrantFormProps> = ({ type, port }) => {
                     'Content-Type': 'application/json',
                     },
                     body: JSON.stringify({ 'accId': user.accountID, 'title': grant.title, 'description': grant.description, 'deadline': grant.deadline, 
-                    'minAmount': grant.minAmount, "maxAmount": grant.maxAmount, 'organization': grant.organization,
+                    'posted': grant.posted, 'minAmount': grant.minAmount, "maxAmount": grant.maxAmount, 'organization': grant.organization,
                     'category': grant.category, "contact": grant.contact, 'questions': grant.questions, 'publish': publish }),
                 });
         

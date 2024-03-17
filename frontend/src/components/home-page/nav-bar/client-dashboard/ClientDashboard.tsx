@@ -29,7 +29,9 @@ const ClientDashboard = ({}: ClientDashboardProps) => {
             heroicon={<ListBulletIcon className="h-40 w-40"/>}
             label="View Available Grants" />
         </Link>
-        <ApplicationIcon imageSrc={search} label="My Applications" />
+        <Link to="/applications">
+          <ApplicationIcon imageSrc={search} label="My Applications" />
+        </Link>
       </div>
     </div>
   )
