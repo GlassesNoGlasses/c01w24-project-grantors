@@ -33,25 +33,21 @@ const AdminGrants = () => {
     const itemsPerPageOptions: number[] = [5, 10];
     const columns: Column<Grant>[] = [
         {
-            key: "title",
             title: "Grant Title",
             format: (grant: Grant) => grant.title,
             sort: (grant1: Grant, grant2: Grant) => grant1.title < grant2.title ? -1 : 1,
         },
         {
-            key: "organization",
             title: "Organization",
             format: (grant: Grant) => String(grant.organization),
             sort: (grant1: Grant, grant2: Grant) => grant1.organization < grant2.organization ? -1 : 1,
         },
         {
-            key: "category",
             title: "Category",
             format: (grant: Grant) => String(grant.category),
             sort: (grant1: Grant, grant2: Grant) => grant1.category < grant2.category ? -1 : 1,
         },
         {
-            key: "posted",
             title: "Posted",
             format: (grant: Grant) => {
                 return grant.posted.toLocaleDateString('en-GB', {
@@ -63,7 +59,6 @@ const AdminGrants = () => {
             sort: (grant1: Grant, grant2: Grant) => Number(grant1.posted) - Number(grant2.posted),
         },
         {
-            key: "deadline",
             title: "Deadline",
             format: (grant: Grant) => {
                 return grant.posted.toLocaleDateString('en-GB', {
@@ -75,13 +70,11 @@ const AdminGrants = () => {
             sort: (grant1: Grant, grant2: Grant) => Number(grant1.deadline) - Number(grant2.deadline),
         },
         {
-            key: "minAmount",
             title: "Min Award",
             format: (grant: Grant) => String(grant.minAmount),
             sort: (grant1: Grant, grant2: Grant) => Number(grant1.minAmount) - Number(grant2.minAmount),
         },
         {
-            key: "maxAmount",
             title: "Max Award",
             format: (grant: Grant) => String(grant.maxAmount),
             sort: (grant1: Grant, grant2: Grant) => Number(grant1.maxAmount) - Number(grant2.maxAmount),
