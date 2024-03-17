@@ -1,18 +1,18 @@
 import { useEffect, useState } from "react";
 import { useUserContext } from "../../../contexts/userContext";
 import { Application, ApplicationStatus } from "../../../../interfaces/Application";
-import { mockApplications } from "../admin-dashboard/mockApplications";
 import { Column } from "../../../table/TableProps";
 import Table from "../../../table/Table";
 import { SERVER_PORT } from "../../../../constants/ServerConstants";
 import { Grant } from "../../../../interfaces/Grant";
 import { useNavigate } from "react-router-dom";
+import { GetGrantsResponse, GetUserApplicationsResponse } from "../../../../interfaces/ServerResponse";
 
 type TableData = [Application, Grant | undefined];
 
 const ClientApplicationList = ({}) => {
     const { user, setUser } = useUserContext();
-    const [ applications, setApplications ] = useState<Application[]>(mockApplications);
+    const [ applications, setApplications ] = useState<Application[]>([]);
     const [ grants, setGrants ] = useState<Grant[]>();
     const [ tableData, setTableData ] = useState<TableData[]>([]);
 
@@ -58,8 +58,10 @@ const ClientApplicationList = ({}) => {
               });
 
             if (res.ok) {
-                await res.json().then((data) => {
-                    return setApplications(data.applications);
+                await res.json().then((data: GetUserApplicationsResponse) => {
+                    if (data.response) {
+                        return setApplications(data.response);
+                    }
                 });
             } else {
                 // Bad response, logout the user and redirect
@@ -69,32 +71,40 @@ const ClientApplicationList = ({}) => {
             }
         }
 
-        //fetchApplications();
+        fetchApplications();
     }, [user]);
 
     useEffect(() => {
-        const grantIDs: number[] = applications.map((app: Application) => app.grantID);
-        const encodedGrantIDs: string = encodeURIComponent(grantIDs.join(','));
-        const fetchGrants = async () => {
-            const res = await fetch(`http://localhost:${SERVER_PORT}/getGrants/${encodedGrantIDs}`, {
-                method: 'GET',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-            });
+        if (applications.length) {
+            const grantIDs: number[] = applications.map((app: Application) => app.grantID);
+            const encodedGrantIDs: string = encodeURIComponent(grantIDs.join(','));
+            const fetchGrants = async () => {
+                const res = await fetch(`http://localhost:${SERVER_PORT}/getGrants/${encodedGrantIDs}`, {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                });
 
-            if (res.ok) {
-                await res.json().then((data) => {
-                    return setGrants(data);
-                })
-            } else {
-                console.log(res);
-                setUser(null);
+                if (res.ok) {
+                    await res.json().then((data: GetGrantsResponse) => {
+                        if (data.response) {
+                            const grants = data.response.map((grant) => {
+                                return {...grant, deadline: new Date(grant.deadline), posted: new Date(grant.posted)};
+                            });
+                            
+                            return setGrants(grants);
+                        }
+                    });
+                } else {
+                    console.error(res);
+                    setUser(null);
+                }
             }
+
+            fetchGrants();
         }
-
-        //fetchGrants();
-
+        
     }, [applications]);
 
     useEffect(() => {

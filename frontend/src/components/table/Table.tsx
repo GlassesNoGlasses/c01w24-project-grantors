@@ -36,7 +36,6 @@ function Table<T>(
     }, [items, itemsPerPage, currentPage, sortColumn, sortAscending]);
 
     useEffect(() => {
-        console.log()
         setMaxPage(Math.max(Math.ceil(items.length / itemsPerPage) - 1, 0));
         if (currentPage > maxPage) {
             setCurrentPage(maxPage)
