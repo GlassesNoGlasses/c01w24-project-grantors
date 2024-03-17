@@ -10,7 +10,7 @@ import GrantBrowse from "./components/grant-browse/GrantBrowse";
 import AdminApplicationList from "./components/home-page/nav-bar/admin-dashboard/AdminApplicationList";
 import GrantPage from "./components/grant-page/GrantPage";
 import SavedGrants from "./components/saved-grants/SavedGrants";
-import GrantPageApply from "./components/grant-page-apply/GrantPageApply";
+import GrantApply from "./components/grant-apply/GrantApply";
 
 
 function App() {
@@ -34,7 +34,7 @@ function App() {
               <Route path="grants/:grantId" element={<GrantPage />} />
               <Route path="saved" element={<SavedGrants />} />
               <Route path=":organization/applications" element={<AdminApplicationList/>} />
-              <Route path="grants/:grantId/apply" element={<GrantPageApply />} />
+              <Route path="grants/:grantId/apply" element={<GrantApply />} />
             </Route>
           </Routes>
         )}

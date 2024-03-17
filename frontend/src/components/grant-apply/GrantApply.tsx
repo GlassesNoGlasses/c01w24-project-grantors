@@ -1,11 +1,11 @@
 import { useParams } from 'react-router-dom';
 import { Grant, GrantQuestion } from "../interfaces/Grant";
 import  { getGrant } from "../grant-page/GrantPage";
-import { GrantPageApplyProps } from './GrantPageApplyProps';
+import { GrantPageApplyProps } from './GrantApplyProps';
 import GrantForm from "../grant-form/GrantForm";
 import { useUserContext } from '../contexts/userContext'
 
-const GrantPageApply = ({}: GrantPageApplyProps) => {
+const GrantApply = ({}: GrantPageApplyProps) => {
 
     const {user, setUser} = useUserContext();
     const {grantId} = useParams();
@@ -25,4 +25,4 @@ const ErrorGrantQuestionList = () => {
     return <div>oh no! something went wrong</div>;
 }
 
-export default GrantPageApply;
+export default GrantApply;
