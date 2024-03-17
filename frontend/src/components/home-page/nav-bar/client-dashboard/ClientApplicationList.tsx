@@ -21,7 +21,7 @@ const ClientApplicationList = ({}) => {
     const itemsPerPageOptions: number[] = [5,10,20,50,100];
     const columns: Column<TableData>[] = [
         {
-            title: "Grant Titlte",
+            title: "Grant Title",
             format: (data: TableData) => data[0].grantTitle,
             sort: (data1: TableData, data2: TableData) => data1[0].grantTitle < data2[0].grantTitle ? -1 : 1,
         },
