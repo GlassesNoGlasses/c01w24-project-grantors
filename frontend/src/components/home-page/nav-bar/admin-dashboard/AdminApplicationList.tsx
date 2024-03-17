@@ -1,16 +1,15 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useUserContext } from '../../../contexts/userContext';
 import { AdminApplicationListProps } from './AdminApplicationListProps';
 import { Application } from '../../../../interfaces/Application';
 import { SERVER_PORT } from '../../../../constants/ServerConstants';
-import { useParams, Navigate, useNavigate } from 'react-router-dom';
-import { mockApplications } from './mockApplications';
+import { useParams, useNavigate } from 'react-router-dom';
 import Table from '../../../table/Table';
 import { Column } from '../../../table/TableProps';
 
 const AdminApplicationList = ({}: AdminApplicationListProps) => {
     const { user, setUser } = useUserContext();
-    const [ applications, setApplications ] = useState<Application[]>(mockApplications);
+    const [ applications, setApplications ] = useState<Application[]>([]);
     const { organization } = useParams();
     const navigate = useNavigate();
 
@@ -56,7 +55,10 @@ const AdminApplicationList = ({}: AdminApplicationListProps) => {
 
             if (res.ok) {
                 await res.json().then((data) => {
-                    return setApplications(data.applications);
+                    const applications = data.applications.map((application: Application) => {
+                        return {...application, submissionDate: new Date(application.submissionDate)};
+                    });
+                    return setApplications(applications);
                 });
             } else {
                 // Bad response, logout the user and redirect
@@ -66,7 +68,7 @@ const AdminApplicationList = ({}: AdminApplicationListProps) => {
             }
         }
 
-        //fetchApplications();
+        fetchApplications();
     }, [user, navigate]);
 
     return (
