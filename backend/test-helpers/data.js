@@ -411,6 +411,24 @@ export const grants =
         ],
         publish: true,
         owner: 'dsafdsfdsafdsf'
+    },
+    {
+        id: '65f6326d04249a6f006a9429',
+        title: "UTAPS",
+        description: "Grant to suppliment federal and provincial student aid.",
+        posted: new Date("2025-09-20"),
+        deadline: new Date("2026-02-28"),
+        minAmount: 100,
+        maxAmount: 7000,
+        organization: "University of Toronto",
+        category: "Education",
+        contact: "Gibbly Bibbly, gibblybibbly@utoronto.com",
+        questions: [
+            { id: 1, question: "How much in funding have you received from federal or provincial sources?", answer: null },
+            { id: 2, question: "Parents net income for 2023", answer: null }
+        ],
+        publish: false,
+        owner: 'dsafdsfdsafdsf'
     }
 ];
 
