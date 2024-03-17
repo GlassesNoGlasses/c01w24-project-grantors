@@ -39,6 +39,7 @@ function App() {
               <Route path=":organization/applications" element={<AdminApplicationList/>} />
               <Route path="applications" element={<ClientApplicationList />} />
               <Route path="grants/:grantId/apply" element={<GrantApply />} />
+>>>>>>>>> Temporary merge branch 2
             </Route>
           </Routes>
         )}
