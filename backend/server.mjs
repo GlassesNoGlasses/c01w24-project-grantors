@@ -235,7 +235,7 @@ app.get('/users/:userId/favourites', express.json(), async (req, res) => {
   }
 });
 
-app.post("/createGrant", express.json(), async (req, res) => {
+app.post("/grant", express.json(), async (req, res) => {
   try {
     // frontend guarantees that all these fields are provided so omit param check
     const { title, description, deadline, posted, minAmount, maxAmount,

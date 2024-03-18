@@ -4,7 +4,7 @@ let accId = ''
 let gId1 = ''
 let gId2 = ''
 
-test("/createGrant - 201 Grant Saved (Not Published) to MongoDB", async() => {
+test("POST /grant - 201 Grant Saved (Not Published) to MongoDB", async() => {
 
     const signup = await fetch(`${SERVER_URL}/signup`, {
         method: "POST",
@@ -24,7 +24,7 @@ test("/createGrant - 201 Grant Saved (Not Published) to MongoDB", async() => {
         accId = data['id']
     })
 
-    const res = await fetch(`${SERVER_URL}/createGrant`, {
+    const res = await fetch(`${SERVER_URL}/grant`, {
         method: 'POST',
         headers: {
         'Content-Type': 'application/json',
@@ -41,9 +41,9 @@ test("/createGrant - 201 Grant Saved (Not Published) to MongoDB", async() => {
     expect(res.status).toBe(201)
 })
 
-test("/createGrant - 201 Grant Saved (Published) to MongoDB", async() => {
+test("POST /grant - 201 Grant Saved (Published) to MongoDB", async() => {
 
-    const res = await fetch(`${SERVER_URL}/createGrant`, {
+    const res = await fetch(`${SERVER_URL}/grant`, {
         method: 'POST',
         headers: {
         'Content-Type': 'application/json',
