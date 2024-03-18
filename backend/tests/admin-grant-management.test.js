@@ -29,7 +29,7 @@ test("/createGrant - 201 Grant Saved (Not Published) to MongoDB", async() => {
         headers: {
         'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ 'accId': accId, 'title': 'test', 'description': 'test grant', 
+        body: JSON.stringify({ 'title': 'test', 'description': 'test grant', 
         'deadline': "2024-03-13T00:16:33.451Z", 'minAmount': 0, "maxAmount": 1, 'organization': 'us',
         'category': 'one', "contact": 'my number', 'questions': [], 'publish': false }),
     })
@@ -41,10 +41,6 @@ test("/createGrant - 201 Grant Saved (Not Published) to MongoDB", async() => {
     expect(res.status).toBe(201)
 })
 
-
-
-
-
 test("/createGrant - 201 Grant Saved (Published) to MongoDB", async() => {
 
     const res = await fetch(`${SERVER_URL}/createGrant`, {
@@ -52,7 +48,7 @@ test("/createGrant - 201 Grant Saved (Published) to MongoDB", async() => {
         headers: {
         'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ 'accId': accId, 'title': 'publish', 'description': 'publish grant', 
+        body: JSON.stringify({ 'title': 'publish', 'description': 'publish grant', 
         'deadline': "2024-03-13T00:16:33.451Z", 'minAmount': 0, "maxAmount": 1, 'organization': 'us',
         'category': 'one', "contact": 'my number', 'questions': [], 'publish': false }),
     })
@@ -118,12 +114,12 @@ test("/editGrant - 201 unpublished grant edited", async() => {
         headers: {
         'Content-Type': 'application/json',
         },
-    })
+    });
 
-    const body = await resp.json()
+    const body = await resp.json();
 
-    expect(res.status).toBe(201)
-    expect(body['response'].title).toBe('test edited')
+    expect(res.status).toBe(201);
+    expect(body['response'].title).toBe('test edited');
 })
 
 test("/deleteGrant - 201 unpublished grant deleted", async() => {
@@ -133,7 +129,6 @@ test("/deleteGrant - 201 unpublished grant deleted", async() => {
         headers: {
         'Content-Type': 'application/json',
         },
-        body: JSON.stringify({accId: accId})
     })
 
     const resp = await fetch(`${SERVER_URL}/getGrant/${gId1}`, {

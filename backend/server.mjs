@@ -341,26 +341,16 @@ app.get("/getGrants/:grantIds", express.json(), async(req, res) => {
 
 app.delete("/deleteGrant/:grantId", express.json(), async(req, res) => {
   try {
-
-    const { accId } = req.body 
-
     const grantId = req.params.grantId;
     const grantCollection = db.collection(COLLECTIONS.grants);
-    const userCollection = db.collection(COLLECTIONS.users);
 
     await grantCollection.deleteOne({
       _id: new ObjectId(grantId)
-    })
-
-    const data = await userCollection.findOne({_id: new ObjectId(accId)})
-    const grants = data.grants
-    const newGrants = grants.length == 1 ? [] : [...(grants.filter(prev => prev._id != grantId))]
-
-    await userCollection.updateOne({ _id: new ObjectId(accId)},
-                                  {$set: { grants: newGrants }})
+    });
 
     res.status(200).json({ response: `grant ${grantId} deleted` });
   } catch (error) {
+    console.error(error);
     res.status(500).json({ error: error.message });
   }
 })
