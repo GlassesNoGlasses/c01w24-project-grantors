@@ -51,4 +51,26 @@ export default class ApplicationsController {
             console.error("Error fetching organization applications", error);
         }
     }
+
+    static async submitApplication(user: User, application: Application): Promise<boolean> {
+        try {
+            const response = await fetch(`http://localhost:${SERVER_PORT}/application`,
+                {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                        // TODO: send user.authToken to authenticate submission
+                    },
+                    body: JSON.stringify(application),
+                })
+
+            if (!response.ok) {
+                console.error("Server failed:", response.status);
+            }
+            return response.ok;
+        } catch (error) {
+            console.log("Fetch function failed:", error);
+            return false;
+        }
+    }
 }
