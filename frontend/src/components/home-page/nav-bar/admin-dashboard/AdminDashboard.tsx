@@ -17,11 +17,11 @@ const AdminDashboard = ({
 
     // States used
     const {user, setUser} = useUserContext();
-    const [grantId, setGrantId] = useState('');
+    const [grantID, setGrantID] = useState('');
     const [encodedOrg, setEncodedOrg] = useState('');
 
     const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-      setGrantId(event.target.value);
+      setGrantID(event.target.value);
     };
 
   useEffect(() => {

@@ -9,12 +9,12 @@ import { useEffect, useState } from 'react';
 const GrantPageApply = ({}: GrantPageApplyProps) => {
 
     const {user, setUser} = useUserContext();
-    const {grantId} = useParams();
+    const {grantID} = useParams();
     const [grant, setGrant] = useState<Grant | undefined>(undefined);
 
     useEffect(() => {
-        if (grantId) {
-            GrantsController.fetchGrant(grantId).then((grant: Grant | undefined) => {
+        if (grantID) {
+            GrantsController.fetchGrant(grantID).then((grant: Grant | undefined) => {
                 if (grant) {
                     setGrant(grant);
                 }

@@ -5,9 +5,9 @@ import { User } from "../interfaces/User";
 
 export default class GrantsController {
 
-    static async fetchGrant(grantId: String): Promise<Grant | undefined> {
+    static async fetchGrant(grantID: String): Promise<Grant | undefined> {
         try {
-            const response = await fetch(`http://localhost:${SERVER_PORT}/getGrant/${grantId}`, {
+            const response = await fetch(`http://localhost:${SERVER_PORT}/getGrant/${grantID}`, {
                 method: 'GET',
                 headers: {
                 'Content-Type': 'application/json',
