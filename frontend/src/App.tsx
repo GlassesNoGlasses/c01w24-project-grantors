@@ -17,7 +17,7 @@ import GrantPageApply from "./components/grant-page-apply/GrantPageApply";
 function App() {
 
   return (
-    <div className="App" style={AppStyle}>
+    <div className="App w-full h-full">
       {UserContextProvider(
         <Routes>
             <Route path="/" element={<Navbar />}>
