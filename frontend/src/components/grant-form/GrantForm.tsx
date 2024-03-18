@@ -3,9 +3,11 @@ import { GrantFormProps } from "./GrantFormProps";
 import { GrantQuestion } from "../../interfaces/Grant";
 import { ApplicationStatus } from '../../interfaces/Application';
 import ApplicationsController from '../../controllers/ApplicationsController';
+import { useNavigate } from 'react-router-dom';
 
 const GrantForm = ({ user, grant }: GrantFormProps) => {
     const [questionList, setQuestionList] = useState<GrantQuestion[]>(grant.questions);
+    const navigate = useNavigate()
 
     const setAnswer = (index: number, answer: string) => {
         const newQuestionList = [...questionList];
@@ -32,6 +34,8 @@ const GrantForm = ({ user, grant }: GrantFormProps) => {
             status: ApplicationStatus.submitted,
             awarded: 0,
             responses: questionList,
+        }).then(() => {
+            navigate('/');
         });
     };
 

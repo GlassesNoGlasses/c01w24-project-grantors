@@ -8,7 +8,7 @@ import GrantsController from '../../controllers/GrantsController';
 
 const GrantList = ({ grants, favouriteGrants }: GrantListProps) => {
     return (
-        <ul className="flex flex-col gap-3">
+        <ul className="flex flex-col gap-3 w-full">
             {grants.map((grant, index) => (
                 <li key={index}>
                     <GrantItem grant={grant} favourite={favouriteGrants.includes(grant.id)} />
@@ -41,13 +41,15 @@ export const GrantItem = ({ grant, link, favourite }: GrantItemProps) => {
                 bg-slate-50 active:bg-slate-100 hover:shadow-md">
             <div className="flex flex-row justify-between items-center">
                 <h1 className="text-2xl font-bold">{grant.title}</h1>
-                <h2 className="text-lg">{`CAD $${grant.minAmount.toString()} - $${grant.maxAmount.toString()}`}</h2>
-                <button onClick={(e) => { 
-                  e.preventDefault();
-                  toggleFavorite(); 
-                }}>
-                    <StarIcon className={`h-6 w-6 ${isFavourite ? 'text-yellow-500' : 'text-gray-500'}`} />
-                </button>
+                <div className="flex flex-row gap-2">
+                    <h2 className="text-lg">{`CAD $${grant.minAmount.toString()} - $${grant.maxAmount.toString()}`}</h2>
+                    <button onClick={(e) => { 
+                    e.preventDefault();
+                    toggleFavorite(); 
+                    }}>
+                        <StarIcon className={`h-6 w-6 ${isFavourite ? 'text-yellow-500' : 'text-gray-500'}`} />
+                    </button>
+                </div>
             </div>
             <div className="flex flex-row justify-between">
                 <h3 className="text-lg">{`Org: ${grant.organization}`}</h3>
