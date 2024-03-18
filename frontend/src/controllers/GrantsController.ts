@@ -106,7 +106,7 @@ export default class GrantsController {
 
     static async toggleFavouriteGrant(userID: string, grantID: string): Promise<boolean> {
         try {
-            const response = await fetch(`http://localhost:${SERVER_PORT}/users/${userID}/favourites/toggle`, {
+            const response = await fetch(`http://localhost:${SERVER_PORT}/users/${userID}/favourites`, {
                 method: 'PATCH',
                 headers: {
                     'Content-Type': 'application/json',
@@ -191,10 +191,10 @@ export default class GrantsController {
     static async getPublishedGrants(): Promise<Grant[]> {
         try {
             const response = await fetch(`http://localhost:${SERVER_PORT}/grants?published=true`, {
-              method: 'GET',
-              headers: {
-                'Content-Type': 'application/json',
-              },
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
             });
 
             return await response.json().then((data: GetGrantsResponse) => {

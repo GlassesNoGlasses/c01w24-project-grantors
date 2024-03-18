@@ -138,7 +138,7 @@ app.post("/signup", express.json(), async (req, res) => {
 	}
 });
 
-app.patch('/users/:userId/favourites/toggle', express.json(), async (req, res) => {
+app.patch('/users/:userId/favourites', express.json(), async (req, res) => {
 	const userId = req.params.userId;
 	const { grantID } = req.body;
 
