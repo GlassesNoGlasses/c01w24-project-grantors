@@ -26,3 +26,9 @@ export interface GetApplicationsResponse {
     response?: Application[],
     error?: string,
 }
+
+export interface CreateObjectResponse {
+    response?: string,
+    id?: string,
+    error?: string,
+}

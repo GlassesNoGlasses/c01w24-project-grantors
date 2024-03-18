@@ -1,6 +1,6 @@
 import { SERVER_PORT } from "../constants/ServerConstants";
 import { Grant } from "../interfaces/Grant";
-import { GetGrantResponse, GetGrantsResponse } from "../interfaces/ServerResponse";
+import { CreateObjectResponse, GetGrantResponse, GetGrantsResponse } from "../interfaces/ServerResponse";
 import { User } from "../interfaces/User";
 
 export default class GrantsController {
@@ -14,21 +14,16 @@ export default class GrantsController {
                 },
             });
 
-            if (!response.ok) {
-                await response.json().then((data: GetGrantResponse) => {
-                    console.error("Failed to fetch grant: ", data.error);
-                });
-                return;
-            }
-
             return await response.json().then((data: GetGrantResponse) => {
                 const grant = data.response;
                 if (grant) {
                     return {...grant, deadline: new Date(grant.deadline), posted: new Date(grant.posted)};
+                } else {
+                    console.error("Failed to fetch grant: ", data.error);
                 }
             });
         } catch (error) {
-            console.error('error creating grant:', (error as Error).message);
+            console.error('Error fetching grant:', (error as Error).message);
         }
     }
 
@@ -63,14 +58,18 @@ export default class GrantsController {
               },
             });
 
-            return await response.json().then((data) => {
-                const fetchedGrants: Grant[] = data['response'];
+            return await response.json().then((data: GetGrantsResponse) => {
+                if (data.response) {
+                    const grants: Grant[] = data.response.map((grant: Grant) => {
+                        return {...grant, deadline: new Date(grant.deadline), posted: new Date(grant.posted)}
+                    });
 
-                const grants: Grant[] = fetchedGrants.map((grant: Grant) => {
-                    return {...grant, deadline: new Date(grant.deadline), posted: new Date(grant.posted)}
-                });
+                    return grants;
+                } else {
+                    console.error("Server error getting organization grants.", data.error);
+                    return [];
+                }
 
-                return grants;
             })
         } catch (error) {
             console.error('error creating grant:', (error as Error).message);
@@ -87,21 +86,18 @@ export default class GrantsController {
                     },
                 });
 
-            if (response.ok) {
-                return await response.json().then((data: GetGrantsResponse) => {
-                    if (data.response) {
-                        const grants: Grant[] = data.response.map((grant: Grant) => {
-                            return {...grant, deadline: new Date(grant.deadline), posted: new Date(grant.posted)}
-                        });
+            return await response.json().then((data: GetGrantsResponse) => {
+                if (data.response) {
+                    const grants: Grant[] = data.response.map((grant: Grant) => {
+                        return {...grant, deadline: new Date(grant.deadline), posted: new Date(grant.posted)}
+                    });
 
-                        return grants;
-                    } else {
-                        return [];
-                    }
-                });
-            } else {
-                console.error("Failed to get user's favourite grants");
-            }
+                    return grants;
+                } else {
+                    console.error("Failed to get user's favourite grants");
+                    return [];
+                }
+            });
 
             return [];
 
@@ -161,11 +157,13 @@ export default class GrantsController {
                 body: JSON.stringify(grant),
             });
 
-            if (response.ok) {
-                return await response.json().then((data) => {
-                    return data['id'];
-                });
-            }
+            return await response.json().then((data: CreateObjectResponse) => {
+                if (data.id) {
+                    return data.id
+                } else {
+                    console.error('Server error creating grant');
+                }
+            });
 
         } catch (error) {
             console.error('Error creating grant:', (error as Error).message);
@@ -184,7 +182,7 @@ export default class GrantsController {
 
             return response.ok;
         } catch (error) {
-            console.error('Error creating grant:', (error as Error).message);
+            console.error('Error saving grant:', (error as Error).message);
             return false;
         }
     }
@@ -198,20 +196,13 @@ export default class GrantsController {
               },
             });
 
-            if (!response.ok) {
-                await response.json().then((data: GetGrantsResponse) => {
-                    console.error("Server error fetching grants.", data.error);
-                    return [];
-                });
-            }
-
             return await response.json().then((data: GetGrantsResponse) => {
                 if (data.response) {
                     return data.response.map((grant: Grant) => {
                         return {...grant, deadline: new Date(grant.deadline), posted: new Date(grant.posted)}
                     });
                 }
-
+                console.error("Server error fetching grants.", data.error);
                 return [];
             });
         } catch (error) {
