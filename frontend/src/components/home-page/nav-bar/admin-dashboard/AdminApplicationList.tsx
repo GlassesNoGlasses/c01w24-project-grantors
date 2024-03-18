@@ -5,7 +5,7 @@ import { Application } from '../../../../interfaces/Application';
 import { useParams, useNavigate } from 'react-router-dom';
 import Table from '../../../table/Table';
 import { Column } from '../../../table/TableProps';
-import { fetchOrgApplications } from '../../../../controllers/ApplicationsController';
+import ApplicationsController from '../../../../controllers/ApplicationsController';
 
 const AdminApplicationList = ({}: AdminApplicationListProps) => {
     const { user, setUser } = useUserContext();
@@ -45,7 +45,7 @@ const AdminApplicationList = ({}: AdminApplicationListProps) => {
                 navigate('/')
             }
 
-            fetchOrgApplications(user).then((applications: Application[] | undefined) => {
+            ApplicationsController.fetchOrgApplications(user).then((applications: Application[] | undefined) => {
                 if (applications) {
                     setApplications(applications.map((application: Application) => {
                         return {...application, submissionDate: new Date(application.submissionDate)};

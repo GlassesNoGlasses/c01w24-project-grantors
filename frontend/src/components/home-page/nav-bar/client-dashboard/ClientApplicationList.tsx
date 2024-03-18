@@ -5,7 +5,7 @@ import { Column } from "../../../table/TableProps";
 import Table from "../../../table/Table";
 import { Grant } from "../../../../interfaces/Grant";
 import GrantsController from "../../../../controllers/GrantsController";
-import { fetchApplications } from "../../../../controllers/ApplicationsController";
+import ApplicationsController from "../../../../controllers/ApplicationsController";
 
 type TableData = [Application, Grant | undefined];
 
@@ -46,7 +46,7 @@ const ClientApplicationList = ({}) => {
 
     useEffect(() => {
         if (user) {
-            fetchApplications(user).then((applications: Application[] | undefined) => {
+            ApplicationsController.fetchApplications(user).then((applications: Application[] | undefined) => {
                 if (applications) {
                     setApplications(applications);
                 }
