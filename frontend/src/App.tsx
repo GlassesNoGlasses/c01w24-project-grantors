@@ -29,15 +29,15 @@ function App() {
 						<Route path="signup" element={<SignUp />} />
 						<Route path="grant" element={<GrantForm />} />
 						<Route path="createGrant" element={<CreateGrant />} />
-						<Route path="editGrant/:grantId" element={<EditGrant />} />
+						<Route path="editGrant/:grantID" element={<EditGrant />} />
 						<Route path="grants" element={<GrantBrowse />} />
-						<Route path="grants/:grantId" element={<GrantPage />} />
+						<Route path="grants/:grantID" element={<GrantPage />} />
 						<Route path="admin/grants" element={<AdminGrants />} />
-						<Route path="admin/grants/:grantId" element={<EditGrant />} />
+						<Route path="admin/grants/:grantID" element={<EditGrant />} />
 						<Route path="saved" element={<SavedGrants />} />
 						<Route path=":organization/applications" element={<AdminApplicationList/>} />
 						<Route path="applications" element={<ClientApplicationList />} />
-						<Route path="grants/:grantId/apply" element={<GrantApply />} />
+						<Route path="grants/:grantID/apply" element={<GrantApply />} />
 					</Route>
 				</Routes>
 			)}

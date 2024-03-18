@@ -1,5 +1,5 @@
 import { useParams } from 'react-router-dom';
-import { Grant, GrantQuestion } from "../../interfaces/Grant";
+import { Grant } from "../../interfaces/Grant";
 import { GrantPageApplyProps } from './GrantApplyProps';
 import GrantForm from "../grant-form/GrantForm";
 import { useUserContext } from '../contexts/userContext'
