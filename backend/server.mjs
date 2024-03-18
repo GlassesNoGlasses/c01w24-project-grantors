@@ -312,6 +312,22 @@ app.get("/grant/:grantId", express.json(), async(req, res) => {
 	}
 });
 
+app.delete("/grant/:grantId", express.json(), async(req, res) => {
+	try {
+		const grantId = req.params.grantId;
+		const grantCollection = db.collection(COLLECTIONS.grants);
+
+		await grantCollection.deleteOne({
+			_id: new ObjectId(grantId)
+		});
+
+		res.status(200).json({ response: `grant ${grantId} deleted` });
+	} catch (error) {
+		console.error(error);
+		res.status(500).json({ error: error.message });
+	}
+});
+
 app.get("/grants", express.json(), async(req, res) => {
 	// Get route query parameters (/grants?publish=true)
 	const { encodedGrantIDs, publish, organization } = req.query;
@@ -338,22 +354,6 @@ app.get("/grants", express.json(), async(req, res) => {
 		res.status(200).json({ response: grants });
 	} catch (error) {
 		console.error("Error getting grants", error);
-		res.status(500).json({ error: error.message });
-	}
-});
-
-app.delete("/grant/:grantId", express.json(), async(req, res) => {
-	try {
-		const grantId = req.params.grantId;
-		const grantCollection = db.collection(COLLECTIONS.grants);
-
-		await grantCollection.deleteOne({
-			_id: new ObjectId(grantId)
-		});
-
-		res.status(200).json({ response: `grant ${grantId} deleted` });
-	} catch (error) {
-		console.error(error);
 		res.status(500).json({ error: error.message });
 	}
 });
