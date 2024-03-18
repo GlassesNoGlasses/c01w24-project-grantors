@@ -2,7 +2,7 @@ import express from 'express';
 import { MongoClient, ObjectId } from "mongodb";
 import cors from "cors";
 import bcrypt from "bcrypt";
-import jwt from "jsonwebtoken";
+import jwt, { decode } from "jsonwebtoken";
 
 const app = express();
 const PORT = 8000;
@@ -421,76 +421,66 @@ app.post("/application", express.json(), async (req, res) => {
 	}
 });
 
-app.get("/organization/:organization/applications", express.json(), async (req, res) => {
-	const organization = req.params.organization;
+app.get("/applications", express.json(), async (req, res) => {
+	const { userID, organization } = req.query;
+
+	if (!userID && !organization) {
+		return res.status(400).json({ error: "Missing required parameters. Include userID or organization." });
+	}
 
 	verifyRequestAuth(req, async (err, decoded) => {
-		if (err) {
+		if (err || (userID && userID != decoded.userID)) {
 			return res.status(401).send("Unauthorized.");
 		}
 
-		if (!organization) {
-			// If no organization was provided, get the org from auth token
-			const userCollection = db.collection(COLLECTIONS.users);
-			const user = await userCollection.findOne({ _id: decoded });
-			if (!user) {
-			return res.status(400).send("Organization not provided.")
-			}
-
-			organization = user.organization;
+		let pipeline = [];
+		if (userID) {
+			pipeline.push({
+				$match: {
+					userID: userID
+				}
+			});
 		}
 
-		const applicationCollection = db.collection(COLLECTIONS.applications)
+		if (organization) {
+			const userCollection = db.collection(COLLECTIONS.users);
+			const user = await userCollection.findOne({ _id: decoded.userID });
+			if (!user) {
+				return res.status(404).send("Organization not found.")
+			}
 
-		// Looks up all applications, where the associate grant belongs to the organization
-		const pipeline = [
-			{
+			if (user.organization != organization) {
+				return res.status(401).send("Unauthorized.");
+			}
+
+			pipeline.push({
 				$addFields: {
-					grantObjectId: { $toObjectId: "$grantID" }
+					convertedGrantID: { $toObjectId: "$grantID" }
 				}
-			},
-			{
+			});
+
+			pipeline.push({
 				$lookup: {
 					from: COLLECTIONS.grants,
-					localField: 'grantObjectId',
-					foreignField: '_id',
-					as: 'grant',
+					localField: "convertedGrantID",
+					foreignField: "_id",
+					as: "grant",
 				}
-			},
-			{
+			});
+
+			pipeline.push({
+				$unwind: "$grant"
+			});
+
+			pipeline.push({
 				$match: {
-					'grant.organization': organization
+					"grant.organization": organization
 				}
-			}
-		]
-
-		const applications = await applicationCollection.aggregate(pipeline).toArray();
-
-		res.json({ response: applications });
-	});
-});
-
-app.get("/user/:userID/applications", express.json(), async (req, res) => {
-	const userID = req.params.userID;
-
-	verifyRequestAuth(req, async (err, decoded) => {
-		if (err) {
-			return res.status(401).send("Unauthorized.");
+			});
 		}
 
-		if (!userID) {
-			// If no organization was provided, get the org from auth token
-			const userCollection = db.collection(COLLECTIONS.users);
-			const user = await userCollection.findOne({ _id: decoded });
-			if (!user) {
-				return res.status(400).send("userID not provided.")
-			}
-
-			userID = user._id;
-		}
-
-		const applicationCollection = db.collection(COLLECTIONS.applications);
-		const applications = await applicationCollection.find({ userID: { $eq: userID } }).toArray();
+		const applicationsCollection = db.collection(COLLECTIONS.applications);
+		const applications = await applicationsCollection.aggregate(pipeline).toArray();
 
 		res.json({ response: applications });
 	});
