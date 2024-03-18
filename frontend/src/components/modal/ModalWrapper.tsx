@@ -14,7 +14,7 @@ const ModalWrapper = ({
                         {children}
                 </ModalInner>
         </div>
-    )
+    );
 }
 
 export default ModalWrapper

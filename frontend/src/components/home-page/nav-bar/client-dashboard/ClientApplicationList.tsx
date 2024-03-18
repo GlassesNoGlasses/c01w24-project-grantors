@@ -72,7 +72,7 @@ const ClientApplicationList = ({}) => {
             return [app, grants?.find(grant => grant.id === app.grantID)];
         }));
 
-    }, [applications, grants])
+    }, [applications, grants]);
 
     return (
         <div className="flex flex-col h-full items-start justify-start px-5 bg-grantor-green">
@@ -84,7 +84,7 @@ const ClientApplicationList = ({}) => {
                    defaultSort={columns[1]}
             />
         </div>
-    )
+    );
 };
 
 export default ClientApplicationList;

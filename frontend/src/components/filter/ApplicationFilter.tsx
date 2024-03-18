@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { ApplicationFilterProps } from "./ApplicationFilterProps";
 import { Application } from '../../interfaces/Application';
 import SearchFilter from './SearchFilter';

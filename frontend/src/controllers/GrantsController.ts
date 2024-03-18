@@ -10,7 +10,7 @@ export default class GrantsController {
             const response = await fetch(`http://localhost:${SERVER_PORT}/getGrant/${grantID}`, {
                 method: 'GET',
                 headers: {
-                'Content-Type': 'application/json',
+                    'Content-Type': 'application/json',
                 },
             });
 
@@ -69,8 +69,7 @@ export default class GrantsController {
                     console.error("Server error getting organization grants.", data.error);
                     return [];
                 }
-
-            })
+            });
         } catch (error) {
             console.error('error creating grant:', (error as Error).message);
             return [];
@@ -98,8 +97,6 @@ export default class GrantsController {
                     return [];
                 }
             });
-
-            return [];
 
         } catch (error) {
             console.error("Error fetching favourite grants", error);

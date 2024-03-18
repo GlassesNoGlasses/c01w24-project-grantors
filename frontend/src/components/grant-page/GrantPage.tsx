@@ -1,15 +1,14 @@
 import { Link, useParams } from "react-router-dom";
 import { GrantPageProps } from "./GrantPageProps";
 import { Grant } from "../../interfaces/Grant";
-import { useState } from "react";
-import React from "react";
+import { useState, useEffect } from "react";
 import GrantsController from "../../controllers/GrantsController";
 
 const GrantPage = ({}: GrantPageProps) => {
     const { grantID } = useParams();
     const [grant, setGrant] = useState<Grant | undefined>(undefined);
 
-    React.useEffect(() => {
+    useEffect(() => {
         if (grantID) {
             GrantsController.fetchGrant(grantID).then((grant: Grant | undefined) => {
                 if (grant) {
@@ -43,7 +42,7 @@ const GrantFound = ({ grant }: { grant: Grant }) => {
             <p className="text-base">{grant.description}</p>
         </div>
     );
-}
+};
 
 const GrantNotFound = () => {
     return (
@@ -52,7 +51,7 @@ const GrantNotFound = () => {
             <p className="text-base">The grant you are looking for does not exist.</p>
         </div>
     );
-}
+};
 
 const ApplyButton = ({ grantID }: { grantID: String }) => {
     return (
@@ -62,7 +61,7 @@ const ApplyButton = ({ grantID }: { grantID: String }) => {
           to={`/grants/${grantID}/apply`}>
           Apply Now
         </Link>
-      )
-}
+    );
+};
 
 export default GrantPage;

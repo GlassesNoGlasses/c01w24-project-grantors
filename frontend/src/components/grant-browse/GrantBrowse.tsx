@@ -3,7 +3,6 @@ import { useUserContext } from "../contexts/userContext";
 import { useEffect, useState } from "react";
 import { Grant } from "../../interfaces/Grant";
 import GrantList from "../grant-list/GrantList";
-import { SERVER_PORT } from "../../constants/ServerConstants";
 import GrantsController from "../../controllers/GrantsController";
 
 const GrantBrowse = ({}: GrantBrowseProps) => {
@@ -30,35 +29,35 @@ const UserGrantBrowse = () => {
 
     useEffect(() => {
         setFilteredGrants(grants)
-    }, [grants])
+    }, [grants]);
 
     // Fetch all grants
     const fetchGrants = async () => {
         GrantsController.getPublishedGrants().then((grants: Grant[]) => {
             setGrants(grants);
         });
-    }
+    };
 
     return (
         <div className="flex flex-col lg:flex-row gap-3 p-2">
             <GrantFilter grants={grants} setGrants={setFilteredGrants} />
             <GrantList grants={filteredGrants} favouriteGrants={favouriteGrants} />
         </div>
-    )
-}
+    );
+};
 
 const AdminGrantBrowse = () => {
     return (
         <div>
             <h1>Admin Grant Browse</h1>
         </div>
-    )
-}
+    );
+};
 
 const GrantFilter = ({ grants, setGrants }: {
-    grants: Grant[],
-    setGrants: (grants: Grant[]) => void
-}) => {
+        grants: Grant[],
+        setGrants: (grants: Grant[]) => void,
+    }) => {
     const [search, setSearch] = useState<string>("");
     const [category, setCategory] = useState<string>("");
     const [minAmount, setMinAmount] = useState<Number>(0);
@@ -133,7 +132,7 @@ const GrantFilter = ({ grants, setGrants }: {
                 </div>
             </div>
         </div>
-    )
-}
+    );
+};
 
 export default GrantBrowse;

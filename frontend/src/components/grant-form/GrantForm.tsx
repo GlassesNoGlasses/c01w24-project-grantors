@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { QuestionListProps } from "./GrantFormProps";
 import { GrantQuestion } from "../../interfaces/Grant";
-import { SERVER_PORT } from "../../constants/ServerConstants";
 import { ApplicationStatus } from '../../interfaces/Application';
 import ApplicationsController from '../../controllers/ApplicationsController';
 
@@ -13,13 +12,7 @@ const GrantQuestionList = ({ user, grant }: QuestionListProps) => {
         newQuestionList[index].answer = answer;
         
         setQuestionList(newQuestionList);
-    }
-
-    const getAnswers = () => {
-        return questionList.map(function (question){
-            return question.answer;
-        });
-    }
+    };
 
     const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
@@ -40,7 +33,7 @@ const GrantQuestionList = ({ user, grant }: QuestionListProps) => {
             awarded: 0,
             responses: questionList,
         });
-    }
+    };
 
     return (
         <div>

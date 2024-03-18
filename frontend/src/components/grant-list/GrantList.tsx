@@ -16,10 +16,10 @@ const GrantList = ({ grants, favouriteGrants }: GrantListProps) => {
             ))}
         </ul>
     );
-}
+};
 
 export const GrantItem = ({ grant, link, favourite }: GrantItemProps) => {
-    const { user, setUser } = useUserContext();
+    const { user } = useUserContext();
     const [isFavourite, setIsFavourite] = useState(favourite);
 
     const toggleFavorite = async () => {
@@ -60,6 +60,6 @@ export const GrantItem = ({ grant, link, favourite }: GrantItemProps) => {
             <p className="text-base">{grant.description}</p>
         </Link>
     );
-}
+};
 
 export default GrantList;

@@ -5,23 +5,23 @@ import { useUserContext } from '../../contexts/userContext';
 import { HomeProps } from './HomeProps';
 
 const Home = ({}: HomeProps) => {
-// SECTION: States Used
-const {user} = useUserContext();
+	// SECTION: States Used
+	const {user} = useUserContext();
 
-// SECTION: Render Functions
-const RenderHomepage = () => {
-  if (!user) {
-    return (<DefaultPage/>);
-  }
+	// SECTION: Render Functions
+	const RenderHomepage = () => {
+		if (!user) {
+			return (<DefaultPage/>);
+		}
 
-  return user.isAdmin ? (<AdminDashboard/>) : (<ClientDashboard/>);
-};
+		return user.isAdmin ? (<AdminDashboard/>) : (<ClientDashboard/>);
+	};
 
-return (
-  <div className='h-full w-full'>
-    {RenderHomepage()}
-  </div>
-  )
+	return (
+		<div className='h-full w-full'>
+			{RenderHomepage()}
+		</div>
+	);
 };
 
 export default Home

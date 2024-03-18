@@ -6,7 +6,7 @@ import { Grant, GrantQuestion } from '../../interfaces/Grant'
 import { GrantFormProps } from './GrantFormProps';
 import GrantsController from '../../controllers/GrantsController'
 
-const GrantForm: React.FC<GrantFormProps> = ({ type, port }) => {
+const GrantForm: React.FC<GrantFormProps> = ({ type }) => {
 
     const {user} = useUserContext();
     
@@ -148,7 +148,7 @@ const GrantForm: React.FC<GrantFormProps> = ({ type, port }) => {
     // remove a question by filtering it out
     const handleRemoveQuestion = (id: number) => {
         setGrant({ ...grant, questions: grant.questions.filter(q => q.id != id)})
-    }
+    };
 
     // when general input changes, update the corresponding field
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
@@ -277,6 +277,6 @@ const GrantForm: React.FC<GrantFormProps> = ({ type, port }) => {
             </div>
         </div>
     );
-}
+};
 
 export default GrantForm

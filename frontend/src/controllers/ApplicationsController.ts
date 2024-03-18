@@ -35,8 +35,8 @@ export default class ApplicationsController {
             const res = await fetch(`http://localhost:${SERVER_PORT}/organization/${user.organization}/applications`, {
                 method: 'GET',
                 headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${user.authToken}`
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${user.authToken}`
                 },
             });
 

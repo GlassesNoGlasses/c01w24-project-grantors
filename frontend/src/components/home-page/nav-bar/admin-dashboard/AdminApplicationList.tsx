@@ -69,7 +69,7 @@ const AdminApplicationList = ({}: AdminApplicationListProps) => {
                    defaultSort={columns[2]}
             />
         </div>
-    )
+    );
 };
 
 export default AdminApplicationList;

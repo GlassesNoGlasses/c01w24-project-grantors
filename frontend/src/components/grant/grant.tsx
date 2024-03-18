@@ -15,7 +15,7 @@ const GrantForm: React.FC = () => {
         contact: '',
         questions: [],
         publish: false,
-        owner: null
+        owner: null,
     };
 
     const [grant, setGrant] = useState<Grant>(initialGrantState);
@@ -131,6 +131,6 @@ const GrantForm: React.FC = () => {
             </div>
         </div>
     );
-}
+};
 
 export default GrantForm;

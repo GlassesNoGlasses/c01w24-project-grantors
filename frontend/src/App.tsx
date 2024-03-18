@@ -16,34 +16,34 @@ import GrantPageApply from "./components/grant-page-apply/GrantPageApply";
 
 function App() {
 
-  return (
-    <div className="App w-full h-full">
-      {UserContextProvider(
-        <Routes>
-            <Route path="/" element={<Navbar />}>
-              <Route index element={<Home />} />
-              <Route path="about" element={<Home />} />
-              <Route path="services" element={<Home />} />
-              <Route path="gallery" element={<Home />} />
-              <Route path="contact" element={<Home />} />
-              <Route path="login" element={<Login />} />
-              <Route path="signup" element={<SignUp />} />
-              <Route path="grant" element={<GrantForm />} />
-              <Route path="createGrant" element={<CreateGrant />} />
-              <Route path="editGrant/:grantID" element={<EditGrant />} />
-              <Route path="grants" element={<GrantBrowse />} />
-              <Route path="grants/:grantID" element={<GrantPage />} />
-              <Route path="admin/grants" element={<AdminGrants />} />
-              <Route path="admin/grants/:grantID" element={<EditGrant />} />
-              <Route path="saved" element={<SavedGrants />} />
-              <Route path=":organization/applications" element={<AdminApplicationList/>} />
-              <Route path="applications" element={<ClientApplicationList />} />
-              <Route path="grants/:grantID/apply" element={<GrantPageApply />} />
-            </Route>
-          </Routes>
-        )}
-    </div>
-  );
+	return (
+		<div className="App w-full h-full">
+			{UserContextProvider(
+			<Routes>
+				<Route path="/" element={<Navbar />}>
+					<Route index element={<Home />} />
+					<Route path="about" element={<Home />} />
+					<Route path="services" element={<Home />} />
+					<Route path="gallery" element={<Home />} />
+					<Route path="contact" element={<Home />} />
+					<Route path="login" element={<Login />} />
+					<Route path="signup" element={<SignUp />} />
+					<Route path="grant" element={<GrantForm />} />
+					<Route path="createGrant" element={<CreateGrant />} />
+					<Route path="editGrant/:grantID" element={<EditGrant />} />
+					<Route path="grants" element={<GrantBrowse />} />
+					<Route path="grants/:grantID" element={<GrantPage />} />
+					<Route path="admin/grants" element={<AdminGrants />} />
+					<Route path="admin/grants/:grantID" element={<EditGrant />} />
+					<Route path="saved" element={<SavedGrants />} />
+					<Route path=":organization/applications" element={<AdminApplicationList/>} />
+					<Route path="applications" element={<ClientApplicationList />} />
+					<Route path="grants/:grantID/apply" element={<GrantPageApply />} />
+				</Route>
+				</Routes>
+			)}
+		</div>
+	);
 }
 
 export default App;

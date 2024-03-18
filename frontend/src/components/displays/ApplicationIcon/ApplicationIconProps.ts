@@ -4,5 +4,5 @@ export interface ApplicationIconProps {
     imageSrc?: string,
     heroicon?: ReactNode,
     label: string,
-    callback?: () => void
-}
+    callback?: () => void,
+};

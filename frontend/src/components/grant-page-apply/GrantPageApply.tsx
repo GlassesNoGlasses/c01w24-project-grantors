@@ -8,7 +8,7 @@ import { useEffect, useState } from 'react';
 
 const GrantPageApply = ({}: GrantPageApplyProps) => {
 
-    const {user, setUser} = useUserContext();
+    const {user} = useUserContext();
     const {grantID} = useParams();
     const [grant, setGrant] = useState<Grant | undefined>(undefined);
 
