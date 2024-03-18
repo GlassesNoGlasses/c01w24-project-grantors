@@ -50,7 +50,6 @@ export const grants =
             { id: 2, question: "How will your project benefit the community?", answer: null }
         ],
         publish: true,
-        owner: 'dsafdsfdsafdsf'
     },
     {
         id: 2,
@@ -68,7 +67,6 @@ export const grants =
             { id: 2, question: "What specific enhancements are you planning to implement?", answer: null }
         ],
         publish: true,
-        owner: 'dsafdsfdsafdsf'
     },
     {
         id: 3,
@@ -86,7 +84,6 @@ export const grants =
             { id: 2, question: "How will your research contribute to improving accessibility?", answer: null }
         ],
         publish: true,
-        owner: 'dsafdsfdsafdsf'
     },
     {
         id: 4,
@@ -104,7 +101,6 @@ export const grants =
             { id: 2, question: "What specific measures are you planning to implement?", answer: null }
         ],
         publish: true,
-        owner: 'dsafdsfdsafdsf'
     },
     {
         id: 5,
@@ -122,7 +118,6 @@ export const grants =
             { id: 2, question: "What specific improvements are you planning to make?", answer: null }
         ],
         publish: true,
-        owner: 'dsafdsfdsafdsf'
     },
     {
         id: 6,
@@ -140,7 +135,6 @@ export const grants =
             { id: 2, question: "How will your project benefit people with disabilities?", answer: null }
         ],
         publish: true,
-        owner: 'dsafdsfdsafdsf'
     },
     {
         id: 7,
@@ -158,7 +152,6 @@ export const grants =
             { id: 2, question: "How will your project ensure accessibility for people with disabilities?", answer: null }
         ],
         publish: true,
-        owner: 'dsafdsfdsafdsf'
     },
     {
         id: 8,
@@ -176,7 +169,6 @@ export const grants =
             { id: 2, question: "How will your project enhance accessibility in these facilities?", answer: null }
         ],
         publish: true,
-        owner: 'dsafdsfdsafdsf'
     },
     {
         id: 9,
@@ -194,7 +186,6 @@ export const grants =
             { id: 2, question: "How will your project make these activities more accessible?", answer: null }
         ],
         publish: true,
-        owner: 'dsafdsfdsafdsf'
     },
     {
         id: 10,
@@ -212,7 +203,6 @@ export const grants =
             { id: 2, question: "How will your project enhance accessibility in these activities?", answer: null }
         ],
         publish: true,
-        owner: 'dsafdsfdsafdsf'
     },
     {
         id: 11,
@@ -230,7 +220,6 @@ export const grants =
             { id: 2, question: "How will your project benefit students with disabilities?", answer: null }
         ],
         publish: true,
-        owner: 'dsafdsfdsafdsf'
     },
     {
         id: 12,
@@ -248,7 +237,6 @@ export const grants =
             { id: 2, question: "How will your project enhance accessibility in these spaces?", answer: null }
         ],
         publish: true,
-        owner: 'dsafdsfdsafdsf'
     },
     {
         id: 13,
@@ -266,7 +254,6 @@ export const grants =
             { id: 2, question: "How will your project ensure accessibility in these technologies?", answer: null }
         ],
         publish: true,
-        owner: 'dsafdsfdsafdsf'
     },
     {
         id: 14,
@@ -284,7 +271,6 @@ export const grants =
             { id: 2, question: "How will your project enhance accessibility in these aspects?", answer: null }
         ],
         publish: true,
-        owner: 'dsafdsfdsafdsf'
     },
     {
         id: 15,
@@ -302,7 +288,6 @@ export const grants =
             { id: 2, question: "How will your project make these efforts more accessible?", answer: null }
         ],
         publish: true,
-        owner: 'dsafdsfdsafdsf'
     },
     {
         id: 16,
@@ -320,7 +305,6 @@ export const grants =
             { id: 2, question: "How will your project enhance accessibility in these services?", answer: null }
         ],
         publish: true,
-        owner: 'dsafdsfdsafdsf'
     },
     {
         id: 17,
@@ -338,7 +322,6 @@ export const grants =
             { id: 2, question: "How will your project ensure accessibility in these services?", answer: null }
         ],
         publish: true,
-        owner: 'dsafdsfdsafdsf'
     },
     {
         id: 18,
@@ -356,7 +339,6 @@ export const grants =
             { id: 2, question: "How will your project enhance accessibility in these services?", answer: null }
         ],
         publish: true,
-        owner: 'dsafdsfdsafdsf'
     },
     {
         id: 19,
@@ -374,7 +356,6 @@ export const grants =
             { id: 2, question: "How will your project enhance accessibility in these services?", answer: null }
         ],
         publish: true,
-        owner: 'dsafdsfdsafdsf'
     },
     {
         id: 20,
@@ -392,7 +373,6 @@ export const grants =
             { id: 2, question: "How will your project benefit participants with disabilities?", answer: null }
         ],
         publish: true,
-        owner: 'dsafdsfdsafdsf'
     },
     {
         id: '65f6326d04249a6f006a9429',
@@ -410,7 +390,6 @@ export const grants =
             { id: 2, question: "Parents net income for 2023", answer: null }
         ],
         publish: true,
-        owner: 'dsafdsfdsafdsf'
     },
     {
         id: '65f6326d04249a6f006a9429',
@@ -428,7 +407,6 @@ export const grants =
             { id: 2, question: "Parents net income for 2023", answer: null }
         ],
         publish: false,
-        owner: 'dsafdsfdsafdsf'
     }
 ];
 

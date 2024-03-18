@@ -27,7 +27,6 @@ const GrantForm: React.FC<GrantFormProps> = ({ type }) => {
         contact: '',
         questions: [],
         publish: false,
-        owner: user ? user.accountID : null
     };
 
     // set initial form to conform to default empty grant
@@ -64,16 +63,17 @@ const GrantForm: React.FC<GrantFormProps> = ({ type }) => {
     if (!user || !user.isAdmin) {
         return (
             <div className='flex font-bold text-xl justify-center mt-10'>Access Denied: Invalid Permission</div>
-        )
-    }
+        );
+    };
 
     // not the owner of the grant
     if (grant.organization != user.organization) {
         return (
             <div className='flex font-bold text-xl justify-center mt-10'>
                 Unauthorized: Permission Denied
-            </div>)
-    }
+            </div>
+        );
+    };
 
     // grant already published and cannot be editted
     if (grant.publish) {
@@ -81,7 +81,7 @@ const GrantForm: React.FC<GrantFormProps> = ({ type }) => {
             <div className='flex font-bold text-xl justify-center mt-10'>
                 Bad Request: Grant Cannot Be Editted Once Published
             </div>)
-    }
+    };
 
     // function to delete a grant in the server with given id
     const deleteGrant = async(id: string) => {
@@ -93,7 +93,7 @@ const GrantForm: React.FC<GrantFormProps> = ({ type }) => {
 
             navigate('/')
         });
-    }
+    };
     
     // handler for when a question is added in the form
     const handleQuestionSubmit = () => {
@@ -103,14 +103,14 @@ const GrantForm: React.FC<GrantFormProps> = ({ type }) => {
 
         grant.questions.forEach((q) => {
             max = q['id'] > max ? q['id'] : max
-        })
+        });
 
         const addQuestion = (prev: GrantQuestion[], newQuesion: string): GrantQuestion[] => {
             return [...prev, {id: max+1, question: newQuesion, answer: null}]
-        }
+        };
 
         setGrant({ ...grant, questions: addQuestion(grant.questions, question)});
-        setQuestion('')
+        setQuestion('');
     };
 
     // function to save grant when publish==false or publish grant otherwise
@@ -137,7 +137,7 @@ const GrantForm: React.FC<GrantFormProps> = ({ type }) => {
                 }
             });
         }
-    }
+    };
 
     // when question input changes, update the question state
     const handleQuestionChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {

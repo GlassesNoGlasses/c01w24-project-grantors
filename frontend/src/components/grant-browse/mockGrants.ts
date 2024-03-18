@@ -17,7 +17,6 @@ const mockGrants: Grant[] = [
             { id: 2, question: "How will your project benefit the community?", answer: null }
         ],
         publish: true,
-        owner: 'dsafdsfdsafdsf'
     },
     {
         id: "2",
@@ -35,7 +34,6 @@ const mockGrants: Grant[] = [
             { id: 2, question: "What specific enhancements are you planning to implement?", answer: null }
         ],
         publish: true,
-        owner: 'dsafdsfdsafdsf'
     },
     {
         id: "3",
@@ -53,7 +51,6 @@ const mockGrants: Grant[] = [
             { id: 2, question: "How will your research contribute to improving accessibility?", answer: null }
         ],
         publish: true,
-        owner: 'dsafdsfdsafdsf'
     },
     {
         id: "4",
@@ -71,7 +68,6 @@ const mockGrants: Grant[] = [
             { id: 2, question: "What specific measures are you planning to implement?", answer: null }
         ],
         publish: true,
-        owner: 'dsafdsfdsafdsf'
     },
     {
         id: "5",
@@ -89,7 +85,6 @@ const mockGrants: Grant[] = [
             { id: 2, question: "What specific improvements are you planning to make?", answer: null }
         ],
         publish: true,
-        owner: 'dsafdsfdsafdsf'
     },
     {
         id: "6",
@@ -107,7 +102,6 @@ const mockGrants: Grant[] = [
             { id: 2, question: "How will your project benefit people with disabilities?", answer: null }
         ],
         publish: true,
-        owner: 'dsafdsfdsafdsf'
     },
     {
         id: "7",
@@ -125,7 +119,6 @@ const mockGrants: Grant[] = [
             { id: 2, question: "How will your project ensure accessibility for people with disabilities?", answer: null }
         ],
         publish: true,
-        owner: 'dsafdsfdsafdsf'
     },
     {
         id: "8",
@@ -143,7 +136,6 @@ const mockGrants: Grant[] = [
             { id: 2, question: "How will your project enhance accessibility in these facilities?", answer: null }
         ],
         publish: true,
-        owner: 'dsafdsfdsafdsf'
     },
     {
         id: "9",
@@ -161,7 +153,6 @@ const mockGrants: Grant[] = [
             { id: 2, question: "How will your project make these activities more accessible?", answer: null }
         ],
         publish: true,
-        owner: 'dsafdsfdsafdsf'
     },
     {
         id: "10",
@@ -179,7 +170,6 @@ const mockGrants: Grant[] = [
             { id: 2, question: "How will your project enhance accessibility in these activities?", answer: null }
         ],
         publish: true,
-        owner: 'dsafdsfdsafdsf'
     },
     {
         id: "11",
@@ -197,7 +187,6 @@ const mockGrants: Grant[] = [
             { id: 2, question: "How will your project benefit students with disabilities?", answer: null }
         ],
         publish: true,
-        owner: 'dsafdsfdsafdsf'
     },
     {
         id: "12",
@@ -215,7 +204,6 @@ const mockGrants: Grant[] = [
             { id: 2, question: "How will your project enhance accessibility in these spaces?", answer: null }
         ],
         publish: true,
-        owner: 'dsafdsfdsafdsf'
     },
     {
         id: "13",
@@ -233,7 +221,6 @@ const mockGrants: Grant[] = [
             { id: 2, question: "How will your project ensure accessibility in these technologies?", answer: null }
         ],
         publish: true,
-        owner: 'dsafdsfdsafdsf'
     },
     {
         id: "14",
@@ -251,7 +238,6 @@ const mockGrants: Grant[] = [
             { id: 2, question: "How will your project enhance accessibility in these aspects?", answer: null }
         ],
         publish: true,
-        owner: 'dsafdsfdsafdsf'
     },
     {
         id: "15",
@@ -269,7 +255,6 @@ const mockGrants: Grant[] = [
             { id: 2, question: "How will your project make these efforts more accessible?", answer: null }
         ],
         publish: true,
-        owner: 'dsafdsfdsafdsf'
     },
     {
         id: "16",
@@ -287,7 +272,6 @@ const mockGrants: Grant[] = [
             { id: 2, question: "How will your project enhance accessibility in these services?", answer: null }
         ],
         publish: true,
-        owner: 'dsafdsfdsafdsf'
     },
     {
         id: "17",
@@ -305,7 +289,6 @@ const mockGrants: Grant[] = [
             { id: 2, question: "How will your project ensure accessibility in these services?", answer: null }
         ],
         publish: true,
-        owner: 'dsafdsfdsafdsf'
     },
     {
         id: "18",
@@ -323,7 +306,6 @@ const mockGrants: Grant[] = [
             { id: 2, question: "How will your project enhance accessibility in these services?", answer: null }
         ],
         publish: true,
-        owner: 'dsafdsfdsafdsf'
     },
     {
         id: "19",
@@ -341,7 +323,6 @@ const mockGrants: Grant[] = [
             { id: 2, question: "How will your project enhance accessibility in these services?", answer: null }
         ],
         publish: true,
-        owner: 'dsafdsfdsafdsf'
     },
     {
         id: "20",
@@ -359,7 +340,6 @@ const mockGrants: Grant[] = [
             { id: 2, question: "How will your project benefit participants with disabilities?", answer: null }
         ],
         publish: true,
-        owner: 'dsafdsfdsafdsf'
     }
 ];
 
