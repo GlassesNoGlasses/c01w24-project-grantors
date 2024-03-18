@@ -4,8 +4,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { useUserContext } from '../contexts/userContext';
 import { Grant, GrantQuestion } from '../../interfaces/Grant' 
 import { GrantFormProps } from './GrantFormProps';
-import { fetchGrant } from '../../controllers/GrantsController';
-
+import GrantsController from '../../controllers/GrantsController'
 
 const GrantForm: React.FC<GrantFormProps> = ({ type, port }) => {
 
@@ -40,7 +39,7 @@ const GrantForm: React.FC<GrantFormProps> = ({ type, port }) => {
     // requested grant
     const getSavedGrant = async(id: string) => {
 
-        const grant: Grant | undefined = await fetchGrant(id);
+        const grant: Grant | undefined = await GrantsController.fetchGrant(id);
         if (grant) {
             setGrant(grant);
         } else {
@@ -92,6 +91,7 @@ const GrantForm: React.FC<GrantFormProps> = ({ type, port }) => {
 
     // function to delete a grant in the server with given id
     const deleteGrant = async(id: string) => {
+
         try {
             const response = await fetch(`http://localhost:${port}/deleteGrant/${id}`, {
               method: 'DELETE',

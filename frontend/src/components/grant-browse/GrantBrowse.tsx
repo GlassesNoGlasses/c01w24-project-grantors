@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { Grant } from "../../interfaces/Grant";
 import GrantList from "../grant-list/GrantList";
 import { SERVER_PORT } from "../../constants/ServerConstants";
-import { fetchFavouriteGrants } from "../../controllers/GrantsController";
+import GrantsController from "../../controllers/GrantsController";
 
 const GrantBrowse = ({}: GrantBrowseProps) => {
     const { user } = useUserContext();
@@ -21,7 +21,7 @@ const UserGrantBrowse = () => {
     useEffect(() => {
         if (user) {
             fetchGrants();
-            fetchFavouriteGrants(user.accountID).then((grants: Grant[]) => {
+            GrantsController.fetchFavouriteGrants(user.accountID).then((grants: Grant[]) => {
                 setFavouriteGrants(grants.map((grant: Grant) => grant.id));
             });
         }

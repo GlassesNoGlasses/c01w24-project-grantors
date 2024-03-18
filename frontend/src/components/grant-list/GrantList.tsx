@@ -4,7 +4,7 @@ import { GrantListProps } from "./GrantListProps";
 import { GrantItemProps } from "./GrantItemProps";
 import { useUserContext } from "../contexts/userContext";
 import { StarIcon } from '@heroicons/react/24/solid';
-import { toggleFavouriteGrant } from '../../controllers/GrantsController';
+import GrantsController from '../../controllers/GrantsController';
 
 const GrantList = ({ grants, favouriteGrants }: GrantListProps) => {
     return (
@@ -28,7 +28,7 @@ export const GrantItem = ({ grant, link, favourite }: GrantItemProps) => {
             return;
         }
 
-        await toggleFavouriteGrant(user.accountID, grant.id).then((success: boolean) => {
+        await GrantsController.toggleFavouriteGrant(user.accountID, grant.id).then((success: boolean) => {
             if (success) {
                 setIsFavourite(!isFavourite);
             }

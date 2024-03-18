@@ -3,7 +3,7 @@ import { GrantPageProps } from "./GrantPageProps";
 import { Grant } from "../../interfaces/Grant";
 import { useState } from "react";
 import React from "react";
-import { fetchGrant } from "../../controllers/GrantsController";
+import GrantsController from "../../controllers/GrantsController";
 
 const GrantPage = ({}: GrantPageProps) => {
     const { grantId } = useParams();
@@ -11,7 +11,7 @@ const GrantPage = ({}: GrantPageProps) => {
 
     React.useEffect(() => {
         if (grantId) {
-            fetchGrant(grantId).then((grant: Grant | undefined) => {
+            GrantsController.fetchGrant(grantId).then((grant: Grant | undefined) => {
                 if (grant) {
                     console.log(grant);
                     setGrant(grant);

@@ -4,7 +4,7 @@ import { Application, ApplicationStatus } from "../../../../interfaces/Applicati
 import { Column } from "../../../table/TableProps";
 import Table from "../../../table/Table";
 import { Grant } from "../../../../interfaces/Grant";
-import { fetchGrants } from "../../../../controllers/GrantsController";
+import GrantsController from "../../../../controllers/GrantsController";
 import { fetchApplications } from "../../../../controllers/ApplicationsController";
 
 type TableData = [Application, Grant | undefined];
@@ -59,7 +59,7 @@ const ClientApplicationList = ({}) => {
         if (applications.length) {
             const grantIDs: string[] = applications.map((app: Application) => app.grantID);
 
-            fetchGrants(grantIDs).then((grants: Grant[] | undefined) => {
+            GrantsController.fetchGrants(grantIDs).then((grants: Grant[] | undefined) => {
                 if (grants) {
                     setGrants(grants);
                 }

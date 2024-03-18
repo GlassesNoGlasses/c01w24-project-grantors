@@ -9,7 +9,7 @@ import { TabItem } from '../../../../tabs/TabProps';
 import { Column } from '../../../../table/TableProps';
 import Table from '../../../../table/Table';
 import { LinkProps } from '../../../../../interfaces/LinkProps';
-import { fetchOrgGrants } from '../../../../../controllers/GrantsController';
+import GrantsController from '../../../../../controllers/GrantsController';
 
 const AdminGrants = () => {
     // States and contexts
@@ -84,7 +84,7 @@ const AdminGrants = () => {
         // Fetch all grants created by the admin's organization
         if (organization){
             console.log("Fetching Admin Grants");
-            fetchOrgGrants(organization).then((grants: Grant[]) => {
+            GrantsController.fetchOrgGrants(organization).then((grants: Grant[]) => {
                 setPublishedGrants(grants.filter((grant: Grant) => grant.publish));
                 setUnpublishedGrants(grants.filter((grant: Grant) => !grant.publish));
             });

@@ -1,9 +1,9 @@
 import { useParams } from 'react-router-dom';
-import { Grant, GrantQuestion } from "../../interfaces/Grant";
+import { Grant } from "../../interfaces/Grant";
 import { GrantPageApplyProps } from './GrantPageApplyProps';
 import GrantForm from "../grant-form/GrantForm";
 import { useUserContext } from '../contexts/userContext'
-import { fetchGrant } from '../../controllers/GrantsController';
+import GrantsController from '../../controllers/GrantsController';
 import { useEffect, useState } from 'react';
 
 const GrantPageApply = ({}: GrantPageApplyProps) => {
@@ -14,7 +14,7 @@ const GrantPageApply = ({}: GrantPageApplyProps) => {
 
     useEffect(() => {
         if (grantId) {
-            fetchGrant(grantId).then((grant: Grant | undefined) => {
+            GrantsController.fetchGrant(grantId).then((grant: Grant | undefined) => {
                 if (grant) {
                     setGrant(grant);
                 }

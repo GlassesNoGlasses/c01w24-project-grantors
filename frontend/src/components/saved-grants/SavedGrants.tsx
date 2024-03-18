@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useUserContext } from "../contexts/userContext";
 import { Grant } from "../../interfaces/Grant";
 import GrantList from "../grant-list/GrantList";
-import { fetchFavouriteGrants } from "../../controllers/GrantsController";
+import GrantsController from "../../controllers/GrantsController";
 
 const SavedGrants = () => {
     const { user } = useUserContext();
@@ -15,7 +15,7 @@ const UserGrantBrowse = () => {
 
     useEffect(() => {
         if (user) {
-            fetchFavouriteGrants(user.accountID).then((grants: Grant[] | undefined) => {
+            GrantsController.fetchFavouriteGrants(user.accountID).then((grants: Grant[] | undefined) => {
                 if (grants) {
                     setFilteredGrants(grants);
                 }
