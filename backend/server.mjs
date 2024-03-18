@@ -393,7 +393,7 @@ app.get("/getOrgGrants/:organization", express.json(), async (req, res) => {
 
 
 
-app.get("/getAllPublishedGrants", express.json(), async (req, res) => {
+app.get("/grants/published", express.json(), async (req, res) => {
   try {
     const grantCollection = db.collection(COLLECTIONS.grants);
     const publishedGrantsData = await grantCollection.find({ publish: true }).toArray();

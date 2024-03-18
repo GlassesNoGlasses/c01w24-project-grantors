@@ -26,8 +26,3 @@ export interface GetUserApplicationsResponse {
     response?: Application[],
     error?: string,
 }
-
-export interface GetFavouriteGrantsResponse {
-    response?: Grant[],
-    error?: string,
-}

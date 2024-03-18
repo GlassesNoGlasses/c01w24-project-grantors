@@ -1,6 +1,6 @@
 import { SERVER_PORT } from "../constants/ServerConstants";
 import { Grant } from "../interfaces/Grant";
-import { GetGrantResponse, GetGrantsResponse, GetFavouriteGrantsResponse } from "../interfaces/ServerResponse";
+import { GetGrantResponse, GetGrantsResponse } from "../interfaces/ServerResponse";
 import { User } from "../interfaces/User";
 
 export default class GrantsController {
@@ -88,7 +88,7 @@ export default class GrantsController {
                 });
 
             if (response.ok) {
-                return await response.json().then((data: GetFavouriteGrantsResponse) => {
+                return await response.json().then((data: GetGrantsResponse) => {
                     if (data.response) {
                         const grants: Grant[] = data.response.map((grant: Grant) => {
                             return {...grant, deadline: new Date(grant.deadline), posted: new Date(grant.posted)}
@@ -186,6 +186,37 @@ export default class GrantsController {
         } catch (error) {
             console.error('Error creating grant:', (error as Error).message);
             return false;
+        }
+    }
+
+    static async getPublishedGrants(): Promise<Grant[]> {
+        try {
+            const response = await fetch(`http://localhost:${SERVER_PORT}/grants/published`, {
+              method: 'GET',
+              headers: {
+                'Content-Type': 'application/json',
+              },
+            });
+
+            if (!response.ok) {
+                await response.json().then((data: GetGrantsResponse) => {
+                    console.error("Server error fetching grants.", data.error);
+                    return [];
+                });
+            }
+
+            return await response.json().then((data: GetGrantsResponse) => {
+                if (data.response) {
+                    return data.response.map((grant: Grant) => {
+                        return {...grant, deadline: new Date(grant.deadline), posted: new Date(grant.posted)}
+                    });
+                }
+
+                return [];
+            });
+        } catch (error) {
+            console.error('Error fetching grants:', (error as Error).message);
+            return [];
         }
     }
 }

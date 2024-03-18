@@ -34,34 +34,9 @@ const UserGrantBrowse = () => {
 
     // Fetch all grants
     const fetchGrants = async () => {
-        try {
-            const response = await fetch(`http://localhost:${SERVER_PORT}/getAllPublishedGrants`, {
-              method: 'GET',
-              headers: {
-                'Content-Type': 'application/json',
-              },
-            });
-
-            if (!response.ok) {
-                await response.json().then((data) => {
-                    console.error("Server error fetching grants.", data.error);
-                    return;
-                });
-            }
-
-            await response.json().then((data) => {
-                const fetchedGrants: Grant[] = data.response;
-                console.log("Fetched Grants: ", fetchedGrants);
-
-                const grants: Grant[] = fetchedGrants.map((grant: Grant) => {
-                    return {...grant, deadline: new Date(grant.deadline), posted: new Date(grant.posted)}
-                });
-
-                setGrants(grants);
-            })
-        } catch (error) {
-            console.error('Error fetching grants:', (error as Error).message);
-        }
+        GrantsController.getPublishedGrants().then((grants: Grant[]) => {
+            setGrants(grants);
+        });
     }
 
     return (
