@@ -355,7 +355,7 @@ app.delete("/grant/:grantId", express.json(), async(req, res) => {
   }
 })
 
-app.get("/getOrgGrants/:organization", express.json(), async (req, res) => {
+app.get("/organization/:organization/grants", express.json(), async (req, res) => {
   try {
 
     const organization = req.params.organization;
@@ -510,7 +510,7 @@ app.get("/organization/:organization/applications", express.json(), async (req, 
   });
 });
 
-app.get("/getUserApplications/:userID", express.json(), async (req, res) => {
+app.get("/user/:userID/applications", express.json(), async (req, res) => {
   const userID = req.params.userID;
 
   verifyRequestAuth(req, async (err, decoded) => {
