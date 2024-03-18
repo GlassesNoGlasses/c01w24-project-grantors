@@ -1,5 +1,8 @@
+export enum GrantFormType {
+    CREATE  = "create",
+    EDIT = "edit",
+};
 
 export interface GrantFormProps {
-    type: string,
-    port: number,
-}
+    type: GrantFormType,
+};

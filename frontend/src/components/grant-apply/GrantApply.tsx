@@ -1,20 +1,20 @@
 import { useParams } from 'react-router-dom';
-import { Grant, GrantQuestion } from "../../interfaces/Grant";
+import { Grant } from "../../interfaces/Grant";
 import { GrantPageApplyProps } from './GrantApplyProps';
 import GrantForm from "../grant-form/GrantForm";
 import { useUserContext } from '../contexts/userContext'
-import { fetchGrant } from '../../controllers/GrantsController';
+import GrantsController from '../../controllers/GrantsController';
 import { useEffect, useState } from 'react';
 
 const GrantApply = ({}: GrantPageApplyProps) => {
 
-    const {user, setUser} = useUserContext();
-    const {grantId} = useParams();
+    const {user} = useUserContext();
+    const {grantID} = useParams();
     const [grant, setGrant] = useState<Grant | undefined>(undefined);
 
     useEffect(() => {
-        if (grantId) {
-            fetchGrant(grantId).then((grant: Grant | undefined) => {
+        if (grantID) {
+            GrantsController.fetchGrant(grantID).then((grant: Grant | undefined) => {
                 if (grant) {
                     setGrant(grant);
                 }

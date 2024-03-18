@@ -1,19 +1,17 @@
 import { Link, useParams } from "react-router-dom";
 import { GrantPageProps } from "./GrantPageProps";
 import { Grant } from "../../interfaces/Grant";
-import { useState } from "react";
-import React from "react";
-import { fetchGrant } from "../../controllers/GrantsController";
+import { useState, useEffect } from "react";
+import GrantsController from "../../controllers/GrantsController";
 
 const GrantPage = ({}: GrantPageProps) => {
-    const { grantId } = useParams();
+    const { grantID } = useParams();
     const [grant, setGrant] = useState<Grant | undefined>(undefined);
 
-    React.useEffect(() => {
-        if (grantId) {
-            fetchGrant(grantId).then((grant: Grant | undefined) => {
+    useEffect(() => {
+        if (grantID) {
+            GrantsController.fetchGrant(grantID).then((grant: Grant | undefined) => {
                 if (grant) {
-                    console.log(grant);
                     setGrant(grant);
                 }
             });
@@ -28,7 +26,7 @@ const GrantFound = ({ grant }: { grant: Grant }) => {
         <div className="flex flex-col gap-3 p-1 px-3">
             <div className="flex flex-row justify-between items-center">
                 <h1 className="text-4xl font-bold">{grant.title}</h1>
-                <ApplyButton grantId={grant.id.toString()} />
+                <ApplyButton grantID={grant.id.toString()} />
             </div>
             <h1 className="text-3xl">{`CAD $${grant.minAmount} - $${grant.maxAmount}`}</h1>
             <div className="flex flex-row justify-between">
@@ -44,7 +42,7 @@ const GrantFound = ({ grant }: { grant: Grant }) => {
             <p className="text-base">{grant.description}</p>
         </div>
     );
-}
+};
 
 const GrantNotFound = () => {
     return (
@@ -53,17 +51,17 @@ const GrantNotFound = () => {
             <p className="text-base">The grant you are looking for does not exist.</p>
         </div>
     );
-}
+};
 
-const ApplyButton = ({ grantId }: { grantId: String }) => {
+const ApplyButton = ({ grantID }: { grantID: String }) => {
     return (
         <Link className='p-2 px-5 m-2 bg-green-500 hover:bg-green-600 active:bg-green-700
           text-white font-bold rounded-lg shadow-md transition-colors duration-150 ease-in
           text-lg'
-          to={`/grants/${grantId}/apply`}>
+          to={`/grants/${grantID}/apply`}>
           Apply Now
         </Link>
-      )
-}
+    );
+};
 
 export default GrantPage;

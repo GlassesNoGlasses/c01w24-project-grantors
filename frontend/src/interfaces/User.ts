@@ -1,6 +1,4 @@
-import { Grant } from "./Grant";
 /* Inferface of Users to be used. */
-
 export interface User {
     accountID: string,
     isAdmin: boolean,
@@ -8,7 +6,6 @@ export interface User {
     firstName: String | null,
     lastName: String | null,
     email: String | null, 
-    grants?: Grant[]
     organization?: string,
     authToken: string,
 }

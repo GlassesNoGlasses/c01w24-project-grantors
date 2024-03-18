@@ -4,8 +4,8 @@ import { Application, ApplicationStatus } from "../../../../interfaces/Applicati
 import { Column } from "../../../table/TableProps";
 import Table from "../../../table/Table";
 import { Grant } from "../../../../interfaces/Grant";
-import { fetchGrants } from "../../../../controllers/GrantsController";
-import { fetchApplications } from "../../../../controllers/ApplicationsController";
+import GrantsController from "../../../../controllers/GrantsController";
+import ApplicationsController from "../../../../controllers/ApplicationsController";
 
 type TableData = [Application, Grant | undefined];
 
@@ -46,10 +46,8 @@ const ClientApplicationList = ({}) => {
 
     useEffect(() => {
         if (user) {
-            fetchApplications(user).then((applications: Application[] | undefined) => {
-                if (applications) {
-                    setApplications(applications);
-                }
+            ApplicationsController.fetchApplications(user).then((applications: Application[]) => {
+                setApplications(applications);
             });
         }
 
@@ -59,7 +57,7 @@ const ClientApplicationList = ({}) => {
         if (applications.length) {
             const grantIDs: string[] = applications.map((app: Application) => app.grantID);
 
-            fetchGrants(grantIDs).then((grants: Grant[] | undefined) => {
+            GrantsController.fetchGrants(grantIDs).then((grants: Grant[] | undefined) => {
                 if (grants) {
                     setGrants(grants);
                 }
@@ -74,7 +72,7 @@ const ClientApplicationList = ({}) => {
             return [app, grants?.find(grant => grant.id === app.grantID)];
         }));
 
-    }, [applications, grants])
+    }, [applications, grants]);
 
     return (
         <div className="flex flex-col h-full items-start justify-start px-5 bg-grantor-green">
@@ -86,7 +84,7 @@ const ClientApplicationList = ({}) => {
                    defaultSort={columns[1]}
             />
         </div>
-    )
+    );
 };
 
 export default ClientApplicationList;

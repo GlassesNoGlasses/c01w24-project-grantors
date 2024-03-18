@@ -1,7 +1,6 @@
 
-import React, { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useUserContext } from '../../../../contexts/userContext'
-import { Link } from 'react-router-dom';
 import { Grant } from '../../../../../interfaces/Grant';
 import { GrantItem } from '../../../../grant-list/GrantList';
 import Tab from '../../../../tabs/Tab';
@@ -9,7 +8,7 @@ import { TabItem } from '../../../../tabs/TabProps';
 import { Column } from '../../../../table/TableProps';
 import Table from '../../../../table/Table';
 import { LinkProps } from '../../../../../interfaces/LinkProps';
-import { fetchOrgGrants } from '../../../../../controllers/GrantsController';
+import GrantsController from '../../../../../controllers/GrantsController';
 
 const AdminGrants = () => {
     // States and contexts
@@ -80,18 +79,18 @@ const AdminGrants = () => {
         },
     ];
 
-    React.useEffect(() => {
+    useEffect(() => {
         // Fetch all grants created by the admin's organization
         if (organization){
             console.log("Fetching Admin Grants");
-            fetchOrgGrants(organization).then((grants: Grant[]) => {
+            GrantsController.fetchOrgGrants(organization).then((grants: Grant[]) => {
                 setPublishedGrants(grants.filter((grant: Grant) => grant.publish));
                 setUnpublishedGrants(grants.filter((grant: Grant) => !grant.publish));
             });
         }
     }, []);
 
-    React.useEffect(() => {
+    useEffect(() => {
         console.log("Changes Occured");
         console.log(publishedGrants);
         console.log(unpublishedGrants);
@@ -104,8 +103,8 @@ const AdminGrants = () => {
             <div>
                 <h1 className='text-xl'>{`There are no ${status} grants.`}</h1>
             </div>
-        )
-    }
+        );
+    };
 
     const ShowPublishedGrants = (): JSX.Element => {
         return (
@@ -145,18 +144,18 @@ const AdminGrants = () => {
         );
     };
 
-  return (
-    <div className='flex flex-col min-h-full min-w-full bg-grantor-green space-y-2'>
-        <div className='flex w-full justify-center align-middle'>
-            <div className='w-3/4'>
-                <Tab items={tabItems}/>
+    return (
+        <div className='flex flex-col min-h-full min-w-full bg-grantor-green space-y-2'>
+            <div className='flex w-full justify-center align-middle'>
+                <div className='w-3/4'>
+                    <Tab items={tabItems}/>
+                </div>
+            </div>
+            <div className='min-h-3/4 min-w-fit'>
+                {published ? ShowPublishedGrants() : ShowUnpublishedGrants()}
             </div>
         </div>
-        <div className='min-h-3/4 min-w-fit'>
-            {published ? ShowPublishedGrants() : ShowUnpublishedGrants()}
-        </div>
-    </div>
-  )
-}
+    );
+};
 
 export default AdminGrants

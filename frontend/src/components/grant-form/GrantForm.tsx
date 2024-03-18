@@ -1,24 +1,20 @@
 import React, { useState } from 'react';
 import { GrantFormProps } from "./GrantFormProps";
 import { GrantQuestion } from "../../interfaces/Grant";
-import { SERVER_PORT } from "../../constants/ServerConstants";
 import { ApplicationStatus } from '../../interfaces/Application';
+import ApplicationsController from '../../controllers/ApplicationsController';
+import { useNavigate } from 'react-router-dom';
 
 const GrantForm = ({ user, grant }: GrantFormProps) => {
     const [questionList, setQuestionList] = useState<GrantQuestion[]>(grant.questions);
+    const navigate = useNavigate()
 
     const setAnswer = (index: number, answer: string) => {
         const newQuestionList = [...questionList];
         newQuestionList[index].answer = answer;
         
         setQuestionList(newQuestionList);
-    }
-
-    const getAnswers = () => {
-        return questionList.map(function (question){
-            return question.answer;
-        });
-    }
+    };
 
     const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
@@ -26,35 +22,22 @@ const GrantForm = ({ user, grant }: GrantFormProps) => {
         if (!questionList) {
             return 
         }
-        try {
-            await fetch(`http://localhost:${SERVER_PORT}/submitApplication`,
-                {
-                    method: "POST",
-                    headers: {
-                        "Content-Type": "application/json"
-                    },
-                    
-                    body: JSON.stringify({
-                        userID: user.accountID,
-                        grantID: grant.id,
-                        grantTitle: grant.title,
-                        grantCategory: grant.category,
-                        submitted: true,
-                        submissionDate: new Date(),
-                        status: ApplicationStatus.submitted,
-                        awarded: 0,
-                        responses: getAnswers(),
-                    })
-                })
-            .then(async (response) => {
-                if (!response.ok) {
-                    console.log("Server failed:", response.status)
-                }
-            })
-        } catch (error) {
-            console.log("Fetch function failed:", error)
-        } 
-    }
+
+        ApplicationsController.submitApplication(user, {
+            id: '', // id does not exist yet as we have not submitted
+            userID: user.accountID,
+            grantID: grant.id,
+            grantTitle: grant.title,
+            grantCategory: grant.category,
+            submitted: true,
+            submissionDate: new Date(),
+            status: ApplicationStatus.submitted,
+            awarded: 0,
+            responses: questionList,
+        }).then(() => {
+            navigate('/');
+        });
+    };
 
     return (
         <div>

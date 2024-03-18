@@ -3,18 +3,15 @@ import { useState, useEffect} from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useUserContext } from '../contexts/userContext';
 import { Grant, GrantQuestion } from '../../interfaces/Grant' 
-import { GrantFormProps } from './GrantFormProps';
-import { fetchGrant } from '../../controllers/GrantsController';
+import { GrantFormProps, GrantFormType } from './GrantFormProps';
+import GrantsController from '../../controllers/GrantsController'
 
-
-const GrantForm: React.FC<GrantFormProps> = ({ type, port }) => {
+const GrantForm: React.FC<GrantFormProps> = ({ type }) => {
 
     const {user} = useUserContext();
     
-    // extract the grantId from url
-    let { grantId } = useParams()
-    console.log(grantId);
-    const grantID = !grantId ? '' : grantId
+    // extract the grantID from url
+    const grantID = useParams()?.grantID ?? '';
 
     // default grant object
     const initialGrantState: Grant = {
@@ -30,7 +27,6 @@ const GrantForm: React.FC<GrantFormProps> = ({ type, port }) => {
         contact: '',
         questions: [],
         publish: false,
-        owner: user ? user.accountID : null
     };
 
     // set initial form to conform to default empty grant
@@ -40,7 +36,7 @@ const GrantForm: React.FC<GrantFormProps> = ({ type, port }) => {
     // requested grant
     const getSavedGrant = async(id: string) => {
 
-        const grant: Grant | undefined = await fetchGrant(id);
+        const grant: Grant | undefined = await GrantsController.fetchGrant(id);
         if (grant) {
             setGrant(grant);
         } else {
@@ -51,14 +47,10 @@ const GrantForm: React.FC<GrantFormProps> = ({ type, port }) => {
 
     // retrieve the grant if in edit mode only when mounting
     useEffect(() => {
-       
-        if (type != 'create') {
+        if (type === GrantFormType.EDIT) {
             getSavedGrant(grantID)
         }
-        
-        return () => {
-          
-        };
+
       }, []);
 
     
@@ -71,16 +63,17 @@ const GrantForm: React.FC<GrantFormProps> = ({ type, port }) => {
     if (!user || !user.isAdmin) {
         return (
             <div className='flex font-bold text-xl justify-center mt-10'>Access Denied: Invalid Permission</div>
-        )
-    }
+        );
+    };
 
     // not the owner of the grant
     if (grant.organization != user.organization) {
         return (
             <div className='flex font-bold text-xl justify-center mt-10'>
                 Unauthorized: Permission Denied
-            </div>)
-    }
+            </div>
+        );
+    };
 
     // grant already published and cannot be editted
     if (grant.publish) {
@@ -88,26 +81,19 @@ const GrantForm: React.FC<GrantFormProps> = ({ type, port }) => {
             <div className='flex font-bold text-xl justify-center mt-10'>
                 Bad Request: Grant Cannot Be Editted Once Published
             </div>)
-    }
+    };
 
     // function to delete a grant in the server with given id
     const deleteGrant = async(id: string) => {
-        try {
-            const response = await fetch(`http://localhost:${port}/deleteGrant/${id}`, {
-              method: 'DELETE',
-              headers: {
-                'Content-Type': 'application/json',
-              },
-              body: JSON.stringify({'accId': user.accountID})
-            });
+        GrantsController.deleteGrant(user, id).then((success: boolean) => {
+            if (!success) {
+                console.error('Failed to delete grant:');
+                setFeedback('Failed to delete grant')
+            }
 
             navigate('/')
-            
-        } catch (error) {
-        console.error('error deleting grant:', (error as Error).message);
-            setFeedback(`error deleting grant`)
-        }
-    }
+        });
+    };
     
     // handler for when a question is added in the form
     const handleQuestionSubmit = () => {
@@ -117,97 +103,46 @@ const GrantForm: React.FC<GrantFormProps> = ({ type, port }) => {
 
         grant.questions.forEach((q) => {
             max = q['id'] > max ? q['id'] : max
-        })
+        });
 
         const addQuestion = (prev: GrantQuestion[], newQuesion: string): GrantQuestion[] => {
             return [...prev, {id: max+1, question: newQuesion, answer: null}]
-        }
+        };
 
         setGrant({ ...grant, questions: addQuestion(grant.questions, question)});
-        setQuestion('')
+        setQuestion('');
     };
 
     // function to save grant when publish==false or publish grant otherwise
     const saveGrant = async(publish: boolean) => {
-        let GRANTID = 0
-
-        if (type == 'create'){
-            try {
-                const response = await fetch(`http://localhost:${port}/createGrant`, {
-                    method: 'POST',
-                    headers: {
-                    'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({ 'accId': user.accountID, 'title': grant.title, 'description': grant.description, 'deadline': grant.deadline, 
-                    'posted': grant.posted, 'minAmount': grant.minAmount, "maxAmount": grant.maxAmount, 'organization': grant.organization,
-                    'category': grant.category, "contact": grant.contact, 'questions': grant.questions, 'publish': publish }),
-                });
-        
-            
-                console.log('Successfully saved grant');
-    
-                await response.json().then((data) => {
-                    GRANTID = data['id']
-                });
-            
-        
-            } catch (error) {
-                console.error('error creating grant:', (error as Error).message);
-                setFeedback(`error creating grant`)
-            }
-        } else {
-            try {
-                const response = await fetch(`http://localhost:${port}/editGrant/${grantID}`, {
-                    method: 'PUT',
-                    headers: {
-                    'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({ 'accId': user.accountID, 'title': grant.title, 'description': grant.description, 'deadline': grant.deadline, 
-                    'minAmount': grant.minAmount, "maxAmount": grant.maxAmount, 'organization': grant.organization,
-                    'category': grant.category, "contact": grant.contact, 'questions': grant.questions, 'publish': publish }),
-                });
-        
-            
-                console.log('Successfully edited grant');
-    
-                await response.json().then((data) => {
-                    GRANTID = data['id']
-                });
-            
-        
-            } catch (error) {
-                console.error('error creating grant:', (error as Error).message);
-                setFeedback(`error creating grant`)
-            }
-        }
-        
-        
-        try {
-        
-            const response = await fetch(`http://localhost:${port}/addGrantToAdminList`, {
-                method: 'PUT',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({ 'accId': user.accountID, 'grantId': GRANTID, 'title': grant.title, 'description': grant.description, 'deadline': grant.deadline, 
-                    'minAmount': grant.minAmount, "maxAmount": grant.maxAmount, 'organization': grant.organization,
-                    'category': grant.category, "contact": grant.contact, 'questions': grant.questions, "publish": publish }),
+        if (type === GrantFormType.CREATE){
+            GrantsController.createGrant(user, {...grant, publish: publish}).then((grantID: string | undefined) => {
+                if (grantID) {
+                    setGrant(initialGrantState);
+                    if (publish) {
+                        setFeedback('Grant Published!');
+                    } else {
+                        setFeedback('Grant Saved!')
+                    }
+                } else {
+                    setFeedback('Error creating grant')
+                }
             });
-
-            console.log(user)
-            
-            if (publish){
-                setFeedback(`Grant Published!`);
-            } else {
-                setFeedback(`Grant Saved!`);
-            }
-            
-            if (type == 'create') setGrant(initialGrantState)
-        } catch (error) {
-            console.error('error creating grant:', (error as Error).message);
-            setFeedback(`error creating grant`)
+        } else if (type === GrantFormType.EDIT) {
+            GrantsController.saveGrant(user, {...grant, publish: publish}).then((success: boolean) => {
+                if (success) {
+                    if (publish) {
+                        navigate('/admin/grants');
+                    } else {
+                        setFeedback('Grant Saved!');
+                    }
+                } else {
+                    console.error('Failed to save grant');
+                    setFeedback('Error saving grant');
+                }
+            });
         }
-    }
+    };
 
     // when question input changes, update the question state
     const handleQuestionChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
@@ -218,7 +153,7 @@ const GrantForm: React.FC<GrantFormProps> = ({ type, port }) => {
     // remove a question by filtering it out
     const handleRemoveQuestion = (id: number) => {
         setGrant({ ...grant, questions: grant.questions.filter(q => q.id != id)})
-    }
+    };
 
     // when general input changes, update the corresponding field
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
@@ -247,7 +182,7 @@ const GrantForm: React.FC<GrantFormProps> = ({ type, port }) => {
     return (
         <div className="flex items-center justify-center min-h-screen bg-grantor-green">
             <div className="w-full max-w-2xl px-8 py-10 bg-white shadow-lg rounded-xl mt-10 mb-10">
-                <h2 className="text-2xl font-bold text-center text-gray-800 mb-8">{type === 'create' ? 'Create a Grant': 'Edit Grant'}</h2>
+                <h2 className="text-2xl font-bold text-center text-gray-800 mb-8">{type === GrantFormType.CREATE ? 'Create a Grant': 'Edit Grant'}</h2>
                 <form onSubmit={handleSubmit} className="space-y-6">
                     {/* Organization */}
                     <div>
@@ -335,8 +270,8 @@ const GrantForm: React.FC<GrantFormProps> = ({ type, port }) => {
                     <div className='h-[40px] flex justify-center items-center'>{feedback}</div>
 
         
-                    <div className={`flex ${type === 'create' ? 'justify-end' : 'justify-between'} gap-8 `}>
-                        {type === 'create' ? <></> : <button type='button' className='p-2 bg-red-600 text-white pl-5 pr-5 rounded-lg hover:bg-red-800' onClick={() => deleteGrant(grantID)}>Delete</button>}
+                    <div className={`flex ${type === GrantFormType.CREATE ? 'justify-end' : 'justify-between'} gap-8 `}>
+                        {type === GrantFormType.CREATE ? <></> : <button type='button' className='p-2 bg-red-600 text-white pl-5 pr-5 rounded-lg hover:bg-red-800' onClick={() => deleteGrant(grantID)}>Delete</button>}
                         <div className='flex justify-end'>
                             <button type='button' className='p-2 bg-blue-600 text-white pl-5 pr-5 rounded-lg hover:bg-blue-800 mr-10' onClick={() => saveGrant(false)}>Save</button>
                             <button type='submit' className='p-2 bg-green-600 text-white pl-5 pr-5 rounded-lg hover:bg-green-800'>Publish</button>
@@ -347,6 +282,6 @@ const GrantForm: React.FC<GrantFormProps> = ({ type, port }) => {
             </div>
         </div>
     );
-}
+};
 
 export default GrantForm

@@ -22,12 +22,13 @@ export interface GetGrantsResponse {
     error?: string,
 };
 
-export interface GetUserApplicationsResponse {
+export interface GetApplicationsResponse {
     response?: Application[],
     error?: string,
 }
 
-export interface GetFavouriteGrantsResponse {
-    response?: Grant[],
+export interface CreateObjectResponse {
+    response?: string,
+    id?: string,
     error?: string,
 }

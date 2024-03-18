@@ -20,7 +20,7 @@ test("/signup - 201 Successful Registration", async() => {
         password: password,
         firstName: firstName,
         lastName: lastName,
-        isAdmin: isAdmin
+        isAdmin: isAdmin,
       }),
   });
 

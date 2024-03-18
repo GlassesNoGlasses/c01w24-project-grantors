@@ -2,10 +2,10 @@ import { useEffect, useState } from 'react';
 import { useUserContext } from '../../../contexts/userContext';
 import { AdminApplicationListProps } from './AdminApplicationListProps';
 import { Application } from '../../../../interfaces/Application';
-import { SERVER_PORT } from '../../../../constants/ServerConstants';
 import { useParams, useNavigate } from 'react-router-dom';
 import Table from '../../../table/Table';
 import { Column } from '../../../table/TableProps';
+import ApplicationsController from '../../../../controllers/ApplicationsController';
 
 const AdminApplicationList = ({}: AdminApplicationListProps) => {
     const { user, setUser } = useUserContext();
@@ -23,7 +23,7 @@ const AdminApplicationList = ({}: AdminApplicationListProps) => {
         {
             title: "Applicant",
             format: (application: Application) => String(application.userID),
-            sort: (app1: Application, app2: Application) => app1.userID - app2.userID,
+            sort: (app1: Application, app2: Application) => app1.userID < app2.userID ? -1 : 1,
         },
         {
             title: "Date",
@@ -40,35 +40,23 @@ const AdminApplicationList = ({}: AdminApplicationListProps) => {
 
     useEffect(() => {
         // Redirect user if they are not apart of this org
-        if ( user?.organization != organization ) {
-            navigate('/')
-        }
-
-        const fetchApplications = async () => {
-            const res = await fetch(`http://localhost:${SERVER_PORT}/getOrgApplications/${organization}`, {
-                method: 'GET',
-                headers: {
-                  'Content-Type': 'application/json',
-                  'Authorization': `Bearer ${user?.authToken}`
-                },
-              });
-
-            if (res.ok) {
-                await res.json().then((data) => {
-                    const applications = data.response.map((application: Application) => {
-                        return {...application, submissionDate: new Date(application.submissionDate)};
-                    });
-                    return setApplications(applications);
-                });
-            } else {
-                // Bad response, logout the user and redirect
-                console.log(res);
-                setUser(null)
-                navigate('/login')
+        if (user) {
+            if (user.organization !== organization) {
+                navigate('/')
             }
+
+            ApplicationsController.fetchOrgApplications(user).then((applications: Application[] | undefined) => {
+                if (applications) {
+                    setApplications(applications.map((application: Application) => {
+                        return {...application, submissionDate: new Date(application.submissionDate)};
+                    }));
+                } else {
+                    // TODO: Display error message / popup
+                    console.error("Failed getting admin applications");
+                }
+            });
         }
 
-        fetchApplications();
     }, [user, navigate]);
 
     return (
@@ -81,7 +69,7 @@ const AdminApplicationList = ({}: AdminApplicationListProps) => {
                    defaultSort={columns[2]}
             />
         </div>
-    )
+    );
 };
 
 export default AdminApplicationList;

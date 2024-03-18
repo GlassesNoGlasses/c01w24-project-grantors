@@ -5,4 +5,4 @@ export interface ButtonIconProps {
     heroicon?: ReactNode,
     label: string | null,
     callback?: () => void
-}
+};

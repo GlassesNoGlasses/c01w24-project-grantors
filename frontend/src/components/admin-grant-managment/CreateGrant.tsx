@@ -1,10 +1,10 @@
-import { SERVER_PORT } from '../../constants/ServerConstants';
 import GrantForm from './GrantForm';
+import { GrantFormType } from './GrantFormProps';
 
 const CreateGrant = () => {
-  return (
-    <GrantForm port={SERVER_PORT} type='create'/>
-  )
-}
+	return (
+		<GrantForm type={GrantFormType.CREATE}/>
+	);
+};
 
-export default CreateGrant
+export default CreateGrant;

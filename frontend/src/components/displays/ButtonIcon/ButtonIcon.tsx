@@ -1,12 +1,11 @@
-import React from 'react'
 import { ButtonIconProps } from './ButtonIconProps'
 
 const ButtonIcon = ({
-    imageSrc,
-    heroicon,
-    label,
-    callback,
-}: ButtonIconProps) => {
+        imageSrc,
+        heroicon,
+        label,
+        callback,
+    }: ButtonIconProps) => {
 
     return (
         <button className='flex flex-col items-center justify-center' onClick={callback}>
@@ -19,8 +18,8 @@ const ButtonIcon = ({
             </div>
             <p className='text-xl text-white font-bold'>{label ? label : ""}</p>
         </button>
-    )
-}
+    );
+};
 
 export default ButtonIcon
 
@@ -31,5 +30,4 @@ const styles = {
         height: "16vh",
         aspectRatio: "1 / 1"
     },
-}
-
+};

@@ -3,8 +3,7 @@ import { useUserContext } from "../contexts/userContext";
 import { useEffect, useState } from "react";
 import { Grant } from "../../interfaces/Grant";
 import GrantList from "../grant-list/GrantList";
-import { SERVER_PORT } from "../../constants/ServerConstants";
-import { fetchFavouriteGrants } from "../../controllers/GrantsController";
+import GrantsController from "../../controllers/GrantsController";
 
 const GrantBrowse = ({}: GrantBrowseProps) => {
     const { user } = useUserContext();
@@ -21,7 +20,7 @@ const UserGrantBrowse = () => {
     useEffect(() => {
         if (user) {
             fetchGrants();
-            fetchFavouriteGrants(user.accountID).then((grants: Grant[]) => {
+            GrantsController.fetchFavouriteGrants(user.accountID).then((grants: Grant[]) => {
                 setFavouriteGrants(grants.map((grant: Grant) => grant.id));
             });
         }
@@ -30,60 +29,35 @@ const UserGrantBrowse = () => {
 
     useEffect(() => {
         setFilteredGrants(grants)
-    }, [grants])
+    }, [grants]);
 
     // Fetch all grants
     const fetchGrants = async () => {
-        try {
-            const response = await fetch(`http://localhost:${SERVER_PORT}/getAllPublishedGrants`, {
-              method: 'GET',
-              headers: {
-                'Content-Type': 'application/json',
-              },
-            });
-
-            if (!response.ok) {
-                await response.json().then((data) => {
-                    console.error("Server error fetching grants.", data.error);
-                    return;
-                });
-            }
-
-            await response.json().then((data) => {
-                const fetchedGrants: Grant[] = data.response;
-                console.log("Fetched Grants: ", fetchedGrants);
-
-                const grants: Grant[] = fetchedGrants.map((grant: Grant) => {
-                    return {...grant, deadline: new Date(grant.deadline), posted: new Date(grant.posted)}
-                });
-
-                setGrants(grants);
-            })
-        } catch (error) {
-            console.error('Error fetching grants:', (error as Error).message);
-        }
-    }
+        GrantsController.getPublishedGrants().then((grants: Grant[]) => {
+            setGrants(grants);
+        });
+    };
 
     return (
         <div className="flex flex-col lg:flex-row gap-3 p-2">
             <GrantFilter grants={grants} setGrants={setFilteredGrants} />
             <GrantList grants={filteredGrants} favouriteGrants={favouriteGrants} />
         </div>
-    )
-}
+    );
+};
 
 const AdminGrantBrowse = () => {
     return (
         <div>
             <h1>Admin Grant Browse</h1>
         </div>
-    )
-}
+    );
+};
 
 const GrantFilter = ({ grants, setGrants }: {
-    grants: Grant[],
-    setGrants: (grants: Grant[]) => void
-}) => {
+        grants: Grant[],
+        setGrants: (grants: Grant[]) => void,
+    }) => {
     const [search, setSearch] = useState<string>("");
     const [category, setCategory] = useState<string>("");
     const [minAmount, setMinAmount] = useState<Number>(0);
@@ -158,7 +132,7 @@ const GrantFilter = ({ grants, setGrants }: {
                 </div>
             </div>
         </div>
-    )
-}
+    );
+};
 
 export default GrantBrowse;

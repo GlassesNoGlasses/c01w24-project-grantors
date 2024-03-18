@@ -1,5 +1,5 @@
 
-import React, { useState } from 'react'
+import { useEffect } from 'react'
 import { ModalProps } from './ModalProps'
 import ModalWrapper from './ModalWrapper'
 
@@ -11,24 +11,24 @@ export const Modal = ({
     openModal,
 }: ModalProps) => {
 
-    React.useEffect(() => {
+    useEffect(() => {
         const closeOnEscapePressed = (e: KeyboardEvent) => {
-          if (e.key === "Escape") {
-            closeModal();
-          }
+			if (e.key === "Escape") {
+				closeModal();
+			}
         };
         window.addEventListener("keydown", closeOnEscapePressed);
         return () =>
           window.removeEventListener("keydown", closeOnEscapePressed);
       }, []);
 
-  return (
-    <div className={`${showModal ? 'visible' : 'invisible'}`}>
-        <ModalWrapper closeModal={closeModal}>
-            {children}
-        </ModalWrapper>
-    </div>
-  )
-}
+	return (
+		<div className={`${showModal ? 'visible' : 'invisible'}`}>
+			<ModalWrapper closeModal={closeModal}>
+				{children}
+			</ModalWrapper>
+		</div>
+	);
+};
 
 

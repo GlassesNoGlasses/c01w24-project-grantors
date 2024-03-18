@@ -4,4 +4,4 @@ export interface GrantItemProps {
     grant: Grant,
     link?: string,
     favourite?: boolean,
-}
+};
