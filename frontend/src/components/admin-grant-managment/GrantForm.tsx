@@ -10,9 +10,8 @@ const GrantForm: React.FC<GrantFormProps> = ({ type, port }) => {
 
     const {user} = useUserContext();
     
-    // extract the grantId from url
-    let { grantId } = useParams()
-    const grantID = !grantId ? '' : grantId
+    // extract the grantID from url
+    const grantID = useParams()?.grantID ?? '';
 
     // default grant object
     const initialGrantState: Grant = {
@@ -116,12 +115,9 @@ const GrantForm: React.FC<GrantFormProps> = ({ type, port }) => {
 
     // function to save grant when publish==false or publish grant otherwise
     const saveGrant = async(publish: boolean) => {
-        let GRANTID: string = grant.id;
-
         if (type == 'create'){
             GrantsController.createGrant(user, {...grant, publish: publish}).then((grantID: string | undefined) => {
                 if (grantID) {
-                    GRANTID = grantID;
                     setGrant(initialGrantState);
                     setFeedback('Grant Published!');
                 } else {
