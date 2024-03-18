@@ -238,7 +238,7 @@ app.get('/users/:userId/favourites', express.json(), async (req, res) => {
 app.post("/createGrant", express.json(), async (req, res) => {
   try {
     // frontend guarantees that all these fields are provided so omit param check
-    const { accId, title, description, deadline, posted, minAmount, maxAmount,
+    const { title, description, deadline, posted, minAmount, maxAmount,
       organization, category, contact, questions, publish } = req.body;
     
     const grantCollection = db.collection(COLLECTIONS.grants);
@@ -255,7 +255,6 @@ app.post("/createGrant", express.json(), async (req, res) => {
       contact: contact,
       questions: questions,
       publish: publish,
-      owner: accId
     });
 
     res.status(201).json({ response: "Grant Saved.", id: insertedId});
@@ -266,7 +265,7 @@ app.post("/createGrant", express.json(), async (req, res) => {
 
 app.put("/editGrant/:grantId", express.json(), async (req, res) => {
   try {
-    const { accId, title, description, deadline, minAmount, maxAmount,
+    const { title, description, deadline, minAmount, maxAmount,
       organization, category, contact, questions, publish } = req.body;
     
     const grantCollection = db.collection(COLLECTIONS.grants);
@@ -285,7 +284,6 @@ app.put("/editGrant/:grantId", express.json(), async (req, res) => {
       contact: contact,
       questions: questions,
       publish: publish,
-      owner: accId
     }});
     
     res.status(201).json({ response: "Grant Edited.", id: grantId});
@@ -293,44 +291,6 @@ app.put("/editGrant/:grantId", express.json(), async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 });
-
-app.put('/addGrantToAdminList', express.json(), async(req, res) => {
-  try {
-    const { accId, grantId, title, description, deadline, minAmount, maxAmount,
-      organization, category, contact, questions, publish } = req.body;
-    
-    const userCollection = db.collection(COLLECTIONS.users);
-
-    const grant = { _id: new ObjectId(grantId), 
-                  title: title,
-                  description: description,
-                  deadline: deadline,
-                  minAmount: minAmount,
-                  maxAmount: maxAmount,
-                  organization: organization,
-                  category: category,
-                  contact: contact,
-                  questions: questions,
-                  publish: publish,
-                  owner: accId }
-
-    const data = await userCollection.findOne({_id: new ObjectId(accId)})
-    
-    const grants = data.grants
-    
-
-    const newGrants = !grants ? [grant] : [...(grants.filter(prev => prev._id != grantId)), grant]
-
-    await userCollection.updateOne({ _id: new ObjectId(accId)},
-                                  {$set: { grants: newGrants }})
-    
-    
-    res.status(201).json({ response: "Grant Saved to Admin Account."});
-  } catch (error) {
-    console.error(error.message)
-    res.status(500).json({ error: error.message });
-  }
-})
 
 app.get("/getGrant/:grantId", express.json(), async(req, res) => {
   try {
