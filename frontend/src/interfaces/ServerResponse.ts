@@ -22,7 +22,7 @@ export interface GetGrantsResponse {
     error?: string,
 };
 
-export interface GetUserApplicationsResponse {
+export interface GetApplicationsResponse {
     response?: Application[],
     error?: string,
 }

@@ -1,11 +1,11 @@
 import { SERVER_PORT } from "../constants/ServerConstants";
 import { Application } from "../interfaces/Application";
-import { GetUserApplicationsResponse } from "../interfaces/ServerResponse";
+import { GetApplicationsResponse } from "../interfaces/ServerResponse";
 import { User } from "../interfaces/User";
 
 export default class ApplicationsController {
 
-    static async fetchApplications(user: User): Promise<Application[] | undefined> {
+    static async fetchApplications(user: User): Promise<Application[]> {
         try {
             const res = await fetch(`http://localhost:${SERVER_PORT}/getUserApplications/${user?.accountID}`, {
             method: 'GET',
@@ -16,15 +16,17 @@ export default class ApplicationsController {
           });
 
             if (res.ok) {
-                return await res.json().then((data: GetUserApplicationsResponse) => {
-                    return data.response;
+                return await res.json().then((data: GetApplicationsResponse) => {
+                    return data.response ?? [];
                 });
             } else {
                 // Bad response, logout the user and redirect
                 console.error("Failed to fetch user applications", res);
+                return [];
             }
         } catch (error) {
             console.error("Error while fetching user applications", error);
+            return [];
         }
     }
 
@@ -39,10 +41,13 @@ export default class ApplicationsController {
             });
 
             if (res.ok) {
-                return await res.json().then((data) => {
-                    return data.response.map((application: Application) => {
-                        return {...application, submissionDate: new Date(application.submissionDate)};
-                    });
+                return await res.json().then((data: GetApplicationsResponse) => {
+                    if (data.response) {
+                        return data.response.map((application: Application) => {
+                            return {...application, submissionDate: new Date(application.submissionDate)};
+                        });
+                    }
+                    return [];
                 });
             } else {
                 console.error("Server error fetching organization applications", res);
