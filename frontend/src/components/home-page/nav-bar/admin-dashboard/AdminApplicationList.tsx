@@ -23,7 +23,7 @@ const AdminApplicationList = ({}: AdminApplicationListProps) => {
         {
             title: "Applicant",
             format: (application: Application) => String(application.userID),
-            sort: (app1: Application, app2: Application) => app1.userID - app2.userID,
+            sort: (app1: Application, app2: Application) => app1.userID < app2.userID ? -1 : 1,
         },
         {
             title: "Date",

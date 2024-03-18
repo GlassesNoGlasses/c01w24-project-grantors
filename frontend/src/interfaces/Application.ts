@@ -7,8 +7,8 @@ export enum ApplicationStatus {
 }
 
 export interface Application {
-    id: number,
-    userID: number,
+    id: string,
+    userID: string,
     grantID: string,
     grantTitle: string, 
     grantCategory: string,
