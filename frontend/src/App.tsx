@@ -47,8 +47,3 @@ function App() {
 }
 
 export default App;
-
-const AppStyle = {
-  height: "100vh",
-  width: "100vw",
-}
