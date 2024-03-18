@@ -148,4 +148,44 @@ export default class GrantsController {
             return false;
         }
     }
+
+    static async createGrant(user: User, grant: Grant): Promise<string | undefined> {
+        try {
+            const response = await fetch(`http://localhost:${SERVER_PORT}/createGrant`, {
+                method: 'POST',
+                headers: {
+                'Content-Type': 'application/json',
+                // TODO: Pass user's authToken to verify that this request is coming from 
+                // someone in the grant.organization
+                },
+                body: JSON.stringify(grant),
+            });
+
+            if (response.ok) {
+                return await response.json().then((data) => {
+                    return data['id'];
+                });
+            }
+
+        } catch (error) {
+            console.error('Error creating grant:', (error as Error).message);
+        }
+    }
+
+    static async saveGrant(user: User, grant: Grant): Promise<boolean> {
+        try {
+            const response = await fetch(`http://localhost:${SERVER_PORT}/editGrant/${grant.id}`, {
+                method: 'PUT',
+                headers: {
+                'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(grant),
+            });
+
+            return response.ok;
+        } catch (error) {
+            console.error('Error creating grant:', (error as Error).message);
+            return false;
+        }
+    }
 }

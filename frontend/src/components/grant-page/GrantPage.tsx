@@ -13,7 +13,6 @@ const GrantPage = ({}: GrantPageProps) => {
         if (grantId) {
             GrantsController.fetchGrant(grantId).then((grant: Grant | undefined) => {
                 if (grant) {
-                    console.log(grant);
                     setGrant(grant);
                 }
             });

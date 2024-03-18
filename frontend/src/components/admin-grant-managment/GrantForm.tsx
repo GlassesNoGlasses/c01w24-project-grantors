@@ -12,7 +12,6 @@ const GrantForm: React.FC<GrantFormProps> = ({ type, port }) => {
     
     // extract the grantId from url
     let { grantId } = useParams()
-    console.log(grantId);
     const grantID = !grantId ? '' : grantId
 
     // default grant object
@@ -50,14 +49,10 @@ const GrantForm: React.FC<GrantFormProps> = ({ type, port }) => {
 
     // retrieve the grant if in edit mode only when mounting
     useEffect(() => {
-       
         if (type != 'create') {
             getSavedGrant(grantID)
         }
-        
-        return () => {
-          
-        };
+
       }, []);
 
     
@@ -91,22 +86,14 @@ const GrantForm: React.FC<GrantFormProps> = ({ type, port }) => {
 
     // function to delete a grant in the server with given id
     const deleteGrant = async(id: string) => {
-
-        try {
-            const response = await fetch(`http://localhost:${port}/deleteGrant/${id}`, {
-              method: 'DELETE',
-              headers: {
-                'Content-Type': 'application/json',
-              },
-              body: JSON.stringify({'accId': user.accountID})
-            });
+        GrantsController.deleteGrant(user, id).then((success: boolean) => {
+            if (!success) {
+                console.error('Failed to delete grant:');
+                setFeedback('Failed to delete grant')
+            }
 
             navigate('/')
-            
-        } catch (error) {
-        console.error('error deleting grant:', (error as Error).message);
-            setFeedback(`error deleting grant`)
-        }
+        });
     }
     
     // handler for when a question is added in the form
@@ -129,83 +116,30 @@ const GrantForm: React.FC<GrantFormProps> = ({ type, port }) => {
 
     // function to save grant when publish==false or publish grant otherwise
     const saveGrant = async(publish: boolean) => {
-        let GRANTID = 0
+        let GRANTID: string = grant.id;
 
         if (type == 'create'){
-            try {
-                const response = await fetch(`http://localhost:${port}/createGrant`, {
-                    method: 'POST',
-                    headers: {
-                    'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({ 'accId': user.accountID, 'title': grant.title, 'description': grant.description, 'deadline': grant.deadline, 
-                    'posted': grant.posted, 'minAmount': grant.minAmount, "maxAmount": grant.maxAmount, 'organization': grant.organization,
-                    'category': grant.category, "contact": grant.contact, 'questions': grant.questions, 'publish': publish }),
-                });
-        
-            
-                console.log('Successfully saved grant');
-    
-                await response.json().then((data) => {
-                    GRANTID = data['id']
-                });
-            
-        
-            } catch (error) {
-                console.error('error creating grant:', (error as Error).message);
-                setFeedback(`error creating grant`)
-            }
-        } else {
-            try {
-                const response = await fetch(`http://localhost:${port}/editGrant/${grantID}`, {
-                    method: 'PUT',
-                    headers: {
-                    'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({ 'accId': user.accountID, 'title': grant.title, 'description': grant.description, 'deadline': grant.deadline, 
-                    'minAmount': grant.minAmount, "maxAmount": grant.maxAmount, 'organization': grant.organization,
-                    'category': grant.category, "contact": grant.contact, 'questions': grant.questions, 'publish': publish }),
-                });
-        
-            
-                console.log('Successfully edited grant');
-    
-                await response.json().then((data) => {
-                    GRANTID = data['id']
-                });
-            
-        
-            } catch (error) {
-                console.error('error creating grant:', (error as Error).message);
-                setFeedback(`error creating grant`)
-            }
-        }
-        
-        
-        try {
-        
-            const response = await fetch(`http://localhost:${port}/addGrantToAdminList`, {
-                method: 'PUT',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({ 'accId': user.accountID, 'grantId': GRANTID, 'title': grant.title, 'description': grant.description, 'deadline': grant.deadline, 
-                    'minAmount': grant.minAmount, "maxAmount": grant.maxAmount, 'organization': grant.organization,
-                    'category': grant.category, "contact": grant.contact, 'questions': grant.questions, "publish": publish }),
+            GrantsController.createGrant(user, {...grant, publish: publish}).then((grantID: string | undefined) => {
+                if (grantID) {
+                    GRANTID = grantID;
+                    setGrant(initialGrantState);
+                    setFeedback('Grant Published!');
+                } else {
+                    setFeedback('Error creating grant')
+                }
             });
-
-            console.log(user)
-            
-            if (publish){
-                setFeedback(`Grant Published!`);
-            } else {
-                setFeedback(`Grant Saved!`);
-            }
-            
-            if (type == 'create') setGrant(initialGrantState)
-        } catch (error) {
-            console.error('error creating grant:', (error as Error).message);
-            setFeedback(`error creating grant`)
+        } else  { // TODO: Should explicitly say what type needs to be for this code to run (save?)
+            GrantsController.saveGrant(user, {...grant, publish: publish}).then((success: boolean) => {
+                if (success) {
+                    setFeedback('Grant Saved!');
+                    if (publish) {
+                        navigate('/admin/grants');
+                    }
+                } else {
+                    console.error('Failed to save grant');
+                    setFeedback('Error saving grant');
+                }
+            });
         }
     }
 

@@ -1,5 +1,5 @@
 
 export interface GrantFormProps {
-    type: string,
+    type: string, // TODO: this should be an enum like frontend/src/interfaces/Application.ts#ApplicationStatus
     port: number,
 }
