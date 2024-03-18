@@ -7,7 +7,7 @@ export default class ApplicationsController {
 
     static async fetchApplications(user: User): Promise<Application[]> {
         try {
-            const res = await fetch(`http://localhost:${SERVER_PORT}/getUserApplications/${user?.accountID}`, {
+            const res = await fetch(`http://localhost:${SERVER_PORT}/user/${user?.accountID}/applications`, {
             method: 'GET',
             headers: {
               'Content-Type': 'application/json',

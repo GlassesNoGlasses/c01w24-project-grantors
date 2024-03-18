@@ -7,7 +7,7 @@ export default class GrantsController {
 
     static async fetchGrant(grantID: String): Promise<Grant | undefined> {
         try {
-            const response = await fetch(`http://localhost:${SERVER_PORT}/getGrant/${grantID}`, {
+            const response = await fetch(`http://localhost:${SERVER_PORT}/grant/${grantID}`, {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
@@ -29,7 +29,7 @@ export default class GrantsController {
 
     static async fetchGrants(grantIDs: string[]): Promise<Grant[] | undefined> {
         const encodedGrantIDs: string = encodeURIComponent(grantIDs.join(','));
-        const res = await fetch(`http://localhost:${SERVER_PORT}/getGrants/${encodedGrantIDs}`, {
+        const res = await fetch(`http://localhost:${SERVER_PORT}/grants/${encodedGrantIDs}`, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
@@ -51,7 +51,7 @@ export default class GrantsController {
 
     static async fetchOrgGrants(organization: string): Promise<Grant[]> {
         try {
-            const response = await fetch(`http://localhost:${SERVER_PORT}/getOrgGrants/${organization}`, {
+            const response = await fetch(`http://localhost:${SERVER_PORT}/organization/${organization}/grants`, {
               method: 'GET',
               headers: {
                 'Content-Type': 'application/json',
@@ -125,7 +125,7 @@ export default class GrantsController {
     // function to delete a grant in the server with given id
     static async deleteGrant(user: User, grantID: string): Promise<boolean> {
         try {
-            const response = await fetch(`http://localhost:${SERVER_PORT}/deleteGrant/${grantID}`, {
+            const response = await fetch(`http://localhost:${SERVER_PORT}/grant/${grantID}`, {
               method: 'DELETE',
               headers: {
                 'Content-Type': 'application/json',
@@ -144,7 +144,7 @@ export default class GrantsController {
 
     static async createGrant(user: User, grant: Grant): Promise<string | undefined> {
         try {
-            const response = await fetch(`http://localhost:${SERVER_PORT}/createGrant`, {
+            const response = await fetch(`http://localhost:${SERVER_PORT}/grant`, {
                 method: 'POST',
                 headers: {
                 'Content-Type': 'application/json',
@@ -169,13 +169,17 @@ export default class GrantsController {
 
     static async saveGrant(user: User, grant: Grant): Promise<boolean> {
         try {
-            const response = await fetch(`http://localhost:${SERVER_PORT}/editGrant/${grant.id}`, {
+            const response = await fetch(`http://localhost:${SERVER_PORT}/grant/${grant.id}`, {
                 method: 'PUT',
                 headers: {
                 'Content-Type': 'application/json',
                 },
                 body: JSON.stringify(grant),
             });
+
+            if (!response.ok) {
+                console.error('Error saving grant', response);
+            }
 
             return response.ok;
         } catch (error) {
