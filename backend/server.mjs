@@ -292,7 +292,7 @@ app.put("/grant/:grantId", express.json(), async (req, res) => {
   }
 });
 
-app.get("/getGrant/:grantId", express.json(), async(req, res) => {
+app.get("/grant/:grantId", express.json(), async(req, res) => {
   try {
     const grantId = req.params.grantId;
     const grantCollection = db.collection(COLLECTIONS.grants);
@@ -313,7 +313,7 @@ app.get("/getGrant/:grantId", express.json(), async(req, res) => {
   }
 })
 
-app.get("/getGrants/:grantIds", express.json(), async(req, res) => {
+app.get("/grants/:grantIds", express.json(), async(req, res) => {
   try {
 
     const encodedGrantIDs = req.params.grantIds;
@@ -339,7 +339,7 @@ app.get("/getGrants/:grantIds", express.json(), async(req, res) => {
   }
 })
 
-app.delete("/deleteGrant/:grantId", express.json(), async(req, res) => {
+app.delete("/grant/:grantId", express.json(), async(req, res) => {
   try {
     const grantId = req.params.grantId;
     const grantCollection = db.collection(COLLECTIONS.grants);
