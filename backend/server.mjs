@@ -312,21 +312,26 @@ app.get("/grant/:grantId", express.json(), async(req, res) => {
 	}
 });
 
-app.get("/grants/:grantIds", express.json(), async(req, res) => {
-	try {
-		const encodedGrantIDs = req.params.grantIds;
+app.get("/grants", express.json(), async(req, res) => {
+	// Get route query parameters (/grants?publish=true)
+	const { encodedGrantIDs, publish, organization } = req.query;
+
+	let filters = {};
+	if (encodedGrantIDs) {
 		const grantIDs = encodedGrantIDs.split(',').map((id) => new ObjectId(id));
+		filters._id = { $in: grantIDs };
+	}
+	if (publish) {
+		filters.publish = publish;
+	}
+	if (organization) {
+		filters.organization = organization;
+	}
+
+	try {
 		const grantCollection = db.collection(COLLECTIONS.grants);
 
-		const data = await grantCollection.find({
-			_id: { $in: grantIDs}
-		}).toArray();
-
-		if (!data.length) {
-			return res
-			.status(404)
-			.json({ error: "Unable to find grants with given IDs." });
-		}
+		const data = await grantCollection.find(filters).toArray();
 
 		const grants = data.map((grant) => dbGrantToFrontendGrant(grant));
 
@@ -349,47 +354,6 @@ app.delete("/grant/:grantId", express.json(), async(req, res) => {
 		res.status(200).json({ response: `grant ${grantId} deleted` });
 	} catch (error) {
 		console.error(error);
-		res.status(500).json({ error: error.message });
-	}
-})
-
-app.get("/organization/:organization/grants", express.json(), async (req, res) => {
-	try {
-		const organization = req.params.organization;
-
-		const grantCollection = db.collection(COLLECTIONS.grants);
-
-		const data = await grantCollection.find({
-			organization: organization
-		}).toArray();
-
-		if (!data) {
-			return res.status(404).send(`Unable to find grants for organization: ${organization}`);
-		}
-
-		const grants = data.length <= 0 ? [] : data.map((grant) => {
-			return dbGrantToFrontendGrant(grant)
-		});
-		res.status(200).json({ response: grants });
-
-	} catch (error) {
-		console.error("Error getting all grants: ", error);
-		res.status(500).json({ error: error.message }); 
-	}
-});
-
-app.get("/grants/published", express.json(), async (req, res) => {
-	try {
-		const grantCollection = db.collection(COLLECTIONS.grants);
-		const publishedGrantsData = await grantCollection.find({ publish: true }).toArray();
-
-		const grants = publishedGrantsData.map((grant) => {
-			return dbGrantToFrontendGrant(grant)
-		});
-
-		res.status(200).json({ response: grants });
-	} catch (error) {
-		console.error("Error getting all published grants:", error);
 		res.status(500).json({ error: error.message });
 	}
 });

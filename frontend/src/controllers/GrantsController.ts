@@ -29,7 +29,7 @@ export default class GrantsController {
 
     static async fetchGrants(grantIDs: string[]): Promise<Grant[] | undefined> {
         const encodedGrantIDs: string = encodeURIComponent(grantIDs.join(','));
-        const res = await fetch(`http://localhost:${SERVER_PORT}/grants/${encodedGrantIDs}`, {
+        const res = await fetch(`http://localhost:${SERVER_PORT}/grants?grantIDs=${encodedGrantIDs}`, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
@@ -51,7 +51,7 @@ export default class GrantsController {
 
     static async fetchOrgGrants(organization: string): Promise<Grant[]> {
         try {
-            const response = await fetch(`http://localhost:${SERVER_PORT}/organization/${organization}/grants`, {
+            const response = await fetch(`http://localhost:${SERVER_PORT}/grants?organization=${organization}`, {
               method: 'GET',
               headers: {
                 'Content-Type': 'application/json',
@@ -190,7 +190,7 @@ export default class GrantsController {
 
     static async getPublishedGrants(): Promise<Grant[]> {
         try {
-            const response = await fetch(`http://localhost:${SERVER_PORT}/grants/published`, {
+            const response = await fetch(`http://localhost:${SERVER_PORT}/grants?published=true`, {
               method: 'GET',
               headers: {
                 'Content-Type': 'application/json',
