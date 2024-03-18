@@ -1,5 +1,5 @@
 
-import React, { useRef, useState } from 'react'
+import { useState } from 'react'
 import { TabItem, TabProps } from './TabProps'
 
 const Tab = ({
@@ -16,7 +16,7 @@ const Tab = ({
             autoFocus={label === tabItems[0].label}>
                 {label}
             </button>
-        )
+        );
     };
 
 
