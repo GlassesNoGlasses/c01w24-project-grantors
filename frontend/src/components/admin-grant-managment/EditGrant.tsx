@@ -1,8 +1,9 @@
 import GrantForm from './GrantForm'
+import { GrantFormType } from './GrantFormProps';
 
 const EditGrant = () => {
     return (
-        <GrantForm type='edit' />
+        <GrantForm type={GrantFormType.EDIT} />
     );
 };
 

@@ -3,7 +3,7 @@ import { useState, useEffect} from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useUserContext } from '../contexts/userContext';
 import { Grant, GrantQuestion } from '../../interfaces/Grant' 
-import { GrantFormProps } from './GrantFormProps';
+import { GrantFormProps, GrantFormType } from './GrantFormProps';
 import GrantsController from '../../controllers/GrantsController'
 
 const GrantForm: React.FC<GrantFormProps> = ({ type }) => {
@@ -47,7 +47,7 @@ const GrantForm: React.FC<GrantFormProps> = ({ type }) => {
 
     // retrieve the grant if in edit mode only when mounting
     useEffect(() => {
-        if (type != 'create') {
+        if (type === GrantFormType.EDIT) {
             getSavedGrant(grantID)
         }
 
@@ -115,21 +115,26 @@ const GrantForm: React.FC<GrantFormProps> = ({ type }) => {
 
     // function to save grant when publish==false or publish grant otherwise
     const saveGrant = async(publish: boolean) => {
-        if (type == 'create'){
+        if (type === GrantFormType.CREATE){
             GrantsController.createGrant(user, {...grant, publish: publish}).then((grantID: string | undefined) => {
                 if (grantID) {
                     setGrant(initialGrantState);
-                    setFeedback('Grant Published!');
+                    if (publish) {
+                        setFeedback('Grant Published!');
+                    } else {
+                        setFeedback('Grant Saved!')
+                    }
                 } else {
                     setFeedback('Error creating grant')
                 }
             });
-        } else  { // TODO: Should explicitly say what type needs to be for this code to run (save?)
+        } else if (type === GrantFormType.EDIT) {
             GrantsController.saveGrant(user, {...grant, publish: publish}).then((success: boolean) => {
                 if (success) {
-                    setFeedback('Grant Saved!');
                     if (publish) {
                         navigate('/admin/grants');
+                    } else {
+                        setFeedback('Grant Saved!');
                     }
                 } else {
                     console.error('Failed to save grant');
@@ -177,7 +182,7 @@ const GrantForm: React.FC<GrantFormProps> = ({ type }) => {
     return (
         <div className="flex items-center justify-center min-h-screen bg-grantor-green">
             <div className="w-full max-w-2xl px-8 py-10 bg-white shadow-lg rounded-xl mt-10 mb-10">
-                <h2 className="text-2xl font-bold text-center text-gray-800 mb-8">{type === 'create' ? 'Create a Grant': 'Edit Grant'}</h2>
+                <h2 className="text-2xl font-bold text-center text-gray-800 mb-8">{type === GrantFormType.CREATE ? 'Create a Grant': 'Edit Grant'}</h2>
                 <form onSubmit={handleSubmit} className="space-y-6">
                     {/* Organization */}
                     <div>
@@ -265,8 +270,8 @@ const GrantForm: React.FC<GrantFormProps> = ({ type }) => {
                     <div className='h-[40px] flex justify-center items-center'>{feedback}</div>
 
         
-                    <div className={`flex ${type === 'create' ? 'justify-end' : 'justify-between'} gap-8 `}>
-                        {type === 'create' ? <></> : <button type='button' className='p-2 bg-red-600 text-white pl-5 pr-5 rounded-lg hover:bg-red-800' onClick={() => deleteGrant(grantID)}>Delete</button>}
+                    <div className={`flex ${type === GrantFormType.CREATE ? 'justify-end' : 'justify-between'} gap-8 `}>
+                        {type === GrantFormType.CREATE ? <></> : <button type='button' className='p-2 bg-red-600 text-white pl-5 pr-5 rounded-lg hover:bg-red-800' onClick={() => deleteGrant(grantID)}>Delete</button>}
                         <div className='flex justify-end'>
                             <button type='button' className='p-2 bg-blue-600 text-white pl-5 pr-5 rounded-lg hover:bg-blue-800 mr-10' onClick={() => saveGrant(false)}>Save</button>
                             <button type='submit' className='p-2 bg-green-600 text-white pl-5 pr-5 rounded-lg hover:bg-green-800'>Publish</button>

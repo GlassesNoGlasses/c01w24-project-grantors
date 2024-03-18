@@ -1,4 +1,8 @@
+export enum GrantFormType {
+    CREATE  = "create",
+    EDIT = "edit",
+};
 
 export interface GrantFormProps {
-    type: string, // TODO: this should be an enum like frontend/src/interfaces/Application.ts#ApplicationStatus
+    type: GrantFormType,
 };
