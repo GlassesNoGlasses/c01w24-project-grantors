@@ -97,9 +97,9 @@ test("/getGrant - 200 published grant found", async() => {
 
 
 
-test("/editGrant - 201 unpublished grant edited", async() => {
+test("PUT /grant - 201 unpublished grant edited", async() => {
 
-    const res = await fetch(`${SERVER_URL}/editGrant/${gId1}`, {
+    const res = await fetch(`${SERVER_URL}/grant/${gId1}`, {
         method: 'PUT',
         headers: {
         'Content-Type': 'application/json',

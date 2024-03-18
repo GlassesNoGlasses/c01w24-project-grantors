@@ -263,7 +263,7 @@ app.post("/grant", express.json(), async (req, res) => {
   }
 });
 
-app.put("/editGrant/:grantId", express.json(), async (req, res) => {
+app.put("/grant/:grantId", express.json(), async (req, res) => {
   try {
     const { title, description, deadline, minAmount, maxAmount,
       organization, category, contact, questions, publish } = req.body;
