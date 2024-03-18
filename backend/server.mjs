@@ -409,7 +409,7 @@ app.get("/grants/published", express.json(), async (req, res) => {
   }
 });
 
-app.post("/submitApplication", express.json(), async (req, res) => {
+app.post("/application", express.json(), async (req, res) => {
   try {
     const { 
       userID,

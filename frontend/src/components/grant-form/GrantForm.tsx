@@ -27,7 +27,7 @@ const GrantQuestionList = ({ user, grant }: QuestionListProps) => {
             return 
         }
         try {
-            await fetch(`http://localhost:${SERVER_PORT}/submitApplication`,
+            await fetch(`http://localhost:${SERVER_PORT}/application`,
                 {
                     method: "POST",
                     headers: {
