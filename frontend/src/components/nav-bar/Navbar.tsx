@@ -2,7 +2,7 @@ import { NavbarProps } from './NavbarProps'
 import { Link, Outlet } from 'react-router-dom'
 import logoImage from '../../images/grantors-logo.png'
 import { useUserContext } from '../contexts/userContext'
-import { Cookies } from 'react-cookie';
+import UserController from '../../controllers/UserController';
 
 const Navbar = ({}: NavbarProps) => {
 	// Get User Context
@@ -10,7 +10,7 @@ const Navbar = ({}: NavbarProps) => {
 
 	const LogOut = () => {
 		setUser(null);
-		new Cookies().remove('user-token');
+		UserController.logoutUser();
 	};
 
 	const LoginButton = () => {
@@ -103,7 +103,7 @@ const Navbar = ({}: NavbarProps) => {
 		<div className='h-full w-full'>
 			<nav className='flex flex-col sm:flex-row justify-between items-center sm:pr-8 border-b-2 border-black'>
 			<Link to="/" className='nav-brand'>
-				<img src={logoImage} className='nav-logo'/>
+				<img src={logoImage} alt='grantors logo' className='nav-logo'/>
 			</Link>
 			{SetTopNavigation()}
 			</nav>

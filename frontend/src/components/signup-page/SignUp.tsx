@@ -5,8 +5,10 @@ import emailIcon from '../../images/iconMail.png';
 import passwordIcon from '../../images/iconPassword.png';
 import { BuildingOfficeIcon } from '@heroicons/react/24/outline';
 import { Modal } from '../modal/Modal';
-import { Link } from 'react-router-dom';
-import { SERVER_PORT } from '../../constants/ServerConstants';
+import { useNavigate } from 'react-router-dom';
+import UserController from '../../controllers/UserController';
+import { useUserContext } from '../contexts/userContext';
+import { User } from '../../interfaces/User';
 
 const SignUp: React.FC<SignUpProps> = () => {
 	const [firstName, setFirstName] = useState('');
@@ -19,32 +21,40 @@ const SignUp: React.FC<SignUpProps> = () => {
 	const [feedback, setFeedback] = useState<string>("");
 	const [showModal, setShowModal] = useState<boolean>(false);
 
+	const { setUser } = useUserContext();
+	const navigate = useNavigate();
+
 	const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
 		event.preventDefault();
 
-		try {
-			const response = await fetch(`http://localhost:${SERVER_PORT}/signup`, {
-			method: 'POST',
-			headers: {
-				'Content-Type': 'application/json',
-			},
-			body: JSON.stringify({ 'email': email, 'username': username,'password': password, 
-				'firstName': firstName, "lastName": lastName, 'isAdmin': isAdmin,
-				'organization':  organization }),
-			});
+		const response = await UserController.signupUser(
+			username, password, email, firstName, lastName, organization, isAdmin);
 
-			if (!response.ok) {
-				setFeedback(`User already exists.`)
-			} else {
-				console.log('Sign up successful');
-				setShowModal(true);
-			}
-
-		} catch (error) {
-			console.error('Sign up failed:', (error as Error).message);
-			setFeedback(`Failed to sign up as ${username}.`)
+		if (!response) {
+			setFeedback(`Failed to sign up as ${username}.`);
+			return;
 		}
+		
+		if (!response.ok) {
+			setFeedback(`User already exists.`);
+			return;
+		}
+
+		console.log('Sign up successful');
+		setShowModal(true);
 	};
+
+	const login = async () => {
+		const response = await UserController.loginUser(username, password);
+
+		if (!response || response instanceof Response) {
+			navigate('/login');
+			return;
+		}
+
+		setUser(response as User);
+		navigate('/');
+	}
 
   return (
   	<div>
@@ -191,12 +201,12 @@ const SignUp: React.FC<SignUpProps> = () => {
 								onClick={() => setShowModal(false)}>
 								Close
 							</button>
-							<Link className='p-2 px-5 m-2 bg-green-500 hover:bg-green-600 active:bg-green-700
+							<button className='p-2 px-5 m-2 bg-green-500 hover:bg-green-600 active:bg-green-700
 								text-white font-bold rounded-lg shadow-md transition-colors duration-150 ease-in
 								text-base text-center justify-center align-middle'
-								to='/login'>
+								onClick={login}>
 								Log In
-							</Link>
+							</button>
 						</div>
 					</div>
 				</div>

@@ -6,8 +6,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { useUserContext } from '../contexts/userContext';
 import { User } from '../../interfaces/User';
 import { ServerLoginResponse } from '../../interfaces/ServerResponse';
-import { SERVER_PORT } from '../../constants/ServerConstants'
-import { Cookies } from 'react-cookie';
+import UserController from '../../controllers/UserController';
 
 const Login: React.FC<LoginProps> = () => {
 	const [username, setUsername] = useState('');
@@ -15,31 +14,19 @@ const Login: React.FC<LoginProps> = () => {
 	const [feedback, setFeedback] = useState('');
 	const navigate = useNavigate();
 
-	const {user, setUser} = useUserContext();
-
-	const InstantiateUser = (response: ServerLoginResponse): User => {
-	if (response.isAdmin) {
-		return {accountID: response.accountID, isAdmin: true, username: response.username,
-		firstName: response.firstName, lastName: response.lastName, email: response.email,
-		organization: response.organization, authToken: response.authToken};
-	}
-	return {accountID: response.accountID, isAdmin: false, username: response.username, 
-		firstName: response.firstName, lastName: response.lastName, email: response.email,
-		authToken: response.authToken};
-	};
+	const { setUser } = useUserContext();
 
 	const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
 		event.preventDefault();
 
-		try {
-			const response = await fetch(`http://localhost:${SERVER_PORT}/login`, {
-				method: 'POST',
-				headers: {
-					'Content-Type': 'application/json',
-				},
-				body: JSON.stringify({ username: username, password }),
-			});
+		const response = await UserController.loginUser(username, password);
 
+		if (!response) {
+			setFeedback(`Failed to login as ${username}.`);
+			return;
+		}
+
+		if (response instanceof Response) {
 			switch (response.status) {
 				case 404:
 					setFeedback("user does not exist, perhaps you would like to sign up?")
@@ -51,26 +38,15 @@ const Login: React.FC<LoginProps> = () => {
 					setFeedback("invalid credentials, please try again.")
 					break;
 				case 500:
-					throw new Error('Failed to login');
-				case 200:
-					console.log('Login successful');
-					await response.json().then((data: ServerLoginResponse) => {
-						console.log(`Welcome ${data['username']}`);
-						setFeedback('');
-						setUser(InstantiateUser(data));
-
-						// Set user token cookie for 1 hour
-						new Cookies().set('user-token', data.authToken,
-							{ path: '/', expires: new Date(Date.now() + 1000 * 60 * 60) });
-
-						navigate("/");
-					});
-					break;
+					setFeedback("Internal Server Error, please try again later.");
 			}
-			
-		} catch (error) {
-			console.error('Login failed:', (error as Error).message);
+
+			return;
 		}
+
+		setFeedback('');
+		setUser(response as User);
+		navigate("/");
 	};
 
 	return (
@@ -115,10 +91,12 @@ const Login: React.FC<LoginProps> = () => {
 						<span className="input-feedback" style={{ color: 'red' }}>{feedback}</span>
 					</div>
 					<div className="flex justify-center">
-						<button
-							type="submit" 
-							className="submit-btn px-4 py-2 mt-4 text-white bg-green-500 rounded-lg hover:bg-green-600 sm:px-6 sm:py-3"
-							style={{ width: '100%' }}>Login</button>
+					<button type='submit'
+						className='p-2 px-5 m-2 bg-green-500 hover:bg-green-600 active:bg-green-700
+							text-white font-bold rounded-lg shadow-md transition-colors duration-150 ease-in
+							text-base w-full'>
+						Log In
+					</button>
 					</div>
 					<div className="form-footer-container" style={{ marginTop: '5%' }}>
 						<Link to="/signup" className="underline" style={{ textDecoration: 'underline' }}>Sign Up</Link>
