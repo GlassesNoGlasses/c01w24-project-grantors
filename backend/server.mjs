@@ -167,7 +167,7 @@ app.patch('/users/:userID/favourites', express.json(), async (req, res) => {
 				}
 			);
 
-			if (!insert.insertedCount) {
+			if (!insert.insertedId) {
 				return res.status(500).json({ error: "Failed to toggle favourite" });
 			}
 
