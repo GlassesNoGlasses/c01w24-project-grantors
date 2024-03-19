@@ -7,6 +7,7 @@ import { useUserContext } from '../contexts/userContext';
 import { User } from '../../interfaces/User';
 import { ServerLoginResponse } from '../../interfaces/ServerResponse';
 import { SERVER_PORT } from '../../constants/ServerConstants'
+import { Cookies } from 'react-cookie';
 
 const Login: React.FC<LoginProps> = () => {
 	const [username, setUsername] = useState('');
@@ -57,6 +58,8 @@ const Login: React.FC<LoginProps> = () => {
 						console.log(`Welcome ${data['username']}`);
 						setFeedback('');
 						setUser(InstantiateUser(data));
+						new Cookies().set('user-token', data.authToken,
+							{ path: '/', expires: new Date(Date.now() + 1000 * 60 * 60 * 24) });
 						navigate("/");
 					});
 					break;

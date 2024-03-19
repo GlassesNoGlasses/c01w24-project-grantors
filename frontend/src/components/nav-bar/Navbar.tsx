@@ -2,6 +2,7 @@ import { NavbarProps } from './NavbarProps'
 import { Link, Outlet } from 'react-router-dom'
 import logoImage from '../../images/grantors-logo.png'
 import { useUserContext } from '../contexts/userContext'
+import { Cookies } from 'react-cookie';
 
 const Navbar = ({}: NavbarProps) => {
 	// Get User Context
@@ -9,6 +10,7 @@ const Navbar = ({}: NavbarProps) => {
 
 	const LogOut = () => {
 		setUser(null);
+		new Cookies().remove('user-token');
 	};
 
 	const LoginButton = () => {
