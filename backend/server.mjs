@@ -139,6 +139,35 @@ app.post("/signup", express.json(), async (req, res) => {
   }
 });
 
+app.get('/user', express.json(), async (req, res) => {
+  verifyRequestAuth(req, async (err, decoded) => {
+    if (err) {
+        return res.status(401).send("Unauthorized.");
+    }
+
+    const userCollection = db.collection(COLLECTIONS.users);
+    const user = await userCollection.findOne({ _id: new ObjectId(decoded.userID) });
+
+    if (!user) {
+      return res.status(404).send(decoded.userID);
+    }
+
+    // Do not return password hash
+    res.status(200).json({ 
+      response: {
+        accountID: user._id,
+        username: user.username,
+        email: user.email,
+        firstName: user.firstName,
+        lastName: user.lastName,
+        isAdmin: user.isAdmin,
+        organization: user.organization,
+        authToken: req.headers.authorization.split(" ")[1]
+      } 
+    });
+  });
+});
+
 app.patch('/users/:userId/favourites/toggle', express.json(), async (req, res) => {
   const userId = req.params.userId;
   const { grantID } = req.body;
