@@ -167,8 +167,6 @@ app.patch('/users/:userId/favourites', express.json(), async (req, res) => {
 				}
 			);
 
-			console.log(insert);
-
 			if (!insert.insertedCount) {
 				return res.status(500).json({ error: "Failed to toggle favourite" });
 			}
@@ -183,7 +181,6 @@ app.patch('/users/:userId/favourites', express.json(), async (req, res) => {
 			});
 
 		if (alreadyFavourite) {
-			console.log("already fav");
 			const update = await favouriteGrantsCollection.updateOne(
 				{
 					_id: userIDObj,
@@ -205,8 +202,6 @@ app.patch('/users/:userId/favourites', express.json(), async (req, res) => {
 				$push: { favourites: grantID },
 			},
 		);
-
-		console.log(result);
 
 		if (result.modifiedCount === 0) {
 			return res.status(404).json({ error: "User not found or data not changed." });
@@ -234,14 +229,10 @@ app.get('/users/:userId/favourites', express.json(), async (req, res) => {
 
 		const favourites = result ? result.favourites.map((grantId) => new ObjectId(grantId)) : [];
 
-		console.log(favourites);
-
 		const grantsCollection = db.collection(COLLECTIONS.grants);
 		const grants = await grantsCollection.find({
 			_id: { $in: favourites }
 		}).toArray();
-
-		console.log(grants);
 
 		res.status(200).json({ response: grants.map(grant => dbGrantToFrontendGrant(grant)) });
 	} catch (error) {
