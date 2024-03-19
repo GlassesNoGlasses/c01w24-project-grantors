@@ -1,12 +1,12 @@
 import { useParams } from 'react-router-dom';
 import { Grant } from "../../interfaces/Grant";
-import { GrantPageApplyProps } from './GrantApplyProps';
+import { GrantApplyProps } from './GrantApplyProps';
 import GrantForm from "../grant-form/GrantForm";
 import { useUserContext } from '../contexts/userContext'
 import GrantsController from '../../controllers/GrantsController';
 import { useEffect, useState } from 'react';
 
-const GrantApply = ({}: GrantPageApplyProps) => {
+const GrantApply = ({}: GrantApplyProps) => {
 
     const {user} = useUserContext();
     const {grantID} = useParams();
