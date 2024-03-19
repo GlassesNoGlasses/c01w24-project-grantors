@@ -15,10 +15,8 @@ const UserGrantBrowse = () => {
 
     useEffect(() => {
         if (user) {
-            GrantsController.fetchFavouriteGrants(user.accountID).then((grants: Grant[] | undefined) => {
-                if (grants) {
-                    setFilteredGrants(grants);
-                }
+            GrantsController.fetchFavouriteGrants(user.accountID).then((grants: Grant[]) => {
+                setFilteredGrants(grants);
             });
         }
     }, [user]);
