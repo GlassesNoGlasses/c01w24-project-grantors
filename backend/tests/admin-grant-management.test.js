@@ -1,8 +1,8 @@
 const SERVER_URL = "http://localhost:8000";
 
-let accId = ''
-let gId1 = ''
-let gId2 = ''
+let accID = ''
+let gID1 = ''
+let gID2 = ''
 
 test("POST /grant - 201 Grant Saved (Not Published) to MongoDB", async() => {
     const res = await fetch(`${SERVER_URL}/grant`, {
@@ -16,7 +16,7 @@ test("POST /grant - 201 Grant Saved (Not Published) to MongoDB", async() => {
     });
 
     await res.json().then((data) => {
-        gId1 = data['id']
+        gID1 = data['id']
     });
 
     expect(res.status).toBe(201);
@@ -35,7 +35,7 @@ test("POST /grant - 201 Grant Saved (Published) to MongoDB", async() => {
     });
 
     await res.json().then((data) => {
-        gId2 = data['id']
+        gID2 = data['id']
     });
 
     expect(res.status).toBe(201);
@@ -58,7 +58,7 @@ test("GET /grant - 404 grant not found", async() => {
 
 test("GET /grant - 200 published grant found", async() => {
 
-    const res = await fetch(`${SERVER_URL}/grant/${gId2}`, {
+    const res = await fetch(`${SERVER_URL}/grant/${gID2}`, {
         method: 'GET',
         headers: {
         'Content-Type': 'application/json',
@@ -70,7 +70,7 @@ test("GET /grant - 200 published grant found", async() => {
 
 test("PUT /grant - 201 unpublished grant edited", async() => {
 
-    const res = await fetch(`${SERVER_URL}/grant/${gId1}`, {
+    const res = await fetch(`${SERVER_URL}/grant/${gID1}`, {
         method: 'PUT',
         headers: {
         'Content-Type': 'application/json',
@@ -80,7 +80,7 @@ test("PUT /grant - 201 unpublished grant edited", async() => {
         'category': 'one', "contact": 'my number', 'questions': [], 'publish': false }),
     });
 
-    const resp = await fetch(`${SERVER_URL}/grant/${gId1}`, {
+    const resp = await fetch(`${SERVER_URL}/grant/${gID1}`, {
         method: 'GET',
         headers: {
         'Content-Type': 'application/json',
@@ -95,14 +95,14 @@ test("PUT /grant - 201 unpublished grant edited", async() => {
 
 test("DELETE /grant - 201 unpublished grant deleted", async() => {
 
-    const res = await fetch(`${SERVER_URL}/grant/${gId1}`, {
+    const res = await fetch(`${SERVER_URL}/grant/${gID1}`, {
         method: 'DELETE',
         headers: {
         'Content-Type': 'application/json',
         },
     });
 
-    const resp = await fetch(`${SERVER_URL}/grant/${gId1}`, {
+    const resp = await fetch(`${SERVER_URL}/grant/${gID1}`, {
         method: 'GET',
         headers: {
         'Content-Type': 'application/json',

@@ -138,16 +138,16 @@ app.post("/signup", express.json(), async (req, res) => {
 	}
 });
 
-app.patch('/users/:userId/favourites', express.json(), async (req, res) => {
-	const userId = req.params.userId;
+app.patch('/users/:userID/favourites', express.json(), async (req, res) => {
+	const userID = req.params.userID;
 	const { grantID } = req.body;
 
-	if (!userId || !grantID) {
+	if (!userID || !grantID) {
 		return res.status(400).json({ error: "Invalid request." });
 	}
 
 	try {
-		const userIDObj = new ObjectId(userId);
+		const userIDObj = new ObjectId(userID);
 
 		const userCollection = db.collection(COLLECTIONS.users);
 		const user = await userCollection.findOne({_id: userIDObj});
@@ -214,20 +214,20 @@ app.patch('/users/:userId/favourites', express.json(), async (req, res) => {
 	}
 });
 
-app.get('/users/:userId/favourites', express.json(), async (req, res) => {
-	const userId = req.params.userId;
+app.get('/users/:userID/favourites', express.json(), async (req, res) => {
+	const userID = req.params.userID;
 
-	if (!userId) {
+	if (!userID) {
 		return res.status(400).json({ error: "Invalid request." });
 	}
 
 	try {
 		const favouriteGrantsCollection = db.collection(COLLECTIONS.favouriteGrants);
 		const result = await favouriteGrantsCollection.findOne({
-			_id: new ObjectId(userId)
+			_id: new ObjectId(userID)
 		});
 
-		const favourites = result ? result.favourites.map((grantId) => new ObjectId(grantId)) : [];
+		const favourites = result ? result.favourites.map((grantID) => new ObjectId(grantID)) : [];
 
 		const grantsCollection = db.collection(COLLECTIONS.grants);
 		const grants = await grantsCollection.find({
@@ -269,16 +269,16 @@ app.post("/grant", express.json(), async (req, res) => {
 	}
 });
 
-app.put("/grant/:grantId", express.json(), async (req, res) => {
+app.put("/grant/:grantID", express.json(), async (req, res) => {
 	try {
 		const { title, description, deadline, minAmount, maxAmount,
 			organization, category, contact, questions, publish } = req.body;
 
 		const grantCollection = db.collection(COLLECTIONS.grants);
-		const grantId = req.params.grantId
+		const grantID = req.params.grantID
 
 		await grantCollection.updateOne(
-			{ _id: new ObjectId(grantId)},
+			{ _id: new ObjectId(grantID)},
 			{$set: {
 			title: title,
 			description: description,
@@ -292,19 +292,19 @@ app.put("/grant/:grantId", express.json(), async (req, res) => {
 			publish: publish,
 		}});
 
-		res.status(201).json({ response: "Grant Edited.", id: grantId});
+		res.status(201).json({ response: "Grant Edited.", id: grantID});
 	} catch (error) {
 		res.status(500).json({ error: error.message });
 	}
 });
 
-app.get("/grant/:grantId", express.json(), async(req, res) => {
+app.get("/grant/:grantID", express.json(), async(req, res) => {
 	try {
-		const grantId = req.params.grantId;
+		const grantID = req.params.grantID;
 		const grantCollection = db.collection(COLLECTIONS.grants);
 
 		const grant = await grantCollection.findOne({
-			_id: new ObjectId(grantId)
+			_id: new ObjectId(grantID)
 		});
 
 		if (!grant) {
@@ -315,20 +315,21 @@ app.get("/grant/:grantId", express.json(), async(req, res) => {
 
 		res.status(200).json({ response: dbGrantToFrontendGrant(grant) });
 	} catch (error) {
+		console.log(error);
 		res.status(500).json({ error: error.message });
 	}
 });
 
-app.delete("/grant/:grantId", express.json(), async(req, res) => {
+app.delete("/grant/:grantID", express.json(), async(req, res) => {
 	try {
-		const grantId = req.params.grantId;
+		const grantID = req.params.grantID;
 		const grantCollection = db.collection(COLLECTIONS.grants);
 
 		await grantCollection.deleteOne({
-			_id: new ObjectId(grantId)
+			_id: new ObjectId(grantID)
 		});
 
-		res.status(200).json({ response: `grant ${grantId} deleted` });
+		res.status(200).json({ response: `grant ${grantID} deleted` });
 	} catch (error) {
 		console.error(error);
 		res.status(500).json({ error: error.message });
