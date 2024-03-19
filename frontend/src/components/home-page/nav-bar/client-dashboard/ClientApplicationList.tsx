@@ -46,7 +46,7 @@ const ClientApplicationList = ({}) => {
 
     useEffect(() => {
         if (user) {
-            ApplicationsController.fetchApplications(user).then((applications: Application[]) => {
+            ApplicationsController.fetchUserApplications(user).then((applications: Application[]) => {
                 setApplications(applications);
             });
         }

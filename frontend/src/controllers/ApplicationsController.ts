@@ -5,15 +5,15 @@ import { User } from "../interfaces/User";
 
 export default class ApplicationsController {
 
-    static async fetchApplications(user: User): Promise<Application[]> {
+    static async fetchUserApplications(user: User): Promise<Application[]> {
         try {
-            const res = await fetch(`http://localhost:${SERVER_PORT}/getUserApplications/${user?.accountID}`, {
-            method: 'GET',
-            headers: {
-              'Content-Type': 'application/json',
-              'Authorization': `Bearer ${user?.authToken}`
-            },
-          });
+            const res = await fetch(`http://localhost:${SERVER_PORT}/applications?userID=${user.accountID}`, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${user.authToken}`
+                },
+            });
 
             if (res.ok) {
                 return await res.json().then((data: GetApplicationsResponse) => {
@@ -31,8 +31,12 @@ export default class ApplicationsController {
     }
 
     static async fetchOrgApplications(user: User): Promise<Application[] | undefined> {
+        if (!user.organization) {
+            return;
+        }
+
         try {
-            const res = await fetch(`http://localhost:${SERVER_PORT}/organization/${user.organization}/applications`, {
+            const res = await fetch(`http://localhost:${SERVER_PORT}/applications?organization=${user.organization}`, {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
