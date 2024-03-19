@@ -146,19 +146,28 @@ app.patch('/users/:userId/favourites', express.json(), async (req, res) => {
 		return res.status(400).json({ error: "Invalid request." });
 	}
 
-	const userIdObj = new ObjectId(userId);
-
 	try {
+		const userIDObj = new ObjectId(userId);
+
+		const userCollection = db.collection(COLLECTIONS.users);
+		const user = await userCollection.findOne({_id: userIDObj});
+		if (!user) {
+			return res.status(404).json({ error: "User not found" });
+		}
+
 		const favouriteGrantsCollection = db.collection(COLLECTIONS.favouriteGrants);
 
-		const favourite = await favouriteGrantsCollection.findOne({_id: userIdObj});
+		const favourite = await favouriteGrantsCollection.findOne({_id: userIDObj});
 		if (!favourite) {
 			// user has no favourite array so create one
 			const insert = await favouriteGrantsCollection.insertOne(
-			{
-				_id: userIdObj,
-				favourites: [grantID],
-			});
+				{
+					_id: userIDObj,
+					favourites: [grantID],
+				}
+			);
+
+			console.log(insert);
 
 			if (!insert.insertedCount) {
 				return res.status(500).json({ error: "Failed to toggle favourite" });
@@ -169,14 +178,15 @@ app.patch('/users/:userId/favourites', express.json(), async (req, res) => {
 
 		const alreadyFavourite = await favouriteGrantsCollection.findOne(
 			{
-				_id: userIdObj,
+				_id: userIDObj,
 				favourites: { $in: [grantID] ,}
 			});
 
 		if (alreadyFavourite) {
+			console.log("already fav");
 			const update = await favouriteGrantsCollection.updateOne(
 				{
-					_id: userIdObj,
+					_id: userIDObj,
 				},
 				{
 					$pull: { favourites: grantID },
@@ -190,11 +200,13 @@ app.patch('/users/:userId/favourites', express.json(), async (req, res) => {
 		}
 
 		const result = await favouriteGrantsCollection.updateOne(
-			{ _id: userIdObj },
+			{ _id: userIDObj },
 			{
 				$push: { favourites: grantID },
 			},
 		);
+
+		console.log(result);
 
 		if (result.modifiedCount === 0) {
 			return res.status(404).json({ error: "User not found or data not changed." });
@@ -222,10 +234,14 @@ app.get('/users/:userId/favourites', express.json(), async (req, res) => {
 
 		const favourites = result ? result.favourites.map((grantId) => new ObjectId(grantId)) : [];
 
+		console.log(favourites);
+
 		const grantsCollection = db.collection(COLLECTIONS.grants);
 		const grants = await grantsCollection.find({
 			_id: { $in: favourites }
 		}).toArray();
+
+		console.log(grants);
 
 		res.status(200).json({ response: grants.map(grant => dbGrantToFrontendGrant(grant)) });
 	} catch (error) {
