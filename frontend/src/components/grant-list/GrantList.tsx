@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Link } from "react-router-dom";
 import { GrantListProps } from "./GrantListProps";
 import { GrantItemProps } from "./GrantItemProps";
@@ -21,6 +21,12 @@ const GrantList = ({ grants, favouriteGrants }: GrantListProps) => {
 export const GrantItem = ({ grant, link, favourite }: GrantItemProps) => {
     const { user } = useUserContext();
     const [isFavourite, setIsFavourite] = useState(favourite);
+
+    useEffect(() => {
+        setIsFavourite(favourite);
+        
+    }, [favourite]);
+
 
     const toggleFavorite = async () => {
         if (!user || !grant.id) {
