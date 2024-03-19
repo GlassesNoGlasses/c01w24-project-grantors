@@ -58,8 +58,11 @@ const Login: React.FC<LoginProps> = () => {
 						console.log(`Welcome ${data['username']}`);
 						setFeedback('');
 						setUser(InstantiateUser(data));
+
+						// Set user token cookie for 1 hour
 						new Cookies().set('user-token', data.authToken,
-							{ path: '/', expires: new Date(Date.now() + 1000 * 60 * 60 * 24) });
+							{ path: '/', expires: new Date(Date.now() + 1000 * 60 * 60) });
+
 						navigate("/");
 					});
 					break;
