@@ -5,10 +5,16 @@ import search from '../../../../images/search.png'
 import ApplicationIcon from '../../../displays/ApplicationIcon/ApplicationIcon';
 import { Link } from 'react-router-dom';
 import { ClientDashboardProps } from './ClientDashboardProps';
+import UserController from '../../../../controllers/UserController';
 
 
 const ClientDashboard = ({}: ClientDashboardProps) => {
 	const {user, setUser} = useUserContext();
+
+	const logout = () => {
+		setUser(null);
+		UserController.logoutUser();
+	}
 
 	return (
 		<div className="dashboard-container bg-grantor-green w-full h-full">
@@ -20,7 +26,7 @@ const ClientDashboard = ({}: ClientDashboardProps) => {
 			<ButtonIcon heroicon={<UserIcon />} label="Account"/>
 			<ButtonIcon heroicon={<Cog6ToothIcon className=""/>} label="Settings"/>
 			<Link to="/">
-				<ButtonIcon heroicon={<ArrowRightStartOnRectangleIcon />} label="Log out" callback={() => setUser(null)}/>
+				<ButtonIcon heroicon={<ArrowRightStartOnRectangleIcon />} label="Log out" callback={logout}/>
 			</Link>
 			</div>
 			<div className="application-buttons flex justify-around items-center h-2/5">
