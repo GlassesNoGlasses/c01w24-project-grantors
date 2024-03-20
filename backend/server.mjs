@@ -17,6 +17,7 @@ const COLLECTIONS = {
 	users: "users",
 	applicants: "applicants",
 	applications: "applications",
+	applicationReviews: "applicationReviews",
 	grants: "grants",
 	favouriteGrants: "favouriteGrants",
 };
@@ -425,7 +426,7 @@ app.get("/application/:applicationID", express.json(), async (req, res) => {
 			return res.status(404).json({ error: "Application not found." });
 		}
 
-		res.status(200).json({ response: application });
+		res.status(200).json({ response: dbIDToFrontendID(application) });
 	} catch (error) {
 		console.error(error);
 		res.status(500).json({ error: error.message });
@@ -577,6 +578,47 @@ app.get("/applicant/:applicantID", express.json(), async (req, res) => {
 		res.status(200).json({ response: applicant });
 	} catch (error) {
 		console.error(error);
+		res.status(500).json({ error: error.message });
+	}
+});
+
+app.post("/review", express.json(), async (req, res) => {
+	const { applicationID, reviewerID, reviewText, rating, applicationStatus} = req.body;
+	try {
+		const reviewsCollection = db.collection(COLLECTIONS.applicationReviews);
+
+		const existingReview = await reviewsCollection.findOne({
+			applicationID: applicationID,
+			reviewerID: reviewerID,
+		});
+
+		if (existingReview) {
+			return res.status(400).json({ error: "Review already exists. Use patch to update review." });
+		}
+
+		const {insertedId} = await reviewsCollection.insertOne({
+			applicationID: applicationID,
+			reviewerID: reviewerID,
+			reviewText: reviewText,
+			rating: rating,
+			applicationStatus: applicationStatus,
+		});
+
+		if (!insertedId) {
+			return res.status(500).json({ errror: "Failed to insert review" });
+		}
+
+		const applicationCollection = db.collection(COLLECTIONS.applications);
+		await applicationCollection.updateOne(
+			{
+			_id: applicationID
+			},
+			{
+				$set: { status: applicationStatus }
+			});
+			
+		res.status(201).json({ response: "Review submitted.", id: insertedId});
+	} catch (error) {
 		res.status(500).json({ error: error.message });
 	}
 });
