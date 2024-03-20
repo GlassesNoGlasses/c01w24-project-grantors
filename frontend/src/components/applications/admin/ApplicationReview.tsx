@@ -169,13 +169,15 @@ const ApplicationReview = () => {
             </div>
             {
                reviewed ? 
-               <div id="post-review-actions" className="flex flex-row justify-between px-8 pt-4">
-                    <span>Application reviewed!</span>
-                    <button id="next-application" className={`py-5 px-10 button`}
-                        onClick={rejectApplication}
-                    >
-                        Review Next Application
-                    </button>
+               <div id="post-review-actions" className="flex flex-row justify-between px-8 pt-4 items-center">
+                    <div className="flex flex-row items-center gap-5">
+                        <span className="text-lg">Application reviewed!</span>
+                        <button id="next-application" className={`py-5 px-10 button`}
+                            onClick={rejectApplication}
+                        >
+                            Review Next Application
+                        </button>
+                    </div>
                     <button id="back-to-dashboard" className={`py-5 px-10 button`}
                         onClick={submitApplicationReview}
                     >
