@@ -22,7 +22,12 @@ module.exports = {
       colors: {
         'grantor-green': 'rgb(141, 229, 100)',
         'dim': 'rgb(0, 0, 0, 0.5)',
+        'primary': '#21525c',
+        'secondary': "#19859c"
       }
+    },
+    backgroundImage: {
+      "home-background": "url('./images/home-bg.png')",
     },
   },
   plugins: [],
