@@ -38,6 +38,10 @@ const AdminApplicationList = ({}: AdminApplicationListProps) => {
         },
     ];
 
+    const onApplicationRowClick = (application: Application) => {
+        navigate(`/application/${application.id}/review`);
+    }
+
     useEffect(() => {
         // Redirect user if they are not apart of this org
         if (user) {
@@ -67,6 +71,7 @@ const AdminApplicationList = ({}: AdminApplicationListProps) => {
                    itemsPerPageOptions={itemsPerPageOptions}
                    defaultIPP={10}
                    defaultSort={columns[2]}
+                   onRowClick={onApplicationRowClick}
             />
         </div>
     );
