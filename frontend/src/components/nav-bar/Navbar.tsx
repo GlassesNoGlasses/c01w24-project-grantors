@@ -50,7 +50,7 @@ const Navbar = ({}: NavbarProps) => {
 		return (
 			<>
 				<Link className='text-base hover:underline' to="/createGrant">Create Grants</Link>
-				<Link className='text-base hover:underline' to="/about">About</Link>
+				<Link className='text-base hover:underline' to="/about">About Us</Link>
 				<Link className='text-base hover:underline' to="/services">Services</Link>
 				<Link className='text-base hover:underline' to="/gallery">Gallery</Link>
 				<Link className='text-base hover:underline' to="/contact">Contact</Link>
@@ -66,7 +66,7 @@ const Navbar = ({}: NavbarProps) => {
 		return (
 			<>
 				<Link className='text-base hover:underline' to="/">Grants</Link>
-				<Link className='text-base hover:underline' to="/about">About</Link>
+				<Link className='text-base hover:underline' to="/about">About Us</Link>
 				<Link className='text-base hover:underline' to="/services">Services</Link>
 				<Link className='text-base hover:underline' to="/gallery">Gallery</Link>
 				<Link className='text-base hover:underline' to="/contact">Contact</Link>
@@ -81,7 +81,7 @@ const Navbar = ({}: NavbarProps) => {
 	const DefaultTopNavigation = (): JSX.Element => {
 		return (
 			<>
-				<Link className='text-base hover:underline' to="/about">About</Link>
+				<Link className='text-base hover:underline' to="/about">About Us</Link>
 				<Link className='text-base hover:underline' to="/services">Services</Link>
 				<Link className='text-base hover:underline' to="/gallery">Gallery</Link>
 				<Link className='text-base hover:underline' to="/contact">Contact</Link>
