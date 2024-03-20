@@ -7,8 +7,8 @@ import Tab from '../../../../tabs/Tab';
 import { TabItem } from '../../../../tabs/TabProps';
 import { Column } from '../../../../table/TableProps';
 import Table from '../../../../table/Table';
-import { LinkProps } from '../../../../../interfaces/LinkProps';
 import GrantsController from '../../../../../controllers/GrantsController';
+import { useNavigate } from 'react-router-dom';
 
 const AdminGrants = () => {
     // States and contexts
@@ -16,6 +16,7 @@ const AdminGrants = () => {
     const [publishedGrants, setPublishedGrants] = useState<Grant[]>([]);
     const [unpublishedGrants, setUnpublishedGrants] = useState<Grant[]>([]);
     const [published, setPublished] = useState<boolean>(true);
+    const navigate = useNavigate();
 
     const organization = user?.organization;
 
@@ -26,8 +27,7 @@ const AdminGrants = () => {
     ];
 
     // Table
-    const publishedLink: LinkProps<Grant> = {to: '/grants/', key: 'id'};
-    const unPublished: LinkProps<Grant> = {to: '', key: 'id'};
+    const onGrantRowClick = (grant: Grant) => navigate(`/grants/${grant.id}`);
     const itemsPerPageOptions: number[] = [5, 10];
     const columns: Column<Grant>[] = [
         {
@@ -116,7 +116,7 @@ const AdminGrants = () => {
                     itemsPerPageOptions={itemsPerPageOptions}
                     defaultIPP={5}
                     defaultSort={columns[0]}
-                    link={publishedLink}
+                    onRowClick={onGrantRowClick}
                     />
                 </div>
                 : (
