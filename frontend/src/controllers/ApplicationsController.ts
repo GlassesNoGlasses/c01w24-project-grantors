@@ -1,6 +1,6 @@
 import { SERVER_PORT } from "../constants/ServerConstants";
 import { Application } from "../interfaces/Application";
-import { GetApplicationsResponse } from "../interfaces/ServerResponse";
+import { GetApplicationResponse, GetApplicationsResponse } from "../interfaces/ServerResponse";
 import { User } from "../interfaces/User";
 
 export default class ApplicationsController {
@@ -61,6 +61,29 @@ export default class ApplicationsController {
         }
     }
 
+    static async fetchApplication(applicationID: string): Promise<Application | undefined> {
+        try {
+            const response = await fetch(`http://localhost:${SERVER_PORT}/application/${applicationID}`,
+                {
+                    method: "GET",
+                    headers: {
+                        "Content-Type": "application/json"
+                        // TODO: send user.authToken to authenticate submission
+                    },
+                });
+
+            return await response.json().then((data: GetApplicationResponse) => {
+                if (data.error) {
+                    console.error("Server error fetching application:", data.error);
+                    return;
+                }
+                return data.response;
+            });
+        } catch (error) {
+            console.log("Fetch function failed:", error);
+        }
+    };
+
     static async submitApplication(user: User, application: Application): Promise<boolean> {
         try {
             const response = await fetch(`http://localhost:${SERVER_PORT}/application`,
@@ -81,5 +104,5 @@ export default class ApplicationsController {
             console.log("Fetch function failed:", error);
             return false;
         }
-    }
+    };
 }

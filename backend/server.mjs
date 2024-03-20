@@ -15,7 +15,9 @@ if (process.env.ENV === 'Docker') {
 const DB_NAME = "grantors";
 const COLLECTIONS = {
 	users: "users",
+	applicants: "applicants",
 	applications: "applications",
+	applicationReviews: "applicationReviews",
 	grants: "grants",
 	favouriteGrants: "favouriteGrants",
 };
@@ -55,8 +57,8 @@ function verifyRequestAuth(req, callback) {
 	jwt.verify(token, "secret-key", callback);
 }
 
-function dbGrantToFrontendGrant(grant) {
-	return {...grant, id: grant._id};
+function dbIDToFrontendID(object) {
+	return {...object, id: object._id};
 }
 
 app.post('/login', express.json(), async (req, res) => {
@@ -132,6 +134,21 @@ app.post("/signup", express.json(), async (req, res) => {
 
 		// Returning JSON Web Token
 		const token = jwt.sign({ username }, "secret-key", { expiresIn: "1h" });
+
+		if (!isAdmin) {
+			// Create applicant profile if not an admin
+			const applicantCollection = db.collection(COLLECTIONS.applicants);
+			const applicantInsert = await applicantCollection.insertOne({
+				_id: insertedId,
+				firstName: firstName,
+				lastName: lastName,
+				email: email,
+			});
+
+			if (!applicantInsert.acknowledged) {
+				return res.status(500).json({ error: "Failed to create applicant profile "});
+			}
+		}
 		res.status(201).json({ response: "User registered successfully.", token, id: insertedId});
 	} catch (error) {
 		res.status(500).json({ error: error.message });
@@ -263,7 +280,7 @@ app.get('/users/:userID/favourites', express.json(), async (req, res) => {
 			_id: { $in: favourites }
 		}).toArray();
 
-		res.status(200).json({ response: grants.map(grant => dbGrantToFrontendGrant(grant)) });
+		res.status(200).json({ response: grants.map(grant => dbIDToFrontendID(grant)) });
 	} catch (error) {
 		console.error(error);
 		res.status(500).json({ error: "Internal server error." });
@@ -342,7 +359,7 @@ app.get("/grant/:grantID", express.json(), async(req, res) => {
 			.json({ error: "Unable to find grant with given ID." });
 		}
 
-		res.status(200).json({ response: dbGrantToFrontendGrant(grant) });
+		res.status(200).json({ response: dbIDToFrontendID(grant) });
 	} catch (error) {
 		console.log(error);
 		res.status(500).json({ error: error.message });
@@ -386,7 +403,7 @@ app.get("/grants", express.json(), async(req, res) => {
 
 		const data = await grantCollection.find(filters).toArray();
 
-		const grants = data.map((grant) => dbGrantToFrontendGrant(grant));
+		const grants = data.map((grant) => dbIDToFrontendID(grant));
 
 		res.status(200).json({ response: grants });
 	} catch (error) {
@@ -395,10 +412,31 @@ app.get("/grants", express.json(), async(req, res) => {
 	}
 });
 
+app.get("/application/:applicationID", express.json(), async (req, res) => {
+	const applicationID = req.params.applicationID;
+
+	try {
+		const applicationCollection = db.collection(COLLECTIONS.applications);
+
+		const application = await applicationCollection.findOne({
+			_id: new ObjectId(applicationID)
+		});
+
+		if (!application) {
+			return res.status(404).json({ error: "Application not found." });
+		}
+
+		res.status(200).json({ response: dbIDToFrontendID(application) });
+	} catch (error) {
+		console.error(error);
+		res.status(500).json({ error: error.message });
+	}
+});
+
 app.post("/application", express.json(), async (req, res) => {
 	try {
 		const { 
-			userID,
+			applicantID,
 			grantID,
 			grantTitle, 
 			grantCategory,
@@ -410,7 +448,7 @@ app.post("/application", express.json(), async (req, res) => {
 
 		const applicationCollection = db.collection(COLLECTIONS.applications);
 		const existingApplication = await applicationCollection.findOne({
-			userID: userID,
+			applicantID: applicantID,
 			grantID: grantID,
 		});
 
@@ -435,7 +473,7 @@ app.post("/application", express.json(), async (req, res) => {
 
 		const inserted = await applicationCollection.insertOne(
 			{
-				userID: userID,
+				applicantID: applicantID,
 				grantID: grantID,
 				grantTitle: grantTitle,
 				grantCategory: grantCategory,
@@ -474,14 +512,14 @@ app.get("/applications", express.json(), async (req, res) => {
 		if (userID) {
 			pipeline.push({
 				$match: {
-					userID: userID
+					applicantID: userID
 				}
 			});
 		}
 
 		if (organization) {
 			const userCollection = db.collection(COLLECTIONS.users);
-			const user = await userCollection.findOne({ _id: decoded.userID });
+			const user = await userCollection.findOne({ _id: new ObjectId(decoded.userID) });
 			if (!user) {
 				return res.status(404).send("Organization not found.")
 			}
@@ -519,6 +557,68 @@ app.get("/applications", express.json(), async (req, res) => {
 		const applicationsCollection = db.collection(COLLECTIONS.applications);
 		const applications = await applicationsCollection.aggregate(pipeline).toArray();
 
-		res.json({ response: applications });
+		res.json({ response: applications.map((app) => dbIDToFrontendID(app)) });
 	});
+});
+
+app.get("/applicant/:applicantID", express.json(), async (req, res) => {
+	const applicantID = req.params.applicantID;
+
+	try {
+		const applicantCollection = db.collection(COLLECTIONS.applicants);
+
+		const applicant = await applicantCollection.findOne({
+			_id: new ObjectId(applicantID)
+		});
+
+		if (!applicant) {
+			return res.status(404).json({ error: "Applicant not found." });
+		}
+
+		res.status(200).json({ response: applicant });
+	} catch (error) {
+		console.error(error);
+		res.status(500).json({ error: error.message });
+	}
+});
+
+app.post("/review", express.json(), async (req, res) => {
+	const { applicationID, reviewerID, reviewText, rating, applicationStatus} = req.body;
+	try {
+		const reviewsCollection = db.collection(COLLECTIONS.applicationReviews);
+
+		const existingReview = await reviewsCollection.findOne({
+			applicationID: applicationID,
+			reviewerID: reviewerID,
+		});
+
+		if (existingReview) {
+			return res.status(400).json({ error: "Review already exists. Use patch to update review." });
+		}
+
+		const {insertedId} = await reviewsCollection.insertOne({
+			applicationID: applicationID,
+			reviewerID: reviewerID,
+			reviewText: reviewText,
+			rating: rating,
+			applicationStatus: applicationStatus,
+		});
+
+		if (!insertedId) {
+			return res.status(500).json({ errror: "Failed to insert review" });
+		}
+
+		const applicationCollection = db.collection(COLLECTIONS.applications);
+		await applicationCollection.updateOne(
+			{
+			_id: applicationID
+			},
+			{
+				$set: { status: applicationStatus }
+			});
+
+		res.status(201).json({ response: "Review submitted.", id: insertedId});
+	} catch (error) {
+		res.status(500).json({ error: error.message });
+	}
 });
