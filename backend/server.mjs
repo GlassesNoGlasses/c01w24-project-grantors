@@ -56,8 +56,8 @@ function verifyRequestAuth(req, callback) {
 	jwt.verify(token, "secret-key", callback);
 }
 
-function dbGrantToFrontendGrant(grant) {
-	return {...grant, id: grant._id};
+function dbIDToFrontendID(object) {
+	return {...object, id: object._id};
 }
 
 app.post('/login', express.json(), async (req, res) => {
@@ -279,7 +279,7 @@ app.get('/users/:userID/favourites', express.json(), async (req, res) => {
 			_id: { $in: favourites }
 		}).toArray();
 
-		res.status(200).json({ response: grants.map(grant => dbGrantToFrontendGrant(grant)) });
+		res.status(200).json({ response: grants.map(grant => dbIDToFrontendID(grant)) });
 	} catch (error) {
 		console.error(error);
 		res.status(500).json({ error: "Internal server error." });
@@ -358,7 +358,7 @@ app.get("/grant/:grantID", express.json(), async(req, res) => {
 			.json({ error: "Unable to find grant with given ID." });
 		}
 
-		res.status(200).json({ response: dbGrantToFrontendGrant(grant) });
+		res.status(200).json({ response: dbIDToFrontendID(grant) });
 	} catch (error) {
 		console.log(error);
 		res.status(500).json({ error: error.message });
@@ -402,7 +402,7 @@ app.get("/grants", express.json(), async(req, res) => {
 
 		const data = await grantCollection.find(filters).toArray();
 
-		const grants = data.map((grant) => dbGrantToFrontendGrant(grant));
+		const grants = data.map((grant) => dbIDToFrontendID(grant));
 
 		res.status(200).json({ response: grants });
 	} catch (error) {
@@ -556,7 +556,7 @@ app.get("/applications", express.json(), async (req, res) => {
 		const applicationsCollection = db.collection(COLLECTIONS.applications);
 		const applications = await applicationsCollection.aggregate(pipeline).toArray();
 
-		res.json({ response: applications });
+		res.json({ response: applications.map((app) => dbIDToFrontendID(app)) });
 	});
 });
 
