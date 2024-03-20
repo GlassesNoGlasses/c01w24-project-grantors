@@ -110,9 +110,9 @@ const ApplicationReview = () => {
                             <span>Title:</span>
                             <span>{grant ? grant.title : "Grant not found"}</span>
                         </div>
-                        <div id="grant-description" className="flex flex-row justify-between">
+                        <div id="grant-description" className="flex flex-row justify-between gap-5">
                             <span>Description:</span>
-                            <span>{grant ? grant.description : "Grant not found."}</span>
+                            <span className="text-right">{grant ? grant.description : "Grant not found."}</span>
                         </div>
                         <div id="grant-category" className="flex flex-row justify-between">
                             <span>Category:</span>
