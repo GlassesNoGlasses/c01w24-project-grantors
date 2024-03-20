@@ -105,12 +105,4 @@ export default class ApplicationsController {
             return false;
         }
     };
-
-    static async rejectApplication(applicationID: string) {
-
-    };
-
-    static async approveApplication(applicationID: string) {
-
-    };
 }

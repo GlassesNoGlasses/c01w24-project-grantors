@@ -2,30 +2,55 @@ import { StarIcon } from "@heroicons/react/24/solid";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router";
 import ApplicationsController from "../../../controllers/ApplicationsController";
-import { Application } from "../../../interfaces/Application";
+import { Application, ApplicationStatus } from "../../../interfaces/Application";
 import UserController from "../../../controllers/UserController";
 import { Applicant } from "../../../interfaces/Applicant";
 import { Grant, GrantQuestion } from "../../../interfaces/Grant";
 import GrantsController from "../../../controllers/GrantsController";
+import ReviewController from "../../../controllers/ReviewController";
+import { useUserContext } from "../../contexts/userContext";
 
 const ApplicationReview = () => {
+    const { user } = useUserContext();
     const { applicationID } = useParams();
     const [ application, setApplication ] = useState<Application | undefined>();
     const [ applicant, setApplicant ] = useState<Applicant | undefined>();
     const [ grant, setGrant ] = useState<Grant | undefined>();
-    const [rating, setRating] = useState<number>(0);
-    const [hoverRating, setHoverRating] = useState<number>(0);
+    const [ rating, setRating ] = useState<number>(0);
+    const [ hoverRating, setHoverRating ] = useState<number>(0);
+    const [ review, setReview ] = useState<string>('');
+    const [ reviewed, setReviewed ] = useState<boolean>(true);
+    const [ applicationStatus, setApplicationStatus ] = useState<ApplicationStatus>(ApplicationStatus.submitted);
+    const [ showError, setShowError ] = useState<boolean>(false);
 
     const rejectApplication = () => {
-
+        setApplicationStatus(ApplicationStatus.rejected);
+        submitApplicationReview();
     };
 
     const submitApplicationReview = () => {
+        if (application && user) {
+            ReviewController.submitReview({
+                ID: '',
+                applicationID: application.id,
+                reviewerID: user.accountID,
+                reviewText: review,
+                rating: rating,
+                applicationStatus: applicationStatus,
 
+            }, user).then((success: boolean) => {
+                if (success) {
+                    setReviewed(true);
+                } else {
+                    setShowError(true);
+                }
+            });
+        }
     };
 
     const approveApplication = () => {
-
+        setApplicationStatus(ApplicationStatus.approved);
+        submitApplicationReview();
     };
 
     useEffect(() => {
@@ -136,29 +161,47 @@ const ApplicationReview = () => {
                         <textarea
                             className='outline outline-2 outline-magnify-blue p-2 w-full h-full rounded'
                             placeholder="Application notes."
-                            onChange={(e) => {}}
+                            onChange={(e) => setReview(e.target.value)}
                         />
                     </div>
                     
                 </div>
             </div>
-            <div id="actions" className="flex flex-row justify-between px-8 pt-4">
-                <button id="reject" className="bg-magnify-blue py-5 px-10 rounded-xl text-white font-bold hover:bg-magnify-dark-blue transition ease-in-out duration-200"
-                    onClick={rejectApplication}
-                >
-                    Reject
-                </button>
-                <button id="submit review" className="bg-magnify-blue py-5 px-10 rounded-xl text-white font-bold hover:bg-magnify-dark-blue transition ease-in-out duration-200"
-                    onClick={submitApplicationReview}
-                >
-                    Submit Review
-                </button>
-                <button id="approve" className="bg-magnify-blue py-5 px-10 rounded-xl text-white font-bold hover:bg-magnify-dark-blue transition ease-in-out duration-200"
-                    onClick={approveApplication}
-                >
-                    Approve
-                </button>
-            </div>
+            {
+               reviewed ? 
+               <div id="post-review-actions" className="flex flex-row justify-between px-8 pt-4">
+                    <span>Application reviewed!</span>
+                    <button id="next-application" className={`py-5 px-10 button`}
+                        onClick={rejectApplication}
+                    >
+                        Review Next Application
+                    </button>
+                    <button id="back-to-dashboard" className={`py-5 px-10 button`}
+                        onClick={submitApplicationReview}
+                    >
+                        Back to Dashboard
+                    </button>
+               </div>
+               : 
+               <div id="actions" className="flex flex-row justify-between px-8 pt-4">
+                    <button id="reject" className={`py-5 px-10 ${application && applicant && grant ? "button" : "button-disabled" }`}
+                        onClick={rejectApplication}
+                    >
+                        Reject
+                    </button>
+                    <button id="submit-review" className={`py-5 px-10 ${application && applicant && grant ? "button" : "button-disabled" }`}
+                        onClick={submitApplicationReview}
+                    >
+                        Submit Review
+                    </button>
+                    <button id="approve" className={`py-5 px-10 ${application && applicant && grant ? "button" : "button-disabled" }`}
+                        onClick={approveApplication}
+                    >
+                        Approve
+                    </button>
+                </div>
+            }
+            
         </div>
     );
 };
