@@ -22,8 +22,8 @@ const AdminApplicationList = ({}: AdminApplicationListProps) => {
         },
         {
             title: "Applicant",
-            format: (application: Application) => String(application.userID),
-            sort: (app1: Application, app2: Application) => app1.userID < app2.userID ? -1 : 1,
+            format: (application: Application) => String(application.applicantID),
+            sort: (app1: Application, app2: Application) => app1.applicantID < app2.applicantID ? -1 : 1,
         },
         {
             title: "Date",
@@ -48,7 +48,7 @@ const AdminApplicationList = ({}: AdminApplicationListProps) => {
             ApplicationsController.fetchOrgApplications(user).then((applications: Application[] | undefined) => {
                 if (applications) {
                     setApplications(applications.map((application: Application) => {
-                        return {...application, submissionDate: new Date(application.submissionDate)};
+                        return application;
                     }));
                 } else {
                     // TODO: Display error message / popup

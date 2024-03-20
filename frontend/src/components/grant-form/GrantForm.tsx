@@ -28,7 +28,7 @@ const GrantForm = ({ user, grant }: GrantFormProps) => {
 
         ApplicationsController.submitApplication(user, {
             id: '', // id does not exist yet as we have not submitted
-            userID: user.accountID,
+            applicantID: user.accountID,
             grantID: grant.id,
             grantTitle: grant.title,
             grantCategory: grant.category,
