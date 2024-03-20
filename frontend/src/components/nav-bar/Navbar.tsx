@@ -87,7 +87,8 @@ const Navbar = ({}: NavbarProps) => {
 					<a href='https://www.magnifyaccess.ai/about-us' 
 					className='hover:underline' target='blank'>About Us</a>
 					<Link className='hover:underline' to="/services">Services</Link>
-					<Link className='hover:underline' to="/contact">Contact</Link>
+					<a href='https://www.magnifyaccess.ai/contact-us' 
+					className='hover:underline' target='blank'>Contact</a>
 				</div>
 				
 				<div className='flex xl:gap-10 gap-4'>
