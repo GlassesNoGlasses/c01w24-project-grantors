@@ -1,9 +1,18 @@
 import { StarIcon } from "@heroicons/react/24/solid";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useParams } from "react-router";
+import ApplicationsController from "../../../controllers/ApplicationsController";
+import { Application } from "../../../interfaces/Application";
+import UserController from "../../../controllers/UserController";
+import { Applicant } from "../../../interfaces/Applicant";
+import { Grant, GrantQuestion } from "../../../interfaces/Grant";
+import GrantsController from "../../../controllers/GrantsController";
 
 const ApplicationReview = () => {
-    const applicationID = useParams();
+    const { applicationID } = useParams();
+    const [ application, setApplication ] = useState<Application | undefined>();
+    const [ applicant, setApplicant ] = useState<Applicant | undefined>();
+    const [ grant, setGrant ] = useState<Grant | undefined>();
     const [rating, setRating] = useState<number>(0);
     const [hoverRating, setHoverRating] = useState<number>(0);
 
@@ -18,6 +27,34 @@ const ApplicationReview = () => {
     const approveApplication = () => {
 
     };
+
+    useEffect(() => {
+        if (applicationID) {
+            ApplicationsController.fetchApplication(applicationID).then((application: Application | undefined) => {
+                if (application) {
+                    setApplication(application);
+                    return application;
+                }
+            });
+        }
+    }, [applicationID]);
+
+    useEffect(() => {
+        if (application) {
+            UserController.fetchApplicant(application.applicantID).then((applicant: Applicant | undefined) => {
+                if (applicant) {
+                    setApplicant(applicant);
+                }
+            });
+
+            GrantsController.fetchGrant(application.grantID).then((grant: Grant | undefined) => {
+                if (grant) {
+                    setGrant(grant);
+                }
+            });
+        }
+
+    }, [application]);
 
     return (
         <div id="review-container" className="flex flex-col shadow-[0_4px_25px_rgba(0,0,0,0.2)] rounded m-8 pb-8">
@@ -46,50 +83,53 @@ const ApplicationReview = () => {
                         <span className="text-lg">Applicant</span>
                         <div id="name" className="flex flex-row justify-between">
                             <span>Name:</span>
-                            <span>Jim McHugh</span>
+                            <span>{applicant ? applicant.firstName + ' ' + applicant.lastName : 'Applicant not found'}</span>
                         </div>
                         <div id="email" className="flex flex-row justify-between">
                             <span>Email:</span> 
-                            <span>jimmy@mcgill.com</span>
+                            <span>{applicant ? applicant.email : 'Applicant not found'}</span>
                         </div>
                     </div>
-                    <div id="application-fields" className="flex flex-col border-2 rounded border-magnify-blue p-2 gap-4">
-                        <div id="field1">
-                            <div id="question" className="font-bold italic">Question: Why do you want this grant</div>
-                            <div id="response"> Cuz i like money</div>
-                        </div>
-                        <div id="field2">
-                            <div id="question" className="font-bold italic">Question: What would you use the money for</div>
-                            <div id="response">A. Idk buy some food</div>
-                        </div>
-                        <div id="field3">
-                            <div id="question" className="font-bold italic">Question: How much funding are you requesting</div>
-                            <div id="response">A. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis rutrum erat libero, viverra aliquet ante sagittis ac. Fusce auctor suscipit sapien, eget molestie ante congue eget. Sed tincidunt est a scelerisque posuere. Pellentesque bibendum sit amet tellus at blandit. Nam gravida nulla sem, in porta libero porttitor a.</div>
-                        </div>
-                    </div>
+                    <ul id="application-fields" className="flex flex-col border-2 rounded border-magnify-blue p-2 gap-4">
+                        {
+                            application ? application.responses.map((grantQuestion: GrantQuestion, index: number) => (
+                                <li key={index}>
+                                    <div id={`question-${index}`} className="font-bold italic">Question: {grantQuestion.question}</div>
+                                    <div id={`response-${index}`}>{grantQuestion.answer}</div>
+                                </li>
+                            ))
+
+                            : <div>Application not found</div>
+                        }
+                    </ul>
                 </div>
                 <div id="right-col" className="flex flex-col w-1/2 gap-4">
                     <div id="grant-info-container" className="flex flex-col p-2 border-2 rounded border-magnify-blue">
                         <span className="text-lg">Grant Info</span>
                         <div id="grant-title" className="flex flex-row justify-between">
                             <span>Title:</span>
-                            <span>UTAPS</span>
+                            <span>{grant ? grant.title : "Grant not found"}</span>
                         </div>
                         <div id="grant-description" className="flex flex-row justify-between">
                             <span>Description:</span>
-                            <span>UTAPS</span>
+                            <span>{grant ? grant.description : "Grant not found."}</span>
                         </div>
                         <div id="grant-category" className="flex flex-row justify-between">
                             <span>Category:</span>
-                            <span>Education</span>
+                            <span>{grant ? grant.category : "Grant not found."}</span>
                         </div>
                         <div id="grant-funding" className="flex flex-row justify-between">
                             <span>Funding Amount:</span>
-                            <span>1000-5000</span>
+                            <span>{grant ? grant.minAmount + " - " + grant.maxAmount : "Grant not found."}</span>
                         </div>
                         <div id="grant-deadline" className="flex flex-row justify-between">
                             <span>Deadline:</span>
-                            <span>June 30, 2024</span>
+                            <span>{grant ? grant.deadline.toLocaleDateString('en-GB', {
+                                                day: '2-digit',
+                                                month: 'short',
+                                                year: 'numeric'})
+                                        : "Grant not found."}
+                            </span>
                         </div>
                     </div>
                     <div id="notes" className="p-1 h-full">
