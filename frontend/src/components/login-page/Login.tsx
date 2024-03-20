@@ -50,7 +50,7 @@ const Login: React.FC<LoginProps> = () => {
 	};
 
 	return (
-		<div className="flex items-center justify-center min-h-screen bg-gray-100" style={{ backgroundColor: 'rgb(141, 229, 100)' }}>
+		<div className="flex items-center justify-center min-h-screen pt-20 bg-primary">
 			<div 
 				className="w-full max-w-xs px-4 py-6 mx-auto bg-white shadow rounded-lg 
 					sm:px-6 sm:py-8 md:max-w-sm lg:max-w-md xl:max-w-lg 2xl:max-w-xl flex flex-col gap-4"
@@ -92,7 +92,7 @@ const Login: React.FC<LoginProps> = () => {
 					</div>
 					<div className="flex justify-center">
 					<button type='submit'
-						className='p-2 px-5 m-2 bg-green-500 hover:bg-green-600 active:bg-green-700
+						className='p-2 px-5 m-2 bg-primary hover:bg-secondary
 							text-white font-bold rounded-lg shadow-md transition-colors duration-150 ease-in
 							text-base w-full'>
 						Log In

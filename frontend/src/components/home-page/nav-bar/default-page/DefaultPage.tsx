@@ -19,28 +19,6 @@ const DefaultPage = () => {
 			</Link>
 		);
 	};
-
-	const DiscoverServicesButton = () => {
-		return (
-			<Link className='p-2 px-5 m-2 bg-blue-500 hover:bg-blue-600 active:bg-blue-700
-			text-white font-bold rounded-lg shadow-md transition-colors duration-150 ease-in
-			text-lg'
-			to='/services'>
-			Discover Our Services
-			</Link>
-		);
-	};
-
-	const ViewGrantsButton = () => {
-		return (
-			<Link className='p-2 px-5 m-2 bg-purple-500 hover:bg-purple-600 active:bg-purple-700
-			text-white font-bold rounded-lg shadow-md transition-colors duration-150 ease-in
-			text-lg'
-			to='/grants'>
-			View Grants
-			</Link>
-		);
-	};
   
 	return (
 		<div>
