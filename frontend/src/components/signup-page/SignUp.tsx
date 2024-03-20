@@ -170,7 +170,7 @@ const SignUp: React.FC<SignUpProps> = () => {
 					<div className="flex justify-center">
 						<button
 							type="submit" 
-							className='p-2 px-5 m-2 bg-secondary hover:bg-primary
+							className='p-2 px-5 m-2 bg-secondary hover:bg-primary w-full
 							text-white font-bold rounded-lg shadow-md transition-colors duration-150 ease-in
 							text-base'>Sign Up</button>
 					</div>
