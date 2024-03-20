@@ -616,7 +616,7 @@ app.post("/review", express.json(), async (req, res) => {
 			{
 				$set: { status: applicationStatus }
 			});
-			
+
 		res.status(201).json({ response: "Review submitted.", id: insertedId});
 	} catch (error) {
 		res.status(500).json({ error: error.message });

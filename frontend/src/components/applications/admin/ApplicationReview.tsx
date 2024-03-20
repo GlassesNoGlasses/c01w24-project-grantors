@@ -19,7 +19,7 @@ const ApplicationReview = () => {
     const [ rating, setRating ] = useState<number>(0);
     const [ hoverRating, setHoverRating ] = useState<number>(0);
     const [ review, setReview ] = useState<string>('');
-    const [ reviewed, setReviewed ] = useState<boolean>(true);
+    const [ reviewed, setReviewed ] = useState<boolean>(false);
     const [ applicationStatus, setApplicationStatus ] = useState<ApplicationStatus>(ApplicationStatus.submitted);
     const [ showError, setShowError ] = useState<boolean>(false);
 

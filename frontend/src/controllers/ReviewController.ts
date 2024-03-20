@@ -13,6 +13,7 @@ export default class ReviewController {
                     'Content-Type': 'application/json',
                     'Authorization': `Bearer ${user.authToken}`
                 },
+                body: JSON.stringify(review),
             });
 
             if (!res.ok) {
