@@ -82,14 +82,15 @@ const Navbar = ({}: NavbarProps) => {
 	const DefaultTopNavigation = (): JSX.Element => {
 		return (
 			<div className='flex items-center'>	
-				<div className='flex justify-end gap-20 mr-16'>
-					<Link className='text-base hover:underline' to="/about">About Us</Link>
-					<Link className='text-base hover:underline' to="/services">Services</Link>
-					<Link className='text-base hover:underline' to="/gallery">Gallery</Link>
-					<Link className='text-base hover:underline' to="/contact">Contact</Link>
+				<div className='hidden md:flex justify-end lg:text-[20px] text-[17px] xl:gap-20 xl:mr-16 
+				mr-6 lg:gap-10 gap-6'>
+					<a href='https://www.magnifyaccess.ai/about-us' 
+					className='hover:underline' target='blank'>About Us</a>
+					<Link className='hover:underline' to="/services">Services</Link>
+					<Link className='hover:underline' to="/contact">Contact</Link>
 				</div>
 				
-				<div className='flex gap-10'>
+				<div className='flex xl:gap-10 gap-4'>
 					<LoginButton />
 					<SignUpButton />
 				</div>
@@ -106,17 +107,19 @@ const Navbar = ({}: NavbarProps) => {
 	};
 
 	return (
-		<div className='h-full w-full bg-primary'>
-			<nav className='flex flex-col sm:flex-row justify-between items-center sm:pr-8 
+		<div>
+			<nav className='flex flex-col sm:flex-row justify-between items-center lg:pr-8 
 			border-b-2 border-black bg-white fixed top-0 w-full'>
 			
 				<div className='flex items-end'>
 					<Link to="/" className='nav-brand'>
-						<img src={logoImage} alt='grantors logo' className='h-[60px] mt-2 mb-2 ml-4'/>
+						<img src={logoImage} alt='grantors logo' 
+						className='lg:h-[60px] h-[40px] lg:w-[200px] w-[120px] mt-2 mb-2 ml-4'/>
 					</ Link>
 					<p className='mb-4 text-md font-bold ml-2'>By</p>
 					<a href="https://www.magnifyaccess.ai/" target='blank'>
-						<img src={MAlogoImage} alt='grantors logo' className='h-[40px] mt-2 mb-2 ml-1'/>
+						<img src={MAlogoImage} alt='grantors logo' 
+						className='lg:h-[40px] lg:w-[81px] h-[32px] w-[64px] mt-2 mb-2 ml-1'/>
 					</a>
 				</ div>
 			

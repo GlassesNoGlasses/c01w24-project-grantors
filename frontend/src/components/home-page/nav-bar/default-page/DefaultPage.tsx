@@ -3,13 +3,19 @@ import happy_person from '../../../../images/happy_person.png'
 import grant_signing from '../../../../images/grant_signing.png'
 
 const DefaultPage = () => {
-	const CreateAccountButton = () => {
+
+	interface CustomComponentProps {
+		content: string;
+		to: string
+	  }
+
+	const ActionButton: React.FC<CustomComponentProps> = ({ content, to }) => {
 		return (
-			<Link className='p-2 px-5 m-2 bg-secondary hover:bg-primary active:bg-green-700
+			<Link className='p-2 px-5 m-2 bg-secondary hover:bg-primary active:bg-black
 			text-white font-bold rounded-lg shadow-md transition-colors duration-150 ease-in
 			text-lg'
-			to='/signup'>
-			Create Account
+			to={to}>
+				{content}
 			</Link>
 		);
 	};
@@ -37,12 +43,13 @@ const DefaultPage = () => {
 	};
   
 	return (
-		<div className='bg-home-background bg-cover 
-		bg-no-repeat bg-center h-[100vh] w-[100vw] fixed z-0]'>
-			<div className='flex justify-center pt-24'>
+		<div>
+			<div className='bg-home-background bg-cover 
+				bg-no-repeat bg-center h-[100vh] w-[100vw] fixed z-[-1]'/>
+			<div className='flex justify-center pt-24 z-10'>
 				<div className='flex flex-col py-2 lg:w-1/2'>
-					<div className='flex flex-col gap-8 m-2 p-6 rounded-lg text-center
-					bg-white hover:shadow-lg shadow-black transition-shadow duration-150 ease-in'>
+					<div className='flex flex-col gap-8 m-2 p-6 rounded-2xl text-center border-4 border-primary
+					bg-white shadow-2xl shadow-black transition-shadow duration-150 ease-in'>
 						<h2 className='flex flex-row justify-center text-4xl font-bold'>Bridging Opportunities, Breaking Barriers</h2>
 						<div className='flex justify-center'>
 							<img className='rounded-lg sm:w-1/2' 
@@ -53,11 +60,11 @@ const DefaultPage = () => {
 							Welcome to Grantors, where accessibility meets opportunity. Our innovative web app is your one-stop destination for discovering, applying, and managing grants. Whether you're a passionate individual seeking funding for your projects or a forward-thinking organization looking to support impactful initiatives, Grantors provides an inclusive platform tailored to your needs. Explore, connect, and make a difference with ease – it's time to turn your aspirations into reality with Grantors.
 						</p>
 						<div className='text-base flex justify-center'>
-							<CreateAccountButton />
+							<ActionButton content="Create Account" to='/signup'/>
 						</div>
 					</div>
-					`<div className='flex flex-col gap-8 m-2 p-6 rounded-lg text-center
-					bg-white hover:shadow-md transition-shadow duration-150 ease-in'>
+					<div className='flex flex-col gap-8 m-2 p-6 rounded-2xl text-center border-4 border-primary
+					bg-white shadow-2xl shadow-black transition-shadow duration-150 ease-in'>
 						<h2 className='flex flex-row justify-center text-3xl font-bold'>One Stop Shop</h2>
 						<p className='text-base flex flex-row justify-center'>
 						We understand the challenges individuals and organizations face when navigating the complex world of grants. Our platform is designed to be your ultimate solution – a comprehensive, all-in-one hub where you can effortlessly access everything you need for your grant journey.
@@ -89,11 +96,11 @@ const DefaultPage = () => {
 							Whether you're a grant seeker or a grant provider, Grantors offers unmatched convenience, accessibility, and efficiency at every step of the journey. Join us today and experience the difference of a truly inclusive and empowering grant platform.
 						</p>
 						<div className='text-base flex justify-center'>
-							<DiscoverServicesButton />
+							<ActionButton content="Discover Our Services" to='/services'/>
 						</div>
 					</div>
-					<div className='flex flex-col gap-8 m-2 p-6 rounded-lg text-center
-					bg-orange-100 hover:shadow-md transition-shadow duration-150 ease-in'>
+					<div className='flex flex-col gap-8 m-2 p-6 rounded-2xl text-center border-4 border-primary
+					bg-white shadow-2xl shadow-black transition-shadow duration-150 ease-in'>
 						<h2 className='flex flex-row justify-center text-3xl font-bold'>Accessibility First</h2>
 						<p className='text-base flex flex-row justify-center'>
 							At Grantors, accessibility isn't just a feature – it's a fundamental principle that shapes everything we do. We're committed to ensuring that our platform is inclusive and accessible to all users, regardless of their abilities or limitations.
@@ -102,8 +109,8 @@ const DefaultPage = () => {
 							Accessibility isn't an afterthought – it's a core value that drives our design, development, and user experience decisions. We're dedicated to creating a platform where everyone can fully participate, contribute, and thrive.
 						</p>
 					</div>
-					<div className='flex flex-col gap-8 m-2 p-6 rounded-lg text-center
-					bg-purple-100 hover:shadow-md transition-shadow duration-150 ease-in'>
+					<div className='flex flex-col gap-8 m-2 p-6 rounded-2xl text-center border-4 border-primary
+					bg-white shadow-2xl shadow-black transition-shadow duration-150 ease-in'>
 						<h2 className='flex flex-row justify-center text-3xl font-bold'>World Renowned System</h2>
 						<p className='text-base flex flex-row justify-center'>
 							We take pride in curating a vast array of grant opportunities from some of the most reputable and esteemed grant providers in the industry. Our platform offers access to a diverse range of funding opportunities, ensuring that users can discover grants that align with their unique goals, interests, and initiatives.
@@ -118,7 +125,7 @@ const DefaultPage = () => {
 							With Grantors, you can rest assured that you're accessing high-quality grant opportunities from trusted providers who are dedicated to driving positive change in the world. Join us today and unlock a world of possibilities to turn your vision into reality.
 						</p>
 						<div className='text-base flex justify-center'>
-							<ViewGrantsButton />
+							<ActionButton content="Grants" to='/grants'/>
 						</div>
 					</div>
 				</div>
