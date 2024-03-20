@@ -12,6 +12,7 @@ import ClientApplicationList from "./components/home-page/nav-bar/client-dashboa
 import AdminGrants from "./components/home-page/nav-bar/admin-dashboard/admin-grants/AdminGrants";
 import SavedGrants from "./components/saved-grants/SavedGrants";
 import GrantApply from "./components/grant-apply/GrantApply";
+import ApplicationReview from "./components/applications/admin/ApplicationReview";
 
 function App() {
 	return (
@@ -36,6 +37,7 @@ function App() {
 						<Route path=":organization/applications" element={<AdminApplicationList/>} />
 						<Route path="applications" element={<ClientApplicationList />} />
 						<Route path="grants/:grantID/apply" element={<GrantApply />} />
+						<Route path="application/:applicationID/review" element={<ApplicationReview />} />
 					</Route>
 				</Routes>
 			)}

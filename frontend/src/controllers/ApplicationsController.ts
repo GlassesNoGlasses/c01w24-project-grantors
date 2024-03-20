@@ -81,5 +81,13 @@ export default class ApplicationsController {
             console.log("Fetch function failed:", error);
             return false;
         }
-    }
+    };
+
+    static async rejectApplication(applicationID: string) {
+
+    };
+
+    static async approveApplication(applicationID: string) {
+
+    };
 }

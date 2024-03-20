@@ -5,6 +5,9 @@ import { ApplicationStatus } from '../../interfaces/Application';
 import ApplicationsController from '../../controllers/ApplicationsController';
 import { useNavigate } from 'react-router-dom';
 
+// TODO: This file and component should be renamed to ApplicationForm since this
+// is the form applicants fill out to submit and application, plus we already
+// have GrantForm for when the admin is creating the grant
 const GrantForm = ({ user, grant }: GrantFormProps) => {
     const [questionList, setQuestionList] = useState<GrantQuestion[]>(grant.questions);
     const navigate = useNavigate()

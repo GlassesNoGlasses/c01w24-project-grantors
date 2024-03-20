@@ -22,6 +22,9 @@ module.exports = {
       colors: {
         'grantor-green': 'rgb(141, 229, 100)',
         'dim': 'rgb(0, 0, 0, 0.5)',
+        'magnify-light-blue': 'rgb(235, 244, 244)',
+        'magnify-blue': 'rgb(33, 82, 92)',
+        'magnify-dark-blue': 'rgb(12, 39, 45)',
       }
     },
   },
