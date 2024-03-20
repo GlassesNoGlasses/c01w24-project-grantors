@@ -50,10 +50,12 @@ const Login: React.FC<LoginProps> = () => {
 	};
 
 	return (
-		<div className="flex items-center justify-center min-h-screen pt-20 bg-primary">
+		<div className="flex items-center justify-center min-h-screen pt-20 bg-home-background bg-cover 
+    bg-no-repeat bg-center h-[100vh] w-[100vw] fixed z-[-1]">
 			<div 
-				className="w-full max-w-xs px-4 py-6 mx-auto bg-white shadow rounded-lg 
-					sm:px-6 sm:py-8 md:max-w-sm lg:max-w-md xl:max-w-lg 2xl:max-w-xl flex flex-col gap-4"
+				className="w-full max-w-xs px-4 py-6 mx-auto bg-white rounded-lg 
+					sm:px-6 sm:py-8 md:max-w-sm lg:max-w-md xl:max-w-lg 2xl:max-w-xl flex flex-col gap-4
+          border-4 border-primary shadow-2xl shadow-black"
 				style={{ boxShadow: '-10px 10px 30px 0 rgba(0, 0, 0, 0.1)' }}>
 				<h3 className="text-xl font-bold text-center sm:text-2xl text-gray-700">Log in to your account</h3>
 				<form className='flex flex-col gap-4' onSubmit={handleSubmit}>
@@ -100,7 +102,9 @@ const Login: React.FC<LoginProps> = () => {
 					</div>
 					<div className="form-footer-container" style={{ marginTop: '5%' }}>
 						<Link to="/signup" className="underline" style={{ textDecoration: 'underline' }}>Sign Up</Link>
-						<a href="#" className="forgot-password text-sm text-green-500 hover:underline sm:text-base" style={{ display: 'flex', float: 'right', color: 'rgb(34, 197, 94)' }}>Forgot password?</a>
+						<a href="#" className="forgot-password text-sm text-secondary hover:underline sm:text-base " style={{ display: 'flex', float: 'right' }}>
+              Forgot password?
+            </a>
 					</div>
 				</form>
 			</div>
