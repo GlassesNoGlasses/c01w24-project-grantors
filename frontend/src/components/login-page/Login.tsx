@@ -61,7 +61,7 @@ const Login: React.FC<LoginProps> = () => {
 				<form className='flex flex-col gap-4' onSubmit={handleSubmit}>
 					<div className="flex items-center mt-4">
 						<img src={emailIcon} alt="Email"
-							className="mr-2 h-5 w-5 flex-shrink-0 text-green-500" />
+							className="mr-2 h-5 w-5 flex-shrink-0" />
 						<input
 							type="text"
 							id="email"
@@ -76,7 +76,7 @@ const Login: React.FC<LoginProps> = () => {
 					</div>
 					<div className="flex items-center mt-4">
 						<img src={passwordIcon} alt="Password"
-							className="mr-2 h-5 w-5 flex-shrink-0 text-green-500" />
+							className="mr-2 h-5 w-5 flex-shrink-0" />
 						<input
 							type="password"
 							id="password"

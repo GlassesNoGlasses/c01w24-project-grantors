@@ -16,7 +16,7 @@ const Navbar = ({}: NavbarProps) => {
 
 	const LoginButton = () => {
 		return (
-			<Link className='p-2 px-5 m-2 bg-primary hover:bg-secondary active:bg-green-700
+			<Link className='p-2 px-5 m-2 bg-primary hover:bg-secondary 
 			text-white font-bold rounded-lg shadow-md transition-colors duration-150 ease-in
 			text-base'
 			to='/login'>
@@ -27,7 +27,7 @@ const Navbar = ({}: NavbarProps) => {
 
 	const SignUpButton = () => {
 		return (
-			<Link className='p-2 px-5 m-2 bg-secondary hover:bg-primary active:bg-blue-700
+			<Link className='p-2 px-5 m-2 bg-secondary hover:bg-primary 
 			text-white font-bold rounded-lg shadow-md transition-colors duration-150 ease-in
 			text-base'
 			to='/signup'>
