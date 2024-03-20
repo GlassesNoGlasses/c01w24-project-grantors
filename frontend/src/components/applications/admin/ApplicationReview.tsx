@@ -9,6 +9,7 @@ import { Grant, GrantQuestion } from "../../../interfaces/Grant";
 import GrantsController from "../../../controllers/GrantsController";
 import ReviewController from "../../../controllers/ReviewController";
 import { useUserContext } from "../../contexts/userContext";
+import { useNavigate } from "react-router-dom";
 
 const ApplicationReview = () => {
     const { user } = useUserContext();
@@ -22,6 +23,8 @@ const ApplicationReview = () => {
     const [ reviewed, setReviewed ] = useState<boolean>(false);
     const [ applicationStatus, setApplicationStatus ] = useState<ApplicationStatus>(ApplicationStatus.submitted);
     const [ showError, setShowError ] = useState<boolean>(false);
+
+    const navigate = useNavigate();
 
     const rejectApplication = () => {
         setApplicationStatus(ApplicationStatus.rejected);
@@ -179,7 +182,7 @@ const ApplicationReview = () => {
                         </button>
                     </div>
                     <button id="back-to-dashboard" className={`py-5 px-10 button`}
-                        onClick={submitApplicationReview}
+                        onClick={() => navigate("/")}
                     >
                         Back to Dashboard
                     </button>
