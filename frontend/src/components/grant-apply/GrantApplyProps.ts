@@ -1,1 +1,1 @@
-export interface GrantPageApplyProps {}
+export interface GrantApplyProps {}

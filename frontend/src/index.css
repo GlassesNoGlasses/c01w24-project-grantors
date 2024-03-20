@@ -6,3 +6,11 @@
     font-family: 'SF-Compact-Rounded-Regular';
     src: url('../public/fonts/SF-Compact-Rounded-Regular.otf');
 }
+
+.button {
+    @apply bg-magnify-blue rounded-xl text-white font-bold hover:bg-magnify-dark-blue transition ease-in-out duration-200
+}
+
+.button-disabled {
+    @apply bg-slate-500 text-black rounded-xl
+}

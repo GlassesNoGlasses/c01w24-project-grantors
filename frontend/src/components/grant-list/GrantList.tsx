@@ -50,8 +50,8 @@ export const GrantItem = ({ grant, link, favourite }: GrantItemProps) => {
                 <div className="flex flex-row gap-2">
                     <h2 className="text-lg">{`CAD $${grant.minAmount.toString()} - $${grant.maxAmount.toString()}`}</h2>
                     <button onClick={(e) => { 
-                    e.preventDefault();
-                    toggleFavorite(); 
+                        e.preventDefault();
+                        toggleFavorite(); 
                     }}>
                         <StarIcon className={`h-6 w-6 ${isFavourite ? 'text-yellow-500' : 'text-gray-500'}`} />
                     </button>

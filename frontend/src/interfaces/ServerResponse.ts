@@ -1,3 +1,4 @@
+import { Applicant } from "./Applicant";
 import { Application } from "./Application";
 import { Grant } from "./Grant";
 
@@ -22,13 +23,23 @@ export interface GetGrantsResponse {
     error?: string,
 };
 
+export interface GetApplicationResponse {
+    response?: Application,
+    error?: string,
+};
+
 export interface GetApplicationsResponse {
     response?: Application[],
     error?: string,
-}
+};
 
 export interface CreateObjectResponse {
     response?: string,
     id?: string,
+    error?: string,
+};
+
+export interface GetApplicantResponse {
+    response?: Applicant,
     error?: string,
 }

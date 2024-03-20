@@ -10,7 +10,7 @@ function Table<T>(
         itemsPerPageOptions,
         defaultIPP,
         defaultSort,
-        link,
+        onRowClick,
     }: TableProps<T>) {
     const [ pageItems, setPageItems ] = useState<T[]>(items.slice(0, defaultIPP));
     const [ currentPage, setCurrentPage ] = useState<number>(0);
@@ -70,8 +70,8 @@ function Table<T>(
     };
 
     const handleItemClick = (item: T) => {
-        if (link) {
-            navigate(link.to + (link.key ? item[link.key] : ''));
+        if (onRowClick) {
+            onRowClick(item);
         }
     }
 

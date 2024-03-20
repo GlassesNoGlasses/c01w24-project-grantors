@@ -1,6 +1,8 @@
 import { Cookies } from "react-cookie";
 import { SERVER_PORT } from "../constants/ServerConstants";
 import { User } from "../interfaces/User";
+import { GetApplicantResponse } from "../interfaces/ServerResponse";
+import { Applicant } from "../interfaces/Applicant";
 
 
 export default class UserController {
@@ -59,7 +61,6 @@ export default class UserController {
             console.error("Error while signing up", error);
         }
     }
-        
 
     static async fetchUser(authToken: string): Promise<User | undefined> {
         try {
@@ -80,4 +81,21 @@ export default class UserController {
         }
     }
 
+    static async fetchApplicant(applicantID: string): Promise<Applicant | undefined> {
+        try {
+            const res = await fetch(`http://localhost:${SERVER_PORT}/applicant/${applicantID}`, {
+                method: 'GET',
+            });
+
+            return await res.json().then((data: GetApplicantResponse) => {
+                if (data.error) {
+                    console.error("Server error fetching applicant:", data.error);
+                    return;
+                }
+                return data.response;
+            });
+        } catch (error) {
+            console.error("Error while fetching user", error);
+        }
+    }
 }

@@ -3,7 +3,6 @@ import Navbar from "./components/nav-bar/Navbar";
 import Home from "./components/home-page/nav-bar/Home";
 import Login from "./components/login-page/Login";
 import SignUp from "./components/signup-page/SignUp";
-import GrantForm from "./components/grant/grant";
 import { UserContextProvider } from "./components/contexts/userContext";
 import {CreateGrant, EditGrant} from "./components/admin-grant-managment";
 import GrantBrowse from "./components/grant-browse/GrantBrowse";
@@ -13,6 +12,7 @@ import ClientApplicationList from "./components/home-page/nav-bar/client-dashboa
 import AdminGrants from "./components/home-page/nav-bar/admin-dashboard/admin-grants/AdminGrants";
 import SavedGrants from "./components/saved-grants/SavedGrants";
 import GrantApply from "./components/grant-apply/GrantApply";
+import ApplicationReview from "./components/applications/admin/ApplicationReview";
 import DefaultPage from "./components/home-page/nav-bar/default-page/DefaultPage";
 
 function App() {
@@ -28,7 +28,6 @@ function App() {
 						<Route path="contact" element={<Home />} />
 						<Route path="login" element={<Login />} />
 						<Route path="signup" element={<SignUp />} />
-						<Route path="grant" element={<GrantForm />} />
 						<Route path="createGrant" element={<CreateGrant />} />
 						<Route path="editGrant/:grantID" element={<EditGrant />} />
 						<Route path="grants" element={<GrantBrowse />} />
@@ -39,6 +38,7 @@ function App() {
 						<Route path=":organization/applications" element={<AdminApplicationList/>} />
 						<Route path="applications" element={<ClientApplicationList />} />
 						<Route path="grants/:grantID/apply" element={<GrantApply />} />
+						<Route path="application/:applicationID/review" element={<ApplicationReview />} />
 					</Route>
 				</Routes>
 			)}
