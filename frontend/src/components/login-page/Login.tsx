@@ -50,16 +50,18 @@ const Login: React.FC<LoginProps> = () => {
 	};
 
 	return (
-		<div className="flex items-center justify-center min-h-screen bg-gray-100" style={{ backgroundColor: 'rgb(141, 229, 100)' }}>
+		<div className="flex items-center justify-center min-h-screen pt-20 bg-home-background bg-cover 
+    bg-no-repeat bg-center h-[100vh] w-[100vw] fixed z-[-1]">
 			<div 
-				className="w-full max-w-xs px-4 py-6 mx-auto bg-white shadow rounded-lg 
-					sm:px-6 sm:py-8 md:max-w-sm lg:max-w-md xl:max-w-lg 2xl:max-w-xl flex flex-col gap-4"
+				className="w-full max-w-xs px-4 py-6 mx-auto bg-white rounded-lg 
+					sm:px-6 sm:py-8 md:max-w-sm lg:max-w-md xl:max-w-lg 2xl:max-w-xl flex flex-col gap-4
+          border-4 border-primary shadow-2xl shadow-black"
 				style={{ boxShadow: '-10px 10px 30px 0 rgba(0, 0, 0, 0.1)' }}>
 				<h3 className="text-xl font-bold text-center sm:text-2xl text-gray-700">Log in to your account</h3>
 				<form className='flex flex-col gap-4' onSubmit={handleSubmit}>
 					<div className="flex items-center mt-4">
 						<img src={emailIcon} alt="Email"
-							className="mr-2 h-5 w-5 flex-shrink-0 text-green-500" />
+							className="mr-2 h-5 w-5 flex-shrink-0" />
 						<input
 							type="text"
 							id="email"
@@ -74,7 +76,7 @@ const Login: React.FC<LoginProps> = () => {
 					</div>
 					<div className="flex items-center mt-4">
 						<img src={passwordIcon} alt="Password"
-							className="mr-2 h-5 w-5 flex-shrink-0 text-green-500" />
+							className="mr-2 h-5 w-5 flex-shrink-0" />
 						<input
 							type="password"
 							id="password"
@@ -92,7 +94,7 @@ const Login: React.FC<LoginProps> = () => {
 					</div>
 					<div className="flex justify-center">
 					<button type='submit'
-						className='p-2 px-5 m-2 bg-green-500 hover:bg-green-600 active:bg-green-700
+						className='p-2 px-5 m-2 bg-primary hover:bg-secondary
 							text-white font-bold rounded-lg shadow-md transition-colors duration-150 ease-in
 							text-base w-full'>
 						Log In
@@ -100,7 +102,9 @@ const Login: React.FC<LoginProps> = () => {
 					</div>
 					<div className="form-footer-container" style={{ marginTop: '5%' }}>
 						<Link to="/signup" className="underline" style={{ textDecoration: 'underline' }}>Sign Up</Link>
-						<a href="#" className="forgot-password text-sm text-green-500 hover:underline sm:text-base" style={{ display: 'flex', float: 'right', color: 'rgb(34, 197, 94)' }}>Forgot password?</a>
+						<a href="#" className="forgot-password text-sm text-secondary hover:underline sm:text-base " style={{ display: 'flex', float: 'right' }}>
+              Forgot password?
+            </a>
 					</div>
 				</form>
 			</div>

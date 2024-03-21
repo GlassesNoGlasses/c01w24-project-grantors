@@ -34,7 +34,7 @@ const AdminDashboard = ({
 	}
 
 	return (
-		<div className='h-full bg-grantor-green flex flex-col gap-28'>
+		<div className='h-full bg-grantor-green flex flex-col gap-28 pt-24'>
 			<h2 className='text-6xl underline text-white pl-8'>Welcome, {user?.username}!</h2>
 			<div className='flex justify-evenly items-center'>
 				<div>
