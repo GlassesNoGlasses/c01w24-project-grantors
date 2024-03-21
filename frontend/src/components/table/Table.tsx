@@ -80,8 +80,8 @@ function Table<T>(
             <table className="w-full bg-slate-50 text-left rounded-lg">
                 <thead className="border-collapse uppercase">
                     <tr>
-                        {Array.from(columns).map((column) => (
-                            <th onClick={() => {setSortColumn(column); setSortAscending(!sortAscending)}} className="border-b-4 border-slate-300 text-base rounded-md p-2" scope="col">
+                        {Array.from(columns).map((column, index) => (
+                            <th key={index} onClick={() => {setSortColumn(column); setSortAscending(!sortAscending)}} className="border-b-4 border-slate-300 text-base rounded-md p-2" scope="col">
                                 <div className="flex items-center gap-1 hover:bg-slate-300 hover:rounded-md" >
                                     <span>{column.title}</span>
                                     <ChevronDownIcon className={`h-8 ${sortColumn === column ? "bg-slate-300 rounded-md" : "" }`} />
@@ -91,10 +91,10 @@ function Table<T>(
                     </tr>
                 </thead>
                 <tbody className="divide-y-4">
-                    {pageItems.map((item) =>
-                        <tr className="hover:bg-slate-300" onClick={() => handleItemClick(item)}>
-                            {columns.map((column) => (
-                                <td className="text-base px-2 py-1">{column.format(item)}</td>
+                    {pageItems.map((item, itemIndex) =>
+                        <tr key={itemIndex} className="hover:bg-slate-300" onClick={() => handleItemClick(item)}>
+                            {columns.map((column, columnIndex) => (
+                                <td key={itemIndex + '-' + columnIndex} className="text-base px-2 py-1">{column.format(item)}</td>
                             ))}
                         </tr>
                     )}
@@ -107,8 +107,8 @@ function Table<T>(
                         <li>
                             <a href="#" onClick={() => goToPage(currentPage-1)} className="flex items-center justify-center px-3 h-8 hover:bg-slate-300 hover:rounded-md">Previous</a>
                         </li>
-                        {Array.from(getPageOptions()).map((value) => (
-                            <li>
+                        {Array.from(getPageOptions()).map((value, index) => (
+                            <li key={index}>
                                 <a href="#" onClick={() => goToPage(value)} className={`flex items-center justify-center px-3 h-8 hover:bg-slate-300 hover:rounded-md ${value === currentPage ? "bg-slate-300 rounded-md" : ''}`}>{value + 1}</a>
                             </li>
                         ))}
@@ -122,8 +122,8 @@ function Table<T>(
                         <li className="flex items-center justify-center px-3 h-8 hover:bg-slate-300 hover:rounded-md">
                             <span>Items per page</span>
                         </li>
-                        {Array.from(itemsPerPageOptions).map((value) => (
-                            <li className={`flex items-center justify-center px-3 h-8 hover:bg-slate-300 hover:rounded-md ${itemsPerPage === value ? "bg-slate-300 rounded-md" : ''}`}>
+                        {Array.from(itemsPerPageOptions).map((value, index) => (
+                            <li key={index} className={`flex items-center justify-center px-3 h-8 hover:bg-slate-300 hover:rounded-md ${itemsPerPage === value ? "bg-slate-300 rounded-md" : ''}`}>
                                 <a href="#" onClick={() => setItemsPerPage(value)}>{value}</a>
                             </li>
                         ))}

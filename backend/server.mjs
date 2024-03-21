@@ -582,6 +582,27 @@ app.get("/applicant/:applicantID", express.json(), async (req, res) => {
 	}
 });
 
+app.get("/applicants", express.json(), async (req, res) => {
+	const { encodedApplicantIDs } = req.query;
+
+	const filters = {}
+	if (encodedApplicantIDs) {
+		const applicantIDs = encodedApplicantIDs.split(',').map((id) => new ObjectId(id));
+		filters._id = { $in: applicantIDs };
+	}
+
+	try {
+		const applicantCollection = db.collection(COLLECTIONS.applicants);
+
+		const applicants = await applicantCollection.find(filters).toArray();
+
+		res.status(200).json({ response: applicants.map((applicant) => dbIDToFrontendID(applicant)) });
+	} catch (error) {
+		console.error(error);
+		res.status(500).json({ error: error.message });
+	}
+});
+
 app.post("/review", express.json(), async (req, res) => {
 	const { applicationID, reviewerID, reviewText, rating, applicationStatus} = req.body;
 	try {
