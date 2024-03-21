@@ -1,11 +1,11 @@
 import { useEffect, useState } from "react";
 import { SearchFilterProps } from "./SearchFilerProps";
 
-function SearchFilter({label, onChange}: SearchFilterProps ) {
+function SearchFilter({label, setFilter }: SearchFilterProps ) {
     const [ search, setSearch ] = useState<string>("");
 
     useEffect(() => {
-        onChange(search);
+        setFilter(search)
     }, [search]);
 
     return (

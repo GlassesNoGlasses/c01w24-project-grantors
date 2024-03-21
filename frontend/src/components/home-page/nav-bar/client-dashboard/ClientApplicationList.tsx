@@ -6,14 +6,31 @@ import Table from "../../../table/Table";
 import { Grant } from "../../../../interfaces/Grant";
 import GrantsController from "../../../../controllers/GrantsController";
 import ApplicationsController from "../../../../controllers/ApplicationsController";
+import SearchFilter from "../../../filter/SearchFilter";
 
-type TableData = [Application, Grant | undefined];
+type TableData = [Application, Grant];
+
+const grantNotFound: Grant = {
+    id: '',
+    title: 'Grant not found.',
+    description: '',
+    posted: new Date(),
+    deadline: new Date(),
+    minAmount: 0,
+    maxAmount: 0,
+    organization: '',
+    category: '',
+    contact: '',
+    questions: [],
+    publish: false,
+}
 
 const ClientApplicationList = ({}) => {
     const { user, setUser } = useUserContext();
     const [ applications, setApplications ] = useState<Application[]>([]);
-    const [ grants, setGrants ] = useState<Grant[]>();
+    const [ grants, setGrants ] = useState<Grant[]>([]);
     const [ tableData, setTableData ] = useState<TableData[]>([]);
+    const [ filteredTabledata, setFilteredTableData ] = useState<TableData[]>([])
 
     const itemsPerPageOptions: number[] = [5,10,20,50,100];
     const columns: Column<TableData>[] = [
@@ -69,20 +86,87 @@ const ClientApplicationList = ({}) => {
     useEffect(() => {
         // Table data is made of applications and grant pairs
         setTableData(applications.map((app: Application) => {
-            return [app, grants?.find(grant => grant.id === app.grantID)];
+            return [app, grants.find(grant => grant.id === app.grantID) ?? grantNotFound];
         }));
 
     }, [applications, grants]);
 
+    useEffect(() => {
+        setFilteredTableData(tableData);
+    }, [tableData]);
+
     return (
         <div className="flex flex-col h-full items-start justify-start px-5 bg-grantor-green">
-            <span className="text-2xl pl-2">My Applications</span>
-            <Table items={tableData}
-                   columns={columns}
-                   itemsPerPageOptions={itemsPerPageOptions}
-                   defaultIPP={10}
-                   defaultSort={columns[1]}
-            />
+            <span className="text-2xl">My Applications</span>
+            <div className="flex flex-row w-full gap-4">
+                <TableFilter tableData={tableData} setTableData={setFilteredTableData} />
+                <Table items={filteredTabledata}
+                    columns={columns}
+                    itemsPerPageOptions={itemsPerPageOptions}
+                    defaultIPP={10}
+                    defaultSort={columns[1]}
+                />
+            </div>
+        </div>
+    );
+};
+
+const TableFilter = ({ tableData, setTableData }: {
+        tableData: TableData[],
+        setTableData: (tableData: TableData[]) => void,
+    }) => {
+    const [ grantTitle, setGrantTitle ] = useState<string>("");
+    const [ deadline, setDeadline ] = useState<Date | undefined>(undefined);
+    const [ status, setStatus ] = useState<ApplicationStatus | undefined>(undefined)
+
+    useEffect(() => {
+        setTableData(tableData.filter(row => {
+            if (grantTitle && !row[1].title.toLowerCase().includes(grantTitle.toLowerCase()))
+                return false;
+
+            return true;
+        }));
+
+    }, [grantTitle, deadline]);
+
+    return (
+        <div className="flex flex-col gap-1 lg:w-1/3">
+            <h1 className="text-lg">Application Filter</h1>
+            <SearchFilter label="Grant Title" setFilter={setGrantTitle}/>
+            {/* <div className="flex flex-col">
+                <div>
+                    <p className="text-base">Amount</p>
+                    <div className="flex flex-row gap-4 flex-wrap">
+                        <div>
+                            <p className="text-sm">Min</p>
+                            <input type="number" className="border border-black rounded-lg text-sm p-1 px-2"
+                                value={minAmount as number} onChange={(event) => setMinAmount(event.target.valueAsNumber)} />
+                        </div>
+                        <div>
+                            <p className="text-sm">Max</p>
+                            <input type="number" className="border border-black rounded-lg text-sm p-1 px-2"
+                                value={maxAmount as number} onChange={(event) => setMaxAmount(event.target.valueAsNumber)} />
+                        </div>
+                    </div>
+                </div>
+                <div>
+                    <p className="text-base">Date</p>
+                    <div className="flex flex-row gap-4">
+                        <div>
+                            <p className="text-sm">Posted After</p>
+                            <input type="date" className="border border-black rounded-lg text-sm p-1 px-2"
+                                value={postedAfter?.toISOString().split('T')[0] as string}
+                                onChange={(event) => setPostedAfter(event.target.valueAsDate)} />
+                        </div>
+                        <div>
+                            <p className="text-sm">Due By</p>
+                            <input type="date" className="border border-black rounded-lg text-sm p-1 px-2"
+                                value={dueBy?.toISOString().split('T')[0] as string}
+                                onChange={(event) => setDueBy(event.target.valueAsDate)} />
+                        </div>
+                    </div>
+                </div>
+            </div> */}
         </div>
     );
 };

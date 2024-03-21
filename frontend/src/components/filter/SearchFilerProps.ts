@@ -1,4 +1,4 @@
 export interface SearchFilterProps {
     label: string,
-    onChange: (searchString: string) => void,
+    setFilter: (search: string) => void,
 };
