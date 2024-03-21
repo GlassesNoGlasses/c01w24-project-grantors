@@ -43,3 +43,8 @@ export interface GetApplicantResponse {
     response?: Applicant,
     error?: string,
 }
+
+export interface GetApplicantsResponse {
+    response?: Applicant[],
+    error?: string,
+}
