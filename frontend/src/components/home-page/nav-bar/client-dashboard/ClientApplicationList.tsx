@@ -7,6 +7,7 @@ import { Grant } from "../../../../interfaces/Grant";
 import GrantsController from "../../../../controllers/GrantsController";
 import ApplicationsController from "../../../../controllers/ApplicationsController";
 import SearchFilter from "../../../filter/SearchFilter";
+import DropDownFilter from "../../../filter/DropDownFilter";
 
 type TableData = [Application, Grant];
 
@@ -123,32 +124,26 @@ const TableFilter = ({ tableData, setTableData }: {
         setTableData(tableData.filter(row => {
             if (grantTitle && !row[1].title.toLowerCase().includes(grantTitle.toLowerCase()))
                 return false;
+            if (status && row[0].status !== status)
+                return false;
 
             return true;
         }));
 
-    }, [grantTitle, deadline]);
+    }, [grantTitle, deadline, status]);
+
+    const onStatusFilterChange = (status: string) => {
+        if (Object.values(ApplicationStatus).includes(status as ApplicationStatus)) {
+            setStatus(status as ApplicationStatus);
+        }
+    };
 
     return (
         <div className="flex flex-col gap-1 lg:w-1/3">
             <h1 className="text-lg">Application Filter</h1>
             <SearchFilter label="Grant Title" setFilter={setGrantTitle}/>
+            <DropDownFilter label="Applicant Status" options={Object.values(ApplicationStatus)} setFilter={onStatusFilterChange}/>
             {/* <div className="flex flex-col">
-                <div>
-                    <p className="text-base">Amount</p>
-                    <div className="flex flex-row gap-4 flex-wrap">
-                        <div>
-                            <p className="text-sm">Min</p>
-                            <input type="number" className="border border-black rounded-lg text-sm p-1 px-2"
-                                value={minAmount as number} onChange={(event) => setMinAmount(event.target.valueAsNumber)} />
-                        </div>
-                        <div>
-                            <p className="text-sm">Max</p>
-                            <input type="number" className="border border-black rounded-lg text-sm p-1 px-2"
-                                value={maxAmount as number} onChange={(event) => setMaxAmount(event.target.valueAsNumber)} />
-                        </div>
-                    </div>
-                </div>
                 <div>
                     <p className="text-base">Date</p>
                     <div className="flex flex-row gap-4">
