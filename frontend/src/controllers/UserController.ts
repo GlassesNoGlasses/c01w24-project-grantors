@@ -1,7 +1,7 @@
 import { Cookies } from "react-cookie";
 import { SERVER_PORT } from "../constants/ServerConstants";
 import { User } from "../interfaces/User";
-import { GetApplicantResponse } from "../interfaces/ServerResponse";
+import { GetApplicantResponse, GetApplicantsResponse } from "../interfaces/ServerResponse";
 import { Applicant } from "../interfaces/Applicant";
 
 
@@ -96,6 +96,26 @@ export default class UserController {
             });
         } catch (error) {
             console.error("Error while fetching user", error);
+        }
+    }
+
+    static async fetchApplicants(applicantIDs: string[]): Promise<Applicant[]> {
+        const encodedApplicantIDs: string = encodeURIComponent(applicantIDs.join(','));
+        try {
+            const res = await fetch(`http://localhost:${SERVER_PORT}/applicants?applicantIDs=${encodedApplicantIDs}`, {
+                method: 'GET',
+            });
+
+            return await res.json().then((data: GetApplicantsResponse) => {
+                if (data.response) {
+                    return data.response;
+                }
+                console.error("Server error fetching applicant:", data.error);
+                return [];
+            });
+        } catch (error) {
+            console.error("Error while fetching user", error);
+            return []
         }
     }
 }
