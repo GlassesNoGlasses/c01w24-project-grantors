@@ -6,14 +6,20 @@ import Table from "../../../table/Table";
 import { Grant } from "../../../../interfaces/Grant";
 import GrantsController from "../../../../controllers/GrantsController";
 import ApplicationsController from "../../../../controllers/ApplicationsController";
+import { useNavigate } from 'react-router-dom';
 
 type TableData = [Application, Grant | undefined];
 
 const ClientApplicationList = ({}) => {
+    const navigate = useNavigate();
     const { user, setUser } = useUserContext();
     const [ applications, setApplications ] = useState<Application[]>([]);
     const [ grants, setGrants ] = useState<Grant[]>();
     const [ tableData, setTableData ] = useState<TableData[]>([]);
+
+    const handleApplicationClick = (applicationID: String) => {
+        navigate(`/applications/${applicationID}`);
+    };
 
     const itemsPerPageOptions: number[] = [5,10,20,50,100];
     const columns: Column<TableData>[] = [
@@ -82,6 +88,7 @@ const ClientApplicationList = ({}) => {
                    itemsPerPageOptions={itemsPerPageOptions}
                    defaultIPP={10}
                    defaultSort={columns[1]}
+                   onRowClick={(application => handleApplicationClick(application[0].id))}
             />
         </div>
     );

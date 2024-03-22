@@ -14,6 +14,7 @@ import SavedGrants from "./components/saved-grants/SavedGrants";
 import GrantApply from "./components/grant-apply/GrantApply";
 import ApplicationReview from "./components/applications/admin/ApplicationReview";
 import DefaultPage from "./components/home-page/nav-bar/default-page/DefaultPage";
+import ApplicationView from "./components/home-page/nav-bar/client-dashboard/ApplicationView"
 
 function App() {
 	return (
@@ -37,6 +38,7 @@ function App() {
 						<Route path="saved" element={<SavedGrants />} />
 						<Route path=":organization/applications" element={<AdminApplicationList/>} />
 						<Route path="applications" element={<ClientApplicationList />} />
+						<Route path="applications/:applicationID" element={<ApplicationView/>} />
 						<Route path="grants/:grantID/apply" element={<GrantApply />} />
 						<Route path="application/:applicationID/review" element={<ApplicationReview />} />
 					</Route>
