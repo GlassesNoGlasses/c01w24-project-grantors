@@ -1,46 +1,79 @@
 import React, { useState } from 'react';
+import { useNavigate } from "react-router-dom";
 import { GrantFormProps } from "./GrantFormProps";
 import { GrantQuestion } from "../../interfaces/Grant";
+import { SERVER_PORT } from "../../constants/ServerConstants";
 import { ApplicationStatus } from '../../interfaces/Application';
-import ApplicationsController from '../../controllers/ApplicationsController';
-import { useNavigate } from 'react-router-dom';
 
-// TODO: This file and component should be renamed to ApplicationForm since this
-// is the form applicants fill out to submit and application, plus we already
-// have GrantForm for when the admin is creating the grant
 const GrantForm = ({ user, grant }: GrantFormProps) => {
+    const navigate = useNavigate();
     const [questionList, setQuestionList] = useState<GrantQuestion[]>(grant.questions);
-    const navigate = useNavigate()
 
     const setAnswer = (index: number, answer: string) => {
         const newQuestionList = [...questionList];
         newQuestionList[index].answer = answer;
         
         setQuestionList(newQuestionList);
-    };
+    }
+
+    const getAnswers = () => {
+        return questionList.map(function (question){
+            return question.answer;
+        });
+    }
 
     const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
         
+        const name = (document.activeElement as HTMLButtonElement).getAttribute("name");
+        console.log(name)
+
+        if (name === "submit")
+        {
+            try {
+                await fetch(`http://localhost:${SERVER_PORT}/application`,
+                    {
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "application/json"
+                        },
+                        
+                        body: JSON.stringify({
+                            userID: user.accountID,
+                            grantID: grant.id,
+                            grantTitle: grant.title,
+                            grantCategory: grant.category,
+                            submitted: true,
+                            submissionDate: new Date(),
+                            status: ApplicationStatus.submitted,
+                            awarded: 0,
+                            responses: getAnswers(),
+                        })
+                    })
+                .then(async (response) => {
+                    if (!response.ok) {
+                        console.log("Server failed:", response.status)
+                    }
+                    navigate("/grants");
+                })
+            } catch (error) {
+                console.log("Fetch function failed:", error)
+            } 
+        }
+        else if (name === "back")
+        {
+            navigate("/grants");
+        }
+        else if (name === "save")
+        {
+
+        }
+
         if (!questionList) {
             return 
         }
-
-        ApplicationsController.submitApplication(user, {
-            id: '', // id does not exist yet as we have not submitted
-            applicantID: user.accountID,
-            grantID: grant.id,
-            grantTitle: grant.title,
-            grantCategory: grant.category,
-            submitted: true,
-            submissionDate: new Date(),
-            status: ApplicationStatus.submitted,
-            awarded: 0,
-            responses: questionList,
-        }).then(() => {
-            navigate('/');
-        });
-    };
+        
+    }
 
     return (
         <div>
