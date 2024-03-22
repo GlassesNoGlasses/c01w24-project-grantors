@@ -8,7 +8,7 @@ import GrantsController from '../../controllers/GrantsController';
 
 const GrantList = ({ grants, favouriteGrants }: GrantListProps) => {
     return (
-        <ul className="flex flex-col gap-3 w-full">
+        <ul className="flex flex-col gap-5 w-full px-1">
             {grants.map((grant, index) => (
                 <li key={index}>
                     <GrantItem grant={grant} favourite={favouriteGrants.includes(grant.id)} />
@@ -43,8 +43,8 @@ export const GrantItem = ({ grant, link, favourite }: GrantItemProps) => {
 
     return (
         <Link to={link ? link : `/grants/${grant.id}`}
-            className="flex flex-col gap-3 p-1 px-3 rounded-md shadow-sm border
-                bg-slate-50 active:bg-slate-100 hover:shadow-md">
+            className="flex flex-col gap-3 p-1 px-3 rounded-lg shadow-md border-secondary
+                bg-slate-50 active:bg-slate-100 hover:border-black border-4 shadow-black">
             <div className="flex flex-row justify-between items-center">
                 <h1 className="text-2xl font-bold">{grant.title}</h1>
                 <div className="flex flex-row gap-2">

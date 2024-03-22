@@ -39,8 +39,11 @@ const UserGrantBrowse = () => {
     };
 
     return (
-        <div className="flex flex-col lg:flex-row gap-3 p-2">
-            <GrantFilter grants={grants} setGrants={setFilteredGrants} />
+        <div className="flex flex-col lg:flex-row gap-8 px-6 py-24 h-[100vh]">
+            <div className="flex items-center">
+                <GrantFilter grants={grants} setGrants={setFilteredGrants} />
+            </div>
+
             <GrantList grants={filteredGrants} favouriteGrants={favouriteGrants} />
         </div>
     );
@@ -85,8 +88,9 @@ const GrantFilter = ({ grants, setGrants }: {
     }, [search, category, minAmount, maxAmount, postedAfter, dueBy, grants, setGrants]);
 
     return (
-        <div className="flex flex-col gap-1 lg:w-1/3 py-20 px-10">
-            <h1 className="text-2xl">Grant Filter</h1>
+        <div className="flex flex-col gap-1 pt-8 pb-16 px-10 border-4 bg-white rounded-xl
+        border-primary shadow-2xl shadow-black h-fit">
+            <h1 className="text-2xl font-bold mb-6">Grant Filter</h1>
             <div className="flex flex-col gap-1">
                 <p className="text-base">Search</p>
                 <input type="text" className="border border-black rounded-lg text-sm p-1 px-2"
@@ -113,7 +117,8 @@ const GrantFilter = ({ grants, setGrants }: {
                         </div>
                     </div>
                 </div>
-                <div>
+
+                <div className="w-fit">
                     <p className="text-base">Date</p>
                     <div className="flex flex-row gap-4">
                         <div>
@@ -132,6 +137,7 @@ const GrantFilter = ({ grants, setGrants }: {
                 </div>
             </div>
         </div>
+
     );
 };
 
