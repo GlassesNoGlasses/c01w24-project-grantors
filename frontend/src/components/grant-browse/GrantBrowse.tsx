@@ -85,7 +85,7 @@ const GrantFilter = ({ grants, setGrants }: {
     }, [search, category, minAmount, maxAmount, postedAfter, dueBy, grants, setGrants]);
 
     return (
-        <div className="flex flex-col gap-1 lg:w-1/3">
+        <div className="flex flex-col gap-1 lg:w-1/3 py-20 px-10">
             <h1 className="text-2xl">Grant Filter</h1>
             <div className="flex flex-col gap-1">
                 <p className="text-base">Search</p>

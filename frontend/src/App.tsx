@@ -18,6 +18,8 @@ import DefaultPage from "./components/home-page/nav-bar/default-page/DefaultPage
 function App() {
 	return (
 		<div className="App w-full h-full">
+			<div className="bg-home-background bg-cover 
+    		bg-no-repeat bg-center h-[100vh] w-[100vw] fixed z-[-1]"/>
 			{UserContextProvider(
 				<Routes>
 					<Route path="/" element={<Navbar />}>
