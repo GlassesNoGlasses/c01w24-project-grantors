@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { SearchFilterProps } from "./SearchFilerProps";
+import { SearchFilterProps } from "./SearchFilterProps";
 
 function SearchFilter({label, setFilter }: SearchFilterProps ) {
     const [ search, setSearch ] = useState<string>("");

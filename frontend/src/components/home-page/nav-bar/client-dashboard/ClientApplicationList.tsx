@@ -8,6 +8,7 @@ import GrantsController from "../../../../controllers/GrantsController";
 import ApplicationsController from "../../../../controllers/ApplicationsController";
 import SearchFilter from "../../../filter/SearchFilter";
 import DropDownFilter from "../../../filter/DropDownFilter";
+import DateRangeFilter from "../../../filter/DateRangeFilter";
 
 type TableData = [Application, Grant];
 
@@ -117,7 +118,7 @@ const TableFilter = ({ tableData, setTableData }: {
         setTableData: (tableData: TableData[]) => void,
     }) => {
     const [ grantTitle, setGrantTitle ] = useState<string>("");
-    const [ deadline, setDeadline ] = useState<Date | undefined>(undefined);
+    const [ deadline, setDeadline ] = useState<(Date | null)[]>([]);
     const [ status, setStatus ] = useState<ApplicationStatus | undefined>(undefined)
 
     useEffect(() => {
@@ -125,6 +126,10 @@ const TableFilter = ({ tableData, setTableData }: {
             if (grantTitle && !row[1].title.toLowerCase().includes(grantTitle.toLowerCase()))
                 return false;
             if (status && row[0].status !== status)
+                return false;
+            if (deadline[0] !== null && row[1].deadline < deadline[0])
+                return false;
+            if (deadline[1] !== null&& row[1].deadline > deadline[1])
                 return false;
 
             return true;
@@ -138,11 +143,16 @@ const TableFilter = ({ tableData, setTableData }: {
         }
     };
 
+    const onDeadlineFilterChange = (dateRange: (Date | null)[]) => {
+        setDeadline(dateRange);
+    };
+
     return (
         <div className="flex flex-col gap-1 lg:w-1/3">
             <h1 className="text-lg">Application Filter</h1>
             <SearchFilter label="Grant Title" setFilter={setGrantTitle}/>
             <DropDownFilter label="Applicant Status" options={Object.values(ApplicationStatus)} setFilter={onStatusFilterChange}/>
+            <DateRangeFilter label="Application Deadline" rangeStartLabel="Due After" rangeEndLabel="Due Before" setFilter={onDeadlineFilterChange} />
             {/* <div className="flex flex-col">
                 <div>
                     <p className="text-base">Date</p>
