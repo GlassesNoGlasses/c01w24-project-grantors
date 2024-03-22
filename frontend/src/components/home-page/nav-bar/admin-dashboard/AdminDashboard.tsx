@@ -11,6 +11,7 @@ import list from '../../../../images/list.png'
 import search from '../../../../images/search.png'
 import { Link } from 'react-router-dom';
 import UserController from '../../../../controllers/UserController';
+import { Cog6ToothIcon, ArrowRightStartOnRectangleIcon, FolderPlusIcon, ListBulletIcon, TrophyIcon} from '@heroicons/react/24/solid';
 
 const AdminDashboard = ({
 
@@ -47,19 +48,21 @@ const AdminDashboard = ({
 			<div className='flex justify-evenly items-center py-10'>
 				<div>
 					<Link to='/createGrant'>
-						<ButtonIcon imageSrc={addIcon} label={"New Grant"}/>
+						<ButtonIcon heroicon={<FolderPlusIcon/>} label={"New Grant"}/>
 					</ Link>
 				</div>
-				<ButtonIcon imageSrc={userIcon} label={"My Account"}/>
-				<ButtonIcon imageSrc={settingsIcon} label={"Settings"}/>
+				<ButtonIcon heroicon={<TrophyIcon/>} label={"Milestones"}/>
+				<ButtonIcon heroicon={<Cog6ToothIcon/>} label={"Settings"}/>
 				<Link to="/">
-					<ButtonIcon imageSrc={logoutIcon} label={"Log Out"} callback={logout}/>
+					<ButtonIcon heroicon={<ArrowRightStartOnRectangleIcon/>} label={"Log Out"} callback={logout}/>
 				</Link>
 			</div>
 
 			<div className='flex justify-evenly items-center h-1/4 pt-[5vh]'>
 				<Link to={`admin/grants`}>
-					<ApplicationIcon imageSrc={list} label={"View Hosted Grants"}/>
+				<ApplicationIcon
+					heroicon={<ListBulletIcon className="h-40 w-40"/>}
+					label="View Available Grants" />
 				</Link>
 				<Link to={`${encodedOrg}/applications`}>
 					<ApplicationIcon imageSrc={search} label={"Review Applications"}/>
