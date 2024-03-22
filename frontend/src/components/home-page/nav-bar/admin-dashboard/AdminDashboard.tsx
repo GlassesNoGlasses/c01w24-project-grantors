@@ -34,9 +34,18 @@ const AdminDashboard = ({
 	}
 
 	return (
-		<div className='h-full bg-grantor-green flex flex-col gap-28 pt-24'>
-			<h2 className='text-6xl underline text-white pl-8'>Welcome, {user?.username}!</h2>
-			<div className='flex justify-evenly items-center'>
+		<div className='h-full bg-home-background bg-cover 
+    bg-no-repeat bg-center w-[100vw] fixed z-[-1] flex flex-col  py-20'>
+			
+			<div className='bg-white pb-8'>
+				<h2 className='text-6xl text-secondary pl-10 w-fit flex items-center flex-col'>
+					Welcome, {user?.username}!
+					<div className='bg-primary h-[8px] -mt-4 w-[105%]'/>
+				</h2>
+			</div>
+			
+				
+			<div className='flex justify-evenly items-center py-10'>
 				<div>
 					<Link to='/createGrant'>
 						<ButtonIcon imageSrc={addIcon} label={"New Grant"}/>
@@ -48,7 +57,8 @@ const AdminDashboard = ({
 					<ButtonIcon imageSrc={logoutIcon} label={"Log Out"} callback={logout}/>
 				</Link>
 			</div>
-			<div className='flex justify-evenly items-center h-1/4'>
+
+			<div className='flex justify-evenly items-center h-1/4 pt-40'>
 				<Link to={`admin/grants`}>
 					<ApplicationIcon imageSrc={list} label={"View Hosted Grants"}/>
 				</Link>
