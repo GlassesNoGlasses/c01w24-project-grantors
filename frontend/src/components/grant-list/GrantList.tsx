@@ -8,7 +8,7 @@ import GrantsController from '../../controllers/GrantsController';
 
 const GrantList = ({ grants, favouriteGrants }: GrantListProps) => {
     return (
-        <ul className="flex flex-col gap-5 w-full px-1">
+        <ul className="flex flex-col gap-5 w-full pl-1 pr-4 pt-4 h-[100vh] overflow-scroll">
             {grants.map((grant, index) => (
                 <li key={index}>
                     <GrantItem grant={grant} favourite={favouriteGrants.includes(grant.id)} />
