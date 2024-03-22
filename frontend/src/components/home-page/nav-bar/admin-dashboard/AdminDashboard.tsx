@@ -34,8 +34,7 @@ const AdminDashboard = ({
 	}
 
 	return (
-		<div className='h-full bg-home-background bg-cover 
-    bg-no-repeat bg-center w-[100vw] fixed z-[-1] flex flex-col  py-20'>
+		<div className='h-full flex flex-col py-20'>
 			
 			<div className='bg-white pb-8'>
 				<h2 className='text-6xl text-secondary pl-10 w-fit flex items-center flex-col'>
@@ -58,7 +57,7 @@ const AdminDashboard = ({
 				</Link>
 			</div>
 
-			<div className='flex justify-evenly items-center h-1/4 pt-40'>
+			<div className='flex justify-evenly items-center h-1/4 pt-[5vh]'>
 				<Link to={`admin/grants`}>
 					<ApplicationIcon imageSrc={list} label={"View Hosted Grants"}/>
 				</Link>

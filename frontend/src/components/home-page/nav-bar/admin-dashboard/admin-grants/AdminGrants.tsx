@@ -145,13 +145,14 @@ const AdminGrants = () => {
     };
 
     return (
-        <div className='flex flex-col min-h-full min-w-full bg-grantor-green space-y-2'>
-            <div className='flex w-full justify-center align-middle'>
+        <div className='flex py-20 flex-col min-h-full min-w-full space-y-2 items-center'>
+            <div className='flex w-full justify-center align-middle p-4'>
                 <div className='w-3/4'>
                     <Tab items={tabItems}/>
                 </div>
             </div>
-            <div className='min-h-3/4 min-w-fit'>
+            <div className={`border-4 border-grey shadow-2xl shadow-black
+            min-h-3/4 w-[90vw] p-6 bg-primary rounded-xl`}>
                 {published ? ShowPublishedGrants() : ShowUnpublishedGrants()}
             </div>
         </div>
