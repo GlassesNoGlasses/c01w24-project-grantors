@@ -101,7 +101,7 @@ const AdminGrants = () => {
         const status = published ? 'published' : 'unpublished';
         return (
             <div>
-                <h1 className='text-xl'>{`There are no ${status} grants.`}</h1>
+                <h1 className='text-xl text-white'>{`There are no ${status} grants.`}</h1>
             </div>
         );
     };

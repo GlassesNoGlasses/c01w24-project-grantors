@@ -100,7 +100,7 @@ function Table<T>(
                     )}
                 </tbody>
             </table>
-            <div className="p-2">Showing {currentPage * itemsPerPage + 1}-{Math.min((currentPage + 1) * itemsPerPage, items.length)} of {items.length}</div>
+            <div className="p-2 text-white">Showing {currentPage * itemsPerPage + 1}-{Math.min((currentPage + 1) * itemsPerPage, items.length)} of {items.length}</div>
             <div className="flex flex-row justify-between w-full">
                 <div className="bg-slate-50 rounded-md" aria-label="Table navigation">
                     <ul className="flex flex-row items-center text-sm">

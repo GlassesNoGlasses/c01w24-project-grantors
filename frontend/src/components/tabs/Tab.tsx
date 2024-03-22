@@ -11,7 +11,7 @@ const Tab = ({
     const createTabButton = (label: String, callback: () => void): JSX.Element => {
         return (
             <button className='p-2 px-4 w-max rounded-md border-sky-500 border-2 shadow-sm 
-            bg-slate-50 active:bg-slate-100 hover:shadow-md focus:bg-blue-200'
+            bg-slate-50 active:bg-slate-100 hover:shadow-md focus:bg-blue-200 font-bold'
             onClick={callback}
             autoFocus={label === tabItems[0].label}>
                 {label}
