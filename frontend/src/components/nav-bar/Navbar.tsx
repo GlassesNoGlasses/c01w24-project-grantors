@@ -56,7 +56,8 @@ const Navbar = ({}: NavbarProps) => {
 						<Link className='text-base hover:underline' to="/createGrant">Create Grants</Link>
 						<a href='https://www.magnifyaccess.ai/about-us' 
 						className='hover:underline' target='blank'>About Us</a>
-						<Link className='hover:underline' to="/services">Services</Link>
+						<a href='https://www.magnifyaccess.ai/additional-services' 
+						className='hover:underline' target='blank'>Services</a>
 						<a href='https://www.magnifyaccess.ai/contact-us' 
 						className='hover:underline' target='blank'>Contact</a>
 					</div>
@@ -81,7 +82,8 @@ const Navbar = ({}: NavbarProps) => {
 						<Link className='text-base hover:underline' to="/">Grants</Link>
 						<a href='https://www.magnifyaccess.ai/about-us' 
 						className='hover:underline' target='blank'>About Us</a>
-						<Link className='hover:underline' to="/services">Services</Link>
+						<a href='https://www.magnifyaccess.ai/additional-services' 
+						className='hover:underline' target='blank'>Services</a>
 						<a href='https://www.magnifyaccess.ai/contact-us' 
 						className='hover:underline' target='blank'>Contact</a>
 					</div>
@@ -105,7 +107,8 @@ const Navbar = ({}: NavbarProps) => {
 				mr-6 lg:gap-10 gap-6'>
 					<a href='https://www.magnifyaccess.ai/about-us' 
 					className='hover:underline' target='blank'>About Us</a>
-					<Link className='hover:underline' to="/services">Services</Link>
+					<a href='https://www.magnifyaccess.ai/additional-services' 
+					className='hover:underline' target='blank'>Services</a>
 					<a href='https://www.magnifyaccess.ai/contact-us' 
 					className='hover:underline' target='blank'>Contact</a>
 				</div>
