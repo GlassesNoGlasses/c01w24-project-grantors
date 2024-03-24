@@ -6,15 +6,30 @@ import Table from "../../../table/Table";
 import { Grant } from "../../../../interfaces/Grant";
 import GrantsController from "../../../../controllers/GrantsController";
 import ApplicationsController from "../../../../controllers/ApplicationsController";
-import { Link } from "react-router-dom";
 
-type TableData = [Application, Grant | undefined];
+type TableData = [Application, Grant];
+
+const grantNotFound: Grant = {
+    id: '',
+    title: 'Grant not found.',
+    description: '',
+    posted: new Date(),
+    deadline: new Date(),
+    minAmount: 0,
+    maxAmount: 0,
+    organization: '',
+    category: '',
+    contact: '',
+    questions: [],
+    publish: false,
+}
 
 const ClientApplicationList = ({}) => {
     const { user, setUser } = useUserContext();
     const [ applications, setApplications ] = useState<Application[]>([]);
-    const [ grants, setGrants ] = useState<Grant[]>();
+    const [ grants, setGrants ] = useState<Grant[]>([]);
     const [ tableData, setTableData ] = useState<TableData[]>([]);
+    const [ filteredTabledata, setFilteredTableData ] = useState<TableData[]>([])
 
     const itemsPerPageOptions: number[] = [5,10,20,50,100];
     const columns: Column<TableData>[] = [
@@ -70,32 +85,24 @@ const ClientApplicationList = ({}) => {
     useEffect(() => {
         // Table data is made of applications and grant pairs
         setTableData(applications.map((app: Application) => {
-            return [app, grants?.find(grant => grant.id === app.grantID)];
+            return [app, grants.find(grant => grant.id === app.grantID) ?? grantNotFound];
         }));
 
     }, [applications, grants]);
 
+    useEffect(() => {
+        setFilteredTableData(tableData);
+    }, [tableData]);
+
     return (
-        <div className="pt-28 p-4">
-            <div className="flex flex-col h-full items-start justify-start p-6 bg-primary
-            rounded-2xl border-4 border-white shadow-2xl shadow-black">
-                <span className="text-2xl  text-white">My Applications</span>
-                {applications.length > 0 ? 
-                    <Table items={tableData}
-                    columns={columns}
-                    itemsPerPageOptions={itemsPerPageOptions}
-                    defaultIPP={10}
-                    defaultSort={columns[1]}
-                /> :
-                <div className="text-white flex flex-row mt-2">
-                    <h1>You Have No Applications</h1>
-                    <p className="text-white">, Apply To Grants &nbsp;
-                        <Link to='/grants' className="text-[#0bb4d6] underline hover:text-black">here</Link> !
-                    </p>
-                </div>
-            }
-                
-            </div>
+        <div className="flex flex-col h-full items-start justify-start px-5 bg-grantor-green">
+            <span className="text-2xl pl-2">My Applications</span>
+            <Table items={tableData}
+                   columns={columns}
+                   itemsPerPageOptions={itemsPerPageOptions}
+                   defaultIPP={10}
+                   defaultSort={columns[1]}
+            />
         </div>
     );
 };
