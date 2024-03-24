@@ -137,7 +137,7 @@ const TableFilter = ({ tableData, setTableData }: {
         setTableData(tableData.filter(row => {
             if (grantTitle && !row[0].grantTitle.toLowerCase().includes(grantTitle.toLowerCase()))
                 return false;
-            if (applicant && row[0].applicantID.toLowerCase().includes(applicant))
+            if (applicant && !(row[1].firstName + row[1].lastName).toLowerCase().includes(applicant))
                 return false;
             if (submitted[0] !== null && row[0].submissionDate < submitted[0])
                 return false;
