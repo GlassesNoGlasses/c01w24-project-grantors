@@ -162,10 +162,10 @@ const TableFilter = ({ tableData, setTableData }: {
 
     return (
         <div className="flex flex-col gap-1 lg:w-1/3">
-            <h1 className="text-lg">Application Filter</h1>
-            <SearchFilter label="Grant Title" setFilter={setGrantTitle}/>
-            <DropDownFilter label="Applicant Status" options={Object.values(ApplicationStatus)} setFilter={onStatusFilterChange}/>
-            <DateRangeFilter label="Application Deadline" rangeStartLabel="Due After" rangeEndLabel="Due Before" setFilter={onDeadlineFilterChange} />
+            <h1 className="text-lg text-white">Application Filter</h1>
+            <SearchFilter className="text-white" label="Grant Title" setFilter={setGrantTitle}/>
+            <DropDownFilter className="text-white" label="Applicant Status" options={Object.values(ApplicationStatus)} setFilter={onStatusFilterChange}/>
+            <DateRangeFilter className="text-white" label="Application Deadline" rangeStartLabel="Due After" rangeEndLabel="Due Before" setFilter={onDeadlineFilterChange} />
         </div>
     );
 };

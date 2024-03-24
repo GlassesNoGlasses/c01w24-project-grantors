@@ -3,4 +3,5 @@ export interface DateRangeFilterProps {
     rangeStartLabel: string,
     rangeEndLabel: string,
     setFilter: (dateRange: (Date | null)[]) => void,
+    className?: string,
 };
