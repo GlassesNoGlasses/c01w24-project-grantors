@@ -41,7 +41,7 @@ const AdminApplicationList = ({}: AdminApplicationListProps) => {
             sort: (data1: TableData, data2: TableData) => data1[1].firstName + data1[1].lastName < data2[1].firstName + data2[1].lastName ? -1 : 1,
         },
         {
-            title: "Date",
+            title: "Submission Date",
             format: (data: TableData) => {
                 return data[0].submissionDate.toLocaleDateString('en-GB', {
                     day: '2-digit',
@@ -158,7 +158,7 @@ const TableFilter = ({ tableData, setTableData }: {
             <h1 className="text-lg text-white">Application Filter</h1>
             <SearchFilter className="text-white" label="Grant Title" setFilter={setGrantTitle}/>
             <SearchFilter className="text-white" label="Applicant" setFilter={setApplicant}/>
-            <DateRangeFilter className="text-white" label="Application Deadline" rangeStartLabel="Due After" rangeEndLabel="Due Before" setFilter={onSubmittedFilterChange} />
+            <DateRangeFilter className="text-white" label="Submission Date" rangeStartLabel="Submitted After" rangeEndLabel="Submitted Before" setFilter={onSubmittedFilterChange} />
         </div>
     );
 };
