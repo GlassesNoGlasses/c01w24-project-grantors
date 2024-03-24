@@ -180,7 +180,7 @@ const GrantForm: React.FC<GrantFormProps> = ({ type }) => {
     };
 
     return (
-        <div className="flex items-center justify-center min-h-screen bg-primary  pt-20">
+        <div className="flex items-center justify-center min-h-screen bg-primary pt-20">
             <div className="w-full max-w-2xl px-8 py-10 bg-white rounded-xl mt-10 mb-10 border-4 border-black shadow-2xl shadow-black">
                 <h2 className="text-2xl font-bold text-center text-gray-800 mb-8">{type === GrantFormType.CREATE ? 'Create a Grant': 'Edit Grant'}</h2>
                 <form onSubmit={handleSubmit} className="space-y-6">

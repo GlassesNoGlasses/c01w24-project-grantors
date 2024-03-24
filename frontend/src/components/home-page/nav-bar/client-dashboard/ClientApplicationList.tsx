@@ -75,14 +75,17 @@ const ClientApplicationList = ({}) => {
     }, [applications, grants]);
 
     return (
-        <div className="flex flex-col h-full items-start justify-start px-5 bg-grantor-green">
-            <span className="text-2xl pl-2">My Applications</span>
-            <Table items={tableData}
-                   columns={columns}
-                   itemsPerPageOptions={itemsPerPageOptions}
-                   defaultIPP={10}
-                   defaultSort={columns[1]}
-            />
+        <div className="pt-28 p-4">
+            <div className="flex flex-col h-full items-start justify-start p-6 bg-primary
+            rounded-2xl border-4 border-white shadow-2xl shadow-black">
+                <span className="text-2xl pl-2">My Applications</span>
+                <Table items={tableData}
+                    columns={columns}
+                    itemsPerPageOptions={itemsPerPageOptions}
+                    defaultIPP={10}
+                    defaultSort={columns[1]}
+                />
+            </div>
         </div>
     );
 };
