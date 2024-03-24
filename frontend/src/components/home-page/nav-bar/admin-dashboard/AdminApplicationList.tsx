@@ -1,13 +1,15 @@
 import { useEffect, useState } from 'react';
 import { useUserContext } from '../../../contexts/userContext';
 import { AdminApplicationListProps } from './AdminApplicationListProps';
-import { Application } from '../../../../interfaces/Application';
+import { Application, ApplicationStatus } from '../../../../interfaces/Application';
 import { useParams, useNavigate } from 'react-router-dom';
 import Table from '../../../table/Table';
 import { Column } from '../../../table/TableProps';
 import ApplicationsController from '../../../../controllers/ApplicationsController';
 import UserController from '../../../../controllers/UserController';
 import { Applicant } from '../../../../interfaces/Applicant';
+import SearchFilter from '../../../filter/SearchFilter';
+import DateRangeFilter from '../../../filter/DateRangeFilter';
 
 type TableData = [Application, Applicant];
 
@@ -16,6 +18,7 @@ const AdminApplicationList = ({}: AdminApplicationListProps) => {
     const [ applications, setApplications ] = useState<Application[]>([]);
     const [ applicants, setApplicants ] = useState<Applicant[]>([]);
     const [ tableData, setTableData ] = useState<TableData[]>([]);
+    const [ filteredTableData, setFilteredTableData ] = useState<TableData[]>([]);
     const { organization } = useParams();
     const navigate = useNavigate();
 
@@ -94,15 +97,59 @@ const AdminApplicationList = ({}: AdminApplicationListProps) => {
     }, [applications, applicants]);
 
     return (
-        <div className="flex flex-col h-full items-start justify-start px-5 bg-grantor-green">
+        <div className="flex flex-col h-full items-start justify-start px-5 bg-grantor-green pt-24">
             <span className="text-2xl pl-2">{organization} Grant Applications</span>
-            <Table<TableData> items={tableData}
-                   columns={columns}
-                   itemsPerPageOptions={itemsPerPageOptions}
-                   defaultIPP={10}
-                   defaultSort={columns[2]}
-                   onRowClick={onApplicationRowClick}
-            />
+            <div className="flex flex-row w-full gap-4">
+                <TableFilter tableData={tableData} setTableData={setFilteredTableData}/>
+                <Table<TableData> items={filteredTableData}
+                    columns={columns}
+                    itemsPerPageOptions={itemsPerPageOptions}
+                    defaultIPP={10}
+                    defaultSort={columns[2]}
+                    onRowClick={onApplicationRowClick}
+                />
+            </div>
+            
+        </div>
+    );
+};
+
+const TableFilter = ({ tableData, setTableData }: {
+    tableData: TableData[],
+    setTableData: (tableData: TableData[]) => void,
+}) => {
+    const [ grantTitle, setGrantTitle ] = useState<string>("");
+    const [ submitted, setSubmitted ] = useState<(Date | null)[]>([]);
+    const [ applicant, setApplicant ] = useState<string>("");
+
+    const statusDropDownOptions = Object.values(ApplicationStatus);
+
+    useEffect(() => {
+        setTableData(tableData.filter(row => {
+            if (grantTitle && !row[0].grantTitle.toLowerCase().includes(grantTitle.toLowerCase()))
+                return false;
+            if (applicant && row[0].applicantID.toLowerCase().includes(applicant))
+                return false;
+            if (submitted[0] !== null && row[0].submissionDate < submitted[0])
+                return false;
+            if (submitted[1] !== null&& row[0].submissionDate > submitted[1])
+                return false;
+
+            return true;
+        }));
+
+    }, [grantTitle, submitted, applicant]);
+
+    const onSubmittedFilterChange = (dateRange: (Date | null)[]) => {
+        setSubmitted(dateRange);
+    };
+
+    return (
+        <div className="flex flex-col gap-1 lg:w-1/3">
+            <h1 className="text-lg text-white">Application Filter</h1>
+            <SearchFilter className="text-white" label="Grant Title" setFilter={setGrantTitle}/>
+            <SearchFilter className="text-white" label="Applicant" setFilter={setApplicant}/>
+            <DateRangeFilter className="text-white" label="Application Deadline" rangeStartLabel="Due After" rangeEndLabel="Due Before" setFilter={onSubmittedFilterChange} />
         </div>
     );
 };
