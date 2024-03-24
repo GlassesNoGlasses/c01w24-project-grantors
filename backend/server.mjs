@@ -639,7 +639,7 @@ app.post("/review", express.json(), async (req, res) => {
 				$set: { status: applicationStatus }
 			});
 
-		if (statusUpdate.modifiedCount == 0) {
+		if (statusUpdate.matchedCount === 0) {
 			return res.status(400).json({ error: "Failed to update application status. ApplicationID invalid." });
 		}
 
