@@ -6,6 +6,7 @@ import Table from "../../../table/Table";
 import { Grant } from "../../../../interfaces/Grant";
 import GrantsController from "../../../../controllers/GrantsController";
 import ApplicationsController from "../../../../controllers/ApplicationsController";
+import { Link } from "react-router-dom";
 
 type TableData = [Application, Grant | undefined];
 
@@ -78,13 +79,22 @@ const ClientApplicationList = ({}) => {
         <div className="pt-28 p-4">
             <div className="flex flex-col h-full items-start justify-start p-6 bg-primary
             rounded-2xl border-4 border-white shadow-2xl shadow-black">
-                <span className="text-2xl pl-2">My Applications</span>
-                <Table items={tableData}
+                <span className="text-2xl  text-white">My Applications</span>
+                {applications.length > 0 ? 
+                    <Table items={tableData}
                     columns={columns}
                     itemsPerPageOptions={itemsPerPageOptions}
                     defaultIPP={10}
                     defaultSort={columns[1]}
-                />
+                /> :
+                <div className="text-white flex flex-row mt-2">
+                    <h1>You Have No Applications</h1>
+                    <p className="text-white">, Apply To Grants &nbsp;
+                        <Link to='/grants' className="text-[#0bb4d6] underline hover:text-black">here</Link> !
+                    </p>
+                </div>
+            }
+                
             </div>
         </div>
     );

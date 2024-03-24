@@ -30,7 +30,7 @@ const ClientDashboard = ({}: ClientDashboardProps) => {
 				<Link to="/saved">
 					<ButtonIcon heroicon={<StarIcon />} label="Saved Grants"/>
 				</Link>
-				<ButtonIcon heroicon={<TrophyIcon />} label="milestones"/>
+				<ButtonIcon heroicon={<TrophyIcon />} label="Milestones"/>
 				<ButtonIcon heroicon={<Cog6ToothIcon className=""/>} label="Settings"/>
 				<Link to="/">
 					<ButtonIcon heroicon={<ArrowRightStartOnRectangleIcon />} label="Log out" callback={logout}/>
