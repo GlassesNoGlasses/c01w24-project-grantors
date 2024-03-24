@@ -28,6 +28,7 @@ const AdminGrants = () => {
 
     // Table
     const onGrantRowClick = (grant: Grant) => navigate(`/grants/${grant.id}`);
+    const onSavedGrantRowClick = (grant: Grant) => navigate(`/editGrant/${grant.id}`);
     const itemsPerPageOptions: number[] = [5, 10];
     const columns: Column<Grant>[] = [
         {
@@ -111,6 +112,15 @@ const AdminGrants = () => {
             <>
                 {publishedGrants.length > 0 ? 
                 <div className='flex flex-col h-full w-full items-start justify-start px-5'>
+                    
+                    <div className='text-white font-bold text-2xl ml-4 mb-4'>
+                        Your Published Grants
+                    </div>
+
+                    <div className='text-white font-semibold text-md mb-1 ml-2'>
+                        click on grants to view details
+                    </div>
+
                     <Table items={publishedGrants}
                     columns={columns}
                     itemsPerPageOptions={itemsPerPageOptions}
@@ -130,12 +140,23 @@ const AdminGrants = () => {
         return (
             <>
                 {unpublishedGrants.length > 0 ?
-                <div className='flex h-4/5 min-w-full justify-center align-middle overflow-auto'>
-                    <div className='w-3/4 space-y-2'>
-                        {unpublishedGrants.map((grant: Grant) => (
-                            <GrantItem key={grant.id} grant={grant} link={`${grant.id}`} />
-                        ))}
+                <div className='flex flex-col h-full w-full items-start justify-start px-5'>
+
+                    <div className='text-white font-bold text-2xl ml-4 mb-4'>
+                        Your Unpublished Grants
                     </div>
+
+                    <div className='text-white font-semibold text-md mb-1 ml-2'>
+                        click on grants to edit and make changes
+                    </div>
+
+                    <Table items={unpublishedGrants}
+                    columns={columns}
+                    itemsPerPageOptions={itemsPerPageOptions}
+                    defaultIPP={5}
+                    defaultSort={columns[0]}
+                    onRowClick={onSavedGrantRowClick}
+                    />
                 </div>
                  : (
                     <NoGrantsDisplay />
@@ -145,7 +166,7 @@ const AdminGrants = () => {
     };
 
     return (
-        <div className='flex py-20 flex-col min-h-full min-w-full space-y-2 items-center'>
+        <div className='flex py-20 flex-col min-h-full min-w-full space-y-2 items-center px-20'>
             <div className='flex w-full justify-center align-middle p-4'>
                 <div className='w-3/4'>
                     <Tab items={tabItems}/>
