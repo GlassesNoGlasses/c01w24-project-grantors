@@ -53,7 +53,9 @@ const AdminDashboard = ({
 				</div>
 				<ButtonIcon heroicon={<TrophyIcon/>} label={"Milestones"}/>
 				<ButtonIcon heroicon={<ChartBarIcon />} label="Statistics"/>
-				<ButtonIcon heroicon={<Cog6ToothIcon/>} label={"Settings"}/>
+				<Link to='/settings'>
+					<ButtonIcon heroicon={<Cog6ToothIcon/>} label={"Settings"}/>
+				</Link>
 				<Link to="/">
 					<ButtonIcon heroicon={<ArrowRightStartOnRectangleIcon/>} label={"Log Out"} callback={logout}/>
 				</Link>
