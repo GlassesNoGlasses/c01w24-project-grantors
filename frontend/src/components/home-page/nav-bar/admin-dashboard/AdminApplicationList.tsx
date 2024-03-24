@@ -97,19 +97,28 @@ const AdminApplicationList = ({}: AdminApplicationListProps) => {
     }, [applications, applicants]);
 
     return (
-        <div className="flex flex-col h-full items-start justify-start px-5 bg-grantor-green pt-24">
-            <span className="text-2xl pl-2">{organization} Grant Applications</span>
-            <div className="flex flex-row w-full gap-4">
-                <TableFilter tableData={tableData} setTableData={setFilteredTableData}/>
-                <Table<TableData> items={filteredTableData}
-                    columns={columns}
-                    itemsPerPageOptions={itemsPerPageOptions}
-                    defaultIPP={10}
-                    defaultSort={columns[2]}
-                    onRowClick={onApplicationRowClick}
-                />
+        <div className="pt-28 p-4">
+            <div className="flex flex-col h-full items-start justify-start p-6
+                bg-primary rounded-2xl border-4 border-white shadow-2xl shadow-black">
+                <span className="text-2xl pl-2 text white mb-4">{organization} Grant Applications</span>
+                {
+                    tableData.length === 0 ?
+                    <div className="flex flex-row justify-center items-center w-full h-full">
+                        <span className="text-white text-lg">You have no applications.</span>
+                    </div>
+                    :
+                    <div className="flex flex-row w-full gap-4">
+                        <TableFilter tableData={tableData} setTableData={setFilteredTableData}/>
+                        <Table<TableData> items={filteredTableData}
+                            columns={columns}
+                            itemsPerPageOptions={itemsPerPageOptions}
+                            defaultIPP={10}
+                            defaultSort={columns[2]}
+                            onRowClick={onApplicationRowClick}
+                        />
+                    </div>
+                }
             </div>
-            
         </div>
     );
 };
