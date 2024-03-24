@@ -20,6 +20,27 @@ const GrantForm = ({ user, grant }: GrantFormProps) => {
         setQuestionList(newQuestionList);
     };
 
+    const handleSave = async () => {
+        if (!questionList) {
+            return 
+        }
+
+        ApplicationsController.submitApplication(user, {
+            id: '', // id does not exist yet as we have not submitted
+            applicantID: user.accountID,
+            grantID: grant.id,
+            grantTitle: grant.title,
+            grantCategory: grant.category,
+            submitted: true,
+            submissionDate: new Date(),
+            status: ApplicationStatus.inProgress,
+            awarded: 0,
+            responses: questionList,
+        }).then(() => {
+            navigate('/');
+        });
+    };
+
     const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
         
@@ -68,7 +89,7 @@ const GrantForm = ({ user, grant }: GrantFormProps) => {
                 ))}
                 <div className="flex flex-row items-center justify-between">
                     
-                    <Link to='/'>
+                    <Link to='/applications'>
                         <button 
                             className='p-2 px-5 m-7 mr-1 bg-red-500 hover:bg-red-600 active:bg-red-700
                             text-white font-bold rounded-lg shadow-md transition-colors duration-150 ease-in
@@ -86,7 +107,8 @@ const GrantForm = ({ user, grant }: GrantFormProps) => {
                             text-white font-bold rounded-lg shadow-md transition-colors duration-150 ease-in
                             text-lg' 
                             type='button' 
-                            name="save">
+                            name="save"
+                            onClick={handleSave}>
                             Save
                         </button>
                         
