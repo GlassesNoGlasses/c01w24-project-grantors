@@ -42,9 +42,7 @@ const Navbar = ({}: NavbarProps) => {
 			text-white font-bold rounded-lg shadow-md transition-colors duration-150 ease-in
 			text-base'
 			to='/' onClick={LogOut}>
-				<button>
-					Sign Out
-				</button>
+				Sign Out
 			</Link>
 		);
 	};
