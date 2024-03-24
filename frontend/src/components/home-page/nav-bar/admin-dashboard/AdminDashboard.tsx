@@ -11,6 +11,7 @@ import list from '../../../../images/list.png'
 import search from '../../../../images/search.png'
 import { Link } from 'react-router-dom';
 import UserController from '../../../../controllers/UserController';
+import { Cog6ToothIcon, ArrowRightStartOnRectangleIcon, FolderPlusIcon, ListBulletIcon, TrophyIcon} from '@heroicons/react/24/solid';
 
 const AdminDashboard = ({
 
@@ -34,23 +35,34 @@ const AdminDashboard = ({
 	}
 
 	return (
-		<div className='h-full bg-grantor-green flex flex-col gap-28 pt-24'>
-			<h2 className='text-6xl underline text-white pl-8'>Welcome, {user?.username}!</h2>
-			<div className='flex justify-evenly items-center'>
+		<div className='h-full flex flex-col py-20'>
+			
+			<div className='bg-white pb-8'>
+				<h2 className='text-6xl text-secondary pl-10 w-fit flex items-center flex-col'>
+					Welcome, {user?.username}!
+					<div className='bg-primary h-[8px] -mt-4 w-[105%]'/>
+				</h2>
+			</div>
+			
+				
+			<div className='flex justify-evenly items-center py-10'>
 				<div>
 					<Link to='/createGrant'>
-						<ButtonIcon imageSrc={addIcon} label={"New Grant"}/>
+						<ButtonIcon heroicon={<FolderPlusIcon/>} label={"New Grant"}/>
 					</ Link>
 				</div>
-				<ButtonIcon imageSrc={userIcon} label={"My Account"}/>
-				<ButtonIcon imageSrc={settingsIcon} label={"Settings"}/>
+				<ButtonIcon heroicon={<TrophyIcon/>} label={"Milestones"}/>
+				<ButtonIcon heroicon={<Cog6ToothIcon/>} label={"Settings"}/>
 				<Link to="/">
-					<ButtonIcon imageSrc={logoutIcon} label={"Log Out"} callback={logout}/>
+					<ButtonIcon heroicon={<ArrowRightStartOnRectangleIcon/>} label={"Log Out"} callback={logout}/>
 				</Link>
 			</div>
-			<div className='flex justify-evenly items-center h-1/4'>
+
+			<div className='flex justify-evenly items-center h-1/4 pt-[5vh]'>
 				<Link to={`admin/grants`}>
-					<ApplicationIcon imageSrc={list} label={"View Hosted Grants"}/>
+				<ApplicationIcon
+					heroicon={<ListBulletIcon className="h-40 w-40"/>}
+					label="View Available Grants" />
 				</Link>
 				<Link to={`${encodedOrg}/applications`}>
 					<ApplicationIcon imageSrc={search} label={"Review Applications"}/>

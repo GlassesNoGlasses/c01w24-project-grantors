@@ -4,6 +4,7 @@ import { GrantQuestion } from "../../interfaces/Grant";
 import { ApplicationStatus } from '../../interfaces/Application';
 import ApplicationsController from '../../controllers/ApplicationsController';
 import { useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 
 // TODO: This file and component should be renamed to ApplicationForm since this
 // is the form applicants fill out to submit and application, plus we already
@@ -43,14 +44,20 @@ const GrantForm = ({ user, grant }: GrantFormProps) => {
     };
 
     return (
-        <div>
-            <form onSubmit={handleSubmit} id="grantform" className='m-5 ml-10 mr-10'>
+        <div className='pt-28 pb-20 flex justify-center'>
+            <form onSubmit={handleSubmit} id="grantform" className=' border-4 bg-white lg:w-[70vw] w-[90vw]
+            rounded-2xl border-primary shadow-2xl shadow-black p-6'>
+
+                <div className='text-center font-bold text-2xl'>
+                    Application Form
+                </div>
+
                 {questionList.map((questionElement, index) => (
                     <li key={index} className='list-none'>
                          <div className="flex flex-col gap-1 p-5 px-3">
                             <label className='text-base'>{questionElement.question}</label>
                             <textarea
-                                className='outline outline-2 p-1 pb-10 mt-3 ml-5 mr-5'
+                                className='outline outline-2 p-3 pb-10 mt-3 ml-5 mr-5 rounded-md'
                                 value={questionList[index].answer || ''}
                                 placeholder="Type your answer here."
                                 key={index}
@@ -59,33 +66,40 @@ const GrantForm = ({ user, grant }: GrantFormProps) => {
                         </div>
                     </li>
                 ))}
-                <div className="flex flex-row items-center justify-end">
-                    <button 
-                        className='p-2 px-5 m-7 mr-1 bg-red-500 hover:bg-red-600 active:bg-red-700
-                        text-white font-bold rounded-lg shadow-md transition-colors duration-150 ease-in
-                        text-lg' 
-                        type='button' 
-                        name="back">
-                        Back
-                    </button>
+                <div className="flex flex-row items-center justify-between">
                     
-                    <button 
-                        className='p-2 px-5 m-7 mr-1 bg-green-500 hover:bg-green-600 active:bg-green-700
-                        text-white font-bold rounded-lg shadow-md transition-colors duration-150 ease-in
-                        text-lg' 
-                        type='button' 
-                        name="save">
-                        Save
-                    </button>
+                    <Link to='/'>
+                        <button 
+                            className='p-2 px-5 m-7 mr-1 bg-red-500 hover:bg-red-600 active:bg-red-700
+                            text-white font-bold rounded-lg shadow-md transition-colors duration-150 ease-in
+                            text-lg' 
+                            type='button' 
+                            name="back">
+                            Back
+                        </button>
+                    </Link>
                     
-                    <button 
-                        className='p-2 px-5 m-7 mr-14 bg-green-500 hover:bg-green-600 active:bg-green-700
-                        text-white font-bold rounded-lg shadow-md transition-colors duration-150 ease-in
-                        text-lg' 
-                        type="submit" 
-                        name="submit">
-                        Submit Form
-                    </button>
+                    
+                    <div>
+                        <button 
+                            className='p-2 px-5 m-7 mr-1 bg-secondary hover:bg-[#0bb4d6]
+                            text-white font-bold rounded-lg shadow-md transition-colors duration-150 ease-in
+                            text-lg' 
+                            type='button' 
+                            name="save">
+                            Save
+                        </button>
+                        
+                        <button 
+                            className='p-2 px-5 m-7 mr-14 bg-primary hover:bg-[#0bb4d6]
+                            text-white font-bold rounded-lg shadow-md transition-colors duration-150 ease-in
+                            text-lg' 
+                            type="submit" 
+                            name="submit">
+                            Submit Form
+                        </button>
+                    </div>
+                    
                     
                 </div>
             </form>

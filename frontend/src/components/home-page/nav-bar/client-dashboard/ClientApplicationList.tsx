@@ -6,9 +6,7 @@ import Table from "../../../table/Table";
 import { Grant } from "../../../../interfaces/Grant";
 import GrantsController from "../../../../controllers/GrantsController";
 import ApplicationsController from "../../../../controllers/ApplicationsController";
-import SearchFilter from "../../../filter/SearchFilter";
-import DropDownFilter from "../../../filter/DropDownFilter";
-import DateRangeFilter from "../../../filter/DateRangeFilter";
+import { Link } from "react-router-dom";
 
 type TableData = [Application, Grant];
 
@@ -98,80 +96,25 @@ const ClientApplicationList = ({}) => {
     }, [tableData]);
 
     return (
-        <div className="flex flex-col h-full items-start justify-start px-5 bg-grantor-green">
-            <span className="text-2xl">My Applications</span>
-            <div className="flex flex-row w-full gap-4">
-                <TableFilter tableData={tableData} setTableData={setFilteredTableData} />
-                <Table items={filteredTabledata}
+        <div className="pt-28 p-4">
+            <div className="flex flex-col h-full items-start justify-start p-6 bg-primary
+                rounded-2xl border-4 border-white shadow-2xl shadow-black">
+                <span className="text-2xl text-white mb-4">My Applications</span>
+                    {applications.length > 0 ? 
+                        <Table items={tableData}
                     columns={columns}
                     itemsPerPageOptions={itemsPerPageOptions}
                     defaultIPP={10}
                     defaultSort={columns[1]}
-                />
-            </div>
-        </div>
-    );
-};
-
-const TableFilter = ({ tableData, setTableData }: {
-        tableData: TableData[],
-        setTableData: (tableData: TableData[]) => void,
-    }) => {
-    const [ grantTitle, setGrantTitle ] = useState<string>("");
-    const [ deadline, setDeadline ] = useState<(Date | null)[]>([]);
-    const [ status, setStatus ] = useState<ApplicationStatus | undefined>(undefined)
-
-    useEffect(() => {
-        setTableData(tableData.filter(row => {
-            if (grantTitle && !row[1].title.toLowerCase().includes(grantTitle.toLowerCase()))
-                return false;
-            if (status && row[0].status !== status)
-                return false;
-            if (deadline[0] !== null && row[1].deadline < deadline[0])
-                return false;
-            if (deadline[1] !== null&& row[1].deadline > deadline[1])
-                return false;
-
-            return true;
-        }));
-
-    }, [grantTitle, deadline, status]);
-
-    const onStatusFilterChange = (status: string) => {
-        if (Object.values(ApplicationStatus).includes(status as ApplicationStatus)) {
-            setStatus(status as ApplicationStatus);
-        }
-    };
-
-    const onDeadlineFilterChange = (dateRange: (Date | null)[]) => {
-        setDeadline(dateRange);
-    };
-
-    return (
-        <div className="flex flex-col gap-1 lg:w-1/3">
-            <h1 className="text-lg">Application Filter</h1>
-            <SearchFilter label="Grant Title" setFilter={setGrantTitle}/>
-            <DropDownFilter label="Applicant Status" options={Object.values(ApplicationStatus)} setFilter={onStatusFilterChange}/>
-            <DateRangeFilter label="Application Deadline" rangeStartLabel="Due After" rangeEndLabel="Due Before" setFilter={onDeadlineFilterChange} />
-            {/* <div className="flex flex-col">
-                <div>
-                    <p className="text-base">Date</p>
-                    <div className="flex flex-row gap-4">
-                        <div>
-                            <p className="text-sm">Posted After</p>
-                            <input type="date" className="border border-black rounded-lg text-sm p-1 px-2"
-                                value={postedAfter?.toISOString().split('T')[0] as string}
-                                onChange={(event) => setPostedAfter(event.target.valueAsDate)} />
-                        </div>
-                        <div>
-                            <p className="text-sm">Due By</p>
-                            <input type="date" className="border border-black rounded-lg text-sm p-1 px-2"
-                                value={dueBy?.toISOString().split('T')[0] as string}
-                                onChange={(event) => setDueBy(event.target.valueAsDate)} />
-                        </div>
+                    /> :
+                    <div className="text-white flex flex-row mt-2">
+                        <h1>You Have No Applications</h1>
+                        <p className="text-white">, Apply To Grants &nbsp;
+                            <Link to='/grants' className="text-[#0bb4d6] underline hover:text-black">here</Link> !
+                        </p>
                     </div>
-                </div>
-            </div> */}
+                }
+            </div>
         </div>
     );
 };
