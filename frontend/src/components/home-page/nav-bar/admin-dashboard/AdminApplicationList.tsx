@@ -109,17 +109,17 @@ const AdminApplicationList = ({}: AdminApplicationListProps) => {
     }, [applications, applicants]);
 
     return (
-        <div className="pt-28 p-4">
+        <div className="pt-28 p-8">
             <div className="flex flex-col h-full items-start justify-start p-6
                 bg-primary rounded-2xl border-4 border-white shadow-2xl shadow-black">
-                <span className="text-2xl text-white mb-4">{organization} Grant Applications</span>
+                <span className="text-2xl text-white mb-4">Grant Applications for <i>{organization}</i></span>
                 {
                     tableData.length === 0 ?
                     <div className="flex flex-row justify-center items-center w-full h-full">
                         <span className="text-white text-lg">You have no applications.</span>
                     </div>
                     :
-                    <div className="flex flex-row w-full gap-4">
+                    <div className="flex flex-row w-full gap-10">
                         <TableFilter tableData={tableData} setTableData={setFilteredTableData}/>
                         <Table<TableData> items={filteredTableData}
                             columns={columns}
