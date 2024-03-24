@@ -10,6 +10,7 @@ import UserController from '../../../../controllers/UserController';
 import { Applicant } from '../../../../interfaces/Applicant';
 import SearchFilter from '../../../filter/SearchFilter';
 import DateRangeFilter from '../../../filter/DateRangeFilter';
+import DropDownFilter from '../../../filter/DropDownFilter';
 
 type TableData = [Application, Applicant];
 
@@ -39,6 +40,17 @@ const AdminApplicationList = ({}: AdminApplicationListProps) => {
             title: "Applicant",
             format: (data: TableData) => data[1].firstName + ' ' + data[1].lastName,
             sort: (data1: TableData, data2: TableData) => data1[1].firstName + data1[1].lastName < data2[1].firstName + data2[1].lastName ? -1 : 1,
+        },
+        {
+            title: "Status",
+            format: (data: TableData) => data[0].status,
+            sort: (data1: TableData, data2: TableData) => {
+                // Show processed applications last might need to flip the signs once I test this
+                if (data1[0].status === data2[0].status) return 0;
+                if (data1[0].status === ApplicationStatus.rejected) return -2;
+                if (data1[0].status === ApplicationStatus.approved) return -1;
+                return 1;
+            }
         },
         {
             title: "Submission Date",
@@ -130,6 +142,7 @@ const TableFilter = ({ tableData, setTableData }: {
     const [ grantTitle, setGrantTitle ] = useState<string>("");
     const [ submitted, setSubmitted ] = useState<(Date | null)[]>([]);
     const [ applicant, setApplicant ] = useState<string>("");
+    const [ status, setStatus ] = useState<ApplicationStatus | undefined>(undefined);
 
     const statusDropDownOptions = Object.values(ApplicationStatus);
 
@@ -139,6 +152,8 @@ const TableFilter = ({ tableData, setTableData }: {
                 return false;
             if (applicant && !(row[1].firstName + row[1].lastName).toLowerCase().includes(applicant))
                 return false;
+            if (status && row[0].status !== status)
+                return false;
             if (submitted[0] !== null && row[0].submissionDate < submitted[0])
                 return false;
             if (submitted[1] !== null&& row[0].submissionDate > submitted[1])
@@ -147,10 +162,18 @@ const TableFilter = ({ tableData, setTableData }: {
             return true;
         }));
 
-    }, [grantTitle, submitted, applicant]);
+    }, [grantTitle, submitted, applicant, status]);
 
     const onSubmittedFilterChange = (dateRange: (Date | null)[]) => {
         setSubmitted(dateRange);
+    };
+
+    const onStatusFilterChange = (status: string) => {
+        if (Object.values(ApplicationStatus).includes(status as ApplicationStatus)) {
+            setStatus(status as ApplicationStatus);
+        } else {
+            setStatus(undefined);
+        }
     };
 
     return (
@@ -158,6 +181,8 @@ const TableFilter = ({ tableData, setTableData }: {
             <h1 className="text-lg text-white">Application Filter</h1>
             <SearchFilter className="text-white" label="Grant Title" setFilter={setGrantTitle}/>
             <SearchFilter className="text-white" label="Applicant" setFilter={setApplicant}/>
+            <DropDownFilter className="text-white" label="Applicant Status" options={statusDropDownOptions}
+                identity="Status" setFilter={onStatusFilterChange}/>
             <DateRangeFilter className="text-white" label="Submission Date" rangeStartLabel="Submitted After" rangeEndLabel="Submitted Before" setFilter={onSubmittedFilterChange} />
         </div>
     );
