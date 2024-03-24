@@ -23,7 +23,8 @@ const GrantPage = ({}: GrantPageProps) => {
 
 const GrantFound = ({ grant }: { grant: Grant }) => {
     return (
-        <div className="flex flex-col gap-3 p-1 px-3">
+        <div className="flex flex-col gap-3 py-3 px-5 bg-white border-4 border-primary mx-5 mt-24
+            rounded-2xl shadow-2xl shadow-black">
             <div className="flex flex-row justify-between items-center">
                 <h1 className="text-4xl font-bold">{grant.title}</h1>
                 <ApplyButton grantID={grant.id.toString()} />
@@ -55,7 +56,7 @@ const GrantNotFound = () => {
 
 const ApplyButton = ({ grantID }: { grantID: String }) => {
     return (
-        <Link className='p-2 px-5 m-2 bg-green-500 hover:bg-green-600 active:bg-green-700
+        <Link className='p-2 px-5 m-2 bg-secondary hover:bg-primary
           text-white font-bold rounded-lg shadow-md transition-colors duration-150 ease-in
           text-lg'
           to={`/grants/${grantID}/apply`}>
