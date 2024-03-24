@@ -21,17 +21,15 @@ const ApplicationReview = () => {
     const [ hoverRating, setHoverRating ] = useState<number>(0);
     const [ review, setReview ] = useState<string>('');
     const [ reviewed, setReviewed ] = useState<boolean>(false);
-    const [ applicationStatus, setApplicationStatus ] = useState<ApplicationStatus>(ApplicationStatus.submitted);
     const [ showError, setShowError ] = useState<boolean>(false);
 
     const navigate = useNavigate();
 
     const rejectApplication = () => {
-        setApplicationStatus(ApplicationStatus.rejected);
-        submitApplicationReview();
+        submitApplicationReview(ApplicationStatus.rejected);
     };
 
-    const submitApplicationReview = () => {
+    const submitApplicationReview = (applicationStatus: ApplicationStatus) => {
         if (application && user) {
             ReviewController.submitReview({
                 ID: '',
@@ -45,6 +43,7 @@ const ApplicationReview = () => {
                 if (success) {
                     setReviewed(true);
                 } else {
+                    console.log('Error submitting review');
                     setShowError(true);
                 }
             });
@@ -52,8 +51,7 @@ const ApplicationReview = () => {
     };
 
     const approveApplication = () => {
-        setApplicationStatus(ApplicationStatus.approved);
-        submitApplicationReview();
+        submitApplicationReview(ApplicationStatus.approved);
     };
 
     useEffect(() => {
@@ -198,7 +196,7 @@ const ApplicationReview = () => {
                             Reject
                         </button>
                         <button id="submit-review" className={`py-3 p-6 text-lg ${application && applicant && grant ? "button" : "button-disabled" }`}
-                            onClick={submitApplicationReview}
+                            onClick={() => submitApplicationReview(ApplicationStatus.submitted)}
                         >
                             Submit Review
                         </button>
