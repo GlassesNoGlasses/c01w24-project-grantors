@@ -79,7 +79,7 @@ const Navbar = ({}: NavbarProps) => {
 				<div className='flex items-center'>	
 					<div className='hidden md:flex justify-end lg:text-[20px] text-[17px] xl:gap-20 xl:mr-16 
 					mr-6 lg:gap-10 gap-6'>
-						<Link className='text-base hover:underline' to="/">Grants</Link>
+						<Link className='text-base hover:underline' to="/grants">Grants</Link>
 						<a href='https://www.magnifyaccess.ai/about-us' 
 						className='hover:underline' target='blank'>About Us</a>
 						<a href='https://www.magnifyaccess.ai/additional-services' 

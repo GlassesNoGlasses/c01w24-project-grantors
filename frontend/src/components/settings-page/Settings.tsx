@@ -16,9 +16,9 @@ const Settings = () => {
 		return (
 			<Link className='p-2 px-5 m-2 bg-red-500 hover:bg-red-700 active:bg-red-700
 			text-white font-bold rounded-lg shadow-md transition-colors duration-150 ease-in
-			text-base'
+			text-base text-center'
 			to='/' onClick={LogOut}>
-				Sign Out
+				Log Out
 			</Link>
 		);
 	};
@@ -65,7 +65,7 @@ const Settings = () => {
                         {user?.isAdmin ? <Attribute attribute='Organization' value={user?.organization}></Attribute> : <></>}
                     </div>
                     
-                    <div className='flex flex-col justify-center gap-2'>
+                    <div className='flex flex-col justify-center gap-2 w-[250px]'>
                         <HomeButton />
                         <SignOutButton/>
                     </div>
