@@ -17,21 +17,24 @@ function DropDownFilter({label, options, setFilter }: DropDownFilterProps ) {
     }, [selectedItem]);
 
     return (
-        <div className="dropdown flex flex-col items-start">
+        <div className="dropdown flex flex-col items-start">    
             <span className="text-base">{label}</span>
-            <button className="dropdown-button flex flex-row gap-2 border-2 border-magnify-blue p-2 rounded-lg" onClick={() => setIsOpen(!isOpen)}>
-                {selectedItem}
-                <ChevronDownIcon className="h-5"/>
-            </button>
-            {isOpen && (
-                <ul className="dropdown-content">
-                    {options.map(option => (
-                        <li key={option} onClick={() => handleSelect(option)}>
-                            {option}
-                        </li>
-                    ))}
-                </ul>
-            )}
+            <div className="flex flex-col items-center">
+                <button className="dropdown-button flex flex-row gap-2 border-2 border-magnify-blue p-2 rounded-lg
+                 bg-white hover:bg-magnify-blue transition ease-in-out duration-200" onClick={() => setIsOpen(!isOpen)}>
+                    {selectedItem}
+                    <ChevronDownIcon className="h-5"/>
+                </button>
+                {isOpen && (
+                    <ul className="dropdown-content rounded bg-magnify-blue text-white">
+                        {options.map(option => (
+                            <li key={option} className="p-2 hover:bg-magnify-grey" onClick={() => handleSelect(option)}>
+                                {option}
+                            </li>
+                        ))}
+                    </ul>
+                )}
+            </div>
         </div>
     );
 };
