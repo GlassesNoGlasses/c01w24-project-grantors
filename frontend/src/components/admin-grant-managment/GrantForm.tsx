@@ -192,7 +192,7 @@ const GrantForm: React.FC<GrantFormProps> = ({ type }) => {
                     {/* Organization */}
                     <div>
                         <label htmlFor="organization" className="block text-gray-700 font-semibold mb-2">Organization</label>
-                        <input type="text" name="organization" id="organization" value={grant.organization} onChange={handleInputChange} required
+                        <input type="text" name="organization" id="organization" value={grant.organization} onChange={handleInputChange} required readOnly
                             className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-secondary focus:border-transparent" />
                     </div>
                     
