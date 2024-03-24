@@ -11,7 +11,7 @@ import list from '../../../../images/list.png'
 import search from '../../../../images/search.png'
 import { Link } from 'react-router-dom';
 import UserController from '../../../../controllers/UserController';
-import { Cog6ToothIcon, ArrowRightStartOnRectangleIcon, FolderPlusIcon, ListBulletIcon, TrophyIcon, DocumentMagnifyingGlassIcon} from '@heroicons/react/24/solid';
+import { Cog6ToothIcon, ArrowRightStartOnRectangleIcon, FolderPlusIcon, ListBulletIcon, TrophyIcon, DocumentMagnifyingGlassIcon, ChartBarIcon} from '@heroicons/react/24/solid';
 
 const AdminDashboard = ({
 
@@ -52,6 +52,7 @@ const AdminDashboard = ({
 					</ Link>
 				</div>
 				<ButtonIcon heroicon={<TrophyIcon/>} label={"Milestones"}/>
+				<ButtonIcon heroicon={<ChartBarIcon />} label="Statistics"/>
 				<ButtonIcon heroicon={<Cog6ToothIcon/>} label={"Settings"}/>
 				<Link to="/">
 					<ButtonIcon heroicon={<ArrowRightStartOnRectangleIcon/>} label={"Log Out"} callback={logout}/>

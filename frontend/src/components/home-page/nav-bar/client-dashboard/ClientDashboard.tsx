@@ -1,6 +1,7 @@
 import { useUserContext } from '../../../contexts/userContext';
 import ButtonIcon from '../../../displays/ButtonIcon/ButtonIcon';
-import { Cog6ToothIcon, ArrowRightStartOnRectangleIcon, DocumentMagnifyingGlassIcon, StarIcon, ListBulletIcon, TrophyIcon} from '@heroicons/react/24/solid';
+import { Cog6ToothIcon, ArrowRightStartOnRectangleIcon, DocumentMagnifyingGlassIcon, StarIcon, 
+	ListBulletIcon, TrophyIcon, ChartBarIcon} from '@heroicons/react/24/solid';
 import search from '../../../../images/search.png'
 import ApplicationIcon from '../../../displays/ApplicationIcon/ApplicationIcon';
 import { Link } from 'react-router-dom';
@@ -31,6 +32,7 @@ const ClientDashboard = ({}: ClientDashboardProps) => {
 					<ButtonIcon heroicon={<StarIcon />} label="Saved Grants"/>
 				</Link>
 				<ButtonIcon heroicon={<TrophyIcon />} label="Milestones"/>
+				<ButtonIcon heroicon={<ChartBarIcon />} label="Statistics"/>
 				<ButtonIcon heroicon={<Cog6ToothIcon className=""/>} label="Settings"/>
 				<Link to="/">
 					<ButtonIcon heroicon={<ArrowRightStartOnRectangleIcon />} label="Log out" callback={logout}/>
