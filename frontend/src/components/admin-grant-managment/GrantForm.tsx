@@ -170,8 +170,13 @@ const GrantForm: React.FC<GrantFormProps> = ({ type }) => {
     // handle when the form is published when all required fields are provided
     const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        saveGrant(true)
-        console.log('submitted')
+        if (grant.questions.length == 0) {
+            alert("At Least One Question Is Required To Be Published, Please Add A Custom Question")
+            console.log("missing questions")
+        } else {
+            saveGrant(true)
+            console.log('submitted')
+        }
     };
 
     // formatter for dates
