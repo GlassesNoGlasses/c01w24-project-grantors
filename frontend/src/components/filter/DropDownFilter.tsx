@@ -2,15 +2,16 @@ import { useEffect, useState } from "react";
 import { DropDownFilterProps } from "./DropDownFilterProps";
 import { ChevronDownIcon } from "@heroicons/react/24/solid";
 
-function DropDownFilter({label, options, setFilter, className}: DropDownFilterProps ) {
-    const [isOpen, setIsOpen] = useState(false); // State to manage dropdown open/close
-    const [selectedItem, setSelectedItem] = useState('Status'); // State to hold the selected item
+function DropDownFilter({label, options, identity, setFilter, className}: DropDownFilterProps ) {
+    const [isOpen, setIsOpen] = useState(false);
+    const [selectedItem, setSelectedItem] = useState(identity);
 
-    // Function to handle option selection
     const handleSelect = (option: string) => {
         setSelectedItem(option);
         setIsOpen(false);
     };
+
+    const dropDownList = [identity, ...options];
 
     useEffect(() => {
         setFilter(selectedItem);
@@ -27,7 +28,7 @@ function DropDownFilter({label, options, setFilter, className}: DropDownFilterPr
                 </button>
                 {isOpen && (
                     <ul className="dropdown-content rounded bg-magnify-blue text-white absolute mt-11">
-                        {options.map(option => (
+                        {dropDownList.map(option => (
                             <li key={option} className="p-2 hover:bg-magnify-grey" onClick={() => handleSelect(option)}>
                                 {option}
                             </li>

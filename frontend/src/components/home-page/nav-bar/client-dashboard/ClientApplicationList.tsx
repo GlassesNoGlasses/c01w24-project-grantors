@@ -132,7 +132,9 @@ const TableFilter = ({ tableData, setTableData }: {
     }) => {
     const [ grantTitle, setGrantTitle ] = useState<string>("");
     const [ deadline, setDeadline ] = useState<(Date | null)[]>([]);
-    const [ status, setStatus ] = useState<ApplicationStatus | undefined>(undefined)
+    const [ status, setStatus ] = useState<ApplicationStatus | undefined>(undefined);
+
+    const statusDropDownOptions = Object.values(ApplicationStatus);
 
     useEffect(() => {
         setTableData(tableData.filter(row => {
@@ -153,6 +155,8 @@ const TableFilter = ({ tableData, setTableData }: {
     const onStatusFilterChange = (status: string) => {
         if (Object.values(ApplicationStatus).includes(status as ApplicationStatus)) {
             setStatus(status as ApplicationStatus);
+        } else {
+            setStatus(undefined);
         }
     };
 
@@ -164,7 +168,8 @@ const TableFilter = ({ tableData, setTableData }: {
         <div className="flex flex-col gap-1 lg:w-1/3">
             <h1 className="text-lg text-white">Application Filter</h1>
             <SearchFilter className="text-white" label="Grant Title" setFilter={setGrantTitle}/>
-            <DropDownFilter className="text-white" label="Applicant Status" options={Object.values(ApplicationStatus)} setFilter={onStatusFilterChange}/>
+            <DropDownFilter className="text-white" label="Applicant Status" options={statusDropDownOptions} 
+                identity="Status" setFilter={onStatusFilterChange}/>
             <DateRangeFilter className="text-white" label="Application Deadline" rangeStartLabel="Due After" rangeEndLabel="Due Before" setFilter={onDeadlineFilterChange} />
         </div>
     );
