@@ -26,7 +26,7 @@ function DropDownFilter({label, options, setFilter }: DropDownFilterProps ) {
                     <ChevronDownIcon className="h-5"/>
                 </button>
                 {isOpen && (
-                    <ul className="dropdown-content rounded bg-magnify-blue text-white">
+                    <ul className="dropdown-content rounded bg-magnify-blue text-white absolute mt-11">
                         {options.map(option => (
                             <li key={option} className="p-2 hover:bg-magnify-grey" onClick={() => handleSelect(option)}>
                                 {option}
