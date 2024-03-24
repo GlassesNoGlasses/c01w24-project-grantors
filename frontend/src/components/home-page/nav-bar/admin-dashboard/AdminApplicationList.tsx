@@ -1,13 +1,16 @@
 import { useEffect, useState } from 'react';
 import { useUserContext } from '../../../contexts/userContext';
 import { AdminApplicationListProps } from './AdminApplicationListProps';
-import { Application } from '../../../../interfaces/Application';
+import { Application, ApplicationStatus } from '../../../../interfaces/Application';
 import { useParams, useNavigate } from 'react-router-dom';
 import Table from '../../../table/Table';
 import { Column } from '../../../table/TableProps';
 import ApplicationsController from '../../../../controllers/ApplicationsController';
 import UserController from '../../../../controllers/UserController';
 import { Applicant } from '../../../../interfaces/Applicant';
+import SearchFilter from '../../../filter/SearchFilter';
+import DateRangeFilter from '../../../filter/DateRangeFilter';
+import DropDownFilter from '../../../filter/DropDownFilter';
 
 type TableData = [Application, Applicant];
 
@@ -16,6 +19,7 @@ const AdminApplicationList = ({}: AdminApplicationListProps) => {
     const [ applications, setApplications ] = useState<Application[]>([]);
     const [ applicants, setApplicants ] = useState<Applicant[]>([]);
     const [ tableData, setTableData ] = useState<TableData[]>([]);
+    const [ filteredTableData, setFilteredTableData ] = useState<TableData[]>([]);
     const { organization } = useParams();
     const navigate = useNavigate();
 
@@ -38,7 +42,18 @@ const AdminApplicationList = ({}: AdminApplicationListProps) => {
             sort: (data1: TableData, data2: TableData) => data1[1].firstName + data1[1].lastName < data2[1].firstName + data2[1].lastName ? -1 : 1,
         },
         {
-            title: "Date",
+            title: "Status",
+            format: (data: TableData) => data[0].status,
+            sort: (data1: TableData, data2: TableData) => {
+                // Show processed applications last might need to flip the signs once I test this
+                if (data1[0].status === data2[0].status) return 0;
+                if (data1[0].status === ApplicationStatus.rejected) return -2;
+                if (data1[0].status === ApplicationStatus.approved) return -1;
+                return 1;
+            }
+        },
+        {
+            title: "Submission Date",
             format: (data: TableData) => {
                 return data[0].submissionDate.toLocaleDateString('en-GB', {
                     day: '2-digit',
@@ -94,15 +109,81 @@ const AdminApplicationList = ({}: AdminApplicationListProps) => {
     }, [applications, applicants]);
 
     return (
-        <div className="flex flex-col h-full items-start justify-start px-5 bg-grantor-green">
-            <span className="text-2xl pl-2">{organization} Grant Applications</span>
-            <Table<TableData> items={tableData}
-                   columns={columns}
-                   itemsPerPageOptions={itemsPerPageOptions}
-                   defaultIPP={10}
-                   defaultSort={columns[2]}
-                   onRowClick={onApplicationRowClick}
-            />
+        <div className="pt-28 p-4">
+            <div className="flex flex-col h-full items-start justify-start p-6
+                bg-primary rounded-2xl border-4 border-white shadow-2xl shadow-black">
+                <span className="text-2xl text-white mb-4">{organization} Grant Applications</span>
+                {
+                    tableData.length === 0 ?
+                    <div className="flex flex-row justify-center items-center w-full h-full">
+                        <span className="text-white text-lg">You have no applications.</span>
+                    </div>
+                    :
+                    <div className="flex flex-row w-full gap-4">
+                        <TableFilter tableData={tableData} setTableData={setFilteredTableData}/>
+                        <Table<TableData> items={filteredTableData}
+                            columns={columns}
+                            itemsPerPageOptions={itemsPerPageOptions}
+                            defaultIPP={10}
+                            defaultSort={columns[2]}
+                            onRowClick={onApplicationRowClick}
+                        />
+                    </div>
+                }
+            </div>
+        </div>
+    );
+};
+
+const TableFilter = ({ tableData, setTableData }: {
+    tableData: TableData[],
+    setTableData: (tableData: TableData[]) => void,
+}) => {
+    const [ grantTitle, setGrantTitle ] = useState<string>("");
+    const [ submitted, setSubmitted ] = useState<(Date | null)[]>([]);
+    const [ applicant, setApplicant ] = useState<string>("");
+    const [ status, setStatus ] = useState<ApplicationStatus | undefined>(undefined);
+
+    const statusDropDownOptions = Object.values(ApplicationStatus);
+
+    useEffect(() => {
+        setTableData(tableData.filter(row => {
+            if (grantTitle && !row[0].grantTitle.toLowerCase().includes(grantTitle.toLowerCase()))
+                return false;
+            if (applicant && !(row[1].firstName + row[1].lastName).toLowerCase().includes(applicant))
+                return false;
+            if (status && row[0].status !== status)
+                return false;
+            if (submitted[0] !== null && row[0].submissionDate < submitted[0])
+                return false;
+            if (submitted[1] !== null&& row[0].submissionDate > submitted[1])
+                return false;
+
+            return true;
+        }));
+
+    }, [grantTitle, submitted, applicant, status]);
+
+    const onSubmittedFilterChange = (dateRange: (Date | null)[]) => {
+        setSubmitted(dateRange);
+    };
+
+    const onStatusFilterChange = (status: string) => {
+        if (Object.values(ApplicationStatus).includes(status as ApplicationStatus)) {
+            setStatus(status as ApplicationStatus);
+        } else {
+            setStatus(undefined);
+        }
+    };
+
+    return (
+        <div className="flex flex-col gap-1 lg:w-1/3">
+            <h1 className="text-lg text-white">Application Filter</h1>
+            <SearchFilter className="text-white" label="Grant Title" setFilter={setGrantTitle}/>
+            <SearchFilter className="text-white" label="Applicant" setFilter={setApplicant}/>
+            <DropDownFilter className="text-white" label="Applicant Status" options={statusDropDownOptions}
+                identity="Status" setFilter={onStatusFilterChange}/>
+            <DateRangeFilter className="text-white" label="Submission Date" rangeStartLabel="Submitted After" rangeEndLabel="Submitted Before" setFilter={onSubmittedFilterChange} />
         </div>
     );
 };
