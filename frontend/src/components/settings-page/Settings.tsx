@@ -176,7 +176,17 @@ const Settings = () => {
                                     <li>
                                         - <b>Home Page</b>: <b className='underline'>ALT + H</b> &nbsp;(<b className='underline'>COMMAND + H</b> for <b>Mac</b>)
                                     </li>
-                                    
+                                    {
+                                        user?.isAdmin ? <></> :
+                                        <div>
+                                            <li>
+                                                - <b>View Grants</b>: <b className='underline'>ALT + G</b> &nbsp;(<b className='underline'>COMMAND + G</b> for <b>Mac</b>)
+                                            </li>
+                                            <li>
+                                                - <b>View Applications</b>: <b className='underline'>ALT + I</b> &nbsp;(<b className='underline'>COMMAND + I</b> for <b>Mac</b>)
+                                            </li>
+                                        </div>
+                                    }
                                 </ul>
                             </div>
                         </div>

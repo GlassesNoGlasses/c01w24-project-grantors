@@ -29,6 +29,12 @@ function App() {
             if ((event.altKey || event.metaKey) && event.key === 'h' || event.key === 'H') {
                 window.location.href = '/'; 
             }
+			if ((event.altKey || event.metaKey) && event.key === 'g' || event.key === 'G') {
+                window.location.href = '/grants'; 
+            }
+			if ((event.altKey || event.metaKey) && event.key === 'i' || event.key === 'I') {
+                window.location.href = '/applications'; 
+            }
         };
 
         window.addEventListener('keydown', handleKeyDown);
