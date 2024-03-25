@@ -16,8 +16,27 @@ import ApplicationReview from "./components/applications/admin/ApplicationReview
 import DefaultPage from "./components/home-page/nav-bar/default-page/DefaultPage";
 import NotFoundPage from "./components/not-found-page/NotFoundPage";
 import Settings from "./components/settings-page/Settings";
+import React, { useEffect } from 'react';
+
+
+
 
 function App() {
+
+	useEffect(() => {
+        const handleKeyDown = (event: KeyboardEvent) => {
+            if (event.altKey && event.key === 'h' || event.key === 'H') {
+                window.location.href = '/'; 
+            }
+        };
+
+        window.addEventListener('keydown', handleKeyDown);
+
+        return () => {
+            window.removeEventListener('keydown', handleKeyDown);
+        };
+    }, []);
+
 	return (
 		<div className="App w-full h-full">
 			<div className="bg-home-background bg-cover 

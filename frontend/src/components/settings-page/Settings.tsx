@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { useUserContext } from '../contexts/userContext'
 import UserController from '../../controllers/UserController';
 import { Link } from 'react-router-dom';
@@ -69,10 +69,11 @@ const Settings = () => {
                 </a>
         )
     }
-
+    
     return (
         <div className='pt-24'>
             <div className='flex justify-around'>
+                
                 <div className={`${SettingStyle}`}>
                     <h1 className='text-center font-bold text-2xl'>Account Information</h1>
 
@@ -95,29 +96,47 @@ const Settings = () => {
                 <div className={`${SettingStyle}`}>
                     <h1 className='text-center font-bold text-2xl'>Accessibility</h1>
 
-                    <div className='flex flex-col'>
-                        <h2>Physical</h2>
-                        <div>Our website support nagivation between component with intuitive Tab Controls
-                            <ul className='flex flex-col'>
-                                <li>
-                                    - press TAB to navigate to next component
-                                </li>
-                                <li>
-                                    - press SHIFT + TAB to nagivate to previous component
-                                </li>
-                                <li>
-                                    - once on selected component, press ENTER to proceed
-                                </li>
-                            </ul>
+                    <div className='flex flex-col items-start gap-10'>
+
+                    
+                        <div className='flex flex-col'>
+                            <h2 className='font-semibold mb-2 text-[1.2rem]'>Physical</h2>
+                            <div>Our website supports nagivation between components with intuitive Tab Controls
+                                <ul className='flex flex-col ml-4'>
+                                    <li>
+                                        - press <b className='underline'>TAB</b> to navigate to next component
+                                    </li>
+                                    <li>
+                                        - press <b className='underline'>SHIFT + TAB</b> to nagivate to previous component
+                                    </li>
+                                    <li>
+                                        - once on selected component, press <b className='underline'>ENTER</b> to proceed
+                                    </li>
+                                </ul>
+                            </div>
                         </div>
-                    </div>
 
-                    <div>
-                        Auditorial
-                    </div>
+                        
+                        <div className='flex flex-col'>
+                            <h2 className='font-semibold mb-2 text-[1.2rem]'>Visual</h2>
+                            <div>Font and View can be resized on command with browser support
+                                <ul className='flex flex-col ml-4'>
+                                    <li>
+                                        - press <b className='underline'>CTRL + '+'</b> to zoom in (replace <b className='underline'>CTRL</b> with <b className='underline'>COMMAND</b> for Mac)
+                                    </li>
+                                    <li>
+                                        - press <b className='underline'>CTRL + '-'</b> to zoom out (replace <b className='underline'>CTRL</b> with <b className='underline'>COMMAND</b> for Mac)
+                                    </li>
+                            
+                                </ul>
+                            </div>
+                        </div>
+                        
 
-                    <div className='mb-20'>
-                        Visual
+                        <div className='mb-20'>
+                            Auditory
+                            
+                        </div>
                     </div>
 
                     <div className='w-full'>
