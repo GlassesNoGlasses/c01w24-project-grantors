@@ -17,7 +17,7 @@ const ButtonIcon = ({
                     heroicon
                 ) }
             </div>
-            <p className={`text-xl ${text} font-bold`}>{label ? label : ""}</p>
+            <p className={`text-xl ${text} font-bold mt-2`}>{label ? label : ""}</p>
         </button>
     );
 };

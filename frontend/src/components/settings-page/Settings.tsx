@@ -22,8 +22,6 @@ const Settings = () => {
         setChecker([user.preferences.sbg, user.preferences.hc]);
         }
     }, [user]);
-
-    console.log(checker)
     
     const LogOut = () => {
 		setUser(null);
