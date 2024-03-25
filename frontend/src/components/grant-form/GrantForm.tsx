@@ -86,7 +86,6 @@ const GrantForm = ({ user, grant }: GrantFormProps) => {
                         name="submit">
                         Submit Form
                     </button>
-                    
                 </div>
             </form>
         </div>

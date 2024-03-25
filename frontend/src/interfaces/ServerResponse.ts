@@ -48,3 +48,8 @@ export interface GetApplicantsResponse {
     response?: Applicant[],
     error?: string,
 }
+
+export interface UploadFilesResponse {
+    response?: string,
+    numUploaded: number,
+}

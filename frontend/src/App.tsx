@@ -14,6 +14,7 @@ import SavedGrants from "./components/saved-grants/SavedGrants";
 import GrantApply from "./components/grant-apply/GrantApply";
 import ApplicationReview from "./components/applications/admin/ApplicationReview";
 import DefaultPage from "./components/home-page/nav-bar/default-page/DefaultPage";
+import TestFileDisplay from "./components/files/TestFileDisplay";
 
 function App() {
 	return (
@@ -22,8 +23,9 @@ function App() {
 				<Routes>
 					<Route path="/" element={<Navbar />}>
 						<Route index element={<Home />} />
+						<Route path="files" element={<TestFileDisplay />} />
 						<Route path="about" element={<DefaultPage />} />
-						<Route path="services" element={<Home />} />
+						<Route path="services" element={<TestFileDisplay />} />
 						<Route path="gallery" element={<Home />} />
 						<Route path="contact" element={<Home />} />
 						<Route path="login" element={<Login />} />

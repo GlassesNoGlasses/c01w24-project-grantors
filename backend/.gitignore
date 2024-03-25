@@ -6,3 +6,11 @@ data
 
 # misc
 .DS_Store
+
+# admin/user files
+uploads/admin/*
+uploads/user/*
+
+# keep admin and user directory
+!uploads/admin/.gitkeep 
+!uploads/user/.gitkeep 

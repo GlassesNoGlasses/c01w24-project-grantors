@@ -3,10 +3,15 @@ import { MongoClient, ObjectId } from "mongodb";
 import cors from "cors";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
+import multer from 'multer';
+import fs from "fs"
+import path from "path"
+
 
 const app = express();
 const PORT = 8000;
 let MONGO_URL;
+
 if (process.env.ENV === 'Docker') {
 	MONGO_URL = 'mongodb://mongodb:27017';
 } else {
@@ -20,7 +25,27 @@ const COLLECTIONS = {
 	applicationReviews: "applicationReviews",
 	grants: "grants",
 	favouriteGrants: "favouriteGrants",
+	files: "files",
 };
+
+// Uploading files
+const upload = multer({
+	storage: multer.diskStorage({
+	  destination: (req, file, cb) => {
+		const userDirFilter = req.params.isAdmin === "true" ? "admin" : "user";
+		const directory = path.join(process.cwd(),`./uploads/${userDirFilter}/${req.params.userID}/`);
+
+		if (!fs.existsSync(directory)) {
+			fs.mkdirSync(directory);
+		}
+  
+		cb(null, directory)
+	  },
+	  filename: (req, file, cb) => {
+		cb(null, file.originalname)
+	  }
+	})
+})
 
 // Connect to MongoDB
 let db;
@@ -99,7 +124,7 @@ app.post('/login', express.json(), async (req, res) => {
 		res.status(500).send('Server Error with Logging In');
 	}
 });
-  
+
 app.post("/signup", express.json(), async (req, res) => {
 	try {
 		const { username, email, password, firstName, lastName, isAdmin, organization } = req.body;
@@ -642,4 +667,10 @@ app.post("/review", express.json(), async (req, res) => {
 	} catch (error) {
 		res.status(500).json({ error: error.message });
 	}
+});
+
+
+app.post('/:isAdmin/:userID/uploadFiles', upload.any(), async (req, res) => {
+	const numUploaded = req.files ? req.files.length : 0;
+	res.status(201).json({response: "Files Uploaded", numUploaded: numUploaded});
 });
