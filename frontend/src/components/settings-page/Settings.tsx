@@ -6,6 +6,8 @@ import chrome from '../../images/chrome.png'
 import firefox from '../../images/firefox.png'
 import edge from '../../images/edge.png'
 import safari from '../../images/safari.png'
+import Toggle from 'react-toggle';
+
 
 const Settings = () => {
 
@@ -101,7 +103,7 @@ const Settings = () => {
                     
                         <div className='flex flex-col'>
                             <h2 className='font-semibold mb-2 text-[1.2rem]'>Physical</h2>
-                            <div>Our website supports nagivation between components with intuitive Tab Controls
+                            <div className='mb-2'>Our website supports nagivation between components with intuitive Tab Controls
                                 <ul className='flex flex-col ml-4'>
                                     <li>
                                         - press <b className='underline'>TAB</b> to navigate to next component
@@ -114,12 +116,21 @@ const Settings = () => {
                                     </li>
                                 </ul>
                             </div>
+
+                            <div>Shortcuts:
+                                <ul className='flex flex-col ml-4'>
+                                    <li>
+                                        - <b>Home Page</b>: <b className='underline'>ALT + H</b> &nbsp;(<b className='underline'>OPTION + H</b> for <b>Mac</b>)
+                                    </li>
+                                    
+                                </ul>
+                            </div>
                         </div>
 
                         
                         <div className='flex flex-col'>
                             <h2 className='font-semibold mb-2 text-[1.2rem]'>Visual</h2>
-                            <div>Font and View can be resized on command with browser support
+                            <div className='mb-2'>Font and View can be resized on command with default browser support
                                 <ul className='flex flex-col ml-4'>
                                     <li>
                                         - press <b className='underline'>CTRL + '+'</b> to zoom in (replace <b className='underline'>CTRL</b> with <b className='underline'>COMMAND</b> for Mac)
@@ -130,17 +141,30 @@ const Settings = () => {
                             
                                 </ul>
                             </div>
+
+                            <div>Preferences:
+                                <ul className='flex flex-col ml-4'>
+                                    <li className='flex gap-2'>
+                                        <b>Simple Background Graphics</b>
+                                        <input type="checkbox" />
+                                    </li>           
+                                    <li className='flex gap-2'>
+                                        <b>High Contrast</b>
+                                        <input type="checkbox" />
+                                    </li>   
+                                </ul>
+                            </div>
                         </div>
                         
 
                         <div className='mb-20'>
-                            Auditory
-                            
+                            <h2 className='font-semibold mb-2 text-[1.2rem]'>Auditory</h2>
+                            <div>Our website supports text-to-speech for browser extensions, find some below</div>
                         </div>
                     </div>
 
                     <div className='w-full'>
-                        <h2 className='font-semibold text-center mb-4'>
+                        <h2 className='font-semibold text-center text-[1.2rem] mb-4'>
                             For more accessibility features, try installing browser extensions:
                         </h2>
                         <div className='flex justify-around'>
