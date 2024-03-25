@@ -1,17 +1,20 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { GrantFormProps } from "./GrantFormProps";
 import { GrantQuestion } from "../../interfaces/Grant";
-import { ApplicationStatus } from '../../interfaces/Application';
+import { Application, ApplicationStatus } from '../../interfaces/Application';
 import ApplicationsController from '../../controllers/ApplicationsController';
 import { useNavigate } from 'react-router-dom';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 
 // TODO: This file and component should be renamed to ApplicationForm since this
 // is the form applicants fill out to submit and application, plus we already
 // have GrantForm for when the admin is creating the grant
 const GrantForm = ({ user, grant }: GrantFormProps) => {
     const [questionList, setQuestionList] = useState<GrantQuestion[]>(grant.questions);
-    const navigate = useNavigate()
+    const navigate = useNavigate();
+    const location = useLocation();
+
+    const applicationIDParam = new URLSearchParams(location.search).get('applicationID');
 
     const setAnswer = (index: number, answer: string) => {
         const newQuestionList = [...questionList];
@@ -19,6 +22,26 @@ const GrantForm = ({ user, grant }: GrantFormProps) => {
         
         setQuestionList(newQuestionList);
     };
+
+    useEffect(() => {
+        if (applicationIDParam) {
+            ApplicationsController.fetchApplication(applicationIDParam).then((application: Application | undefined) => {
+                if (application) {
+                    const newQuestionList = questionList.map((question: GrantQuestion) => {
+                        if (application.responses) {
+                            const response = application.responses.find((response) => response.question === question.question);
+                            if (response) {
+                                question.answer = response.answer;
+                            }
+                        }
+                        return question;
+                    });
+                    setQuestionList(newQuestionList);
+                }
+            });
+        }
+
+    }, [applicationIDParam]);
 
     const handleSave = async () => {
         if (!questionList) {

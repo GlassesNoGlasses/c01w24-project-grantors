@@ -31,9 +31,11 @@ const ClientApplicationList = ({}) => {
     const [ applications, setApplications ] = useState<Application[]>([]);
     const [ grants, setGrants ] = useState<Grant[]>([]);
     const [ tableData, setTableData ] = useState<TableData[]>([]);
-    const [ filteredTabledata, setFilteredTableData ] = useState<TableData[]>([])
+    const [ filteredTabledata, setFilteredTableData ] = useState<TableData[]>([]);
     const navigate = useNavigate();
 
+    const onApplicationRowClick = (data: TableData) => navigate(`/grants/${data[0].grantID}/apply?applicationID=${data[0].id}`);
+    
     const itemsPerPageOptions: number[] = [5,10,20,50,100];
     const columns: Column<TableData>[] = [
         {
@@ -96,10 +98,6 @@ const ClientApplicationList = ({}) => {
     useEffect(() => {
         setFilteredTableData(tableData);
     }, [tableData]);
-
-    const onApplicationRowClick = (data: TableData) => {
-        navigate(`/grants/${data[0].grantID}/apply`);
-    }
 
     return (
         <div className="pt-28 p-4">
