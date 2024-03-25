@@ -1,6 +1,6 @@
 import { useUserContext } from '../../../contexts/userContext';
 import ButtonIcon from '../../../displays/ButtonIcon/ButtonIcon';
-import { Cog6ToothIcon, ArrowRightStartOnRectangleIcon, UserIcon, StarIcon, ListBulletIcon, TrophyIcon} from '@heroicons/react/24/solid';
+import { Cog6ToothIcon, ArrowRightStartOnRectangleIcon, DocumentMagnifyingGlassIcon, StarIcon, ListBulletIcon, TrophyIcon} from '@heroicons/react/24/solid';
 import search from '../../../../images/search.png'
 import ApplicationIcon from '../../../displays/ApplicationIcon/ApplicationIcon';
 import { Link } from 'react-router-dom';
@@ -43,7 +43,7 @@ const ClientDashboard = ({}: ClientDashboardProps) => {
 					label="View Available Grants" />
 				</Link>
 				<Link to="/applications">
-					<ApplicationIcon imageSrc={search} label="My Applications" />
+					<ApplicationIcon heroicon={<DocumentMagnifyingGlassIcon className="h-40 w-40"/>} label="My Applications" />
 				</Link>
 			</div>
 		</div>

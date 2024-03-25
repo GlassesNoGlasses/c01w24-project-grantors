@@ -11,7 +11,7 @@ import list from '../../../../images/list.png'
 import search from '../../../../images/search.png'
 import { Link } from 'react-router-dom';
 import UserController from '../../../../controllers/UserController';
-import { Cog6ToothIcon, ArrowRightStartOnRectangleIcon, FolderPlusIcon, ListBulletIcon, TrophyIcon} from '@heroicons/react/24/solid';
+import { Cog6ToothIcon, ArrowRightStartOnRectangleIcon, FolderPlusIcon, ListBulletIcon, TrophyIcon, DocumentMagnifyingGlassIcon} from '@heroicons/react/24/solid';
 
 const AdminDashboard = ({
 
@@ -62,10 +62,10 @@ const AdminDashboard = ({
 				<Link to={`admin/grants`}>
 				<ApplicationIcon
 					heroicon={<ListBulletIcon className="h-40 w-40"/>}
-					label="View Available Grants" />
+					label="Grants You Created" />
 				</Link>
 				<Link to={`${encodedOrg}/applications`}>
-					<ApplicationIcon imageSrc={search} label={"Review Applications"}/>
+					<ApplicationIcon heroicon={<DocumentMagnifyingGlassIcon className="h-40 w-40"/>} label={"Review Applications"}/>
 				</Link>
 			</div>
 		</div>

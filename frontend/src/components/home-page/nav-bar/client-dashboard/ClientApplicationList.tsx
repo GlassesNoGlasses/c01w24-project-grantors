@@ -7,6 +7,9 @@ import Table from "../../../table/Table";
 import { Grant } from "../../../../interfaces/Grant";
 import GrantsController from "../../../../controllers/GrantsController";
 import ApplicationsController from "../../../../controllers/ApplicationsController";
+import SearchFilter from "../../../filter/SearchFilter";
+import DropDownFilter from "../../../filter/DropDownFilter";
+import DateRangeFilter from "../../../filter/DateRangeFilter";
 import { Link } from "react-router-dom";
 
 type TableData = [Application, Grant];
@@ -120,6 +123,55 @@ const ClientApplicationList = ({}) => {
                     </div>
                 }
             </div>
+        </div>
+    );
+};
+
+const TableFilter = ({ tableData, setTableData }: {
+        tableData: TableData[],
+        setTableData: (tableData: TableData[]) => void,
+    }) => {
+    const [ grantTitle, setGrantTitle ] = useState<string>("");
+    const [ deadline, setDeadline ] = useState<(Date | null)[]>([]);
+    const [ status, setStatus ] = useState<ApplicationStatus | undefined>(undefined);
+
+    const statusDropDownOptions = Object.values(ApplicationStatus);
+
+    useEffect(() => {
+        setTableData(tableData.filter(row => {
+            if (grantTitle && !row[1].title.toLowerCase().includes(grantTitle.toLowerCase()))
+                return false;
+            if (status && row[0].status !== status)
+                return false;
+            if (deadline[0] !== null && row[1].deadline < deadline[0])
+                return false;
+            if (deadline[1] !== null&& row[1].deadline > deadline[1])
+                return false;
+
+            return true;
+        }));
+
+    }, [grantTitle, deadline, status]);
+
+    const onStatusFilterChange = (status: string) => {
+        if (Object.values(ApplicationStatus).includes(status as ApplicationStatus)) {
+            setStatus(status as ApplicationStatus);
+        } else {
+            setStatus(undefined);
+        }
+    };
+
+    const onDeadlineFilterChange = (dateRange: (Date | null)[]) => {
+        setDeadline(dateRange);
+    };
+
+    return (
+        <div className="flex flex-col gap-1 lg:w-1/3">
+            <h1 className="text-lg text-white">Application Filter</h1>
+            <SearchFilter className="text-white" label="Grant Title" setFilter={setGrantTitle}/>
+            <DropDownFilter className="text-white" label="Applicant Status" options={statusDropDownOptions} 
+                identity="Status" setFilter={onStatusFilterChange}/>
+            <DateRangeFilter className="text-white" label="Application Deadline" rangeStartLabel="Due After" rangeEndLabel="Due Before" setFilter={onDeadlineFilterChange} />
         </div>
     );
 };

@@ -170,8 +170,13 @@ const GrantForm: React.FC<GrantFormProps> = ({ type }) => {
     // handle when the form is published when all required fields are provided
     const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        saveGrant(true)
-        console.log('submitted')
+        if (grant.questions.length == 0) {
+            alert("At Least One Question Is Required To Be Published, Please Add A Custom Question")
+            console.log("missing questions")
+        } else {
+            saveGrant(true)
+            console.log('submitted')
+        }
     };
 
     // formatter for dates
@@ -180,14 +185,14 @@ const GrantForm: React.FC<GrantFormProps> = ({ type }) => {
     };
 
     return (
-        <div className="flex items-center justify-center min-h-screen bg-primary pt-20">
-            <div className="w-full max-w-2xl px-8 py-10 bg-white rounded-xl mt-10 mb-10 border-4 border-black shadow-2xl shadow-black">
+        <div className="flex items-center justify-center min-h-screen pt-20">
+            <div className="w-full max-w-2xl px-8 py-10 bg-white rounded-xl mt-10 mb-10 border-4 border-primary shadow-2xl shadow-black">
                 <h2 className="text-2xl font-bold text-center text-gray-800 mb-8">{type === GrantFormType.CREATE ? 'Create a Grant': 'Edit Grant'}</h2>
                 <form onSubmit={handleSubmit} className="space-y-6">
                     {/* Organization */}
                     <div>
                         <label htmlFor="organization" className="block text-gray-700 font-semibold mb-2">Organization</label>
-                        <input type="text" name="organization" id="organization" value={grant.organization} onChange={handleInputChange} required
+                        <input type="text" name="organization" id="organization" value={grant.organization} onChange={handleInputChange} required readOnly
                             className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-secondary focus:border-transparent" />
                     </div>
                     

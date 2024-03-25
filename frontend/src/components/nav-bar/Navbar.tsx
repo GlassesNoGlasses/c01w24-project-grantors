@@ -41,8 +41,10 @@ const Navbar = ({}: NavbarProps) => {
 			<Link className='p-2 px-5 m-2 bg-red-500 hover:bg-red-600 active:bg-red-700
 			text-white font-bold rounded-lg shadow-md transition-colors duration-150 ease-in
 			text-base'
-			to='/'>
-			<button onClick={LogOut}>Sign Out</button>
+			to='/' onClick={LogOut}>
+				<button>
+					Sign Out
+				</button>
 			</Link>
 		);
 	};

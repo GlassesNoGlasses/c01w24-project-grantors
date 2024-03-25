@@ -14,6 +14,7 @@ import SavedGrants from "./components/saved-grants/SavedGrants";
 import GrantApply from "./components/grant-apply/GrantApply";
 import ApplicationReview from "./components/applications/admin/ApplicationReview";
 import DefaultPage from "./components/home-page/nav-bar/default-page/DefaultPage";
+import NotFoundPage from "./components/not-found-page/NotFoundPage";
 
 function App() {
 	return (
@@ -42,6 +43,7 @@ function App() {
 						<Route path="applications" element={<ClientApplicationList />} />
 						<Route path="grants/:grantID/apply" element={<GrantApply />} /> 
 						<Route path="application/:applicationID/review" element={<ApplicationReview />} />
+						<Route path="*" element={<NotFoundPage />} />
 					</Route>
 				</Routes>
 			)}
