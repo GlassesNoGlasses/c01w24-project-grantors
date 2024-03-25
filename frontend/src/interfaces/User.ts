@@ -8,4 +8,5 @@ export interface User {
     email: String | null, 
     organization?: string,
     authToken: string,
+    preferences: {hc: boolean, sbg: boolean}
 }

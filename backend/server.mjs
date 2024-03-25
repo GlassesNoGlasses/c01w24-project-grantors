@@ -130,6 +130,10 @@ app.post("/signup", express.json(), async (req, res) => {
 			lastName: lastName,
 			isAdmin: isAdmin,
 			organization: organization,
+			preferences: {
+				hc: false,
+				sbg: false
+			}
 		});
 
 		// Returning JSON Web Token

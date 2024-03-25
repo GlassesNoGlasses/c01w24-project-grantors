@@ -17,6 +17,7 @@ import DefaultPage from "./components/home-page/nav-bar/default-page/DefaultPage
 import NotFoundPage from "./components/not-found-page/NotFoundPage";
 import Settings from "./components/settings-page/Settings";
 import React, { useEffect } from 'react';
+import Background from "./components/background/Background";
 
 
 
@@ -39,8 +40,7 @@ function App() {
 
 	return (
 		<div className="App w-full h-full">
-			<div className="bg-home-background bg-cover 
-    		bg-no-repeat bg-center h-[100vh] w-[100vw] fixed z-[-1]"/>
+			<Background />
 			
 			{UserContextProvider(
 				<Routes>

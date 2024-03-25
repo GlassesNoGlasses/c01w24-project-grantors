@@ -6,7 +6,6 @@ import chrome from '../../images/chrome.png'
 import firefox from '../../images/firefox.png'
 import edge from '../../images/edge.png'
 import safari from '../../images/safari.png'
-import Toggle from 'react-toggle';
 
 
 const Settings = () => {
