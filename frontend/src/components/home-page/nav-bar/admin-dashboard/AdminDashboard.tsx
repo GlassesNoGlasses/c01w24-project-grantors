@@ -11,7 +11,7 @@ import list from '../../../../images/list.png'
 import search from '../../../../images/search.png'
 import { Link } from 'react-router-dom';
 import UserController from '../../../../controllers/UserController';
-import { Cog6ToothIcon, ArrowRightStartOnRectangleIcon, FolderPlusIcon, ListBulletIcon, TrophyIcon, DocumentMagnifyingGlassIcon} from '@heroicons/react/24/solid';
+import { Cog6ToothIcon, ArrowRightStartOnRectangleIcon, FolderPlusIcon, ListBulletIcon, TrophyIcon, DocumentMagnifyingGlassIcon, ChartBarIcon} from '@heroicons/react/24/solid';
 
 const AdminDashboard = ({
 
@@ -48,13 +48,16 @@ const AdminDashboard = ({
 			<div className='flex justify-evenly items-center py-10'>
 				<div>
 					<Link to='/createGrant'>
-						<ButtonIcon heroicon={<FolderPlusIcon/>} label={"New Grant"}/>
+						<ButtonIcon heroicon={<FolderPlusIcon/>} label={"New Grant"} text={user?.preferences.hc ? 'text-white' : 'text-black'}/>
 					</ Link>
 				</div>
-				<ButtonIcon heroicon={<TrophyIcon/>} label={"Milestones"}/>
-				<ButtonIcon heroicon={<Cog6ToothIcon/>} label={"Settings"}/>
+				<ButtonIcon heroicon={<TrophyIcon/>} label={"Milestones"} text={user?.preferences.hc ? 'text-white' : 'text-black'}/>
+				<ButtonIcon heroicon={<ChartBarIcon />} label="Statistics" text={user?.preferences.hc ? 'text-white' : 'text-black'}/>
+				<Link to='/settings'>
+					<ButtonIcon heroicon={<Cog6ToothIcon/>} label={"Settings"} text={user?.preferences.hc ? 'text-white' : 'text-black'}/>
+				</Link>
 				<Link to="/">
-					<ButtonIcon heroicon={<ArrowRightStartOnRectangleIcon/>} label={"Log Out"} callback={logout}/>
+					<ButtonIcon heroicon={<ArrowRightStartOnRectangleIcon/>} label={"Log Out"} callback={logout} text={user?.preferences.hc ? 'text-white' : 'text-black'}/>
 				</Link>
 			</div>
 
