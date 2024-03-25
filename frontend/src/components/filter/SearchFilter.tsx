@@ -1,17 +1,17 @@
 import { useEffect, useState } from "react";
-import { SearchFilterProps } from "./SearchFilerProps";
+import { SearchFilterProps } from "./SearchFilterProps";
 
-function SearchFilter({label, onChange}: SearchFilterProps ) {
+function SearchFilter({label, setFilter, className}: SearchFilterProps ) {
     const [ search, setSearch ] = useState<string>("");
 
     useEffect(() => {
-        onChange(search);
+        setFilter(search)
     }, [search]);
 
     return (
-        <div className="flex flex-col gap-1">
+        <div className={`flex flex-col gap-1t ${className}`}>
             <p className="text-base">{label}</p>
-            <input type="text" className="border border-black rounded-lg text-sm p-1 px-2"
+            <input type="text" className="border border-black rounded-lg text-sm p-1 px-2 text-black"
                 value={search} onChange={(event) => setSearch(event.target.value)} />
         </div>
     );
