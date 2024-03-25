@@ -26,7 +26,7 @@ function App() {
 
 	useEffect(() => {
         const handleKeyDown = (event: KeyboardEvent) => {
-            if (event.altKey && event.key === 'h' || event.key === 'H') {
+            if ((event.altKey || event.metaKey) && event.key === 'h' || event.key === 'H') {
                 window.location.href = '/'; 
             }
         };

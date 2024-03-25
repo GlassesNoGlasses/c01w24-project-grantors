@@ -14,7 +14,18 @@ const SERVER_PORT = 8000
 const Settings = () => {
 
     const { user, setUser } = useUserContext()
-    const [checker, setChecker] = useState([user?.preferences.sbg, user?.preferences.hc])
+
+    const [checker, setChecker] = useState([false, false])
+
+    useEffect(() => {
+        // Update the checker state with values from user preferences
+        if (user) {
+        setChecker([user.preferences.sbg, user.preferences.hc]);
+        }
+    }, [user]); // This effect runs whenever 'user' changes
+
+    console.log(checker)
+    
 
     const LogOut = () => {
 		setUser(null);
@@ -88,7 +99,8 @@ const Settings = () => {
                     "hc": preference === 1 ? !checker[1] : checker[1],
                 }
             };
-    
+            
+            console.log(preferenceBody)
             setChecker([preferenceBody.preferences.sbg, preferenceBody.preferences.hc])
     
             // Send a PUT request to update user preferences
@@ -103,7 +115,7 @@ const Settings = () => {
             // Check if the request was successful
             if (res.ok) {
                 console.log('User preferences updated successfully.');
-                // Optionally, you can handle any further logic upon successful update
+                window.location.reload();
             } else {
                 console.error('Failed to update user preferences.');
                 // Optionally, you can handle the failure scenario here
@@ -138,7 +150,7 @@ const Settings = () => {
                 </div>
 
                 <div className={`${SettingStyle}`}>
-                    <h1 className='text-center font-bold text-2xl'>Accessibility</h1>
+                    <h1 className='text-center underline font-bold text-2xl'>Accessibility</h1>
 
                     <div className='flex flex-col items-start gap-10'>
 
@@ -162,7 +174,7 @@ const Settings = () => {
                             <div>Shortcuts:
                                 <ul className='flex flex-col ml-4'>
                                     <li>
-                                        - <b>Home Page</b>: <b className='underline'>ALT + H</b> &nbsp;(<b className='underline'>OPTION + H</b> for <b>Mac</b>)
+                                        - <b>Home Page</b>: <b className='underline'>ALT + H</b> &nbsp;(<b className='underline'>COMMAND + H</b> for <b>Mac</b>)
                                     </li>
                                     
                                 </ul>
@@ -171,7 +183,7 @@ const Settings = () => {
 
                         
                         <div className='flex flex-col'>
-                            <h2 className='font-semibold mb-2 text-[1.2rem]'>Visual</h2>
+                            <h2 className='font-semibold mb-2 underline text-[1.2rem]'>Visual</h2>
                             <div className='mb-2'>Font and View can be resized on command with default browser support
                                 <ul className='flex flex-col ml-4'>
                                     <li>
@@ -184,16 +196,16 @@ const Settings = () => {
                                 </ul>
                             </div>
 
-                            <div>Preferences:  Press CTRL + R to apply after selection
+                            <div className='mt-4'>Preferences:
                                 <ul className='flex flex-col ml-4'>
                                     <li className='flex gap-2'>
                                         <b>Simple Background Graphics</b>
-                                        <input type="checkbox" defaultChecked={!checker[0]}
+                                        <input type="checkbox" checked={checker[0]}
                                             onChange={() => preferenceHandler(0)}/>
                                     </li>           
                                     <li className='flex gap-2'>
                                         <b>High Contrast</b>
-                                        <input type="checkbox" defaultChecked={!checker[1]}
+                                        <input type="checkbox" checked={checker[1]}
                                             onChange={() => preferenceHandler(1)}/>
                                     </li>   
                                 </ul>
@@ -202,12 +214,12 @@ const Settings = () => {
                         
 
                         <div className='mb-20'>
-                            <h2 className='font-semibold mb-2 text-[1.2rem]'>Auditory</h2>
+                            <h2 className='font-semibold underline text-[1.2rem]'>Auditory</h2>
                             <div>Our website supports text-to-speech for browser extensions, find some below</div>
                         </div>
                     </div>
 
-                    <div className='w-full'>
+                    <div className='w-full mb-4'>
                         <h2 className='font-semibold text-center text-[1.2rem] mb-4'>
                             For more accessibility features, try installing browser extensions:
                         </h2>
