@@ -18,11 +18,10 @@ const Settings = () => {
     const [checker, setChecker] = useState([false, false])
 
     useEffect(() => {
-        // Update the checker state with values from user preferences
         if (user) {
         setChecker([user.preferences.sbg, user.preferences.hc]);
         }
-    }, [user]); // This effect runs whenever 'user' changes
+    }, [user]);
 
     console.log(checker)
     
