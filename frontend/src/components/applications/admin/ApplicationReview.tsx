@@ -67,6 +67,10 @@ const ApplicationReview = () => {
 
     useEffect(() => {
         if (application) {
+            if (application.status != ApplicationStatus.submitted) {
+                setReviewed(true);
+            }
+
             UserController.fetchApplicant(application.applicantID).then((applicant: Applicant | undefined) => {
                 if (applicant) {
                     setApplicant(applicant);
@@ -96,9 +100,9 @@ const ApplicationReview = () => {
                                 <button 
                                     type="button"
                                     key={star}
-                                    onClick={() => setRating(star)}
-                                    onMouseEnter={() => setHoverRating(star)}
-                                    onMouseLeave={() => setHoverRating(rating)} // set hoverRating to rating when not hovering
+                                    onClick={() => reviewed || setRating(star)}
+                                    onMouseEnter={() => reviewed || setHoverRating(star)}
+                                    onMouseLeave={() => reviewed || setHoverRating(rating)} // set hoverRating to rating when not hovering
                                 >
                                     <StarIcon className={`h-8 w-8 ${star <= hoverRating ? 'text-yellow-500' : 'text-gray-500'}`}/>
                                 </button>
