@@ -115,7 +115,7 @@ const Settings = () => {
     };
     
     return (
-        <div className='pt-24'>
+        <div className='py-24'>
             <div className='flex justify-around'>
                 
                 <div className={`${SettingStyle}`}>
@@ -194,7 +194,8 @@ const Settings = () => {
                                 </ul>
                             </div>
 
-                            <div className='mt-4'>Preferences:
+                            <div className='mt-4'>
+                                <h1 className='font-bold'>Preferences:</h1>
                                 <ul className='flex flex-col ml-4'>
                                     <li className='flex gap-2'>
                                         <b>Simple Background Graphics</b>

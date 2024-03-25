@@ -4,6 +4,7 @@ const ButtonIcon = ({
         imageSrc,
         heroicon,
         label,
+        text,
         callback,
     }: ButtonIconProps) => {
 
@@ -16,7 +17,7 @@ const ButtonIcon = ({
                     heroicon
                 ) }
             </div>
-            <p className='text-xl text-black font-bold'>{label ? label : ""}</p>
+            <p className={`text-xl ${text} font-bold`}>{label ? label : ""}</p>
         </button>
     );
 };

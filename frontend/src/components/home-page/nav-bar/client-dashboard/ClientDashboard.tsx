@@ -29,15 +29,15 @@ const ClientDashboard = ({}: ClientDashboardProps) => {
 
 			<div className="client-butons flex justify-evenly items-center py-10">
 				<Link to="/saved">
-					<ButtonIcon heroicon={<StarIcon />} label="Saved Grants"/>
+					<ButtonIcon heroicon={<StarIcon />} label="Saved Grants" text={user?.preferences.hc ? 'text-white' : 'text-black'}/>
 				</Link>
-				<ButtonIcon heroicon={<TrophyIcon />} label="Milestones"/>
-				<ButtonIcon heroicon={<ChartBarIcon />} label="Statistics"/>
+				<ButtonIcon heroicon={<TrophyIcon />} label="Milestones" text={user?.preferences.hc ? 'text-white' : 'text-black'}/>
+				<ButtonIcon heroicon={<ChartBarIcon />} label="Statistics" text={user?.preferences.hc ? 'text-white' : 'text-black'}/>
 				<Link to='/settings'>
-					<ButtonIcon heroicon={<Cog6ToothIcon/>} label={"Settings"}/>
+					<ButtonIcon heroicon={<Cog6ToothIcon/>} label={"Settings"} text={user?.preferences.hc ? 'text-white' : 'text-black'}/>
 				</Link>
 				<Link to="/">
-					<ButtonIcon heroicon={<ArrowRightStartOnRectangleIcon />} label="Log out" callback={logout}/>
+					<ButtonIcon heroicon={<ArrowRightStartOnRectangleIcon />} label="Log out" callback={logout} text={user?.preferences.hc ? 'text-white' : 'text-black'}/>
 				</Link>
 			</div>
 			<div className="application-buttons flex justify-evenly items-center h-1/4 pt-[5vh]">
