@@ -74,6 +74,44 @@ const Settings = () => {
 
                 <div className={`${SettingStyle}`}>
                     <h1 className='text-center font-bold text-2xl'>Accessibility</h1>
+
+                    <div className='flex flex-col'>
+                        <h2>Physical</h2>
+                        <p>Our website support nagivation between component with intuitive Tab Controls
+                            <ul className='flex flex-col'>
+                                <li>
+                                    - press TAB to navigate to next component
+                                </li>
+                                <li>
+                                    - press SHIFT + TAB to nagivate to previous component
+                                </li>
+                                <li>
+                                    - once on selected component, press ENTER to proceed
+                                </li>
+                            </ul>
+                        </p>
+                    </div>
+
+                    <div>
+                        Auditorial
+                    </div>
+
+                    <div className='mb-20'>
+                        Visual
+                    </div>
+
+                    <div>
+                        <h2 className='font-semibold'>
+                            For more accessibility features, try installing browser extensions
+                        </h2>
+                        <div className='flex justify-around'>
+                            <a href="https://chromewebstore.google.com/collection/3p_accessibility_extensions" target='blank'>Chrome</a>
+                            <a href="https://addons.mozilla.org/en-CA/firefox/extensions/" target='blank'>Firefox</a>
+                            <a href="https://microsoftedge.microsoft.com/addons/category/Accessibility" target='blank'>Microsoft Edge</a>
+                            <a href="https://support.apple.com/en-ca/102343" target='blank'>Safari</a>
+                        </div>
+                    </div>
+                    
                 </div>
             </div>
         </div>
