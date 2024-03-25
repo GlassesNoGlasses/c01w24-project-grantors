@@ -71,7 +71,6 @@ function App() {
 							<Route path="applications" element={<ClientApplicationList />} />
 							<Route path="grants/:grantID/apply" element={<GrantApply />} /> 
 							<Route path="application/:applicationID/review" element={<ApplicationReview />} />
-							<Route path="application/:applicationID/review" element={<ApplicationReview />} />
 							<Route path="settings" element={<Settings />} />
 							<Route path="*" element={<NotFoundPage />} />
 						</Route>

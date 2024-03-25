@@ -12,7 +12,7 @@ const SERVER_PORT = 8000
 
 
 const Settings = () => {
-
+    
     const { user, setUser } = useUserContext()
 
     const [checker, setChecker] = useState([false, false])
@@ -26,7 +26,6 @@ const Settings = () => {
 
     console.log(checker)
     
-
     const LogOut = () => {
 		setUser(null);
 		UserController.logoutUser();
@@ -103,26 +102,16 @@ const Settings = () => {
             console.log(preferenceBody)
             setChecker([preferenceBody.preferences.sbg, preferenceBody.preferences.hc])
     
-            // Send a PUT request to update user preferences
-            const res = await fetch(`http://localhost:${SERVER_PORT}/users/${user.accountID}/preferences`, {
-                method: 'PUT',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(preferenceBody)
-            });
+            const res = await UserController.updatePreference(user.accountID, preferenceBody)
             
-            // Check if the request was successful
-            if (res.ok) {
+            if (res) {
                 console.log('User preferences updated successfully.');
                 window.location.reload();
             } else {
                 console.error('Failed to update user preferences.');
-                // Optionally, you can handle the failure scenario here
             }
         } catch (error) {
             console.error('An error occurred while updating user preferences:', error);
-            // Handle errors appropriately
         }
     };
     

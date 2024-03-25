@@ -119,24 +119,25 @@ export default class UserController {
         }
     }
 
-    static async updatePreference(userId: string, preferences: {}): Promise<User | Response | undefined> {
+    static async updatePreference(userId: string, preferences: {}): Promise<Boolean> {
         try {
-            console.log(preferences)
             const res = await fetch(`http://localhost:${SERVER_PORT}/users/${userId}/preferences`, {
                 method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
                 body: JSON.stringify(preferences)
             });
             
             if (res.ok) {
-                return await res.json().then((data: User) => {
-                    return data;
-                });
+                return true
             } else {
                 console.log('error')
+                return false
             }
-            
         } catch (error) {
             console.error("Error while updating preferences", error);
+            return false
         }
     }
 }
