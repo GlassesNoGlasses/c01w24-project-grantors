@@ -1,23 +1,67 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { GrantFormProps } from "./GrantFormProps";
 import { GrantQuestion } from "../../interfaces/Grant";
-import { ApplicationStatus } from '../../interfaces/Application';
+import { Application, ApplicationStatus } from '../../interfaces/Application';
 import ApplicationsController from '../../controllers/ApplicationsController';
 import { useNavigate } from 'react-router-dom';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 
 // TODO: This file and component should be renamed to ApplicationForm since this
 // is the form applicants fill out to submit and application, plus we already
 // have GrantForm for when the admin is creating the grant
 const GrantForm = ({ user, grant }: GrantFormProps) => {
     const [questionList, setQuestionList] = useState<GrantQuestion[]>(grant.questions);
-    const navigate = useNavigate()
+    const navigate = useNavigate();
+    const location = useLocation();
+
+    const applicationIDParam = new URLSearchParams(location.search).get('applicationID');
 
     const setAnswer = (index: number, answer: string) => {
         const newQuestionList = [...questionList];
         newQuestionList[index].answer = answer;
         
         setQuestionList(newQuestionList);
+    };
+
+    useEffect(() => {
+        if (applicationIDParam) {
+            ApplicationsController.fetchApplication(applicationIDParam).then((application: Application | undefined) => {
+                if (application) {
+                    const newQuestionList = questionList.map((question: GrantQuestion) => {
+                        if (application.responses) {
+                            const response = application.responses.find((response) => response.question === question.question);
+                            if (response) {
+                                question.answer = response.answer;
+                            }
+                        }
+                        return question;
+                    });
+                    setQuestionList(newQuestionList);
+                }
+            });
+        }
+
+    }, [applicationIDParam]);
+
+    const handleSave = async () => {
+        if (!questionList) {
+            return 
+        }
+
+        ApplicationsController.submitApplication(user, {
+            id: '', // id does not exist yet as we have not submitted
+            applicantID: user.accountID,
+            grantID: grant.id,
+            grantTitle: grant.title,
+            grantCategory: grant.category,
+            submitted: true,
+            submissionDate: new Date(),
+            status: ApplicationStatus.inProgress,
+            awarded: 0,
+            responses: questionList,
+        }).then(() => {
+            navigate('/');
+        });
     };
 
     const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
@@ -68,7 +112,7 @@ const GrantForm = ({ user, grant }: GrantFormProps) => {
                 ))}
                 <div className="flex flex-row items-center justify-between">
                     
-                    <Link to='/'>
+                    <Link to='/applications'>
                         <button 
                             className='p-2 px-5 m-7 mr-1 bg-red-500 hover:bg-red-600 active:bg-red-700
                             text-white font-bold rounded-lg shadow-md transition-colors duration-150 ease-in
@@ -86,7 +130,8 @@ const GrantForm = ({ user, grant }: GrantFormProps) => {
                             text-white font-bold rounded-lg shadow-md transition-colors duration-150 ease-in
                             text-lg' 
                             type='button' 
-                            name="save">
+                            name="save"
+                            onClick={handleSave}>
                             Save
                         </button>
                         

@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useUserContext } from "../../../contexts/userContext";
 import { Application, ApplicationStatus } from "../../../../interfaces/Application";
 import { Column } from "../../../table/TableProps";
+import { useParams, useNavigate } from 'react-router-dom';
 import Table from "../../../table/Table";
 import { Grant } from "../../../../interfaces/Grant";
 import GrantsController from "../../../../controllers/GrantsController";
@@ -33,8 +34,11 @@ const ClientApplicationList = ({}) => {
     const [ applications, setApplications ] = useState<Application[]>([]);
     const [ grants, setGrants ] = useState<Grant[]>([]);
     const [ tableData, setTableData ] = useState<TableData[]>([]);
-    const [ filteredTabledata, setFilteredTableData ] = useState<TableData[]>([])
+    const [ filteredTabledata, setFilteredTableData ] = useState<TableData[]>([]);
+    const navigate = useNavigate();
 
+    const onApplicationRowClick = (data: TableData) => navigate(`/grants/${data[0].grantID}/apply?applicationID=${data[0].id}`);
+    
     const itemsPerPageOptions: number[] = [5,10,20,50,100];
     const columns: Column<TableData>[] = [
         {
@@ -99,30 +103,24 @@ const ClientApplicationList = ({}) => {
     }, [tableData]);
 
     return (
-        <div className="pt-28 p-8">
-            <div className="flex flex-col h-full items-start justify-start p-6 
-                bg-primary rounded-2xl border-4 border-white shadow-2xl shadow-black">
-                <span className="text-2xl text-white mb-4 font-bold">My Applications</span>
-                { 
-                applications.length > 0 ? 
-                <div className="flex flex-row w-full gap-10">
-                    <TableFilter tableData={tableData} setTableData={setFilteredTableData} />
-                    <div className="p-5 w-full">
-                        <Table items={filteredTabledata}
-                            columns={columns}
-                            itemsPerPageOptions={itemsPerPageOptions}
-                            defaultIPP={10}
-                            defaultSort={columns[1]}
-                        /> 
+        <div className="pt-28 p-4">
+            <div className="flex flex-col h-full items-start justify-start p-6 bg-primary
+                rounded-2xl border-4 border-white shadow-2xl shadow-black">
+                <span className="text-2xl text-white mb-4">My Applications</span>
+                    {applications.length > 0 ? 
+                        <Table items={tableData}
+                    columns={columns}
+                    itemsPerPageOptions={itemsPerPageOptions}
+                    defaultIPP={10}
+                    defaultSort={columns[1]}
+                    onRowClick={onApplicationRowClick}
+                    /> :
+                    <div className="text-white flex flex-row mt-2">
+                        <h1>You Have No Applications</h1>
+                        <p className="text-white">, Apply To Grants &nbsp;
+                            <Link to='/grants' className="text-[#0bb4d6] underline hover:text-black">here</Link> !
+                        </p>
                     </div>
-                    
-                </div> :
-                <div className="text-white flex flex-row mt-2">
-                    <h1>You Have No Applications</h1>
-                    <p className="text-white">, Apply To Grants &nbsp;
-                        <Link to='/grants' className="text-[#0bb4d6] underline hover:text-black">here</Link> !
-                    </p>
-                </div>
                 }
             </div>
         </div>
