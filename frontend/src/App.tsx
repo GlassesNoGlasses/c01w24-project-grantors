@@ -40,34 +40,37 @@ function App() {
 
 	return (
 		<div className="App w-full h-full">
-			<Background />
 			
 			{UserContextProvider(
-				<Routes>
-					<Route path="/" element={<Navbar />}>
-						<Route index element={<Home />} />
-						<Route path="about" element={<DefaultPage />} />
-						<Route path="services" element={<Home />} />
-						<Route path="gallery" element={<Home />} />
-						<Route path="contact" element={<Home />} />
-						<Route path="login" element={<Login />} />
-						<Route path="signup" element={<SignUp />} />
-						<Route path="createGrant" element={<CreateGrant />} />
-						<Route path="editGrant/:grantID" element={<EditGrant />} />
-						<Route path="grants" element={<GrantBrowse />} />
-						<Route path="grants/:grantID" element={<GrantPage />} />
-						<Route path="admin/grants" element={<AdminGrants />} />
-						<Route path="admin/grants/:grantID" element={<EditGrant />} />
-						<Route path="saved" element={<SavedGrants />} />
-						<Route path=":organization/applications" element={<AdminApplicationList/>} />
-						<Route path="applications" element={<ClientApplicationList />} />
-						<Route path="grants/:grantID/apply" element={<GrantApply />} /> 
-						<Route path="application/:applicationID/review" element={<ApplicationReview />} />
-						<Route path="application/:applicationID/review" element={<ApplicationReview />} />
-						<Route path="settings" element={<Settings />} />
-						<Route path="*" element={<NotFoundPage />} />
-					</Route>
-				</Routes>
+				<div>
+					<Background />
+				
+					<Routes>
+						<Route path="/" element={<Navbar />}>
+							<Route index element={<Home />} />
+							<Route path="about" element={<DefaultPage />} />
+							<Route path="services" element={<Home />} />
+							<Route path="gallery" element={<Home />} />
+							<Route path="contact" element={<Home />} />
+							<Route path="login" element={<Login />} />
+							<Route path="signup" element={<SignUp />} />
+							<Route path="createGrant" element={<CreateGrant />} />
+							<Route path="editGrant/:grantID" element={<EditGrant />} />
+							<Route path="grants" element={<GrantBrowse />} />
+							<Route path="grants/:grantID" element={<GrantPage />} />
+							<Route path="admin/grants" element={<AdminGrants />} />
+							<Route path="admin/grants/:grantID" element={<EditGrant />} />
+							<Route path="saved" element={<SavedGrants />} />
+							<Route path=":organization/applications" element={<AdminApplicationList/>} />
+							<Route path="applications" element={<ClientApplicationList />} />
+							<Route path="grants/:grantID/apply" element={<GrantApply />} /> 
+							<Route path="application/:applicationID/review" element={<ApplicationReview />} />
+							<Route path="application/:applicationID/review" element={<ApplicationReview />} />
+							<Route path="settings" element={<Settings />} />
+							<Route path="*" element={<NotFoundPage />} />
+						</Route>
+					</Routes>
+				</div>
 			)}
 		</div>
 	);

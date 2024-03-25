@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useUserContext } from '../contexts/userContext'
 import UserController from '../../controllers/UserController';
 import { Link } from 'react-router-dom';
@@ -8,9 +8,13 @@ import edge from '../../images/edge.png'
 import safari from '../../images/safari.png'
 
 
+const SERVER_PORT = 8000
+
+
 const Settings = () => {
 
     const { user, setUser } = useUserContext()
+    const [checker, setChecker] = useState([user?.preferences.sbg, user?.preferences.hc])
 
     const LogOut = () => {
 		setUser(null);
@@ -70,6 +74,45 @@ const Settings = () => {
                 </a>
         )
     }
+
+    const preferenceHandler = async (preference: number) => {
+        try {
+            // Ensure user is defined
+            if (!user) return;
+    
+            // Prepare the preference body based on the preference number
+            console.log(user)
+            let preferenceBody = {
+                "preferences" : {
+                    "sbg": preference === 0 ? !checker[0] : checker[0],
+                    "hc": preference === 1 ? !checker[1] : checker[1],
+                }
+            };
+    
+            setChecker([preferenceBody.preferences.sbg, preferenceBody.preferences.hc])
+    
+            // Send a PUT request to update user preferences
+            const res = await fetch(`http://localhost:${SERVER_PORT}/users/${user.accountID}/preferences`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(preferenceBody)
+            });
+            
+            // Check if the request was successful
+            if (res.ok) {
+                console.log('User preferences updated successfully.');
+                // Optionally, you can handle any further logic upon successful update
+            } else {
+                console.error('Failed to update user preferences.');
+                // Optionally, you can handle the failure scenario here
+            }
+        } catch (error) {
+            console.error('An error occurred while updating user preferences:', error);
+            // Handle errors appropriately
+        }
+    };
     
     return (
         <div className='pt-24'>
@@ -141,15 +184,17 @@ const Settings = () => {
                                 </ul>
                             </div>
 
-                            <div>Preferences:
+                            <div>Preferences:  Press CTRL + R to apply after selection
                                 <ul className='flex flex-col ml-4'>
                                     <li className='flex gap-2'>
                                         <b>Simple Background Graphics</b>
-                                        <input type="checkbox" />
+                                        <input type="checkbox" defaultChecked={!checker[0]}
+                                            onChange={() => preferenceHandler(0)}/>
                                     </li>           
                                     <li className='flex gap-2'>
                                         <b>High Contrast</b>
-                                        <input type="checkbox" />
+                                        <input type="checkbox" defaultChecked={!checker[1]}
+                                            onChange={() => preferenceHandler(1)}/>
                                     </li>   
                                 </ul>
                             </div>

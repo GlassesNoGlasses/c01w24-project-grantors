@@ -118,4 +118,25 @@ export default class UserController {
             return []
         }
     }
+
+    static async updatePreference(userId: string, preferences: {}): Promise<User | Response | undefined> {
+        try {
+            console.log(preferences)
+            const res = await fetch(`http://localhost:${SERVER_PORT}/users/${userId}/preferences`, {
+                method: 'PUT',
+                body: JSON.stringify(preferences)
+            });
+            
+            if (res.ok) {
+                return await res.json().then((data: User) => {
+                    return data;
+                });
+            } else {
+                console.log('error')
+            }
+            
+        } catch (error) {
+            console.error("Error while updating preferences", error);
+        }
+    }
 }
