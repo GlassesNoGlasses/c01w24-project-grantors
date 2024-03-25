@@ -5,94 +5,76 @@ import { useUserContext } from '../contexts/userContext';
 import { Grant, GrantQuestion } from '../../interfaces/Grant' 
 import { GrantFormProps, GrantFormType } from './GrantFormProps';
 import GrantsController from '../../controllers/GrantsController'
+import DropDown from '../displays/DropDown/DropDown';
+
+// default grant object
+const initialGrantState: Grant = {
+    id: '',
+    title: '',
+    description: '',
+    posted: new Date(),
+    deadline: new Date(),
+    minAmount: 0,
+    maxAmount: 100000,
+    organization: '',
+    category: '',
+    contact: '',
+    questions: [],
+    publish: false,
+};
 
 const GrantForm: React.FC<GrantFormProps> = ({ type }) => {
-
     const {user} = useUserContext();
-    
-    // extract the grantID from url
+    // state variables
+    const [question, setQuestion] = useState<string>('');
+    const [newQuestionType, setNewQuestionType] = useState<string>("Question Type");
+    const [feedback, setFeedback] = useState("");
+    const [unauthorized, setUnauthorized] = useState(false);
+    const navigate = useNavigate()
+    const questionTypes = ["Text", "Date", "Yes/No", "Multiple Choice"];
     const grantID = useParams()?.grantID ?? '';
-
-    // default grant object
-    const initialGrantState: Grant = {
-        id: '',
-        title: '',
-        description: '',
-        posted: new Date(),
-        deadline: new Date(),
-        minAmount: 0,
-        maxAmount: 100000,
-        organization: user?.organization ? user.organization : '',
-        category: '',
-        contact: '',
-        questions: [],
-        publish: false,
-    };
-
-    // set initial form to conform to default empty grant
     const [grant, setGrant] = useState<Grant>(initialGrantState);
-
-    // function to retrieve a grant saved in the server, set the grant form to fill with the
-    // requested grant
-    const getSavedGrant = async(id: string) => {
-
-        const grant: Grant | undefined = await GrantsController.fetchGrant(id);
-        if (grant) {
-            setGrant(grant);
-        } else {
-            console.error("error creating grant:");
-            setFeedback("error creating grant");
-        }
-    }
 
     // retrieve the grant if in edit mode only when mounting
     useEffect(() => {
         if (type === GrantFormType.EDIT) {
-            getSavedGrant(grantID)
+            GrantsController.fetchGrant(grantID).then((grant: Grant | undefined) => {
+                if (grant) {
+                    setGrant(grant);
+                } else {
+                    console.error("Error creating grant:");
+                    setFeedback("Error creating grant");
+                }
+            });
         }
 
       }, []);
 
-    
-    // state variables
-    const [question, setQuestion] = useState<string>('');
-    const [feedback, setFeedback] = useState("");
-    const navigate = useNavigate()
-    
-    // no user logged in or not admin
-    if (!user || !user.isAdmin) {
-        return (
-            <div className='flex font-bold text-xl justify-center mt-10'>Access Denied: Invalid Permission</div>
-        );
-    };
-
-    // not the owner of the grant
-    if (grant.organization != user.organization) {
-        return (
-            <div className='flex font-bold text-xl justify-center mt-10'>
-                Unauthorized: Permission Denied
-            </div>
-        );
-    };
-
-    // grant already published and cannot be editted
-    if (grant.publish) {
-        return (
-            <div className='flex font-bold text-xl justify-center mt-10'>
-                Bad Request: Grant Cannot Be Editted Once Published
-            </div>)
-    };
+    useEffect(() => {
+        if (!user || !user.isAdmin) {
+            setUnauthorized(true);
+        } else if (type === GrantFormType.EDIT && grant.organization != user?.organization) {
+            setUnauthorized(true);
+        } else {
+            // Type is create, or user is admin or organization matches
+            initialGrantState.organization = user?.organization ?? '';
+            setGrant(initialGrantState);
+            setUnauthorized(false);
+        }
+    }, [user]);
 
     // function to delete a grant in the server with given id
     const deleteGrant = async(id: string) => {
-        GrantsController.deleteGrant(user, id).then((success: boolean) => {
-            if (!success) {
-                console.error('Failed to delete grant:');
-                setFeedback('Failed to delete grant')
-            }
-
-            navigate('/')
-        });
+        if (user) {
+            GrantsController.deleteGrant(user, id).then((success: boolean) => {
+                if (!success) {
+                    console.error('Failed to delete grant:');
+                    setFeedback('Failed to delete grant')
+                }
+    
+                navigate('/')
+            });
+        }
     };
     
     // handler for when a question is added in the form
@@ -115,32 +97,34 @@ const GrantForm: React.FC<GrantFormProps> = ({ type }) => {
 
     // function to save grant when publish==false or publish grant otherwise
     const saveGrant = async(publish: boolean) => {
-        if (type === GrantFormType.CREATE){
-            GrantsController.createGrant(user, {...grant, publish: publish}).then((grantID: string | undefined) => {
-                if (grantID) {
-                    setGrant(initialGrantState);
-                    if (publish) {
-                        setFeedback('Grant Published!');
+        if (user) {
+            if (type === GrantFormType.CREATE){
+                GrantsController.createGrant(user, {...grant, publish: publish}).then((grantID: string | undefined) => {
+                    if (grantID) {
+                        setGrant(initialGrantState);
+                        if (publish) {
+                            setFeedback('Grant Published!');
+                        } else {
+                            setFeedback('Grant Saved!')
+                        }
                     } else {
-                        setFeedback('Grant Saved!')
+                        setFeedback('Error creating grant')
                     }
-                } else {
-                    setFeedback('Error creating grant')
-                }
-            });
-        } else if (type === GrantFormType.EDIT) {
-            GrantsController.saveGrant(user, {...grant, publish: publish}).then((success: boolean) => {
-                if (success) {
-                    if (publish) {
-                        navigate('/admin/grants');
+                });
+            } else if (type === GrantFormType.EDIT) {
+                GrantsController.saveGrant(user, {...grant, publish: publish}).then((success: boolean) => {
+                    if (success) {
+                        if (publish) {
+                            navigate('/admin/grants');
+                        } else {
+                            setFeedback('Grant Saved!');
+                        }
                     } else {
-                        setFeedback('Grant Saved!');
+                        console.error('Failed to save grant');
+                        setFeedback('Error saving grant');
                     }
-                } else {
-                    console.error('Failed to save grant');
-                    setFeedback('Error saving grant');
-                }
-            });
+                });
+            }
         }
     };
 
@@ -172,16 +156,29 @@ const GrantForm: React.FC<GrantFormProps> = ({ type }) => {
         e.preventDefault();
         if (grant.questions.length == 0) {
             alert("At Least One Question Is Required To Be Published, Please Add A Custom Question")
-            console.log("missing questions")
         } else {
             saveGrant(true)
-            console.log('submitted')
         }
     };
 
     // formatter for dates
     const formatDateToYYYYMMDD = (date: Date) => {
         return new Date(date).toISOString().split('T')[0];
+    };
+
+    if (unauthorized) {
+        return (
+            <div className='flex font-bold text-xl justify-center mt-10'>Access Denied: Invalid Permission</div>
+        );
+    };
+
+    // grant already published and cannot be editted
+    if (grant.publish) {
+        return (
+            <div className='flex font-bold text-xl justify-center mt-10'>
+                Bad Request: Grant Cannot Be Editted Once Published
+            </div>
+        );
     };
 
     return (
@@ -247,13 +244,27 @@ const GrantForm: React.FC<GrantFormProps> = ({ type }) => {
                             className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-secondary focus:border-transparent" />
                     </div>
 
+                    {/* Questions */}
                     <div className='mt-6'>
                         <label htmlFor="question" className="block text-gray-700 font-semibold mb-2">Add a Question for Applicants</label>
 
-                        <div className='flex items-center'>
-                            <input type="text" name="question" value={question} onChange={handleQuestionChange}
-                                className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-secondary focus:border-transparent mr-4" />
-                            <button type='button' className='p-2 bg-green-600 text-white pl-5 pr-5 rounded-lg hover:bg-green-800' onClick={handleQuestionSubmit}>add</button>
+                        <div className='flex items-center gap-4'>
+                            {
+                                newQuestionType == "DropDown" ? 
+                                <input type="text" name="question" value={question} onChange={handleQuestionChange}
+                                    className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-secondary focus:border-transparent" />
+                                : newQuestionType == "Multiple Choice" ? 
+                                <input type="text" name="question" value={question} onChange={handleQuestionChange}
+                                    className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-secondary focus:border-transparent" />
+                                :
+                                <input type="text" name="question" value={question} onChange={handleQuestionChange}
+                                    className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-secondary focus:border-transparent" />
+                            }
+                            {
+                                newQuestionType != "Question Type" ? <button type='button' className='py-2 bg-green-600 text-white pl-5 pr-5 rounded-lg hover:bg-green-800' onClick={handleQuestionSubmit}>add</button>
+                                : <></>
+                            }
+                            <DropDown options={questionTypes} identity="Question Type" selectCallback={setNewQuestionType}/>
                         </div>
                     </div>
 
@@ -289,4 +300,4 @@ const GrantForm: React.FC<GrantFormProps> = ({ type }) => {
     );
 };
 
-export default GrantForm
+export default GrantForm;
