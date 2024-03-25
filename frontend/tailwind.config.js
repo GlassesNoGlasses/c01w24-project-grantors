@@ -27,6 +27,7 @@ module.exports = {
         'magnify-light-blue': 'rgb(235, 244, 244)',
         'magnify-blue': 'rgb(33, 82, 92)',
         'magnify-dark-blue': 'rgb(12, 39, 45)',
+        'magnify-grey': 'rgb(82, 82, 94)',
       }
     },
     backgroundImage: {

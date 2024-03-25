@@ -9,14 +9,14 @@ const ButtonIcon = ({
 
     return (
         <button className='flex flex-col items-center justify-center' onClick={callback}>
-            <div className='bg-white' style={styles.imageStyes}>
+            <div className='bg-white shadow-lg hover:border-black shadow-black border-4 border-primary' style={styles.imageStyes}>
                 {imageSrc ? (
                     <img src={imageSrc}></img>
                 ) : (
                     heroicon
                 ) }
             </div>
-            <p className='text-xl text-white font-bold'>{label ? label : ""}</p>
+            <p className='text-xl text-black font-bold'>{label ? label : ""}</p>
         </button>
     );
 };

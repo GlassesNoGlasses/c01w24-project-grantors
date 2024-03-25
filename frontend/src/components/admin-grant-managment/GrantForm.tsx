@@ -172,8 +172,13 @@ const GrantForm: React.FC<GrantFormProps> = ({ type }) => {
     // handle when the form is published when all required fields are provided
     const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        saveGrant(true)
-        console.log('submitted')
+        if (grant.questions.length == 0) {
+            alert("At Least One Question Is Required To Be Published, Please Add A Custom Question")
+            console.log("missing questions")
+        } else {
+            saveGrant(true)
+            console.log('submitted')
+        }
     };
 
     // formatter for dates
@@ -184,40 +189,40 @@ const GrantForm: React.FC<GrantFormProps> = ({ type }) => {
     const today = formatDateToYYYYMMDD(new Date());
 
     return (
-        <div className="flex items-center justify-center min-h-screen bg-grantor-green">
-            <div className="w-full max-w-2xl px-8 py-10 bg-white shadow-lg rounded-xl mt-10 mb-10">
+        <div className="flex items-center justify-center min-h-screen pt-20">
+            <div className="w-full max-w-2xl px-8 py-10 bg-white rounded-xl mt-10 mb-10 border-4 border-primary shadow-2xl shadow-black">
                 <h2 className="text-2xl font-bold text-center text-gray-800 mb-8">{type === GrantFormType.CREATE ? 'Create a Grant': 'Edit Grant'}</h2>
                 <form onSubmit={handleSubmit} className="space-y-6">
                     {/* Organization */}
                     <div>
-                        <label htmlFor="organization" className="block text-gray-700 font-medium mb-2">Organization</label>
-                        <input type="text" name="organization" id="organization" value={grant.organization} onChange={handleInputChange} required
-                            className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent" />
+                        <label htmlFor="organization" className="block text-gray-700 font-semibold mb-2">Organization</label>
+                        <input type="text" name="organization" id="organization" value={grant.organization} onChange={handleInputChange} required readOnly
+                            className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-secondary focus:border-transparent" />
                     </div>
                     
                     {/* Category */}
                     <div>
-                        <label htmlFor="category" className="block text-gray-700 font-medium mb-2">Category</label>
+                        <label htmlFor="category" className="block text-gray-700 font-semibold mb-2">Category</label>
                         <input type="text" name="category" id="category" value={grant.category} onChange={handleInputChange} required
-                            className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent" />
+                            className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-secondary focus:border-transparent" />
                     </div>
                     {/* Title */}
                     <div>
-                        <label htmlFor="title" className="block text-gray-700 font-medium mb-2">Title</label>
+                        <label htmlFor="title" className="block text-gray-700 font-semibold mb-2">Title</label>
                         <input type="text" name="title" id="title" value={grant.title} onChange={handleInputChange} required
-                            className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent" />
+                            className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-secondary focus:border-transparent" />
                     </div>
                     
                     {/* Description */}
                     <div>
-                        <label htmlFor="description" className="block text-gray-700 font-medium mb-2">Description</label>
+                        <label htmlFor="description" className="block text-gray-700 font-semibold mb-2">Description</label>
                         <textarea name="description" id="description" value={grant.description} onChange={handleInputChange} required
-                            className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent" rows={4}></textarea>
+                            className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-secondary focus:border-transparent" rows={3}></textarea>
                     </div>
                     
                     {/* Deadline */}
                     <div>
-                        <label htmlFor="deadline" className="block text-gray-700 font-medium mb-2">Deadline</label>
+                        <label htmlFor="deadline" className="block text-gray-700 font-semibold mb-2">Deadline</label>
                         <input type="date" name="deadline" id="deadline" value={formatDateToYYYYMMDD(grant.deadline)}
                             min={today}
                             onChange={(e) => {
@@ -230,33 +235,33 @@ const GrantForm: React.FC<GrantFormProps> = ({ type }) => {
                     
                     {/* Contact */}
                     <div>
-                        <label htmlFor="contact" className="block text-gray-700 font-medium mb-2">Contact</label>
+                        <label htmlFor="contact" className="block text-gray-700 font-semibold mb-2">Contact</label>
                         <input type="text" name="contact" id="contact" value={grant.contact} onChange={handleInputChange} required
-                            className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent" />
+                            className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-secondary focus:border-transparent" />
                     </div>
                     
                     {/* Min Amount */}
                     <div>
-                        <label htmlFor="minAmount" className="block text-gray-700 font-medium mb-2">Min Amount (USD)</label>
+                        <label htmlFor="minAmount" className="block text-gray-700 font-semibold mb-2">Min Amount (USD)</label>
                         <input type="number" name="minAmount" id="minAmount" min="0" value={grant.minAmount.toString()}
                             onChange={(e) => handleAmountChange('minAmount', parseInt(e.target.value))}
-                            className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent" />
+                            className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-secondary focus:border-transparent" />
                     </div>
                     
                     {/* Max Amount */}
                     <div>
-                        <label htmlFor="maxAmount" className="block text-gray-700 font-medium mb-2">Max Amount (USD)</label>
+                        <label htmlFor="maxAmount" className="block text-gray-700 font-semibold mb-2">Max Amount (USD)</label>
                         <input type="number" name="maxAmount" id="maxAmount" min={grant.minAmount.toString()} value={grant.maxAmount.toString()}
                             onChange={(e) => handleAmountChange('maxAmount', parseInt(e.target.value))}
-                            className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent" />
+                            className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-secondary focus:border-transparent" />
                     </div>
 
                     <div className='mt-6'>
-                        <label htmlFor="question" className="block text-gray-700 font-medium mb-2">Add a Question for Applicants</label>
+                        <label htmlFor="question" className="block text-gray-700 font-semibold mb-2">Add a Question for Applicants</label>
 
                         <div className='flex items-center'>
                             <input type="text" name="question" value={question} onChange={handleQuestionChange}
-                                className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent mr-4" />
+                                className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-secondary focus:border-transparent mr-4" />
                             <button type='button' className='p-2 bg-green-600 text-white pl-5 pr-5 rounded-lg hover:bg-green-800' onClick={handleQuestionSubmit}>add</button>
                         </div>
                     </div>
@@ -266,10 +271,10 @@ const GrantForm: React.FC<GrantFormProps> = ({ type }) => {
                             <h3 className="text-lg font-semibold text-gray-800 mb-4">Custom Questions</h3>
                             {grant.questions.map((question) => (
                                 <div key={question.id} className="mb-4 flex justify-between p-2 border-gray-300 border items-center rounded-lg">
-                                    <label htmlFor={`question-${question.id}`} className="block text-gray-700 font-medium max-w-[80%]">
+                                    <label htmlFor={`question-${question.id}`} className="block text-gray-700 font-semibold max-w-[80%]">
                                         {question.question}
                                     </label>
-                                    <button type='button'className='text-[1rem] p-2 bg-red-500 text-white pl-5 pr-5 rounded-lg hover:bg-red-600' 
+                                    <button type='button'className='text-[1rem] p-2 bg-min-500 text-white pl-5 pr-5 rounded-lg hover:bg-red-600' 
                                         onClick={() =>{ handleRemoveQuestion(question.id)} }>Remove</button>
                                 </div>
                             ))}
@@ -282,7 +287,7 @@ const GrantForm: React.FC<GrantFormProps> = ({ type }) => {
                     <div className={`flex ${type === GrantFormType.CREATE ? 'justify-end' : 'justify-between'} gap-8 `}>
                         {type === GrantFormType.CREATE ? <></> : <button type='button' className='p-2 bg-red-600 text-white pl-5 pr-5 rounded-lg hover:bg-red-800' onClick={() => deleteGrant(grantID)}>Delete</button>}
                         <div className='flex justify-end'>
-                            <button type='button' className='p-2 bg-blue-600 text-white pl-5 pr-5 rounded-lg hover:bg-blue-800 mr-10' onClick={() => saveGrant(false)}>Save</button>
+                            <button type='button' className='p-2 bg-secondary text-white pl-5 pr-5 rounded-lg hover:bg-primary mr-10' onClick={() => saveGrant(false)}>Save</button>
                             <button type='submit' className='p-2 bg-green-600 text-white pl-5 pr-5 rounded-lg hover:bg-green-800'>Publish</button>
                         </div>
                     </div>

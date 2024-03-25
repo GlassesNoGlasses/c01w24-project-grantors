@@ -14,10 +14,14 @@ import SavedGrants from "./components/saved-grants/SavedGrants";
 import GrantApply from "./components/grant-apply/GrantApply";
 import ApplicationReview from "./components/applications/admin/ApplicationReview";
 import DefaultPage from "./components/home-page/nav-bar/default-page/DefaultPage";
+import NotFoundPage from "./components/not-found-page/NotFoundPage";
 
 function App() {
 	return (
 		<div className="App w-full h-full">
+			<div className="bg-home-background bg-cover 
+    		bg-no-repeat bg-center h-[100vh] w-[100vw] fixed z-[-1]"/>
+			
 			{UserContextProvider(
 				<Routes>
 					<Route path="/" element={<Navbar />}>
@@ -37,8 +41,9 @@ function App() {
 						<Route path="saved" element={<SavedGrants />} />
 						<Route path=":organization/applications" element={<AdminApplicationList/>} />
 						<Route path="applications" element={<ClientApplicationList />} />
-						<Route path="grants/:grantID/apply" element={<GrantApply />} />
+						<Route path="grants/:grantID/apply" element={<GrantApply />} /> 
 						<Route path="application/:applicationID/review" element={<ApplicationReview />} />
+						<Route path="*" element={<NotFoundPage />} />
 					</Route>
 				</Routes>
 			)}
