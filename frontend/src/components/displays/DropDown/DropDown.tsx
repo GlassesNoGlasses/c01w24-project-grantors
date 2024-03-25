@@ -16,14 +16,14 @@ const DropDown = ({ options, identity, selectCallback }: DropDownProps) => {
     
 
     return (
-        <div className="flex flex-col items-center">
-            <button className="dropdown-button flex flex-row gap-2 border-2 border-magnify-blue p-2 rounded-lg
+        <div className="flex flex-col items-center relative">
+            <button type='button' className="dropdown-button flex flex-row gap-2 border-2 border-magnify-blue p-2 rounded-lg
                 bg-white text-black hover:bg-gray-400 transition ease-in-out duration-200" onClick={() => setIsOpen(!isOpen)}>
                 {selectedItem}
                 <ChevronDownIcon className="h-5"/>
             </button>
             {isOpen && (
-                <ul className="dropdown-content rounded bg-magnify-grey text-white absolute mt-11">
+                <ul className="dropdown-content rounded bg-magnify-grey text-white absolute top-full">
                     {dropDownList.map(option => (
                         <li key={option} className="p-2 hover:bg-gray-400" onClick={() => handleSelect(option)}>
                             {option}
