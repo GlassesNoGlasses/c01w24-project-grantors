@@ -2,6 +2,10 @@ import React from 'react'
 import { useUserContext } from '../contexts/userContext'
 import UserController from '../../controllers/UserController';
 import { Link } from 'react-router-dom';
+import chrome from '../../images/chrome.png'
+import firefox from '../../images/firefox.png'
+import edge from '../../images/edge.png'
+import safari from '../../images/safari.png'
 
 const Settings = () => {
 
@@ -34,12 +38,18 @@ const Settings = () => {
 		);
 	};
 
-    const SettingStyle = 'bg-white w-[40vw] h-[80vh] border-4 border-primary shadow-2xl \
+    const SettingStyle = 'bg-white min-w-[40vw] min-h-[80vh] border-4 border-primary shadow-2xl \
                     shadow-black rounded-xl flex flex-col p-4 justify-between items-center'
 
     interface AttributeProps {
         attribute: string,
         value: any
+    }
+
+    interface ExtensionProps {
+        image: any,
+        browser: string,
+        link: string
     }
 
     const Attribute: React.FC<AttributeProps> = ({attribute, value}) => {
@@ -48,6 +58,16 @@ const Settings = () => {
             <h2 className='font-semibold text-lg'>{attribute}: </h2>
             <p className='text-lg'>{value}</p>
         </div>)
+    }
+
+    const Extension: React.FC<ExtensionProps> = ({ image, browser, link}) => {
+        return(
+                <a href={link} target='blank' className='flex items-center gap-2 border-[3px] p-1 px-3 rounded-xl 
+                border-secondary hover:border-black font-semibold shadow-md shadow-black'>
+                    <img src={image} alt={browser} className='h-8 w-8'/>
+                    {browser}
+                </a>
+        )
     }
 
     return (
@@ -77,7 +97,7 @@ const Settings = () => {
 
                     <div className='flex flex-col'>
                         <h2>Physical</h2>
-                        <p>Our website support nagivation between component with intuitive Tab Controls
+                        <div>Our website support nagivation between component with intuitive Tab Controls
                             <ul className='flex flex-col'>
                                 <li>
                                     - press TAB to navigate to next component
@@ -89,7 +109,7 @@ const Settings = () => {
                                     - once on selected component, press ENTER to proceed
                                 </li>
                             </ul>
-                        </p>
+                        </div>
                     </div>
 
                     <div>
@@ -100,15 +120,15 @@ const Settings = () => {
                         Visual
                     </div>
 
-                    <div>
-                        <h2 className='font-semibold'>
-                            For more accessibility features, try installing browser extensions
+                    <div className='w-full'>
+                        <h2 className='font-semibold text-center mb-4'>
+                            For more accessibility features, try installing browser extensions:
                         </h2>
                         <div className='flex justify-around'>
-                            <a href="https://chromewebstore.google.com/collection/3p_accessibility_extensions" target='blank'>Chrome</a>
-                            <a href="https://addons.mozilla.org/en-CA/firefox/extensions/" target='blank'>Firefox</a>
-                            <a href="https://microsoftedge.microsoft.com/addons/category/Accessibility" target='blank'>Microsoft Edge</a>
-                            <a href="https://support.apple.com/en-ca/102343" target='blank'>Safari</a>
+                            <Extension image={chrome} browser='Chrome' link='https://chromewebstore.google.com/collection/3p_accessibility_extensions'/>
+                            <Extension image={firefox} browser='Firefox' link='https://addons.mozilla.org/en-CA/firefox/extensions/'/>
+                            <Extension image={edge} browser='Microsoft Edge' link='https://microsoftedge.microsoft.com/addons/category/Accessibility'/>
+                            <Extension image={safari} browser='Safari' link='https://support.apple.com/en-ca/102343'/>
                         </div>
                     </div>
                     
