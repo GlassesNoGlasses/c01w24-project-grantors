@@ -21,6 +21,7 @@ const TestFileDisplay = () => {
   // States
   const [imageFiles, setImageFiles] = useState<File[]>([]);
   const [textFiles, setTextFiles] = useState<File[]>([]);
+  const [downloadLinks, setDownloadLinks] = useState<Blob[] | null>(null);
   const {user} = useUserContext();
 
   // Helper Functions
@@ -48,12 +49,15 @@ const TestFileDisplay = () => {
         data.append('test1', file);
     })
 
-    console.log(user?.accountID);
+    const organization = user?.organization ? user?.organization : undefined;
 
-    const res = await fetch(`http://localhost:${SERVER_PORT}/${user?.isAdmin}/${user?.accountID}/uploadFiles`, {
+    const res = await fetch(`http://localhost:${SERVER_PORT}/${user?.accountID}/${organization}/uploadFiles`, {
         method: 'POST',
-        body: data,
+        body: data
     });
+
+    const resBody = await res.json();
+    console.log(resBody);
 
     console.log(res);
   }
@@ -72,20 +76,31 @@ const TestFileDisplay = () => {
         data.append('test1', file);
     })
 
-    const res = await fetch(`http://localhost:${SERVER_PORT}/uploadFiles`, {
+    const organization = user?.organization ? user?.organization : undefined;
+
+    const res = await fetch(`http://localhost:${SERVER_PORT}/${user?.accountID}/${organization}/uploadFiles`, {
         method: 'POST',
-        body: data,
+        body: data
     });
 
     console.log(res);
   }
 
-  React.useEffect(() => {
-    console.log("NEW PARENT FILES: ", imageFiles);
-  }, [imageFiles])
+  const downloadFile = async () => {
+    const fileID = '6601bdeaf11d1a13f6907f85'
+
+    const res = await fetch(`http://localhost:${SERVER_PORT}/files/${fileID}`, {
+        method: 'GET',
+    });
+
+    const fileBlob = await res.blob();
+    console.log(fileBlob)
+    setDownloadLinks(prev => prev ? [...prev, fileBlob] : [fileBlob]);
+  }
+
 
   return (
-    <div>
+    <div className='min-h-fill min-w-full'>
         <form onSubmit={handleImageSubmit}
         encType="multipart/form-data">
             <DropZoneFile
@@ -134,6 +149,25 @@ const TestFileDisplay = () => {
                 Submit Form
             </button>
         </form>
+        <div className='flex h-2/4 min-w-full'>
+            <button onClick={downloadFile}>Download A file</button>
+        </div>
+        {/* {downloadLinks ? downloadLinks?.map((blob : Blob) => {
+        return (
+            <a href={URL.createObjectURL(blob)} download={"image3.pdf"}>
+                Download image 3 here!
+            </a>
+        )
+    }): <></>} */}
+    {
+        imageFiles ? imageFiles.map((file: File) => {
+            return (
+                <a href={URL.createObjectURL(file)} download={file.name}>
+                {file.name}
+            </a>
+            )
+        }) : <></>
+    }
     </div>
   )
 }

@@ -7,10 +7,10 @@ data
 # misc
 .DS_Store
 
-# admin/user files
+# admin/client files
 uploads/admin/*
-uploads/user/*
+uploads/client/*
 
-# keep admin and user directory
+# keep admin and client directory
 !uploads/admin/.gitkeep 
-!uploads/user/.gitkeep 
+!uploads/client/.gitkeep 

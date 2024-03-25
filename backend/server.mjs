@@ -32,16 +32,23 @@ const COLLECTIONS = {
 const upload = multer({
 	storage: multer.diskStorage({
 	  destination: (req, file, cb) => {
-		const userDirFilter = req.params.isAdmin === "true" ? "admin" : "user";
-		const directory = path.join(process.cwd(),`./uploads/${userDirFilter}/${req.params.userID}/`);
+		const userID = req.params.userID;
+		const organization = req.params.organization;
+		const userDirectory = organization === "undefined" ? "client" : "admin";
+		const fileDirectory = userDirectory === "admin" ? organization : userID;
 
+		const directory = path.join(process.cwd(),`./uploads/${userDirectory}/${fileDirectory}/`);
+
+		// make directory based on fileDirectory if not exists
 		if (!fs.existsSync(directory)) {
 			fs.mkdirSync(directory);
 		}
-  
+		
+		// Where directory to store files
 		cb(null, directory)
 	  },
 	  filename: (req, file, cb) => {
+		// How to name the files.
 		cb(null, file.originalname)
 	  }
 	})
@@ -670,7 +677,65 @@ app.post("/review", express.json(), async (req, res) => {
 });
 
 
-app.post('/:isAdmin/:userID/uploadFiles', upload.any(), async (req, res) => {
-	const numUploaded = req.files ? req.files.length : 0;
-	res.status(201).json({response: "Files Uploaded", numUploaded: numUploaded});
+app.post('/:userID/:organization/uploadFiles', upload.any(), async (req, res) => {
+	try {
+		const userID = req.params.userID;
+		const userCollection = db.collection(COLLECTIONS.users);
+		const user = await userCollection.findOne({ _id: new ObjectId(userID) });
+
+		if (!user) {
+			return res.status(404).send("User not found.")
+		}
+
+		console.log(req.files);
+
+		const filteredFiles = req.files.map((file) => {
+			return {
+				accountID: userID,
+				title: file.originalname,
+				posted: new Date(),
+				path: '.' + file.path.substring(file.path.indexOf('/uploads')),
+				mimetype: file.mimetype,
+				organization: req.headers.organization,
+			}
+		})
+
+		const fileCollection = db.collection(COLLECTIONS.files);
+		const fileIDs = await fileCollection.insertMany(filteredFiles);
+
+		// console.log(fileIDs);
+
+		return res.status(200).json({response: "Files Uploaded"});
+		
+	} catch (error) {
+		return res.status(500).json({ error: error.message });
+	}
+});
+
+app.get("/files/:fildID", express.json(), async (req, res) => {
+	const fileID = req.params.fildID;
+
+	try {
+		if (!fileID) {
+			return res.status(400).send("Invalid File ID given.")
+		}
+
+		const fileCollection = db.collection(COLLECTIONS.files);
+
+		const file = await fileCollection.findOne({_id: new ObjectId(fileID)});
+
+		if (!file) {
+			return res.status(404).send("File not found.")
+		}
+
+		return res.download(file.path, file.title, (err) => {
+			if (err) {
+				// Error in downloading a file.
+				console.error(err);
+			}
+		});
+	} catch (error) {
+		console.error(error);
+		return res.status(500).json({ error: error.message });
+	}
 });

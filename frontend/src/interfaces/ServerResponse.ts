@@ -50,6 +50,7 @@ export interface GetApplicantsResponse {
 }
 
 export interface UploadFilesResponse {
-    response?: string,
-    numUploaded: number,
+    response?: {[key: string] : string} ,
+    insertedCount?: number,
+    error?: string,
 }

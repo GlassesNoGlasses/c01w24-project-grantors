@@ -4,7 +4,7 @@ import { UploadFilesResponse } from "../interfaces/ServerResponse";
 export default class FileController {
 
     // Returns the actual number of files uploaded successfully, or null.
-    static async uploadFiles(fileTitle: string, files: File[]): Promise<number | null> {
+    static async uploadFiles(fileTitle: string, files: File[]): Promise<number | undefined> {
         try {
             const data = new FormData();
             
@@ -17,18 +17,18 @@ export default class FileController {
                 body: data,
             });
 
-            // Bad request, return null.
+            // Bad request, return undefined.
             if (!res.ok) {
-                return null;
+                return undefined;
             }
 
             return await res.json().then((resData: UploadFilesResponse) => {
-                return resData.numUploaded;
+                return resData.insertedCount;
             })
 
         } catch (error) {
             console.error("Error while uploading files", error);
-            return null;
+            return undefined;
         }
     }
 }
