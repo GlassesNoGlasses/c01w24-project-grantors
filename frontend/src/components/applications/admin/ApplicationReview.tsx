@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router";
 import ApplicationsController from "../../../controllers/ApplicationsController";
 import { Application, ApplicationStatus } from "../../../interfaces/Application";
+import { ApplicationReview as ApplicationReviewType } from "../../../interfaces/ApplicationReview";
 import UserController from "../../../controllers/UserController";
 import { Applicant } from "../../../interfaces/Applicant";
 import { Grant, GrantQuestion } from "../../../interfaces/Grant";
@@ -21,17 +22,15 @@ const ApplicationReview = () => {
     const [ hoverRating, setHoverRating ] = useState<number>(0);
     const [ review, setReview ] = useState<string>('');
     const [ reviewed, setReviewed ] = useState<boolean>(false);
-    const [ applicationStatus, setApplicationStatus ] = useState<ApplicationStatus>(ApplicationStatus.submitted);
     const [ showError, setShowError ] = useState<boolean>(false);
 
     const navigate = useNavigate();
 
     const rejectApplication = () => {
-        setApplicationStatus(ApplicationStatus.rejected);
-        submitApplicationReview();
+        submitApplicationReview(ApplicationStatus.rejected);
     };
 
-    const submitApplicationReview = () => {
+    const submitApplicationReview = (applicationStatus: ApplicationStatus) => {
         if (application && user) {
             ReviewController.submitReview({
                 ID: '',
@@ -45,6 +44,7 @@ const ApplicationReview = () => {
                 if (success) {
                     setReviewed(true);
                 } else {
+                    console.log('Error submitting review');
                     setShowError(true);
                 }
             });
@@ -52,8 +52,7 @@ const ApplicationReview = () => {
     };
 
     const approveApplication = () => {
-        setApplicationStatus(ApplicationStatus.approved);
-        submitApplicationReview();
+        submitApplicationReview(ApplicationStatus.approved);
     };
 
     useEffect(() => {
@@ -68,7 +67,17 @@ const ApplicationReview = () => {
     }, [applicationID]);
 
     useEffect(() => {
-        if (application) {
+        if (application && user) {
+            if (application.status != ApplicationStatus.submitted) {
+                setReviewed(true);
+                ReviewController.fetchReview(application.id, user).then((review: ApplicationReviewType | undefined) => {
+                    if (review) {
+                        setHoverRating(review.rating);
+                        setReview(review.reviewText);
+                    }
+                });
+            }
+
             UserController.fetchApplicant(application.applicantID).then((applicant: Applicant | undefined) => {
                 if (applicant) {
                     setApplicant(applicant);
@@ -82,7 +91,7 @@ const ApplicationReview = () => {
             });
         }
 
-    }, [application]);
+    }, [application, user]);
 
     return (
         <div className="p-10 pt-24">
@@ -98,9 +107,9 @@ const ApplicationReview = () => {
                                 <button 
                                     type="button"
                                     key={star}
-                                    onClick={() => setRating(star)}
-                                    onMouseEnter={() => setHoverRating(star)}
-                                    onMouseLeave={() => setHoverRating(rating)} // set hoverRating to rating when not hovering
+                                    onClick={() => reviewed || setRating(star)}
+                                    onMouseEnter={() => reviewed || setHoverRating(star)}
+                                    onMouseLeave={() => reviewed || setHoverRating(rating)} // set hoverRating to rating when not hovering
                                 >
                                     <StarIcon className={`h-8 w-8 ${star <= hoverRating ? 'text-yellow-500' : 'text-gray-500'}`}/>
                                 </button>
@@ -167,6 +176,7 @@ const ApplicationReview = () => {
                             <textarea
                                 className='outline outline-2 outline-magnify-blue p-2 w-full h-full rounded'
                                 placeholder="Application notes."
+                                value={review}
                                 onChange={(e) => setReview(e.target.value)}
                             />
                         </div>
@@ -198,7 +208,7 @@ const ApplicationReview = () => {
                             Reject
                         </button>
                         <button id="submit-review" className={`py-3 p-6 text-lg ${application && applicant && grant ? "button" : "button-disabled" }`}
-                            onClick={submitApplicationReview}
+                            onClick={() => submitApplicationReview(ApplicationStatus.submitted)}
                         >
                             Submit Review
                         </button>

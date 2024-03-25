@@ -1,4 +1,4 @@
-import express from 'express';
+import express, { application } from 'express';
 import { MongoClient, ObjectId } from "mongodb";
 import cors from "cors";
 import bcrypt from "bcrypt";
@@ -635,16 +635,48 @@ app.post("/review", express.json(), async (req, res) => {
 		}
 
 		const applicationCollection = db.collection(COLLECTIONS.applications);
-		await applicationCollection.updateOne(
+		const statusUpdate = await applicationCollection.updateOne(
 			{
-			_id: applicationID
+			_id: new ObjectId(applicationID)
 			},
 			{
 				$set: { status: applicationStatus }
 			});
 
+		if (statusUpdate.matchedCount === 0) {
+			return res.status(400).json({ error: "Failed to update application status. ApplicationID invalid." });
+		}
+
 		res.status(201).json({ response: "Review submitted.", id: insertedId});
 	} catch (error) {
+		console.error(error);
+		res.status(500).json({ error: error.message });
+	}
+});
+
+app.get("/review/:applicationID", express.json(), async (req, res) => {
+	const applicationID = req.params.applicationID;
+
+	try {
+		verifyRequestAuth(req, async (err, decoded) => {
+			if (err) {
+				return res.status(401).send("Unauthorized.");
+			}
+			const reviewsCollection = db.collection(COLLECTIONS.applicationReviews);
+
+			const review = await reviewsCollection.findOne({
+				applicationID: applicationID,
+				reviewerID: decoded.userID,
+			});
+
+			if (!review) {
+				return res.status(404).json({ error: "Review not found." });
+			}
+
+			res.status(200).json({ response: review });
+		});
+	} catch (error) {
+		console.error(error);
 		res.status(500).json({ error: error.message });
 	}
 });

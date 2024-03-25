@@ -1,5 +1,6 @@
 import { Applicant } from "./Applicant";
 import { Application } from "./Application";
+import { ApplicationReview } from "./ApplicationReview";
 import { Grant } from "./Grant";
 
 export interface ServerLoginResponse {
@@ -46,5 +47,10 @@ export interface GetApplicantResponse {
 
 export interface GetApplicantsResponse {
     response?: Applicant[],
+    error?: string,
+}
+
+export interface GetReviewResponse {
+    response?: ApplicationReview,
     error?: string,
 }
