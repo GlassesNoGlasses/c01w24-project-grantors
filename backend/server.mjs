@@ -659,7 +659,6 @@ app.get("/review/:applicationID", express.json(), async (req, res) => {
 			}
 			const reviewsCollection = db.collection(COLLECTIONS.applicationReviews);
 
-			console.log(applicationID, decoded.userID);
 			const review = await reviewsCollection.findOne({
 				applicationID: applicationID,
 				reviewerID: decoded.userID,
