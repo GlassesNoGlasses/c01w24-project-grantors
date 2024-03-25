@@ -614,7 +614,6 @@ app.post("/review", express.json(), async (req, res) => {
 		});
 
 		if (existingReview) {
-			await session.abortTransaction();
 			return res.status(400).json({ error: "Review already exists. Use patch to update review." });
 		}
 
