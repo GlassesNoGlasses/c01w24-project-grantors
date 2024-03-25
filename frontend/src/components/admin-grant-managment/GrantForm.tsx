@@ -6,6 +6,7 @@ import { Grant, GrantQuestion } from '../../interfaces/Grant'
 import { GrantFormProps, GrantFormType } from './GrantFormProps';
 import GrantsController from '../../controllers/GrantsController'
 
+
 const GrantForm: React.FC<GrantFormProps> = ({ type }) => {
 
     const {user} = useUserContext();
@@ -58,6 +59,7 @@ const GrantForm: React.FC<GrantFormProps> = ({ type }) => {
     const [question, setQuestion] = useState<string>('');
     const [feedback, setFeedback] = useState("");
     const navigate = useNavigate()
+    
     
     // no user logged in or not admin
     if (!user || !user.isAdmin) {
@@ -184,6 +186,8 @@ const GrantForm: React.FC<GrantFormProps> = ({ type }) => {
         return new Date(date).toISOString().split('T')[0];
     };
 
+    const today = formatDateToYYYYMMDD(new Date());
+
     return (
         <div className="flex items-center justify-center min-h-screen pt-20">
             <div className="w-full max-w-2xl px-8 py-10 bg-white rounded-xl mt-10 mb-10 border-4 border-primary shadow-2xl shadow-black">
@@ -220,8 +224,13 @@ const GrantForm: React.FC<GrantFormProps> = ({ type }) => {
                     <div>
                         <label htmlFor="deadline" className="block text-gray-700 font-semibold mb-2">Deadline</label>
                         <input type="date" name="deadline" id="deadline" value={formatDateToYYYYMMDD(grant.deadline)}
-                            onChange={(e) => setGrant({ ...grant, deadline: new Date(e.target.value) })}
-                            className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-secondary focus:border-transparent" />
+                            min={today}
+                            onChange={(e) => {
+                                const newValue = e.target.value;
+                                const newDate = newValue ? new Date(newValue) : new Date(); // Fallback to current date if empty
+                                setGrant({ ...grant, deadline: newDate });
+                            }}                            
+                            className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent" />
                     </div>
                     
                     {/* Contact */}
@@ -265,7 +274,7 @@ const GrantForm: React.FC<GrantFormProps> = ({ type }) => {
                                     <label htmlFor={`question-${question.id}`} className="block text-gray-700 font-semibold max-w-[80%]">
                                         {question.question}
                                     </label>
-                                    <button type='button'className='text-[1rem] p-2 bg-red-500 text-white pl-5 pr-5 rounded-lg hover:bg-red-600' 
+                                    <button type='button'className='text-[1rem] p-2 bg-min-500 text-white pl-5 pr-5 rounded-lg hover:bg-red-600' 
                                         onClick={() =>{ handleRemoveQuestion(question.id)} }>Remove</button>
                                 </div>
                             ))}
