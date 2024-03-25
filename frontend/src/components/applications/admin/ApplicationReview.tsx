@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router";
 import ApplicationsController from "../../../controllers/ApplicationsController";
 import { Application, ApplicationStatus } from "../../../interfaces/Application";
+import { ApplicationReview as ApplicationReviewType } from "../../../interfaces/ApplicationReview";
 import UserController from "../../../controllers/UserController";
 import { Applicant } from "../../../interfaces/Applicant";
 import { Grant, GrantQuestion } from "../../../interfaces/Grant";
@@ -66,9 +67,15 @@ const ApplicationReview = () => {
     }, [applicationID]);
 
     useEffect(() => {
-        if (application) {
+        if (application && user) {
             if (application.status != ApplicationStatus.submitted) {
                 setReviewed(true);
+                ReviewController.fetchReview(application.id, user).then((review: ApplicationReviewType | undefined) => {
+                    if (review) {
+                        setHoverRating(review.rating);
+                        setReview(review.reviewText);
+                    }
+                });
             }
 
             UserController.fetchApplicant(application.applicantID).then((applicant: Applicant | undefined) => {
@@ -84,7 +91,7 @@ const ApplicationReview = () => {
             });
         }
 
-    }, [application]);
+    }, [application, user]);
 
     return (
         <div className="p-10 pt-24">
@@ -169,6 +176,7 @@ const ApplicationReview = () => {
                             <textarea
                                 className='outline outline-2 outline-magnify-blue p-2 w-full h-full rounded'
                                 placeholder="Application notes."
+                                value={review}
                                 onChange={(e) => setReview(e.target.value)}
                             />
                         </div>

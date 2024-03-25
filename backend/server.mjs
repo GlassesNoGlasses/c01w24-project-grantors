@@ -648,3 +648,31 @@ app.post("/review", express.json(), async (req, res) => {
 		res.status(500).json({ error: error.message });
 	}
 });
+
+app.get("/review/:applicationID", express.json(), async (req, res) => {
+	const applicationID = req.params.applicationID;
+
+	try {
+		verifyRequestAuth(req, async (err, decoded) => {
+			if (err) {
+				return res.status(401).send("Unauthorized.");
+			}
+			const reviewsCollection = db.collection(COLLECTIONS.applicationReviews);
+
+			console.log(applicationID, decoded.userID);
+			const review = await reviewsCollection.findOne({
+				applicationID: applicationID,
+				reviewerID: decoded.userID,
+			});
+
+			if (!review) {
+				return res.status(404).json({ error: "Review not found." });
+			}
+
+			res.status(200).json({ response: review });
+		});
+	} catch (error) {
+		console.error(error);
+		res.status(500).json({ error: error.message });
+	}
+});
