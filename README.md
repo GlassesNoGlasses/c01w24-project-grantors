@@ -42,6 +42,84 @@ Run dev server
 npm run dev
 ```
 
+## File System 101
+
+Example found in `TestFileDisplay.tsx`.
+
+
+How are Files stored (Local):
+
+```
+The actual files themselves (.png, .jpeg, etc.,) are
+stored locally in the directory `/backend/uploads/`.
+
+For admins, the format is: `uploads/admin/[organization]`.
+For users, the format is: `uploads/client/[accountID]`.
+```
+
+How are Files stored (MongoDB):
+
+```
+MongoDB stores files of interface `FSFiles`,
+found in `/interfaces/FSFile.ts`.
+
+`FSFiles` was created in order to add more information
+that may be required of a file, such as IDs, etc..
+```
+
+How to upload files:
+```
+There are 2 main ways to upload a file:
+
+1. Use the component `DropZoneFile.tsx`,
+that allows basically acts as a wrapper for
+whatever element you want to display to upload files.
+
+You can drag and drop, specify what type of files
+(i.e. .jpg, .pdf, etc.), and limit the number of files you
+want to submit as well with the parameters.
+
+2. Use <input type="file">.
+
+In either case, ENSURE that the form element you use
+for uploading files has field: `encType="multipart/form-data"`
+
+
+Use FileController.uploadFiles(batchName: str,
+                                files: File[], user)
+to upload files. Follow example in  `TestFileDisplay.tsx`.
+```
+
+Fetching Files:
+
+```
+There are multiple ways to fetch files.
+
+Fetch a single FSFile: FileController.fetchFSFile
+
+Fetch FSFiles by organizations: FileController.fetchOrgFSFiles
+
+Fetch FSFiles by userID: FileController.fetchUserFSFiles
+
+Fetch a FILE by fileID: FileController.fetchFile
+```
+
+Downloading Files:
+
+```
+Files are downloaded using an anchor tag, creating
+a temporary browswer URL to file based on the file's path,
+and routing the user there.
+
+You can either: 
+Use an anchor tag like examples in `TestFileDisplay.tsx`.
+
+Use the `DownloadWrapper.tsx` component, which takes in
+a file File and an HTML/React element and does the
+necessary wrapping of the download feature for you. This
+allows for dynamic displays on a downloadable file.
+```
+
 ## Notes
 - `Node` and `npm` versions:
     - `node v21.6.1`

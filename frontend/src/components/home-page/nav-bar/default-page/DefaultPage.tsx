@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom'
 import happy_person from '../../../../images/happy_person.png'
 import grant_signing from '../../../../images/grant_signing.png'
+import FileDropZone from '../../../files/dropzone/DropZoneFile';
 
 const DefaultPage = () => {
 
