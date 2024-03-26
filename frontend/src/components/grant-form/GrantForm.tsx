@@ -134,15 +134,6 @@ const GrantForm = ({ user, grant }: GrantFormProps) => {
                             onClick={handleSave}>
                             Save
                         </button>
-                        
-                        <button 
-                            className='p-2 px-5 m-7 mr-14 bg-primary hover:bg-[#0bb4d6]
-                            text-white font-bold rounded-lg shadow-md transition-colors duration-150 ease-in
-                            text-lg' 
-                            type="submit" 
-                            name="submit">
-                            Submit Form
-                        </button>
                     </div>
                     
                     <button 
