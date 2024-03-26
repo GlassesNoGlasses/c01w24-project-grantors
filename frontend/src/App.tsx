@@ -18,6 +18,7 @@ import NotFoundPage from "./components/not-found-page/NotFoundPage";
 import Settings from "./components/settings-page/Settings";
 import React, { useEffect } from 'react';
 import Background from "./components/background/Background";
+import FundingView from "./components/applications/admin/fundingView"
 
 
 
@@ -71,8 +72,10 @@ function App() {
 							<Route path="applications" element={<ClientApplicationList />} />
 							<Route path="grants/:grantID/apply" element={<GrantApply />} /> 
 							<Route path="application/:applicationID/review" element={<ApplicationReview />} />
+							<Route path="applications/:applicationID/funding" element={<FundingView />} />
 							<Route path="settings" element={<Settings />} />
 							<Route path="*" element={<NotFoundPage />} />
+							
 						</Route>
 					</Routes>
 				</div>
