@@ -37,7 +37,17 @@ const ClientApplicationList = ({}) => {
     const [ filteredTabledata, setFilteredTableData ] = useState<TableData[]>([]);
     const navigate = useNavigate();
 
-    const onApplicationRowClick = (data: TableData) => navigate(`/grants/${data[0].grantID}/apply?applicationID=${data[0].id}`);
+    const onApplicationRowClick = (data: TableData) => {
+        if (data[0].status === ApplicationStatus.inProgress) {
+            navigate(`/grants/${data[0].grantID}/apply?applicationID=${data[0].id}`);
+        }
+        if (data[0].status === ApplicationStatus.approved){
+            navigate(`/applications/${data[0].id}`);
+        }
+        if (data[0].status === ApplicationStatus.submitted){
+            navigate(`/applications/submitted/${data[0].id}`);
+        }
+    }
     
     const itemsPerPageOptions: number[] = [5,10,20,50,100];
     const columns: Column<TableData>[] = [
