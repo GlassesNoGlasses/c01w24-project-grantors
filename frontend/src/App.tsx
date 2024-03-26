@@ -16,6 +16,7 @@ import ApplicationReview from "./components/applications/admin/ApplicationReview
 import DefaultPage from "./components/home-page/nav-bar/default-page/DefaultPage";
 import ApplicationView from "./components/home-page/nav-bar/client-dashboard/ApplicationView"
 import NotFoundPage from "./components/not-found-page/NotFoundPage";
+import SubmittedView from "./components/home-page/nav-bar/client-dashboard/SubmittedApplicationView"
 
 function App() {
 	return (
@@ -46,6 +47,7 @@ function App() {
 						<Route path="grants/:grantID/apply" element={<GrantApply />} />
 						<Route path="grants/:grantID/apply" element={<GrantApply />} /> 
 						<Route path="application/:applicationID/review" element={<ApplicationReview />} />
+						<Route path="applications/submitted/:applicationID" element={<SubmittedView/>} />
 						<Route path="*" element={<NotFoundPage />} />
 					</Route>
 				</Routes>

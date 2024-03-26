@@ -38,11 +38,14 @@ const ClientApplicationList = ({}) => {
     const navigate = useNavigate();
 
     const onApplicationRowClick = (data: TableData) => {
-        if (data[0].status === "Submitted") {
+        if (data[0].status === ApplicationStatus.inProgress) {
             navigate(`/grants/${data[0].grantID}/apply?applicationID=${data[0].id}`);
         }
-        if (data[0].status === "Approved"){
+        if (data[0].status === ApplicationStatus.approved){
             navigate(`/applications/${data[0].id}`);
+        }
+        if (data[0].status === ApplicationStatus.submitted){
+            navigate(`/applications/submitted/${data[0].id}`);
         }
     }
     
