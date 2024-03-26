@@ -1,7 +1,6 @@
 
 import React, { useState } from 'react'
-import Dropzone, { DropzoneInputProps } from 'react-dropzone';
-import axios from 'axios';
+import Dropzone from 'react-dropzone';
 import { DropZoneFileProps } from './DropZoneFileProps';
 
 const DropZoneFile = ({
