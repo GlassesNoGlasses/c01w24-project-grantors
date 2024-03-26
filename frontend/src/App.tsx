@@ -14,7 +14,10 @@ import SavedGrants from "./components/saved-grants/SavedGrants";
 import GrantApply from "./components/grant-apply/GrantApply";
 import ApplicationReview from "./components/applications/admin/ApplicationReview";
 import DefaultPage from "./components/home-page/nav-bar/default-page/DefaultPage";
+import TestFileDisplay from "./components/files/TestFileDisplay";
+import ApplicationView from "./components/home-page/nav-bar/client-dashboard/ApplicationView"
 import NotFoundPage from "./components/not-found-page/NotFoundPage";
+import SubmittedView from "./components/home-page/nav-bar/client-dashboard/SubmittedApplicationView"
 import Settings from "./components/settings-page/Settings";
 import React, { useEffect } from 'react';
 import Background from "./components/background/Background";
@@ -50,11 +53,12 @@ function App() {
 			{UserContextProvider(
 				<div>
 					<Background />
-				
+
 					<Routes>
 						<Route path="/" element={<Navbar />}>
 							<Route index element={<Home />} />
 							<Route path="about" element={<DefaultPage />} />
+							<Route path="files" element={<TestFileDisplay />} />
 							<Route path="services" element={<Home />} />
 							<Route path="gallery" element={<Home />} />
 							<Route path="contact" element={<Home />} />
@@ -71,6 +75,8 @@ function App() {
 							<Route path="applications" element={<ClientApplicationList />} />
 							<Route path="grants/:grantID/apply" element={<GrantApply />} /> 
 							<Route path="application/:applicationID/review" element={<ApplicationReview />} />
+							<Route path="applications/:applicationID" element={<ApplicationView />} />
+							<Route path="applications/submitted/:applicationID" element={<SubmittedView/>} />
 							<Route path="settings" element={<Settings />} />
 							<Route path="*" element={<NotFoundPage />} />
 						</Route>

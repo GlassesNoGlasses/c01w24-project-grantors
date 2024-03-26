@@ -9,7 +9,8 @@ const Background = () => {
 
     let background = 'bg-home-background'
 
-    if (user && user.preferences) {
+    if (user) {
+        console.log(user)
         const hc = user?.preferences.hc
         const sbg = user?.preferences.sbg
         if (sbg) background = 'bg-white'

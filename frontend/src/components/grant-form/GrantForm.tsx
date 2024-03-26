@@ -145,6 +145,14 @@ const GrantForm = ({ user, grant }: GrantFormProps) => {
                         </button>
                     </div>
                     
+                    <button 
+                        className='p-2 px-5 m-7 mr-14 bg-green-500 hover:bg-green-600 active:bg-green-700
+                        text-white font-bold rounded-lg shadow-md transition-colors duration-150 ease-in
+                        text-lg' 
+                        type="submit" 
+                        name="submit">
+                        Submit Form
+                    </button>
                     
                 </div>
             </form>
