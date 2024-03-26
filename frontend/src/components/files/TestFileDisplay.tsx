@@ -4,6 +4,8 @@ import DropZoneFile from './dropzone/DropZoneFile'
 import { SERVER_PORT } from '../../constants/ServerConstants';
 import { Accept } from '../../interfaces/Accept';
 import { useUserContext } from '../contexts/userContext';
+import FileController from '../../controllers/FileController';
+import { FSFile } from '../../interfaces/FSFile';
 
 const TestFileDisplay = () => {
 
@@ -21,7 +23,7 @@ const TestFileDisplay = () => {
   // States
   const [imageFiles, setImageFiles] = useState<File[]>([]);
   const [textFiles, setTextFiles] = useState<File[]>([]);
-  const [downloadLinks, setDownloadLinks] = useState<Blob[] | null>(null);
+  const [downloadLinks, setDownloadLinks] = useState<FSFile[] | null>(null);
   const {user} = useUserContext();
 
   // Helper Functions
@@ -44,22 +46,14 @@ const TestFileDisplay = () => {
         return;
     }
 
-    const data = new FormData();
-    imageFiles.forEach((file: File) => {
-        data.append('test1', file);
-    })
+    if (!user) {
+        return;
+    }
 
-    const organization = user?.organization ? user?.organization : undefined;
-
-    const res = await fetch(`http://localhost:${SERVER_PORT}/${user?.accountID}/${organization}/uploadFiles`, {
-        method: 'POST',
-        body: data
+    FileController.uploadFiles("test2", imageFiles, user)
+    .then((numInserted: number | undefined) => {
+        console.log(numInserted);
     });
-
-    const resBody = await res.json();
-    console.log(resBody);
-
-    console.log(res);
   }
 
   const handleTextSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
@@ -71,33 +65,51 @@ const TestFileDisplay = () => {
         return;
     }
 
-    const data = new FormData();
-    textFiles.forEach((file: File) => {
-        data.append('test1', file);
-    })
+    if (!user) {
+        return;
+    }
 
-    const organization = user?.organization ? user?.organization : undefined;
-
-    const res = await fetch(`http://localhost:${SERVER_PORT}/${user?.accountID}/${organization}/uploadFiles`, {
-        method: 'POST',
-        body: data
+    FileController.uploadFiles("test3", textFiles, user)
+    .then((numInserted: number | undefined) => {
+        console.log(numInserted);
     });
-
-    console.log(res);
   }
 
-  const downloadFile = async () => {
-    const fileID = '6601bdeaf11d1a13f6907f85'
+  const getOrganizationFiles = async () => {
+    if (!user || !user.organization) {
+        return;
+    }
 
-    const res = await fetch(`http://localhost:${SERVER_PORT}/files/${fileID}`, {
-        method: 'GET',
+    FileController.fetchOrgFSFiles(user.organization)
+    .then((fsFiles: FSFile[] | undefined) => {
+        if (fsFiles) {
+            setDownloadLinks(fsFiles);
+        }
     });
+  };
 
-    const fileBlob = await res.blob();
-    console.log(fileBlob)
-    setDownloadLinks(prev => prev ? [...prev, fileBlob] : [fileBlob]);
+  const getUserFSFiles = async () => {
+    if (!user) {
+        return;
+    }
+
+    FileController.fetchUserFSFiles(user)
+    .then((fsFiles: FSFile[] | undefined) => {
+        if (fsFiles) {
+            setDownloadLinks(fsFiles);
+        }
+    });
   }
 
+  const fetchFile = async () => {
+    const fileID = '660215c078f6d533802bd26e'
+    const filename = 'image3 (1).png'
+
+    FileController.fetchFile(fileID, filename)
+    .then((file: File| undefined) => {
+        // console.log(file);
+    });
+  }
 
   return (
     <div className='min-h-fill min-w-full'>
@@ -150,24 +162,23 @@ const TestFileDisplay = () => {
             </button>
         </form>
         <div className='flex h-2/4 min-w-full'>
-            <button onClick={downloadFile}>Download A file</button>
+            <button onClick={fetchFile}>Fetch a FILE from db</button>
         </div>
-        {/* {downloadLinks ? downloadLinks?.map((blob : Blob) => {
-        return (
-            <a href={URL.createObjectURL(blob)} download={"image3.pdf"}>
-                Download image 3 here!
-            </a>
-        )
-    }): <></>} */}
-    {
-        imageFiles ? imageFiles.map((file: File) => {
-            return (
-                <a href={URL.createObjectURL(file)} download={file.name}>
-                {file.name}
-            </a>
-            )
-        }) : <></>
-    }
+        <div className='flex h-2/4 min-w-full'>
+            <button onClick={getUserFSFiles}>Get User Files</button>
+        </div>
+        <div className='flex h-2/4 min-w-full'>
+            <button onClick={getOrganizationFiles}>Get Org Files</button>
+        </div>
+        {downloadLinks ? downloadLinks?.map((fs : FSFile) => {
+            if (fs.file) {
+                return (
+                    <a href={URL.createObjectURL(fs.file)} download={`${fs.title}`}>
+                        {`Download ${fs.title} here!`}
+                    </a>
+                )
+            }
+    }): <></>}
     </div>
   )
 }

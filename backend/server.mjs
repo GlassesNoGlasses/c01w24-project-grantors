@@ -680,14 +680,13 @@ app.post("/review", express.json(), async (req, res) => {
 app.post('/:userID/:organization/uploadFiles', upload.any(), async (req, res) => {
 	try {
 		const userID = req.params.userID;
+		const organization = req.params.organization === "undefined" ? undefined : req.params.organization;
 		const userCollection = db.collection(COLLECTIONS.users);
 		const user = await userCollection.findOne({ _id: new ObjectId(userID) });
 
 		if (!user) {
 			return res.status(404).send("User not found.")
 		}
-
-		console.log(req.files);
 
 		const filteredFiles = req.files.map((file) => {
 			return {
@@ -696,24 +695,25 @@ app.post('/:userID/:organization/uploadFiles', upload.any(), async (req, res) =>
 				posted: new Date(),
 				path: '.' + file.path.substring(file.path.indexOf('/uploads')),
 				mimetype: file.mimetype,
-				organization: req.headers.organization,
+				organization: organization,
+				file: undefined,
 			}
 		})
 
 		const fileCollection = db.collection(COLLECTIONS.files);
 		const fileIDs = await fileCollection.insertMany(filteredFiles);
 
-		// console.log(fileIDs);
+		const insertedCount = fileIDs.insertedIds ? Object.keys(fileIDs.insertedIds).length : undefined
 
-		return res.status(200).json({response: "Files Uploaded"});
+		return res.status(200).json({response: "Files Uploaded", insertedCount: insertedCount});
 		
 	} catch (error) {
 		return res.status(500).json({ error: error.message });
 	}
 });
 
-app.get("/files/:fildID", express.json(), async (req, res) => {
-	const fileID = req.params.fildID;
+app.get("/files/downloadable/:fileID", express.json(), async (req, res) => {
+	const fileID = req.params.fileID;
 
 	try {
 		if (!fileID) {
@@ -739,3 +739,88 @@ app.get("/files/:fildID", express.json(), async (req, res) => {
 		return res.status(500).json({ error: error.message });
 	}
 });
+
+app.get("/files/:fileID", express.json(), async (req, res) => {
+	const fileID = req.params.fileID;
+
+	try {
+		if (!fileID) {
+			return res.status(400).send("Invalid File ID given.")
+		}
+
+		const fileCollection = db.collection(COLLECTIONS.files);
+
+		const file = await fileCollection.findOne({_id: new ObjectId(fileID)});
+
+		if (!file) {
+			return res.status(404).send("File not found.")
+		}
+
+		return res.status(200).json({response: dbIDToFrontendID(file)});
+	} catch (error) {
+		console.error(error);
+		return res.status(500).json({ error: error.message });
+	}
+});
+
+app.get("/files/user/:userID", express.json(), async (req, res) => {
+	const userID = req.params.userID;
+
+	try {
+		if (!userID) {
+			return res.status(400).send("Invalid user ID given.")
+		}
+
+		const userCollection = db.collection(COLLECTIONS.users);
+		const user = await userCollection.findOne({ _id: new ObjectId(userID) });
+
+		if (!user) {
+			return res.status(404).send("User not found.")
+		}
+
+		const fileCollection = db.collection(COLLECTIONS.files);
+
+		const files = await fileCollection.find({
+			accountID: userID 
+		}).toArray();
+
+		if (!files) {
+			return res.status(404).send("File not found.")
+		}
+
+		const filteredFiles = files.map((file) => {return dbIDToFrontendID(file)});
+
+		return res.status(200).json({response: filteredFiles});
+	} catch (error) {
+		console.error(error);
+		return res.status(500).json({ error: error.message });
+	}
+});
+
+app.get("/files/organization/:organization", express.json(), async (req, res) => {
+	const organization = req.params.organization;
+
+	try {
+		if (!organization) {
+			return res.status(400).send("Invalid organization given.")
+		}
+
+		const fileCollection = db.collection(COLLECTIONS.files);
+
+		const files = await fileCollection.find({
+			organization: organization,
+		}).toArray();
+
+		if (!files) {
+			return res.status(404).send("Files not found.")
+		}
+
+		const filteredFiles = files.map((file) => {return dbIDToFrontendID(file)});
+
+		return res.status(200).json({response: filteredFiles});
+	} catch (error) {
+		console.error(error);
+		return res.status(500).json({ error: error.message });
+	}
+});
+

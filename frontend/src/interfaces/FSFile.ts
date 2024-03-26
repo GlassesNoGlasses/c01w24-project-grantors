@@ -7,4 +7,5 @@ export interface FSFile {
     path: string;
     mimetype: string;
     organization?: string;
+    file: File | undefined,
 }
