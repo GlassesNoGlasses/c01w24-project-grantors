@@ -41,8 +41,8 @@ const Navbar = ({}: NavbarProps) => {
 			<Link className='p-2 px-5 m-2 bg-red-500 hover:bg-red-600 active:bg-red-700
 			text-white font-bold rounded-lg shadow-md transition-colors duration-150 ease-in
 			text-base'
-			to='/'>
-			<button onClick={LogOut}>Sign Out</button>
+			to='/' onClick={LogOut}>
+				Sign Out
 			</Link>
 		);
 	};
@@ -50,31 +50,52 @@ const Navbar = ({}: NavbarProps) => {
 	const AdminTopNaviation = (): JSX.Element =>  {
 		return (
 			<>
-				<Link className='text-base hover:underline' to="/createGrant">Create Grants</Link>
-				<Link className='text-base hover:underline' to="/about">About Us</Link>
-				<Link className='text-base hover:underline' to="/services">Services</Link>
-				<Link className='text-base hover:underline' to="/gallery">Gallery</Link>
-				<Link className='text-base hover:underline' to="/contact">Contact</Link>
-				<div className='flex flex-row gap-4 items-center'>
-					<p className='text-base'>{user?.username}</p>
-					<SignOutButton />
-				</div>
+				<div className='flex items-center'>	
+					<div className='hidden md:flex justify-end lg:text-[20px] text-[17px] xl:gap-20 xl:mr-16 
+					mr-6 lg:gap-10 gap-6'>
+						<Link className='text-base hover:underline' to="/createGrant">Create Grants</Link>
+						<a href='https://www.magnifyaccess.ai/about-us' 
+						className='hover:underline' target='blank'>About Us</a>
+						<a href='https://www.magnifyaccess.ai/additional-services' 
+						className='hover:underline' target='blank'>Services</a>
+						<a href='https://www.magnifyaccess.ai/contact-us' 
+						className='hover:underline' target='blank'>Contact</a>
+					</div>
+					
+					<div className='flex xl:gap-10 gap-4'>
+						<div className='flex flex-row gap-4 items-center'>
+							<p className='text-base font-bold'>{user?.username}</p>
+							<SignOutButton />
+						</div>
+					</div>
+				</ div>
 			</>
 		);
 	};
 
 	const ClientTopNavigation = (): JSX.Element =>  {
 		return (
-			<>
-				<Link className='text-base hover:underline' to="/">Grants</Link>
-				<Link className='text-base hover:underline' to="/about">About Us</Link>
-				<Link className='text-base hover:underline' to="/services">Services</Link>
-				<Link className='text-base hover:underline' to="/gallery">Gallery</Link>
-				<Link className='text-base hover:underline' to="/contact">Contact</Link>
-				<div className='flex flex-row gap-4 items-center'>
-					<p className='text-base'>{user?.username}</p>
-					<SignOutButton />
-				</div>
+			<>	
+				<div className='flex items-center'>	
+					<div className='hidden md:flex justify-end lg:text-[20px] text-[17px] xl:gap-20 xl:mr-16 
+					mr-6 lg:gap-10 gap-6'>
+						<Link className='text-base hover:underline' to="/grants">Grants</Link>
+						<a href='https://www.magnifyaccess.ai/about-us' 
+						className='hover:underline' target='blank'>About Us</a>
+						<a href='https://www.magnifyaccess.ai/additional-services' 
+						className='hover:underline' target='blank'>Services</a>
+						<a href='https://www.magnifyaccess.ai/contact-us' 
+						className='hover:underline' target='blank'>Contact</a>
+					</div>
+					
+					<div className='flex xl:gap-10 gap-4'>
+						<div className='flex flex-row gap-4 items-center'>
+							<p className='text-base font-bold'>{user?.username}</p>
+							<SignOutButton />
+						</div>
+					</div>
+				</ div>
+				
 			</>
 		);
 	};
@@ -87,7 +108,8 @@ const Navbar = ({}: NavbarProps) => {
 					<Link className='hover:underline' to="/files">Files</Link>
 					<a href='https://www.magnifyaccess.ai/about-us' 
 					className='hover:underline' target='blank'>About Us</a>
-					<Link className='hover:underline' to="/services">Services</Link>
+					<a href='https://www.magnifyaccess.ai/additional-services' 
+					className='hover:underline' target='blank'>Services</a>
 					<a href='https://www.magnifyaccess.ai/contact-us' 
 					className='hover:underline' target='blank'>Contact</a>
 				</div>

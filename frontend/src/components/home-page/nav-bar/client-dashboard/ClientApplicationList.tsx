@@ -2,19 +2,43 @@ import { useEffect, useState } from "react";
 import { useUserContext } from "../../../contexts/userContext";
 import { Application, ApplicationStatus } from "../../../../interfaces/Application";
 import { Column } from "../../../table/TableProps";
+import { useParams, useNavigate } from 'react-router-dom';
 import Table from "../../../table/Table";
 import { Grant } from "../../../../interfaces/Grant";
 import GrantsController from "../../../../controllers/GrantsController";
 import ApplicationsController from "../../../../controllers/ApplicationsController";
+import SearchFilter from "../../../filter/SearchFilter";
+import DropDownFilter from "../../../filter/DropDownFilter";
+import DateRangeFilter from "../../../filter/DateRangeFilter";
+import { Link } from "react-router-dom";
 
-type TableData = [Application, Grant | undefined];
+type TableData = [Application, Grant];
+
+const grantNotFound: Grant = {
+    id: '',
+    title: 'Grant not found.',
+    description: '',
+    posted: new Date(),
+    deadline: new Date(),
+    minAmount: 0,
+    maxAmount: 0,
+    organization: '',
+    category: '',
+    contact: '',
+    questions: [],
+    publish: false,
+}
 
 const ClientApplicationList = ({}) => {
     const { user, setUser } = useUserContext();
     const [ applications, setApplications ] = useState<Application[]>([]);
-    const [ grants, setGrants ] = useState<Grant[]>();
+    const [ grants, setGrants ] = useState<Grant[]>([]);
     const [ tableData, setTableData ] = useState<TableData[]>([]);
+    const [ filteredTabledata, setFilteredTableData ] = useState<TableData[]>([]);
+    const navigate = useNavigate();
 
+    const onApplicationRowClick = (data: TableData) => navigate(`/grants/${data[0].grantID}/apply?applicationID=${data[0].id}`);
+    
     const itemsPerPageOptions: number[] = [5,10,20,50,100];
     const columns: Column<TableData>[] = [
         {
@@ -69,20 +93,85 @@ const ClientApplicationList = ({}) => {
     useEffect(() => {
         // Table data is made of applications and grant pairs
         setTableData(applications.map((app: Application) => {
-            return [app, grants?.find(grant => grant.id === app.grantID)];
+            return [app, grants.find(grant => grant.id === app.grantID) ?? grantNotFound];
         }));
 
     }, [applications, grants]);
 
+    useEffect(() => {
+        setFilteredTableData(tableData);
+    }, [tableData]);
+
     return (
-        <div className="flex flex-col h-full items-start justify-start px-5 bg-grantor-green">
-            <span className="text-2xl pl-2">My Applications</span>
-            <Table items={tableData}
-                   columns={columns}
-                   itemsPerPageOptions={itemsPerPageOptions}
-                   defaultIPP={10}
-                   defaultSort={columns[1]}
-            />
+        <div className="pt-28 p-4">
+            <div className="flex flex-col h-full items-start justify-start p-6 bg-primary
+                rounded-2xl border-4 border-white shadow-2xl shadow-black">
+                <span className="text-2xl text-white mb-4">My Applications</span>
+                    {applications.length > 0 ? 
+                        <Table items={tableData}
+                    columns={columns}
+                    itemsPerPageOptions={itemsPerPageOptions}
+                    defaultIPP={10}
+                    defaultSort={columns[1]}
+                    onRowClick={onApplicationRowClick}
+                    /> :
+                    <div className="text-white flex flex-row mt-2">
+                        <h1>You Have No Applications</h1>
+                        <p className="text-white">, Apply To Grants &nbsp;
+                            <Link to='/grants' className="text-[#0bb4d6] underline hover:text-black">here</Link> !
+                        </p>
+                    </div>
+                }
+            </div>
+        </div>
+    );
+};
+
+const TableFilter = ({ tableData, setTableData }: {
+        tableData: TableData[],
+        setTableData: (tableData: TableData[]) => void,
+    }) => {
+    const [ grantTitle, setGrantTitle ] = useState<string>("");
+    const [ deadline, setDeadline ] = useState<(Date | null)[]>([]);
+    const [ status, setStatus ] = useState<ApplicationStatus | undefined>(undefined);
+
+    const statusDropDownOptions = Object.values(ApplicationStatus);
+
+    useEffect(() => {
+        setTableData(tableData.filter(row => {
+            if (grantTitle && !row[1].title.toLowerCase().includes(grantTitle.toLowerCase()))
+                return false;
+            if (status && row[0].status !== status)
+                return false;
+            if (deadline[0] !== null && row[1].deadline < deadline[0])
+                return false;
+            if (deadline[1] !== null&& row[1].deadline > deadline[1])
+                return false;
+
+            return true;
+        }));
+
+    }, [grantTitle, deadline, status]);
+
+    const onStatusFilterChange = (status: string) => {
+        if (Object.values(ApplicationStatus).includes(status as ApplicationStatus)) {
+            setStatus(status as ApplicationStatus);
+        } else {
+            setStatus(undefined);
+        }
+    };
+
+    const onDeadlineFilterChange = (dateRange: (Date | null)[]) => {
+        setDeadline(dateRange);
+    };
+
+    return (
+        <div className="flex flex-col gap-1 lg:w-1/3">
+            <h1 className="text-lg text-white">Application Filter</h1>
+            <SearchFilter className="text-white" label="Grant Title" setFilter={setGrantTitle}/>
+            <DropDownFilter className="text-white" label="Applicant Status" options={statusDropDownOptions} 
+                identity="Status" setFilter={onStatusFilterChange}/>
+            <DateRangeFilter className="text-white" label="Application Deadline" rangeStartLabel="Due After" rangeEndLabel="Due Before" setFilter={onDeadlineFilterChange} />
         </div>
     );
 };

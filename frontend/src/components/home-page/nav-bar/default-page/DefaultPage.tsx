@@ -15,7 +15,7 @@ const DefaultPage = () => {
 			<Link className='p-2 px-5 m-2 bg-secondary hover:bg-primary active:bg-black
 			text-white font-bold rounded-lg shadow-md transition-colors duration-150 ease-in
 			text-lg'
-			to={to}>
+			to={to} target={`${to.includes('magnify') ? '_blank' : '_self'}`}>
 				{content}
 			</Link>
 		);
@@ -75,7 +75,7 @@ const DefaultPage = () => {
 							Whether you're a grant seeker or a grant provider, Grantors offers unmatched convenience, accessibility, and efficiency at every step of the journey. Join us today and experience the difference of a truly inclusive and empowering grant platform.
 						</p>
 						<div className='text-base flex justify-center'>
-							<ActionButton content="Discover Our Services" to='/services'/>
+							<ActionButton content="Discover Our Services" to='https://www.magnifyaccess.ai/additional-services'/>
 						</div>
 					</div>
 					<div className='flex flex-col gap-8 m-2 p-6 rounded-2xl text-center border-4 border-primary

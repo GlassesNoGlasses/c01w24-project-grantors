@@ -1,6 +1,6 @@
 import { SERVER_PORT } from "../constants/ServerConstants";
 import { ApplicationReview } from "../interfaces/ApplicationReview";
-import { CreateObjectResponse } from "../interfaces/ServerResponse";
+import { CreateObjectResponse, GetReviewResponse } from "../interfaces/ServerResponse";
 import { User } from "../interfaces/User";
 
 export default class ReviewController {
@@ -26,4 +26,24 @@ export default class ReviewController {
             return false;
         }
     };
+
+    static async fetchReview(applicationID: string, user: User): Promise<ApplicationReview | undefined> {
+        try {
+            const res = await fetch(`http://localhost:${SERVER_PORT}/review/${applicationID}`, {
+                method: 'GET',
+                headers: {
+                    'Authorization': `Bearer ${user.authToken}`
+                }
+            });
+
+            return await res.json().then((data: GetReviewResponse) => {
+                if (data.response) {
+                    return data.response;
+                }
+                console.error("Server error fetching review:", data.error);
+            });
+        } catch (error) {
+            console.error("Error fetching review", error);
+        }
+    }
 };
