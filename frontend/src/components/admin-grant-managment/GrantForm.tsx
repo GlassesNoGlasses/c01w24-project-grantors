@@ -274,7 +274,7 @@ const GrantForm: React.FC<GrantFormProps> = ({ type }) => {
                                     <label htmlFor={`question-${question.id}`} className="block text-gray-700 font-semibold max-w-[80%]">
                                         {question.question}
                                     </label>
-                                    <button type='button'className='text-[1rem] p-2 bg-red-500 text-white pl-5 pr-5 rounded-lg hover:bg-red-600' 
+                                    <button type='button'className='text-[1rem] p-2 bg-min-500 text-white pl-5 pr-5 rounded-lg hover:bg-red-600' 
                                         onClick={() =>{ handleRemoveQuestion(question.id)} }>Remove</button>
                                 </div>
                             ))}

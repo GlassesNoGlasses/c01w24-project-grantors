@@ -92,7 +92,7 @@ app.post('/login', express.json(), async (req, res) => {
 
 		return res.status(200).send({ accountID: user._id, username: user.username, 
 		email: user.email, firstName: user.firstName, lastName: user.lastName,
-		isAdmin: user.isAdmin, organization: user.organization, authToken: token });
+		isAdmin: user.isAdmin, organization: user.organization, authToken: token, preferences: user.preferences });
 
 	} catch (err) {
 		console.error(err)
@@ -130,6 +130,10 @@ app.post("/signup", express.json(), async (req, res) => {
 			lastName: lastName,
 			isAdmin: isAdmin,
 			organization: organization,
+			preferences: {
+				hc: false,
+				sbg: false
+			}
 		});
 
 		// Returning JSON Web Token
@@ -178,6 +182,7 @@ app.get('/user', express.json(), async (req, res) => {
 				lastName: user.lastName,
 				isAdmin: user.isAdmin,
 				organization: user.organization,
+				preferences: user.preferences,
 				authToken: req.headers.authorization.split(" ")[1]
 			} 
 		});
@@ -674,4 +679,26 @@ app.get("/review/:applicationID", express.json(), async (req, res) => {
 		console.error(error);
 		res.status(500).json({ error: error.message });
 	}
+});
+
+app.put('/users/:userID/preferences', express.json(), async (req, res) => {
+    try {
+        const userId = req.params.userID;
+        const { preferences } = req.body;
+
+        const userCollection = db.collection(COLLECTIONS.users);
+        const result = await userCollection.updateOne(
+            { _id: new ObjectId(userId) },
+            { $set: { preferences: preferences } }
+        );
+
+        if (result.modifiedCount === 1) {
+            res.status(201).json({ message: 'Preferences updated successfully.' });
+        } else {
+            res.status(404).json({ message: 'User not found or preferences were not updated.' });
+        }
+    } catch (error) {
+        console.error('Error updating user preferences:', error);
+        res.status(500).json({ message: 'An error occurred while updating user preferences.' });
+    }
 });
