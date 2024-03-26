@@ -27,6 +27,7 @@ const GrantForm: React.FC<GrantFormProps> = ({ type }) => {
         category: '',
         contact: '',
         questions: [],
+        milestones: [],
         publish: false,
     };
 

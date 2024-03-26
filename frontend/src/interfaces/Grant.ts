@@ -4,6 +4,15 @@ export interface GrantQuestion {
     answer: string | null;
 }
 
+export interface GrantMilstone {
+    id: number;
+    title: string;
+    description: string;
+    dueDate: Date;
+    completed: boolean;
+    evidence: string;
+}
+
 export interface Grant {
     id: string;
     title: string;
@@ -16,5 +25,6 @@ export interface Grant {
     category: string;
     contact: string;
     questions: GrantQuestion[];
+    milestones: GrantMilstone[];
     publish: boolean;
 }
