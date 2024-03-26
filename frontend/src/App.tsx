@@ -14,7 +14,9 @@ import SavedGrants from "./components/saved-grants/SavedGrants";
 import GrantApply from "./components/grant-apply/GrantApply";
 import ApplicationReview from "./components/applications/admin/ApplicationReview";
 import DefaultPage from "./components/home-page/nav-bar/default-page/DefaultPage";
+import ApplicationView from "./components/home-page/nav-bar/client-dashboard/ApplicationView"
 import NotFoundPage from "./components/not-found-page/NotFoundPage";
+import SubmittedView from "./components/home-page/nav-bar/client-dashboard/SubmittedApplicationView"
 import Settings from "./components/settings-page/Settings";
 import React, { useEffect } from 'react';
 import Background from "./components/background/Background";
@@ -71,6 +73,8 @@ function App() {
 							<Route path="applications" element={<ClientApplicationList />} />
 							<Route path="grants/:grantID/apply" element={<GrantApply />} /> 
 							<Route path="application/:applicationID/review" element={<ApplicationReview />} />
+							<Route path="applications/:applicationID" element={<ApplicationView />} />
+							<Route path="applications/submitted/:applicationID" element={<SubmittedView/>} />
 							<Route path="settings" element={<Settings />} />
 							<Route path="*" element={<NotFoundPage />} />
 						</Route>
