@@ -27,13 +27,13 @@ function App() {
 
 	useEffect(() => {
         const handleKeyDown = (event: KeyboardEvent) => {
-            if ((event.altKey || event.metaKey) && event.key === 'h' || event.key === 'H') {
+            if ((event.altKey || event.metaKey) && event.key === 'h') {
                 window.location.href = '/'; 
             }
-			if ((event.altKey || event.metaKey) && event.key === 'g' || event.key === 'G') {
+			if ((event.altKey || event.metaKey) && event.key === 'g') {
                 window.location.href = '/grants'; 
             }
-			if ((event.altKey || event.metaKey) && event.key === 'i' || event.key === 'I') {
+			if ((event.altKey || event.metaKey) && event.key === 'i') {
                 window.location.href = '/applications'; 
             }
         };
