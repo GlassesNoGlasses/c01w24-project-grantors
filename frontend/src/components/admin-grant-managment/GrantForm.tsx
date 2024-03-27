@@ -326,16 +326,21 @@ const GrantForm: React.FC<GrantFormProps> = ({ type }) => {
                                         <button type='button'className='text-[1rem] p-2 bg-red-500 text-white pl-5 pr-5 rounded-lg hover:bg-red-600'
                                             onClick={() =>{ handleRemoveQuestion(question.id)} }>Remove</button>
                                     </div>
-                                    <div className='flex flex-row w-full gap-3 pl-4'>
+                                    <div className='flex flex-row w-full gap-3'>
                                         {
-                                            question.options.map((option, index) => (
-                                                <div key={index} className='flex flex-row items-center gap-1'>
-                                                    <input type='radio' name={`question-${question.id}`} value={option} />
-                                                    <label htmlFor={`question-${question.id}`} className="block text-gray-700 font-semibold">
-                                                        {option}
-                                                    </label>
-                                                </div>
-                                            ))
+                                            question.type == GrantQuestionType.CHECKBOX ?
+                                                question.options.map((option, index) => (
+                                                    <div key={index} className='flex flex-row items-center gap-1'>
+                                                        <input type='radio' name={`question-${question.id}`} value={option} />
+                                                        <label htmlFor={`question-${question.id}`} className="block text-gray-700 font-semibold">
+                                                            {option}
+                                                        </label>
+                                                    </div>
+                                                ))
+                                            : question.type == GrantQuestionType.MULTIPLE_CHOICE ?
+                                                <DropDown options={question.options} identity="Select Option"/>
+                                            :
+                                                <></>
                                         }
                                     </div>
                                 </div>
