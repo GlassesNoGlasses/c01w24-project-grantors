@@ -2,7 +2,7 @@ import React from 'react'
 import { useState, useEffect} from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useUserContext } from '../contexts/userContext';
-import { Grant, GrantQuestion } from '../../interfaces/Grant' 
+import { Grant, GrantQuestion, GrantQuestionType } from '../../interfaces/Grant' 
 import { GrantFormProps, GrantFormType } from './GrantFormProps';
 import GrantsController from '../../controllers/GrantsController'
 import DropDown from '../displays/DropDown/DropDown';
@@ -23,17 +23,26 @@ const initialGrantState: Grant = {
     publish: false,
 };
 
+const initalNewQuestion: GrantQuestion = {
+    id: -1,
+    question: '',
+    answer: '',
+    type: GrantQuestionType.NULL,
+    options: [],
+}
+
 const GrantForm: React.FC<GrantFormProps> = ({ type }) => {
     const {user} = useUserContext();
     // state variables
-    const [question, setQuestion] = useState<string>('');
-    const [newQuestionType, setNewQuestionType] = useState<string>("Question Type");
+    const [newQuestion, setNewQuestion] = useState<GrantQuestion>(initalNewQuestion);
     const [feedback, setFeedback] = useState("");
     const [unauthorized, setUnauthorized] = useState(false);
     const navigate = useNavigate()
-    const questionTypes = ["Text", "Date", "Yes/No", "Multiple Choice"];
+    
     const grantID = useParams()?.grantID ?? '';
     const [grant, setGrant] = useState<Grant>(initialGrantState);
+
+    const questionTypes = Object.values(GrantQuestionType);
 
     // retrieve the grant if in edit mode only when mounting
     useEffect(() => {
@@ -79,20 +88,26 @@ const GrantForm: React.FC<GrantFormProps> = ({ type }) => {
     
     // handler for when a question is added in the form
     const handleQuestionSubmit = () => {
-        if (question == '') return;
+        if (newQuestion.question == '') return;
 
         let max = -1
 
-        grant.questions.forEach((q) => {
-            max = q['id'] > max ? q['id'] : max
+        grant.questions.forEach((question: GrantQuestion) => {
+            max = question.id > max ? question.id : max
         });
 
-        const addQuestion = (prev: GrantQuestion[], newQuesion: string): GrantQuestion[] => {
-            return [...prev, {id: max+1, question: newQuesion, answer: null}]
-        };
+        let questionOptionsCleaned = newQuestion.options.filter((option) => option != '');
+        if (newQuestion.type == GrantQuestionType.MULTIPLE_CHOICE ||
+            newQuestion.type == GrantQuestionType.CHECKBOX) {
+            if (questionOptionsCleaned.length < 2) {
+                setFeedback('At least two options are required for multiple choice or checkbox questions');
+                return;
+            }
+        }
 
-        setGrant({ ...grant, questions: addQuestion(grant.questions, question)});
-        setQuestion('');
+        setGrant({ ...grant, questions: [...grant.questions, {...newQuestion, id: max+1, options: questionOptionsCleaned}]});
+        // Keep the type for the next question
+        setNewQuestion({...initalNewQuestion, type: newQuestion.type});
     };
 
     // function to save grant when publish==false or publish grant otherwise
@@ -131,7 +146,8 @@ const GrantForm: React.FC<GrantFormProps> = ({ type }) => {
     // when question input changes, update the question state
     const handleQuestionChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
         const { value } = e.target;
-        setQuestion(value)
+
+        setNewQuestion({...newQuestion, question: value});
     };
 
     // remove a question by filtering it out
@@ -160,6 +176,24 @@ const GrantForm: React.FC<GrantFormProps> = ({ type }) => {
             saveGrant(true)
         }
     };
+
+    const handleQuestionTypeChange = (selected: string) => {
+        setNewQuestion({
+            ...newQuestion, 
+            type: selected as GrantQuestionType,
+            options: [],
+        });
+    };
+
+    // handle when a multiple choice answer is changed
+    const handleMCAnswerChange = (index: number, value: string) => {
+        if (newQuestion.options) {
+            const newOptions = newQuestion.options.map((option, i) => {
+                return i == index ? value : option
+            });
+            setNewQuestion({...newQuestion, options: newOptions});
+        }
+    }
 
     // formatter for dates
     const formatDateToYYYYMMDD = (date: Date) => {
@@ -248,23 +282,35 @@ const GrantForm: React.FC<GrantFormProps> = ({ type }) => {
                     <div className='mt-6'>
                         <label htmlFor="question" className="block text-gray-700 font-semibold mb-2">Add a Question for Applicants</label>
 
-                        <div className='flex items-center gap-4'>
-                            {
-                                newQuestionType == "DropDown" ? 
-                                <input type="text" name="question" value={question} onChange={handleQuestionChange}
-                                    className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-secondary focus:border-transparent" />
-                                : newQuestionType == "Multiple Choice" ? 
-                                <input type="text" name="question" value={question} onChange={handleQuestionChange}
-                                    className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-secondary focus:border-transparent" />
+                        <div className="flex flex-col items-start">
+                            <div className='flex flex-row items-center gap-4 w-full'>
+                                {
+                                    newQuestion.type != GrantQuestionType.NULL ?
+                                    <>
+                                    <input type="text" name="question" value={newQuestion.question} onChange={handleQuestionChange}
+                                        className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-secondary focus:border-transparent" />
+                                    <button type='button' className='py-2 bg-green-600 text-white pl-5 pr-5 rounded-lg hover:bg-green-800' onClick={handleQuestionSubmit}>add</button>
+                                    </>
+                                    : <></>
+                                }
+                                <DropDown options={questionTypes} identity="Question Type" selectCallback={handleQuestionTypeChange}/>
+                            </div>
+                            { // special question options
+                                newQuestion.type == GrantQuestionType.MULTIPLE_CHOICE ||
+                                newQuestion.type == GrantQuestionType.CHECKBOX ?
+                                <div className="flex flex-col gap-2">
+                                    <span className="block text-gray-700 font-semibold">Question Options</span>
+                                    {
+                                        newQuestion.options.map((option, index) => (
+                                            <input key={index} type="text" name={`answer-option-${index}`} value={option} onChange={(e) => handleMCAnswerChange(index, e.target.value)}
+                                                className="w-1/2 px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-secondary focus:border-transparent" />
+                                        ))
+                                    }
+                                    <button type='button' onClick={() => setNewQuestion({...newQuestion, options: [...newQuestion.options, '']})} className='py-2 bg-green-600 text-white pl-5 pr-5 rounded-lg hover:bg-green-800'>Add Answer Option</button>
+                                </div>
                                 :
-                                <input type="text" name="question" value={question} onChange={handleQuestionChange}
-                                    className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-secondary focus:border-transparent" />
+                                <></>
                             }
-                            {
-                                newQuestionType != "Question Type" ? <button type='button' className='py-2 bg-green-600 text-white pl-5 pr-5 rounded-lg hover:bg-green-800' onClick={handleQuestionSubmit}>add</button>
-                                : <></>
-                            }
-                            <DropDown options={questionTypes} identity="Question Type" selectCallback={setNewQuestionType}/>
                         </div>
                     </div>
 
@@ -272,12 +318,26 @@ const GrantForm: React.FC<GrantFormProps> = ({ type }) => {
                         <div className='mt-6'>
                             <h3 className="text-lg font-semibold text-gray-800 mb-4">Custom Questions</h3>
                             {grant.questions.map((question) => (
-                                <div key={question.id} className="mb-4 flex justify-between p-2 border-gray-300 border items-center rounded-lg">
-                                    <label htmlFor={`question-${question.id}`} className="block text-gray-700 font-semibold max-w-[80%]">
-                                        {question.question}
-                                    </label>
-                                    <button type='button'className='text-[1rem] p-2 bg-red-500 text-white pl-5 pr-5 rounded-lg hover:bg-red-600' 
-                                        onClick={() =>{ handleRemoveQuestion(question.id)} }>Remove</button>
+                                <div key={question.id} className="mb-4 flex flex-col justify-between p-2 border-gray-300 border items-center rounded-lg">
+                                    <div className="flex flex-row justify-between w-full items-center">
+                                        <label htmlFor={`question-${question.id}`} className="block text-gray-700 font-semibold max-w-[80%]">
+                                            {question.question}
+                                        </label>
+                                        <button type='button'className='text-[1rem] p-2 bg-red-500 text-white pl-5 pr-5 rounded-lg hover:bg-red-600'
+                                            onClick={() =>{ handleRemoveQuestion(question.id)} }>Remove</button>
+                                    </div>
+                                    <div className='flex flex-row w-full gap-3 pl-4'>
+                                        {
+                                            question.options.map((option, index) => (
+                                                <div key={index} className='flex flex-row items-center gap-1'>
+                                                    <input type='radio' name={`question-${question.id}`} value={option} />
+                                                    <label htmlFor={`question-${question.id}`} className="block text-gray-700 font-semibold">
+                                                        {option}
+                                                    </label>
+                                                </div>
+                                            ))
+                                        }
+                                    </div>
                                 </div>
                             ))}
                         </div>
