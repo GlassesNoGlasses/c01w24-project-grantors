@@ -1,6 +1,7 @@
 import { useUserContext } from '../../../contexts/userContext';
 import ButtonIcon from '../../../displays/ButtonIcon/ButtonIcon';
-import { Cog6ToothIcon, ArrowRightStartOnRectangleIcon, UserIcon, StarIcon, ListBulletIcon} from '@heroicons/react/24/solid';
+import { Cog6ToothIcon, ArrowRightStartOnRectangleIcon, DocumentMagnifyingGlassIcon, StarIcon, 
+	ListBulletIcon, TrophyIcon, ChartBarIcon} from '@heroicons/react/24/solid';
 import search from '../../../../images/search.png'
 import ApplicationIcon from '../../../displays/ApplicationIcon/ApplicationIcon';
 import { Link } from 'react-router-dom';
@@ -17,29 +18,38 @@ const ClientDashboard = ({}: ClientDashboardProps) => {
 	}
 
 	return (
-		<div className="dashboard-container bg-grantor-green w-full h-full">
-			<div className="welcome-message underline px-10 bold text-white text-6xl">Welcome{user ? ", " + user.username + "!" : ""}</div>
-			<div className="client-butons flex justify-around items-center p-10">
-			<Link to="/saved">
-				<ButtonIcon heroicon={<StarIcon />} label="Saved Grants"/>
-			</Link>
-			<ButtonIcon heroicon={<UserIcon />} label="Account"/>
-			<Link to="/stats">
-			<ButtonIcon heroicon={<Cog6ToothIcon className=""/>} label="Stats"/>
-			</Link>
-			<Link to="/">
-				<ButtonIcon heroicon={<ArrowRightStartOnRectangleIcon />} label="Log out" callback={logout}/>
-			</Link>
+		<div className="dashboard-container py-20 w-full h-full">
+
+			<div className='bg-white pb-8'>
+				<h2 className='text-6xl text-secondary pl-10 w-fit flex items-center flex-col'>
+					Welcome, {user?.username}!
+					<div className='bg-primary h-[8px] -mt-4 w-[105%]'/>
+				</h2>
 			</div>
-			<div className="application-buttons flex justify-around items-center h-2/5">
-			<Link to="/grants">
-				<ApplicationIcon
-				heroicon={<ListBulletIcon className="h-40 w-40"/>}
-				label="View Available Grants" />
-			</Link>
-			<Link to="/applications">
-				<ApplicationIcon imageSrc={search} label="My Applications" />
-			</Link>
+
+			<div className="client-butons flex justify-evenly items-center py-10">
+				<Link to="/saved">
+					<ButtonIcon heroicon={<StarIcon />} label="Saved Grants" text={user?.preferences.hc ? 'text-white' : 'text-black'}/>
+				</Link>
+				<ButtonIcon heroicon={<TrophyIcon />} label="Milestones" text={user?.preferences.hc ? 'text-white' : 'text-black'}/>
+				<ButtonIcon heroicon={<ChartBarIcon />} label="Statistics" text={user?.preferences.hc ? 'text-white' : 'text-black'}/>
+				<Link to='/settings'>
+					<ButtonIcon heroicon={<Cog6ToothIcon/>} label={"Settings"} text={user?.preferences.hc ? 'text-white' : 'text-black'}/>
+				</Link>
+				<Link to="/">
+					<ButtonIcon heroicon={<ArrowRightStartOnRectangleIcon />} label="Log out" callback={logout} text={user?.preferences.hc ? 'text-white' : 'text-black'}/>
+				</Link>
+			</div>
+			
+			<div className="application-buttons flex justify-evenly items-center h-1/4 pt-[5vh]">
+				<Link to="/grants">
+					<ApplicationIcon
+					heroicon={<ListBulletIcon className="h-40 w-40"/>}
+					label="View Available Grants" />
+				</Link>
+				<Link to="/applications">
+					<ApplicationIcon heroicon={<DocumentMagnifyingGlassIcon className="h-40 w-40"/>} label="My Applications" />
+				</Link>
 			</div>
 		</div>
 	);

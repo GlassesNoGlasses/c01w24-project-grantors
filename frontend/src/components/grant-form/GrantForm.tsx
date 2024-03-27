@@ -1,89 +1,104 @@
-import React, { useState } from 'react';
-import { useNavigate } from "react-router-dom";
+import React, { useEffect, useState } from 'react';
 import { GrantFormProps } from "./GrantFormProps";
 import { GrantQuestion } from "../../interfaces/Grant";
-import { SERVER_PORT } from "../../constants/ServerConstants";
-import { ApplicationStatus } from '../../interfaces/Application';
+import { Application, ApplicationStatus } from '../../interfaces/Application';
+import ApplicationsController from '../../controllers/ApplicationsController';
+import { useNavigate } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 
 const GrantForm = ({ user, grant }: GrantFormProps) => {
     const navigate = useNavigate();
     const [questionList, setQuestionList] = useState<GrantQuestion[]>(grant.questions);
+    const location = useLocation();
+
+    const applicationIDParam = new URLSearchParams(location.search).get('applicationID');
 
     const setAnswer = (index: number, answer: string) => {
         const newQuestionList = [...questionList];
         newQuestionList[index].answer = answer;
         
         setQuestionList(newQuestionList);
-    }
+    };
 
-    const getAnswers = () => {
-        return questionList.map(function (question){
-            return question.answer;
+    useEffect(() => {
+        if (applicationIDParam) {
+            ApplicationsController.fetchApplication(applicationIDParam).then((application: Application | undefined) => {
+                if (application) {
+                    const newQuestionList = questionList.map((question: GrantQuestion) => {
+                        if (application.responses) {
+                            const response = application.responses.find((response) => response.question === question.question);
+                            if (response) {
+                                question.answer = response.answer;
+                            }
+                        }
+                        return question;
+                    });
+                    setQuestionList(newQuestionList);
+                }
+            });
+        }
+
+    }, [applicationIDParam]);
+
+    const handleSave = async () => {
+        if (!questionList) {
+            return 
+        }
+
+        ApplicationsController.submitApplication(user, {
+            id: '',
+            applicantID: user.accountID,
+            grantID: grant.id,
+            grantTitle: grant.title,
+            grantCategory: grant.category,
+            submitted: true,
+            submissionDate: new Date(),
+            status: ApplicationStatus.inProgress,
+            awarded: 0,
+            responses: questionList,
+        }).then(() => {
+            navigate('/');
         });
-    }
+    };
 
     const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
         
-        const name = (document.activeElement as HTMLButtonElement).getAttribute("name");
-        console.log(name)
-
-        if (name === "submit")
-        {
-            try {
-                await fetch(`http://localhost:${SERVER_PORT}/application`,
-                    {
-                        method: "POST",
-                        headers: {
-                            "Content-Type": "application/json"
-                        },
-                        
-                        body: JSON.stringify({
-                            userID: user.accountID,
-                            grantID: grant.id,
-                            grantTitle: grant.title,
-                            grantCategory: grant.category,
-                            submitted: true,
-                            submissionDate: new Date(),
-                            status: ApplicationStatus.submitted,
-                            awarded: 0,
-                            responses: getAnswers(),
-                        })
-                    })
-                .then(async (response) => {
-                    if (!response.ok) {
-                        console.log("Server failed:", response.status)
-                    }
-                    navigate("/grants");
-                })
-            } catch (error) {
-                console.log("Fetch function failed:", error)
-            } 
-        }
-        else if (name === "back")
-        {
-            navigate("/grants");
-        }
-        else if (name === "save")
-        {
-
-        }
-
         if (!questionList) {
             return 
         }
-        
-    }
+
+        ApplicationsController.submitApplication(user, {
+            id: '',
+            applicantID: user.accountID,
+            grantID: grant.id,
+            grantTitle: grant.title,
+            grantCategory: grant.category,
+            submitted: true,
+            submissionDate: new Date(),
+            status: ApplicationStatus.submitted,
+            awarded: 0,
+            responses: questionList,
+        }).then(() => {
+            navigate('/');
+        });
+    };
 
     return (
-        <div>
-            <form onSubmit={handleSubmit} id="grantform" className='m-5 ml-10 mr-10'>
+        <div className='pt-28 pb-20 flex justify-center'>
+            <form onSubmit={handleSubmit} id="grantform" className=' border-4 bg-white lg:w-[70vw] w-[90vw]
+            rounded-2xl border-primary shadow-2xl shadow-black p-6'>
+
+                <div className='text-center font-bold text-2xl'>
+                    Application Form
+                </div>
+
                 {questionList.map((questionElement, index) => (
                     <li key={index} className='list-none'>
                          <div className="flex flex-col gap-1 p-5 px-3">
                             <label className='text-base'>{questionElement.question}</label>
                             <textarea
-                                className='outline outline-2 p-1 pb-10 mt-3 ml-5 mr-5'
+                                className='outline outline-2 p-3 pb-10 mt-3 ml-5 mr-5 rounded-md'
                                 value={questionList[index].answer || ''}
                                 placeholder="Type your answer here."
                                 key={index}
@@ -92,24 +107,31 @@ const GrantForm = ({ user, grant }: GrantFormProps) => {
                         </div>
                     </li>
                 ))}
-                <div className="flex flex-row items-center justify-end">
-                    <button 
-                        className='p-2 px-5 m-7 mr-1 bg-red-500 hover:bg-red-600 active:bg-red-700
-                        text-white font-bold rounded-lg shadow-md transition-colors duration-150 ease-in
-                        text-lg' 
-                        type='button' 
-                        name="back">
-                        Back
-                    </button>
+                <div className="flex flex-row items-center justify-between">
                     
-                    <button 
-                        className='p-2 px-5 m-7 mr-1 bg-green-500 hover:bg-green-600 active:bg-green-700
-                        text-white font-bold rounded-lg shadow-md transition-colors duration-150 ease-in
-                        text-lg' 
-                        type='button' 
-                        name="save">
-                        Save
-                    </button>
+                    <Link to='/applications'>
+                        <button 
+                            className='p-2 px-5 m-7 mr-1 bg-red-500 hover:bg-red-600 active:bg-red-700
+                            text-white font-bold rounded-lg shadow-md transition-colors duration-150 ease-in
+                            text-lg' 
+                            type='button' 
+                            name="back">
+                            Back
+                        </button>
+                    </Link>
+                    
+                    
+                    <div>
+                        <button 
+                            className='p-2 px-5 m-7 mr-1 bg-secondary hover:bg-[#0bb4d6]
+                            text-white font-bold rounded-lg shadow-md transition-colors duration-150 ease-in
+                            text-lg' 
+                            type='button' 
+                            name="save"
+                            onClick={handleSave}>
+                            Save
+                        </button>
+                    </div>
                     
                     <button 
                         className='p-2 px-5 m-7 mr-14 bg-green-500 hover:bg-green-600 active:bg-green-700

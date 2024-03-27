@@ -4,6 +4,7 @@
   "private": true,
   "dependencies": {
     "@heroicons/react": "^2.1.1",
+    "@syncfusion/ej2-react-buttons": "^25.1.35",
     "@testing-library/jest-dom": "^5.17.0",
     "@testing-library/react": "^13.4.0",
     "@testing-library/user-event": "^13.5.0",
@@ -13,12 +14,15 @@
     "@types/react-dom": "^18.2.18",
     "apexcharts": "^3.48.0",
     "heroicons-react": "^1.4.1",
+    "multer": "^1.4.5-lts.1",
     "react": "^18.2.0",
     "react-cookie": "^7.1.0",
     "react-dom": "^18.2.0",
+    "react-dropzone": "^14.2.3",
     "react-google-charts": "^4.0.1",
     "react-router-dom": "^6.22.2",
     "react-scripts": "5.0.1",
+    "react-toggle": "^4.1.3",
     "typescript": "^4.9.5",
     "web-vitals": "^2.1.4"
   },
@@ -47,6 +51,7 @@
     ]
   },
   "devDependencies": {
+    "@types/react-toggle": "^4.0.5",
     "tailwindcss": "^3.4.1"
   }
 }

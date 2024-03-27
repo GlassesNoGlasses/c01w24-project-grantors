@@ -44,16 +44,17 @@ export default class UserController {
         this.cookies.remove('user-token');
     }
 
-    static async signupUser(username: string, password: string, email: string, 
-            firstName: string, lastName: string, organization: string, isAdmin: boolean): Promise<Response | undefined> {
-    
+    static async signupUser(username: string, password: string, email: string, firstName: string, 
+        lastName: string, organization: string, isAdmin: boolean, isSysAdmin: boolean): Promise<Response | undefined> {
+            
+        
         try {
             const res = await fetch(`http://localhost:${SERVER_PORT}/signup`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({ username, password, email, firstName, lastName, organization, isAdmin }),
+                body: JSON.stringify({ username, password, email, firstName, lastName, organization, isAdmin, isSysAdmin }),
             });
 
             return res;
@@ -116,6 +117,28 @@ export default class UserController {
         } catch (error) {
             console.error("Error while fetching user", error);
             return []
+        }
+    }
+
+    static async updatePreference(userId: string, preferences: {}): Promise<Boolean> {
+        try {
+            const res = await fetch(`http://localhost:${SERVER_PORT}/users/${userId}/preferences`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(preferences)
+            });
+            
+            if (res.ok) {
+                return true
+            } else {
+                console.log('error')
+                return false
+            }
+        } catch (error) {
+            console.error("Error while updating preferences", error);
+            return false
         }
     }
 }

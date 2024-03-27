@@ -1,5 +1,7 @@
 import { Applicant } from "./Applicant";
 import { Application } from "./Application";
+import { FSFile } from "./FSFile";
+import { ApplicationReview } from "./ApplicationReview";
 import { Grant } from "./Grant";
 
 export interface ServerLoginResponse {
@@ -46,5 +48,25 @@ export interface GetApplicantResponse {
 
 export interface GetApplicantsResponse {
     response?: Applicant[],
+    error?: string,
+}
+
+export interface UploadFilesResponse {
+    response?: string,
+    insertedCount?: number,
+    error?: string,
+}
+
+export interface GetFSFileResponse {
+    response?: FSFile,
+    error?: string,
+}
+
+export interface GetFSFilesResponse {
+    response?: FSFile[],
+    error?: string,
+}
+export interface GetReviewResponse {
+    response?: ApplicationReview,
     error?: string,
 }
