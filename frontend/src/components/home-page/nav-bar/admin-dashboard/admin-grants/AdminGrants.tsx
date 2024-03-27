@@ -91,13 +91,6 @@ const AdminGrants = () => {
         }
     }, []);
 
-    useEffect(() => {
-        console.log("Changes Occured");
-        console.log(publishedGrants);
-        console.log(unpublishedGrants);
-        console.log(published);
-    }, [publishedGrants, unpublishedGrants, published]);
-
     const NoGrantsDisplay = (): JSX.Element => {
         const status = published ? 'published' : 'unpublished';
         return (
