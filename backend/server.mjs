@@ -511,6 +511,11 @@ app.post("/application", express.json(), async (req, res) => {
 			return res.status(500).json( {error: "Failed to update application."} );
 		}
 
+		// Update milestones to have real IDs
+		milestones.forEach((milestone) => {
+			milestone.id = new ObjectId();
+		});
+
 		const inserted = await applicationCollection.insertOne(
 			{
 				applicantID: applicantID,

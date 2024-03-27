@@ -82,7 +82,8 @@ const AdminMilestonesPage = () => {
     return (
         <div className="py-24 px-5 flex flex-col gap-10">
             <div className="flex flex-col gap-2">
-                {approvedApplications.map((application: Application) => (
+                <h1 className="text-3xl font-bold">Grants Awarded</h1>
+                {approvedApplications.length > 0 ? approvedApplications.map((application: Application) => (
                     <div key={application.id} className="flex flex-col gap-2 py-4 px-5 border-2 border-magnify-dark-blue rounded-md bg-white shadow-lg">
                         <div className="flex flex-row justify-between align-middle">
                             <h2 className="text-2xl font-bold">{application.grantTitle}</h2>
@@ -96,7 +97,8 @@ const AdminMilestonesPage = () => {
                             ))}
                         </div>
                     </div>
-                ))}
+                )) :
+                <p className="text-lg">There have been no grants awarded.</p>}
             </div>
         </div>
     );

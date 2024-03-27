@@ -5,7 +5,7 @@ export interface GrantQuestion {
 }
 
 export interface GrantMilstone {
-    id: number;
+    id: string;
     title: string;
     description: string;
     dueDate: Date;

@@ -62,7 +62,7 @@ const GrantForm: React.FC<GrantFormProps> = ({ type }) => {
     const [feedback, setFeedback] = useState("");
     const navigate = useNavigate();
     const [milestone, setMilestone] = useState<GrantMilstone>({
-        id: 0,
+        id: '0',
         title: '',
         description: '',
         dueDate: new Date(),
@@ -110,17 +110,17 @@ const GrantForm: React.FC<GrantFormProps> = ({ type }) => {
     const handleMilestoneSubmit = () => {
         if (milestone.title == '' || milestone.description == '') return;
 
-        const max = Math.max(0, ...grant.milestones.map(m => m.id));
+        const max = Math.max(0, ...grant.milestones.map(m => Number(m.id)));
 
         const addMilestone = (prev: GrantMilstone[], newMilestone: GrantMilstone): GrantMilstone[] => {
-            return [...prev, {id: max + 1, title: newMilestone.title, description: newMilestone.description, dueDate: newMilestone.dueDate, completed: false, evidence: ''}]
+            return [...prev, {id: String(max + 1), title: newMilestone.title, description: newMilestone.description, dueDate: newMilestone.dueDate, completed: false, evidence: ''}]
         };
 
         setGrant({ ...grant, milestones: addMilestone(grant.milestones, milestone)});
-        setMilestone({id: 0, title: '', description: '', dueDate: new Date(), completed: false, evidence: ''});
+        setMilestone({id: '0', title: '', description: '', dueDate: new Date(), completed: false, evidence: ''});
     }
 
-    const handleRemoveMilestone = (id: number) => {
+    const handleRemoveMilestone = (id: string) => {
         setGrant({ ...grant, milestones: grant.milestones.filter(m => m.id != id)});
     }
 
