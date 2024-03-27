@@ -9,6 +9,9 @@ import { useNavigate } from 'react-router-dom';
 import UserController from '../../controllers/UserController';
 import { useUserContext } from '../contexts/userContext';
 import { User } from '../../interfaces/User';
+import { returnStatement } from '@babel/types';
+
+const ACCESS_CODE = 'CSCC01'
 
 const SignUp: React.FC<SignUpProps> = () => {
 	const [firstName, setFirstName] = useState('');
@@ -17,7 +20,9 @@ const SignUp: React.FC<SignUpProps> = () => {
 	const [username, setUsername] = useState('');
 	const [password, setPassword] = useState('');
 	const [isAdmin, setIsAdmin] = useState(false);
+	const [isSysAdmin, setIsSysAdmin] = useState(false);
 	const [organization, setOrganization] = useState('');
+	const [code, setCode] = useState('')
 	const [feedback, setFeedback] = useState<string>("");
 	const [showModal, setShowModal] = useState<boolean>(false);
 
@@ -27,8 +32,13 @@ const SignUp: React.FC<SignUpProps> = () => {
 	const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
 		event.preventDefault();
 
+		if (isSysAdmin && code !== ACCESS_CODE) {
+			setFeedback("Invalid Access Code")
+			return;
+		}
+
 		const response = await UserController.signupUser(
-			username, password, email, firstName, lastName, organization, isAdmin);
+			username, password, email, firstName, lastName, organization, isAdmin, isSysAdmin);
 
 		if (!response) {
 			setFeedback(`Failed to sign up as ${username}.`);
@@ -159,14 +169,44 @@ const SignUp: React.FC<SignUpProps> = () => {
 						</div>
 						: null
 					}
-					<label className='flex flex-row gap-2 text-secondary text-sm ml-2'>
-						Sign up as Admin?
+					{ isSysAdmin ?
+						<div className="flex items-center">
+							<BuildingOfficeIcon className="mr-2 h-5 w-5 flex-shrink-0" />
+							<input
+							type="text"
+							id="organization"
+							placeholder="Enter Access Code"
+							value={code}
+							onChange={(e) => setCode(e.target.value)}
+							className="w-full px-3 py-2 mt-2 border border-gray-200 rounded-full focus:outline-none
+								focus:ring focus:ring-green-600 sm:px-4 sm:py-3"
+							style={{ boxShadow: 'inset -4px 4px 6px rgba(0, 0, 0, 0.1)'}}
+							required
+							/>
+						</div>
+						: <label className='flex flex-row gap-2 text-secondary text-sm ml-2'>
+						Sign up as Grantor?
 						<input
 							type="checkbox"
 							checked={isAdmin}
 							onChange={() => setIsAdmin(!isAdmin)}
 						/>
 					</label>
+					}
+					
+					{ !isAdmin ?
+						<label className='flex flex-row gap-2 text-secondary text-sm ml-2'>
+						Sign up as Admin?
+						<input
+							type="checkbox"
+							checked={isSysAdmin}
+							onChange={() => setIsSysAdmin(!isSysAdmin)}
+						/>
+						</label>
+						: null
+					}
+					
+					
 					<div className="flex justify-center">
 						<button
 							type="submit" 
@@ -176,7 +216,7 @@ const SignUp: React.FC<SignUpProps> = () => {
 					</div>
 				</form>
 				<div className='flex items-center justify-center'>
-					<span className='font-bold text-green'>{feedback}</span>
+					<span className='font-bold text-red-500'>{feedback}</span>
 				</div>
 			</div>
 		</div>

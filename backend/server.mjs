@@ -124,7 +124,8 @@ app.post('/login', express.json(), async (req, res) => {
 
 		return res.status(200).send({ accountID: user._id, username: user.username, 
 		email: user.email, firstName: user.firstName, lastName: user.lastName,
-		isAdmin: user.isAdmin, organization: user.organization, authToken: token, preferences: user.preferences });
+		isAdmin: user.isAdmin, organization: user.organization, authToken: token, 
+		preferences: user.preferences, isSysAdmin: user.isSysAdmin });
 
 	} catch (err) {
 		console.error(err)
@@ -134,7 +135,8 @@ app.post('/login', express.json(), async (req, res) => {
 
 app.post("/signup", express.json(), async (req, res) => {
 	try {
-		const { username, email, password, firstName, lastName, isAdmin, organization } = req.body;
+		const { username, email, password, firstName, lastName, isAdmin, organization, isSysAdmin } = req.body;
+		
 
 		// Basic body request check
 		if (!username || !password || !email) {
@@ -162,6 +164,7 @@ app.post("/signup", express.json(), async (req, res) => {
 			lastName: lastName,
 			isAdmin: isAdmin,
 			organization: organization,
+			isSysAdmin: isSysAdmin,
 			preferences: {
 				hc: false,
 				sbg: false

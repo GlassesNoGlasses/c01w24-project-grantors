@@ -59,9 +59,6 @@ function App() {
 							<Route index element={<Home />} />
 							<Route path="about" element={<DefaultPage />} />
 							<Route path="files" element={<TestFileDisplay />} />
-							<Route path="services" element={<Home />} />
-							<Route path="gallery" element={<Home />} />
-							<Route path="contact" element={<Home />} />
 							<Route path="login" element={<Login />} />
 							<Route path="signup" element={<SignUp />} />
 							<Route path="createGrant" element={<CreateGrant />} />

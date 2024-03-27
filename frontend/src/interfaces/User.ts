@@ -2,6 +2,7 @@
 export interface User {
     accountID: string,
     isAdmin: boolean,
+    isSysAdmin: boolean
     username: String | null,
     firstName: String | null,
     lastName: String | null,
