@@ -4,6 +4,7 @@ import { GrantMilstone } from "../../interfaces/Grant";
 import { Application, ApplicationStatus } from "../../interfaces/Application";
 import { useUserContext } from "../contexts/userContext";
 import ApplicationsController from "../../controllers/ApplicationsController";
+import UserController from "../../controllers/UserController";
 
 const AdminMilestonesPage = () => {
     const { user } = useUserContext();
@@ -79,26 +80,41 @@ const AdminMilestonesPage = () => {
         )
     }
 
+    const GrantItem = ({ application }: { application: Application }) => {
+        const [name, setName] = useState<string>("");
+
+        useEffect(() => {
+            UserController.fetchApplicant(application.applicantID).then((applicant) => {
+                if (!applicant) return;
+                setName(`${applicant.firstName} ${applicant.lastName}`);
+            });
+        }, [application]);
+
+        return (
+            <div key={application.id} className="flex flex-col gap-2 py-4 px-5 border-2 border-magnify-dark-blue rounded-md bg-white shadow-lg">
+                <div className="flex flex-row justify-between align-middle">
+                    <h2 className="text-2xl font-bold">{application.grantTitle}</h2>
+                    <p className="text-lg">Awarded ${application.awarded}</p>
+                </div>
+                <p className="text-base">For: {name}</p>
+                <h3 className="text-xl font-bold">Milestones</h3>
+                <div className="flex flex-col gap-2">
+                    {application.milestones.map((milestone) => (
+                        <MilestoneItem key={milestone.id} milestone={milestone} />
+                    ))}
+                </div>
+            </div>
+        )
+    }
+
     return (
         <div className="py-24 px-5 flex flex-col gap-10">
             <div className="flex flex-col gap-2">
                 <h1 className="text-3xl font-bold">Grants Awarded</h1>
-                {approvedApplications.length > 0 ? approvedApplications.map((application: Application) => (
-                    <div key={application.id} className="flex flex-col gap-2 py-4 px-5 border-2 border-magnify-dark-blue rounded-md bg-white shadow-lg">
-                        <div className="flex flex-row justify-between align-middle">
-                            <h2 className="text-2xl font-bold">{application.grantTitle}</h2>
-                            <p className="text-lg">Awarded ${application.awarded}</p>
-                        </div>
-                        <p className="text-base">For: {application.applicantID}</p>
-                        <h3 className="text-xl font-bold">Milestones</h3>
-                        <div className="flex flex-col gap-2">
-                            {application.milestones.map((milestone) => (
-                                <MilestoneItem key={milestone.id} milestone={milestone} />
-                            ))}
-                        </div>
-                    </div>
-                )) :
-                <p className="text-lg">There have been no grants awarded.</p>}
+                {approvedApplications.length > 0 ? 
+                    approvedApplications.map((application: Application) =>
+                        <GrantItem key={application.id} application={application} />) :
+                    <p className="text-lg">There have been no grants awarded.</p>}
             </div>
         </div>
     );
