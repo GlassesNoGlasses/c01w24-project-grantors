@@ -1,5 +1,5 @@
 import { NavbarProps } from './NavbarProps'
-import { Link, Outlet } from 'react-router-dom'
+import { Link, useLocation, Outlet } from 'react-router-dom'
 import logoImage from '../../images/logo.png'
 import MAlogoImage from '../../images/ma-logo.png'
 import { useUserContext } from '../contexts/userContext'
@@ -131,28 +131,47 @@ const Navbar = ({}: NavbarProps) => {
 		return user.isAdmin ? AdminTopNaviation() : ClientTopNavigation();
 	};
 
+	const Breadcrumbs = () => {
+		const location = useLocation();
+		const paths = location.pathname.split('/').filter(Boolean);
+	
+		return (
+			<div className="nav-breadcrumbs">
+				{paths.map((path, index) => (
+					<div key={path}>
+						<Link to={`/${paths.slice(0, index + 1).join('/')}`} className="breadcrumb-link">
+							{path.charAt(0).toUpperCase() + path.slice(1)}
+						</Link>
+						{index !== paths.length - 1 && <span className="breadcrumb-separator">{'>'}</span>}
+					</div>
+				))}
+			</div>
+		);
+	};
+
 	return (
-		<div>
-			<nav className='flex flex-col sm:flex-row justify-between items-center lg:pr-8 
-			border-b-2 border-black bg-white fixed top-0 w-full'>
-			
-				<div className='flex items-end'>
-					<Link to="/" className='nav-brand'>
-						<img src={logoImage} alt='grantors logo' 
-						className='lg:h-[60px] h-[40px] lg:w-[200px] w-[120px] mt-2 mb-2 ml-4'/>
-					</ Link>
-					<p className='mb-4 text-md font-bold ml-2'>By</p>
-					<a href="https://www.magnifyaccess.ai/" target='blank'>
-						<img src={MAlogoImage} alt='grantors logo' 
-						className='lg:h-[40px] lg:w-[81px] h-[32px] w-[64px] mt-2 mb-2 ml-1'/>
-					</a>
-				</ div>
-			
-				{SetTopNavigation()}
-			</nav>
-			<Outlet />
-		</div>
-	);
+        <div>
+            <nav className='flex flex-col sm:flex-row justify-between items-center lg:pr-8 
+            border-b-2 border-black bg-white fixed top-0 w-full'>
+
+                <div className='flex items-end'>
+                    <Link to="/" className='nav-brand'>
+                        <img src={logoImage} alt='grantors logo' 
+                        className='lg:h-[60px] h-[40px] lg:w-[200px] w-[120px] mt-2 mb-2 ml-4'/>
+                    </ Link>
+                    <p className='mb-4 text-md font-bold ml-2'>By</p>
+                    <a href="https://www.magnifyaccess.ai/" target='blank'>
+                        <img src={MAlogoImage} alt='grantors logo' 
+                        className='lg:h-[40px] lg:w-[81px] h-[32px] w-[64px] mt-2 mb-2 ml-1'/>
+                    </a>
+                    <Breadcrumbs />
+                </ div>
+
+                {SetTopNavigation()}
+            </nav>
+            <Outlet />
+        </div>
+    );
 };
 
 export default Navbar
