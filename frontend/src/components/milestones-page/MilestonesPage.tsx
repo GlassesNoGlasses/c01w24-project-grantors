@@ -5,7 +5,7 @@ import AdminMilestonesPage from "./AdminMilestones";
 const MilestonesPage = () => {
     const { user } = useUserContext();
 
-    return user ? <UserMilestonesPage /> : <AdminMilestonesPage />;
+    return !user?.isAdmin ? <UserMilestonesPage /> : <AdminMilestonesPage />;
 };
 
 export default MilestonesPage;

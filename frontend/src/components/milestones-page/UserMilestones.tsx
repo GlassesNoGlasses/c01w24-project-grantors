@@ -23,10 +23,10 @@ const UserMilestonesPage = () => {
     const userMilestones = approvedApplications.map((application: Application) => application.milestones).flat();
 
     const incompleteMilestones = userMilestones.filter((milestone) => !milestone.completed)
-                                               .sort((a, b) => a.dueDate.getTime() - b.dueDate.getTime());
+                                               .sort((a, b) => new Date(a.dueDate).getTime() - new Date(b.dueDate).getTime());
 
     const completedMilestones = userMilestones.filter((milestone) => milestone.completed)
-                                              .sort((a, b) => a.dueDate.getTime() - b.dueDate.getTime());
+                                              .sort((a, b) => new Date(a.dueDate).getTime() - new Date(b.dueDate).getTime());
     
     const handleMilestoneSubmit = (e: FormEvent<HTMLFormElement>, milestone: GrantMilstone) => {
         e.preventDefault();
@@ -64,7 +64,7 @@ const UserMilestonesPage = () => {
             <div className="flex flex-col gap-2 py-4 px-5 border-2 border-magnify-dark-blue rounded-md bg-magnify-light-blue">
                 <div className="flex flex-row justify-between align-middle">
                     <h3 className="text-lg font-bold">{milestone.title}</h3>
-                    {milestone.completed ? <Check className="h-5 w-5 text-green-500" /> : <X className="h-10 w-10 text-red-500" />}
+                    {milestone.completed ? <Check className="h-10 w-10 text-green-500" /> : <X className="h-10 w-10 text-red-500" />}
                 </div>
                 <p className="text-sm">Due: {new Date(milestone.dueDate).toDateString()}</p>
                 <p className="text-base">{milestone.description}</p>
@@ -89,24 +89,21 @@ const UserMilestonesPage = () => {
     }
 
     return (
-        <div className="py-24 px-5">
-            {incompleteMilestones.length > 0 && (
-                <div className="flex flex-col gap-2">
-                    <h2 className="text-2xl font-bold">Incomplete Milestones</h2>
-                    {incompleteMilestones.map((milestone) => (
-                        <MilestoneItem key={milestone.id} milestone={milestone} />
-                    ))}
-                </div>
-            )}
-
-            {completedMilestones.length > 0 && (
-                <div className="flex flex-col gap-2">
-                    <h2 className="text-2xl font-bold">Completed Milestones</h2>
-                    {completedMilestones.map((milestone) => (
-                        <MilestoneItem key={milestone.id} milestone={milestone} />
-                    ))}
-                </div>
-            )}
+        <div className="py-24 px-5 flex flex-col gap-10">
+            <div className="flex flex-col gap-2">
+                <h2 className="text-2xl font-bold">Incomplete Milestones</h2>
+                {incompleteMilestones.length > 0 ? incompleteMilestones.map((milestone) => (
+                    <MilestoneItem key={milestone.id} milestone={milestone} />
+                )) :
+                <p className="text-lg">There are no incomplete milestones.</p>}
+            </div>
+            <div className="flex flex-col gap-2">
+                <h2 className="text-2xl font-bold">Complete Milestones</h2>
+                {completedMilestones.length > 0 ? completedMilestones.map((milestone) => (
+                    <MilestoneItem key={milestone.id} milestone={milestone} />
+                )) :
+                <p className="text-lg">There are no complete milestones.</p>}
+            </div>
         </div>
     );
 };
