@@ -41,6 +41,21 @@ const GrantFound = ({ grant }: { grant: Grant }) => {
             </div>
 
             <p className="text-base">{grant.description}</p>
+            
+            <div className="flex flex-col gap-2">
+                <h2 className="text-xl">Milestones</h2>
+                <div className="flex flex-col gap-3">
+                    {grant.milestones.map((milestone, index) => (
+                        <div key={index}
+                        className='p-2 px-4 border-2 border-magnify-dark-blue rounded-md
+                                   flex flex-col gap-2 bg-magnify-light-blue'>
+                            <h4 className='text-xl'>{milestone.title}</h4>
+                            <p className='text-sm'>{`Due: ${new Date(milestone.dueDate).toDateString()}`}</p>
+                            <p className='text-base'>{milestone.description}</p>
+                        </div>
+                    ))}
+                </div>
+            </div>
         </div>
     );
 };
