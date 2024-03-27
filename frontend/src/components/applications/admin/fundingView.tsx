@@ -55,31 +55,36 @@ const ApplicationFunding = () => {
     };
 
     return (
-        <div className="container mx-auto p-4">
-            <h1 className="text-2xl font-semibold mb-4">Assign Funding Amount</h1>
-            {grant && (
+        <div className="py-28">
+            <div className="container mx-auto p-6 bg-white border-4 border-primary shadow-2xl
+                rounded-2xl shadow-black hover:border-black">
+                <h1 className="text-2xl font-bold mb-4">Assign Funding Amount</h1>
+                {grant && (
+                    <div className="mb-4">
+                        <p><span className="font-bold text-base">Grant Name:</span> &nbsp; {grant.title}</p>
+                        <p><span className="font-bold text-base">Funding Range:</span> &nbsp; $ {Number(grant.minAmount)} - {Number(grant.maxAmount)}</p>
+                    </div>
+                )}
                 <div className="mb-4">
-                    <p>Grant: {grant.title}</p>
-                    <p>Funding Range: {Number(grant.minAmount)} - {Number(grant.maxAmount)}</p>
+                    <label htmlFor="fundingAmount" className="block text-md font-semibold text-gray-700">Funding Amount</label>
+                    <input
+                        type="number"
+                        id="fundingAmount"
+                        name="fundingAmount"
+                        value={fundingAmount}
+                        onChange={(e) => setFundingAmount(e.target.value)}
+                        className="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-2
+                         border-secondary rounded-md p-2"
+                    />
                 </div>
-            )}
-            <div className="mb-4">
-                <label htmlFor="fundingAmount" className="block text-md font-medium text-gray-700">Funding Amount</label>
-                <input
-                    type="number"
-                    id="fundingAmount"
-                    name="fundingAmount"
-                    value={fundingAmount}
-                    onChange={(e) => setFundingAmount(e.target.value)}
-                    className="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
-                />
+                <button
+                    onClick={handleFundingSubmission}
+                    className="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm font-semibold rounded-md text-white
+                     bg-primary hover:bg-secondary focus:outline-none focus:ring-2 focus:ring-offset-2 text-base"
+                >
+                    Submit Funding Amount
+                </button>
             </div>
-            <button
-                onClick={handleFundingSubmission}
-                className="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
-            >
-                Submit Funding Amount
-            </button>
         </div>
     );
 };
