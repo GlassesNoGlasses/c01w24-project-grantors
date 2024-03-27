@@ -16,9 +16,9 @@ const DropDown = ({ options, identity, selectCallback }: DropDownProps) => {
     
 
     return (
-        <div className="flex flex-col items-center relative">
+        <div className="flex flex-col relative w-fit">
             <button type='button' className="dropdown-button flex flex-row gap-2 border-2 border-magnify-blue p-2 rounded-lg
-                bg-white text-black hover:bg-gray-400 transition ease-in-out duration-200" onClick={() => setIsOpen(!isOpen)}>
+                bg-white text-black hover:bg-gray-400 transition ease-in-out duration-200 whitespace-nowrap" onClick={() => setIsOpen(!isOpen)}>
                 {selectedItem}
                 <ChevronDownIcon className="h-5"/>
             </button>
