@@ -328,7 +328,7 @@ app.post("/grant", express.json(), async (req, res) => {
 	try {
 		// frontend guarantees that all these fields are provided so omit param check
 		const { title, description, deadline, posted, minAmount, maxAmount,
-			organization, category, contact, questions, publish } = req.body;
+			organization, category, contact, questions, milestones, publish } = req.body;
 
 		const grantCollection = db.collection(COLLECTIONS.grants);
 
@@ -343,6 +343,7 @@ app.post("/grant", express.json(), async (req, res) => {
 			category: category,
 			contact: contact,
 			questions: questions,
+			milestones: milestones,
 			publish: publish,
 		});
 
