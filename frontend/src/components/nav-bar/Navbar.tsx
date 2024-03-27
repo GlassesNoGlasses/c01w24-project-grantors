@@ -134,15 +134,23 @@ const Navbar = ({}: NavbarProps) => {
 	const Breadcrumbs = () => {
 		const location = useLocation();
 		const paths = location.pathname.split('/').filter(Boolean);
+		const breadcrumbs = [{ path: '/', label: 'Home' }];	// Makes `Home` always visible in breadcrumbs by initializing it in the array
+	
+		paths.forEach((path, index) => {
+			breadcrumbs.push({
+				path: `/${paths.slice(0, index + 1).join('/')}`,
+				label: path.charAt(0).toUpperCase() + path.slice(1)
+			});
+		});
 	
 		return (
 			<div className="nav-breadcrumbs">
-				{paths.map((path, index) => (
-					<div key={path}>
-						<Link to={`/${paths.slice(0, index + 1).join('/')}`} className="breadcrumb-link">
-							{path.charAt(0).toUpperCase() + path.slice(1)}
+				{breadcrumbs.map(({ path, label }, index) => (
+					<div key={index}>
+						<Link to={path} className="breadcrumb-link">
+							{label}
 						</Link>
-						{index !== paths.length - 1 && <span className="breadcrumb-separator">{'>'}</span>}
+						{index !== breadcrumbs.length - 1 && <span className="breadcrumb-separator">{' > '}</span>}
 					</div>
 				))}
 			</div>
