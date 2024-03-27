@@ -57,7 +57,7 @@ const GrantNotFound = () => {
 
 const ApplyButton = ({ grantID }: { grantID: string }) => {
     const { user } = useUserContext();
-    if (user && !user.isAdmin) {
+    if (user && !user.isAdmin && !user.isSysAdmin) {
         return (
             <Link
                 className='p-2 px-5 m-2 bg-secondary hover:bg-primary
