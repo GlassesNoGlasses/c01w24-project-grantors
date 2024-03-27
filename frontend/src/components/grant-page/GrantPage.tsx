@@ -2,6 +2,7 @@ import { Link, useParams } from "react-router-dom";
 import { GrantPageProps } from "./GrantPageProps";
 import { Grant } from "../../interfaces/Grant";
 import { useState, useEffect } from "react";
+import { useUserContext } from "../contexts/userContext";
 import GrantsController from "../../controllers/GrantsController";
 
 const GrantPage = ({}: GrantPageProps) => {
@@ -69,15 +70,22 @@ const GrantNotFound = () => {
     );
 };
 
-const ApplyButton = ({ grantID }: { grantID: String }) => {
-    return (
-        <Link className='p-2 px-5 m-2 bg-secondary hover:bg-primary
-          text-white font-bold rounded-lg shadow-md transition-colors duration-150 ease-in
-          text-lg'
-          to={`/grants/${grantID}/apply`}>
-          Apply Now
-        </Link>
-    );
+const ApplyButton = ({ grantID }: { grantID: string }) => {
+    const { user } = useUserContext();
+    if (user && !user.isAdmin) {
+        return (
+            <Link
+                className='p-2 px-5 m-2 bg-secondary hover:bg-primary
+                    text-white font-bold rounded-lg shadow-md transition-colors duration-150 ease-in
+                    text-lg'
+                to={`/grants/${grantID}/apply`}
+            >
+                Apply Now
+            </Link>
+        );
+    } else {
+        return null;
+    }
 };
 
 export default GrantPage;

@@ -21,6 +21,7 @@ import SubmittedView from "./components/home-page/nav-bar/client-dashboard/Submi
 import Settings from "./components/settings-page/Settings";
 import React, { useEffect } from 'react';
 import Background from "./components/background/Background";
+import FundingView from "./components/applications/admin/fundingView"
 import MilestonesPage from "./components/milestones-page/MilestonesPage";
 
 
@@ -73,11 +74,13 @@ function App() {
 							<Route path="applications" element={<ClientApplicationList />} />
 							<Route path="grants/:grantID/apply" element={<GrantApply />} /> 
 							<Route path="application/:applicationID/review" element={<ApplicationReview />} />
+							<Route path="applications/:applicationID/funding" element={<FundingView />} />
 							<Route path="applications/:applicationID" element={<ApplicationView />} />
 							<Route path="applications/submitted/:applicationID" element={<SubmittedView/>} />
 							<Route path="milestones" element={<MilestonesPage />} />
 							<Route path="settings" element={<Settings />} />
 							<Route path="*" element={<NotFoundPage />} />
+							
 						</Route>
 					</Routes>
 				</div>

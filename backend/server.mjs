@@ -882,3 +882,33 @@ app.put('/users/:userID/preferences', express.json(), async (req, res) => {
         res.status(500).json({ message: 'An error occurred while updating user preferences.' });
     }
 });
+
+app.put('/application/:applicationID/funding', express.json(), async (req, res) => {
+    const applicationID = req.params.applicationID;
+    const { awarded } = req.body;
+
+    if (awarded === undefined || typeof awarded !== 'number') {
+        return res.status(400).json({ error: "Invalid request: 'awarded' must be a valid number." });
+    }
+
+    try {
+        const applicationCollection = db.collection(COLLECTIONS.applications);
+        const result = await applicationCollection.updateOne(
+            { _id: new ObjectId(applicationID) },
+            { $set: { awarded: awarded } }
+        );
+
+        if (result.matchedCount === 0) {
+            return res.status(404).json({ error: "Application not found." });
+        }
+
+        if (result.modifiedCount === 0) {
+            return res.status(304).send(); // Not Modified
+        }
+
+        res.status(200).json({ message: "Application funding updated successfully." });
+    } catch (error) {
+        console.error("Error updating application funding:", error);
+        res.status(500).json({ error: "Internal server error." });
+    }
+});
