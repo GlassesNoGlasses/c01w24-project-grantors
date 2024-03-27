@@ -482,7 +482,8 @@ app.post("/application", express.json(), async (req, res) => {
 			submissionDate,
 			status,
 			awarded,
-			responses, } = req.body;
+			responses,
+			milestones } = req.body;
 
 		const applicationCollection = db.collection(COLLECTIONS.applications);
 		const existingApplication = await applicationCollection.findOne({
@@ -500,6 +501,7 @@ app.post("/application", express.json(), async (req, res) => {
 						status: status,
 						awarded: awarded,
 						responses: responses,
+						milestones: milestones,
 					}
 				});
 			if (update.modifiedCount === 1) {
@@ -520,6 +522,7 @@ app.post("/application", express.json(), async (req, res) => {
 				status: status,
 				awarded: awarded,
 				responses: responses,
+				milestones: milestones,
 			}
 		);
 
