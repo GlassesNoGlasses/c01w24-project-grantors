@@ -3,10 +3,35 @@ import { User, UserTypes } from '../../../interfaces/User';
 import UserController from '../../../controllers/UserController';
 import { Cookies } from 'react-cookie';
 import DropDownFilter from '../../filter/DropDownFilter';
+import { Link } from 'react-router-dom';
 
 
-const UserCard = () => {
+const UserCard = ({ user } : {user: User}) => {
+    return (<div className='flex justify-between p-6 w-[60vw] items-center rounded-xl
+            border-4 border-primary shadow-xl shadow-black bg-white text-base'>
+        <div className='flex flex-col justify-around'>
+            <h2>
+                <b>Account Type:</b> &nbsp; {user.isSysAdmin ? 'Admin' : (user.isAdmin ? 'Grantor' : 'Grantee')}
+            </h2>
+            {user.isAdmin && !user.isSysAdmin ? 
+            <h2><b>Organization:</b> &nbsp; {user.organization} </h2> : ''}
+            <h2><b>Username:</b> &nbsp; {user.username}</h2>
+            <h2><b>Email:</b> &nbsp; {user.email}</h2>
+            <h2><b>Name:</b> &nbsp; {user.firstName + ' ' + user.lastName}</h2>
+        </div>
 
+        <div className='flex gap-4'>
+            <Link to='/statistics' className='bg-primary hover:bg-secondary h-fit w-fit py-2 px-4
+                rounded-xl text-white'>
+                Statistics
+            </Link>
+
+            <Link to='/statistics' className='bg-orange-400 hover:bg-orange-500 
+            h-fit w-fit py-2 px-4 rounded-xl text-white'>
+                Edit
+            </Link>
+        </div>
+    </div>)
 }
 
 
@@ -59,7 +84,6 @@ const UserFilter = ({ users, setUsers }: {
                 <DropDownFilter className="text-white" label="Account Types" options={userTypeDropDownOptions}
                 identity="AccountType" setFilter={onAccountTypeFilterChange}/>
             </div>
-            
         </div>
 
     );
@@ -84,11 +108,17 @@ const UserList = () => {
 
     console.log(users)
   return (
-    <div className='py-24 px-10'>
-        <UserFilter users={users} setUsers={setUsers}/>
-        {users.map((user) => {
-            return <div>{user.username}</div>
-        })}
+    <div className='pt-24 px-10 flex justify-around'>
+        <div className='pt-28'>
+            <UserFilter users={users} setUsers={setUsers}/>
+        </div>
+
+        <div className='flex flex-col gap-6 h-[95vh] overflow-scroll p-10'>
+            {users.map((user) => {
+            return <UserCard user={user}/>
+            })}
+        </div>
+        
     </div>
     
   )
