@@ -14,7 +14,7 @@ const Home = ({}: HomeProps) => {
 		if (!user) {
 			return (<DefaultPage/>);
 		}	
-
+		
 		return user.isSysAdmin ? (<SystemAdminDashboard/>) : (user.isAdmin ? (<AdminDashboard/>) : (<ClientDashboard/>));
 	};
 

@@ -216,6 +216,7 @@ app.get('/user', express.json(), async (req, res) => {
 				firstName: user.firstName,
 				lastName: user.lastName,
 				isAdmin: user.isAdmin,
+				isSysAdmin: user.isSysAdmin,
 				organization: user.organization,
 				preferences: user.preferences,
 				authToken: req.headers.authorization.split(" ")[1]

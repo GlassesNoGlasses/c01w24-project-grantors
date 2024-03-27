@@ -9,7 +9,6 @@ import { useNavigate } from 'react-router-dom';
 import UserController from '../../controllers/UserController';
 import { useUserContext } from '../contexts/userContext';
 import { User } from '../../interfaces/User';
-import { returnStatement } from '@babel/types';
 
 const ACCESS_CODE = 'CSCC01'
 
@@ -74,7 +73,7 @@ const SignUp: React.FC<SignUpProps> = () => {
 				sm:px-6 sm:py-8 md:max-w-sm lg:max-w-md xl:max-w-lg 2xl:max-w-xl
 				flex flex-col gap-4 border-4 border-primary shadow-2xl shadow-black"
           		style={{ boxShadow: '-10px 10px 30px 0 rgba(0, 0, 0, 0.1)' }}>
-				<h3 className="text-xl font-bold text-center sm:text-2xl text-gray-700">Sign up to Grantors</h3>
+				<h3 className="text-xl font-bold text-center sm:text-2xl text-gray-700">Create an account for Grantors</h3>
 				<form className='flex flex-col gap-4' onSubmit={handleSubmit}>
 					<div className='flex flex-row'>
 						<div className="flex items-center w-[49%] mr-[2%]">
@@ -83,7 +82,7 @@ const SignUp: React.FC<SignUpProps> = () => {
 							<input
 								type="firstName"
 								id="firstName"
-								placeholder="Enter your First Name"
+								placeholder="Enter First Name"
 								value={firstName}
 								onChange={(e) => setFirstName(e.target.value)}
 								className="w-full px-3 py-2 mt-2 border border-gray-200 rounded-full focus:outline-none
@@ -96,7 +95,7 @@ const SignUp: React.FC<SignUpProps> = () => {
 							<input
 								type="lastName"
 								id="lastName"
-								placeholder="Enter your Last Name"
+								placeholder="Enter Last Name"
 								value={lastName}
 								onChange={(e) => setLastName(e.target.value)}
 								className="w-full px-3 py-2 mt-2 border border-gray-200 rounded-full focus:outline-none

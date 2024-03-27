@@ -16,7 +16,6 @@ const SystemAdminDashboard = () => {
 		UserController.logoutUser();
 	}
 
-    console.log("hi")
     return (
         <div className="dashboard-container py-20 w-full h-full">
 
@@ -31,7 +30,7 @@ const SystemAdminDashboard = () => {
 				<Link to="/users">
 					<ButtonIcon heroicon={<UsersIcon />} label="View Users" text={user?.preferences.hc ? 'text-white' : 'text-black'}/>
 				</Link>
-				<Link to="/users">
+				<Link to="/signup">
 					<ButtonIcon heroicon={<UserPlusIcon />} label="Create User" text={user?.preferences.hc ? 'text-white' : 'text-black'}/>
 				</Link>
 				<Link to='/settings'>
