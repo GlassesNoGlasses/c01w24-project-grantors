@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { GrantFormProps } from "./GrantFormProps";
-import { GrantQuestion } from "../../interfaces/Grant";
+import { GrantQuestion, GrantQuestionType } from "../../interfaces/Grant";
 import { Application, ApplicationStatus } from '../../interfaces/Application';
 import ApplicationsController from '../../controllers/ApplicationsController';
 import { useNavigate } from 'react-router-dom';
 import { Link, useLocation } from 'react-router-dom';
+import DropDown from '../displays/DropDown/DropDown';
 
 // TODO: This file and component should be renamed to ApplicationForm since this
 // is the form applicants fill out to submit and application, plus we already
@@ -100,13 +101,38 @@ const GrantForm = ({ user, grant }: GrantFormProps) => {
                     <li key={index} className='list-none'>
                          <div className="flex flex-col gap-1 p-5 px-3">
                             <label className='text-base'>{questionElement.question}</label>
-                            <textarea
+                            {
+                                questionElement.type == GrantQuestionType.MULTIPLE_CHOICE ? (
+                                    <DropDown options={questionElement.options} 
+                                              identity="Select Option" 
+                                              selectCallback={(value: string) => setAnswer(index, value)}/>
+                                ) :
+                                questionElement.type == GrantQuestionType.CHECKBOX ? (
+                                    <div className="flex flex-row gap-2">
+                                        {questionElement.options.map((option, optionIndex) => (
+                                            <div key={optionIndex} className="flex flex-row items-center gap-2">
+                                                <input type="checkbox" 
+                                                    value={option} 
+                                                    checked={questionList[index].answer?.split(',').includes(option) || false}
+                                                    onChange={(e) => {
+                                                        const newAnswer = e.target.checked ? 
+                                                            (questionList[index].answer ? questionList[index].answer + ',' + option : option) :
+                                                            questionList[index].answer?.split(',').filter((item) => item !== option).join(',');
+                                                        setAnswer(index, newAnswer);
+                                                    }}/>
+                                                <label>{option}</label>
+                                            </div>
+                                        ))}
+                                    </div>
+                                ) :
+                                <textarea
                                 className='outline outline-2 p-3 pb-10 mt-3 ml-5 mr-5 rounded-md'
                                 value={questionList[index].answer || ''}
                                 placeholder="Type your answer here."
                                 key={index}
                                 onChange={(e) => setAnswer(index, e.target.value)}
-                            />
+                                />
+                            }
                         </div>
                     </li>
                 ))}
