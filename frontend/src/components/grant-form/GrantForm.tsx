@@ -105,7 +105,8 @@ const GrantForm = ({ user, grant }: GrantFormProps) => {
                                 questionElement.type == GrantQuestionType.MULTIPLE_CHOICE ? (
                                     <DropDown options={questionElement.options} 
                                               identity="Select Option" 
-                                              selectCallback={(value: string) => setAnswer(index, value)}/>
+                                              selectCallback={(value: string) => setAnswer(index, value)}
+                                              />
                                 ) :
                                 questionElement.type == GrantQuestionType.CHECKBOX ? (
                                     <div className="flex flex-row gap-2">
@@ -118,7 +119,7 @@ const GrantForm = ({ user, grant }: GrantFormProps) => {
                                                         const newAnswer = e.target.checked ? 
                                                             (questionList[index].answer ? questionList[index].answer + ',' + option : option) :
                                                             questionList[index].answer?.split(',').filter((item) => item !== option).join(',');
-                                                        setAnswer(index, newAnswer);
+                                                        setAnswer(index, newAnswer ?? '');
                                                     }}/>
                                                 <label>{option}</label>
                                             </div>
@@ -126,11 +127,11 @@ const GrantForm = ({ user, grant }: GrantFormProps) => {
                                     </div>
                                 ) :
                                 <textarea
-                                className='outline outline-2 p-3 pb-10 mt-3 ml-5 mr-5 rounded-md'
-                                value={questionList[index].answer || ''}
-                                placeholder="Type your answer here."
-                                key={index}
-                                onChange={(e) => setAnswer(index, e.target.value)}
+                                    className='outline outline-2 p-3 pb-10 mt-3 ml-5 mr-5 rounded-md'
+                                    value={questionList[index].answer || ''}
+                                    placeholder="Type your answer here."
+                                    key={index}
+                                    onChange={(e) => setAnswer(index, e.target.value)}
                                 />
                             }
                         </div>
