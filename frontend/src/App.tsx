@@ -22,6 +22,7 @@ import Settings from "./components/settings-page/Settings";
 import React, { useEffect } from 'react';
 import Background from "./components/background/Background";
 import FundingView from "./components/applications/admin/fundingView"
+import UserList from "./components/user-list/UserList/UserList";
 
 
 
@@ -64,6 +65,7 @@ function App() {
 							<Route path="signup" element={<SignUp />} />
 							<Route path="createGrant" element={<CreateGrant />} />
 							<Route path="editGrant/:grantID" element={<EditGrant />} />
+							<Route path="users" element={<UserList />} />
 							<Route path="grants" element={<GrantBrowse />} />
 							<Route path="grants/:grantID" element={<GrantPage />} />
 							<Route path="admin/grants" element={<AdminGrants />} />

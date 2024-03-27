@@ -915,3 +915,15 @@ app.put('/application/:applicationID/funding', express.json(), async (req, res) 
         res.status(500).json({ error: "Internal server error." });
     }
 });
+
+app.get('/users', express.json(), async (req, res) => {
+	try {
+		const userCollection = db.collection(COLLECTIONS.users)
+
+		const users = await userCollection.find({}).toArray();
+		
+		res.status(200).json({ users: users})
+	} catch (error) {
+		res.status(500).json({ error: "Internal server error." });
+	}
+})

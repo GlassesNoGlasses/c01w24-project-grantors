@@ -82,6 +82,25 @@ export default class UserController {
         }
     }
 
+    static async fetchUsers(authToken: string): Promise<User[] | undefined> {
+        try {
+            const res = await fetch(`http://localhost:${SERVER_PORT}/users`, {
+                method: 'GET',
+                headers: { 'Authorization': `Bearer ${authToken}` }
+            });
+
+            if (res.ok) {
+                return await res.json().then((data: { users: User[] }) => {
+                    return data.users;
+                });
+            } else {
+                console.error("Failed to fetch users", res);
+            }
+        } catch (error) {
+            console.error("Error while fetching users", error);
+        }
+    }
+
     static async fetchApplicant(applicantID: string): Promise<Applicant | undefined> {
         try {
             const res = await fetch(`http://localhost:${SERVER_PORT}/applicant/${applicantID}`, {
