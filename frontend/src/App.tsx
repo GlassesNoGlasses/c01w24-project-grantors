@@ -21,6 +21,7 @@ import SubmittedView from "./components/home-page/nav-bar/client-dashboard/Submi
 import Settings from "./components/settings-page/Settings";
 import React, { useEffect } from 'react';
 import Background from "./components/background/Background";
+import MilestonesPage from "./components/milestones-page/MilestonesPage";
 
 
 
@@ -59,9 +60,6 @@ function App() {
 							<Route index element={<Home />} />
 							<Route path="about" element={<DefaultPage />} />
 							<Route path="files" element={<TestFileDisplay />} />
-							<Route path="services" element={<Home />} />
-							<Route path="gallery" element={<Home />} />
-							<Route path="contact" element={<Home />} />
 							<Route path="login" element={<Login />} />
 							<Route path="signup" element={<SignUp />} />
 							<Route path="createGrant" element={<CreateGrant />} />
@@ -77,6 +75,7 @@ function App() {
 							<Route path="application/:applicationID/review" element={<ApplicationReview />} />
 							<Route path="applications/:applicationID" element={<ApplicationView />} />
 							<Route path="applications/submitted/:applicationID" element={<SubmittedView/>} />
+							<Route path="milestones" element={<MilestonesPage />} />
 							<Route path="settings" element={<Settings />} />
 							<Route path="*" element={<NotFoundPage />} />
 						</Route>
