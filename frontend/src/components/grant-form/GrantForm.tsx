@@ -6,9 +6,6 @@ import ApplicationsController from '../../controllers/ApplicationsController';
 import { useNavigate } from 'react-router-dom';
 import { Link, useLocation } from 'react-router-dom';
 
-// TODO: This file and component should be renamed to ApplicationForm since this
-// is the form applicants fill out to submit and application, plus we already
-// have GrantForm for when the admin is creating the grant
 const GrantForm = ({ user, grant }: GrantFormProps) => {
     const [questionList, setQuestionList] = useState<GrantQuestion[]>(grant.questions);
     const navigate = useNavigate();
@@ -49,7 +46,7 @@ const GrantForm = ({ user, grant }: GrantFormProps) => {
         }
 
         ApplicationsController.submitApplication(user, {
-            id: '', // id does not exist yet as we have not submitted
+            id: '',
             applicantID: user.accountID,
             grantID: grant.id,
             grantTitle: grant.title,
@@ -72,7 +69,7 @@ const GrantForm = ({ user, grant }: GrantFormProps) => {
         }
 
         ApplicationsController.submitApplication(user, {
-            id: '', // id does not exist yet as we have not submitted
+            id: '',
             applicantID: user.accountID,
             grantID: grant.id,
             grantTitle: grant.title,
@@ -133,15 +130,6 @@ const GrantForm = ({ user, grant }: GrantFormProps) => {
                             name="save"
                             onClick={handleSave}>
                             Save
-                        </button>
-                        
-                        <button 
-                            className='p-2 px-5 m-7 mr-14 bg-primary hover:bg-[#0bb4d6]
-                            text-white font-bold rounded-lg shadow-md transition-colors duration-150 ease-in
-                            text-lg' 
-                            type="submit" 
-                            name="submit">
-                            Submit Form
                         </button>
                     </div>
                     
