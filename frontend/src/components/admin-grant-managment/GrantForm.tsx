@@ -331,7 +331,7 @@ const GrantForm: React.FC<GrantFormProps> = ({ type }) => {
                                             question.type == GrantQuestionType.CHECKBOX ?
                                                 question.options.map((option, index) => (
                                                     <div key={index} className='flex flex-row items-center gap-1'>
-                                                        <input type='radio' name={`question-${question.id}`} value={option} />
+                                                        <input type='checkbox' name={`question-${question.id}`} value={option} />
                                                         <label htmlFor={`question-${question.id}`} className="block text-gray-700 font-semibold">
                                                             {option}
                                                         </label>
