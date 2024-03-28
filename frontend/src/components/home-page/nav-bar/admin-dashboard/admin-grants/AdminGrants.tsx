@@ -106,20 +106,20 @@ const AdminGrants = () => {
                 {publishedGrants.length > 0 ? 
                 <div className='flex flex-col h-full w-full items-start justify-start px-5'>
                     
-                    <div className='text-white font-bold text-2xl ml-4 mb-4'>
+                    <h1 className='text-white font-bold text-2xl ml-4 mb-4'>
                         Your Published Grants
-                    </div>
+                    </h1>
 
-                    <div className='text-white font-semibold text-md mb-1 ml-2'>
+                    <h2 className='text-white font-semibold text-md mb-1 ml-2'>
                         click on grants to view details
-                    </div>
+                    </h2>
 
                     <Table items={publishedGrants}
-                    columns={columns}
-                    itemsPerPageOptions={itemsPerPageOptions}
-                    defaultIPP={5}
-                    defaultSort={columns[0]}
-                    onRowClick={onGrantRowClick}
+                        columns={columns}
+                        itemsPerPageOptions={itemsPerPageOptions}
+                        defaultIPP={5}
+                        defaultSort={columns[0]}
+                        onRowClick={onGrantRowClick}
                     />
                 </div>
                 : (
@@ -135,13 +135,13 @@ const AdminGrants = () => {
                 {unpublishedGrants.length > 0 ?
                 <div className='flex flex-col h-full w-full items-start justify-start px-5'>
 
-                    <div className='text-white font-bold text-2xl ml-4 mb-4'>
+                    <h1 className='text-white font-bold text-2xl ml-4 mb-4'>
                         Your Unpublished Grants
-                    </div>
+                    </h1>
 
-                    <div className='text-white font-semibold text-md mb-1 ml-2'>
+                    <h2 className='text-white font-semibold text-md mb-1 ml-2'>
                         click on grants to edit and make changes
-                    </div>
+                    </h2>
 
                     <Table items={unpublishedGrants}
                     columns={columns}
