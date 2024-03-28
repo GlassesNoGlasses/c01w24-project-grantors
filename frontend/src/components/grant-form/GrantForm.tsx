@@ -133,16 +133,17 @@ const GrantForm = ({ user, grant }: GrantFormProps) => {
                     Application Form
                 </div>
 
-                {questionList.map((questionElement, index) => (
-                    <li key={index} className='list-none'>
+                {questionList.map((questionElement, questionIndex) => (
+                    <li key={questionIndex} className='list-none'>
                          <div className="flex flex-col gap-1 p-5 px-3">
-                            <label className='text-base'>{questionElement.question}</label>
+                            <label id={`question-${questionIndex}`} className='text-base'>{questionElement.question}</label>
                             {
                                 questionElement.type === GrantQuestionType.DROP_DOWN ? (
                                     <DropDown options={questionElement.options} 
                                               identity="Select Option" 
-                                              selected={questionList[index].answer}
-                                              selectCallback={(value: string) => setAnswer(index, value)}
+                                              selected={questionList[questionIndex].answer}
+                                              selectCallback={(value: string) => setAnswer(questionIndex, value)}
+                                              aria-labelledby={`question-${questionIndex}`}
                                               />
                                 ) :
                                 questionElement.type === GrantQuestionType.CHECKBOX ? (
@@ -150,15 +151,17 @@ const GrantForm = ({ user, grant }: GrantFormProps) => {
                                         {questionElement.options.map((option, optionIndex) => (
                                             <div key={optionIndex} className="flex flex-row items-center gap-2">
                                                 <input type="checkbox" 
+                                                    aria-labelledby={`question-${questionIndex}-option-${optionIndex}`}
                                                     value={option} 
-                                                    checked={questionList[index].answer?.split(',').includes(option) || false}
+                                                    checked={questionList[questionIndex].answer?.split(',').includes(option) || false}
                                                     onChange={(e) => {
                                                         const newAnswer = e.target.checked ? 
-                                                            (questionList[index].answer ? questionList[index].answer + ',' + option : option) :
-                                                            questionList[index].answer?.split(',').filter((item) => item !== option).join(',');
-                                                        setAnswer(index, newAnswer ?? '');
-                                                    }}/>
-                                                <label>{option}</label>
+                                                            (questionList[questionIndex].answer ? questionList[questionIndex].answer + ',' + option : option) :
+                                                            questionList[questionIndex].answer?.split(',').filter((item) => item !== option).join(',');
+                                                        setAnswer(questionIndex, newAnswer ?? '');
+                                                    }}
+                                                    />
+                                                <label id={`question-${questionIndex}-option-${optionIndex}`}>{option}</label>
                                             </div>
                                         ))}
                                     </div>
@@ -168,10 +171,11 @@ const GrantForm = ({ user, grant }: GrantFormProps) => {
                                         {questionElement.options.map((option, optionIndex) => (
                                             <div key={optionIndex} className="flex flex-row items-center gap-2">
                                                 <input type="radio" 
+                                                    aria-labelledby={`question-${questionIndex}-option-${optionIndex}`}
                                                     value={option} 
-                                                    checked={questionList[index].answer === option}
-                                                    onChange={(e) => setAnswer(index, option)}/>
-                                                <label>{option}</label>
+                                                    checked={questionList[questionIndex].answer === option}
+                                                    onChange={(e) => setAnswer(questionIndex, option)}/>
+                                                <label id={`question-${questionIndex}-option-${optionIndex}`}>{option}</label>
                                             </div>
                                         ))}
                                     </div>
@@ -180,8 +184,8 @@ const GrantForm = ({ user, grant }: GrantFormProps) => {
                                 <div className="flex flex-row justify-between w-full">
                                     <div className="flex flex-col max-h-40 overflow-y-auto">
                                     {
-                                        uploadedFiles[index]?.length ?
-                                        uploadedFiles[index].map((file, fileIndex) => (
+                                        uploadedFiles[questionIndex]?.length ?
+                                        uploadedFiles[questionIndex].map((file, fileIndex) => (
                                             <div key={fileIndex} className="flex flex-row gap-2">
                                                 <label className="block text-gray-700 font-semibold">{file.name}</label>
                                             </div>
@@ -191,18 +195,20 @@ const GrantForm = ({ user, grant }: GrantFormProps) => {
                                     }
                                     </div>
                                     <DropZoneFile
+                                        aria-labelledby={`question-${questionIndex}`}
                                         fileLimit={25}
-                                        FileCallback={(droppedFiles) => handleFileUpload(index, droppedFiles)}
+                                        FileCallback={(droppedFiles) => handleFileUpload(questionIndex, droppedFiles)}
                                         dropZoneElement={FileDisplay()}
                                         acceptedFileTypes={GrantQuestionFileTypesToAccept(questionElement.options as GrantQuestionFileType[])}
                                     />
                                 </div>
                                 : <textarea
+                                    aria-labelledby={`question-${questionIndex}`}
                                     className='outline outline-2 p-3 pb-10 mt-3 ml-5 mr-5 rounded-md'
-                                    value={questionList[index].answer || ''}
+                                    value={questionList[questionIndex].answer || ''}
                                     placeholder="Type your answer here."
-                                    key={index}
-                                    onChange={(e) => setAnswer(index, e.target.value)}
+                                    key={questionIndex}
+                                    onChange={(e) => setAnswer(questionIndex, e.target.value)}
                                 />
                             }
                         </div>
