@@ -92,7 +92,7 @@ const TestFileDisplay = () => {
         return;
     }
 
-    FileController.fetchUserFSFiles(user)
+    FileController.fetchUserFSFiles(user.accountID)
     .then((fsFiles: FSFile[] | undefined) => {
         if (fsFiles) {
             setDownloadLinks(fsFiles);
