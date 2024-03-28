@@ -1,15 +1,15 @@
 export enum GrantQuestionType {
     TEXT = "Text",
-    MULTIPLE_CHOICE = "Multiple Choice",
+    DROP_DOWN = "Drop Down",
     CHECKBOX = "Checkbox",
-    DATE = "Date",
+    RADIO = "Radio",
     NULL = "Null",
 }
 
 export interface GrantQuestion {
     id: number;
     question: string;
-    answer: string | null;
+    answer?: string;
     type: GrantQuestionType;
     options: string[];
 }
