@@ -163,7 +163,7 @@ const Navbar = ({}: NavbarProps) => {
 
 	
 		return (
-			breadcrumbs.length ===  1 ? <></>
+			breadcrumbs.length ===  1 || (breadcrumbs.length > 2 && !user?.isSysAdmin)? <></>
 			:
 			<div className="nav-breadcrumbs flex items-end pl-5 text-sm -mt-3">
 				{breadcrumbs.map(({ path, label }, index) => (

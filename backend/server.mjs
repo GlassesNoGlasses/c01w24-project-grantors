@@ -745,7 +745,7 @@ app.post('/:userID/:organization/uploadFiles', upload.any(), async (req, res) =>
 				accountID: userID,
 				title: file.originalname,
 				posted: new Date(),
-				path: '.' + file.path.substring(file.path.indexOf('/uploads')),
+				path: '.' + file.path.substring(file.path.indexOf(path.sep + 'uploads')),
 				mimetype: file.mimetype,
 				organization: organization,
 				file: undefined,
@@ -780,6 +780,7 @@ app.get("/files/downloadable/:fileID", express.json(), async (req, res) => {
 			return res.status(404).send("File not found.")
 		}
 
+		console.log(file.path);
 		return res.download(file.path, file.title, (err) => {
 			if (err) {
 				// Error in downloading a file.

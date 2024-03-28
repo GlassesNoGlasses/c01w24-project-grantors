@@ -1,13 +1,21 @@
 import React, { useEffect, useState } from 'react';
 import { GrantFormProps } from "./GrantFormProps";
-import { GrantQuestion } from "../../interfaces/Grant";
+import { GrantQuestion, GrantQuestionType } from "../../interfaces/Grant";
 import { Application, ApplicationStatus } from '../../interfaces/Application';
 import ApplicationsController from '../../controllers/ApplicationsController';
 import { useNavigate } from 'react-router-dom';
 import { Link, useLocation } from 'react-router-dom';
+import DropDown from '../displays/DropDown/DropDown';
+import DropZoneFile from '../files/dropzone/DropZoneFile';
+import { Accept } from 'react-dropzone';
+import { GrantQuestionFileType, GrantQuestionFileTypesToAccept } from '../files/FileUtils';
+import FileController from '../../controllers/FileController';
+import { upload } from '@testing-library/user-event/dist/upload';
 
 const GrantForm = ({ user, grant }: GrantFormProps) => {
     const [questionList, setQuestionList] = useState<GrantQuestion[]>(grant.questions);
+    const [uploadedFiles, setUploadedFiles] = useState<File[][]>([]);
+    const [feedback, setFeedback] = useState<string>("");
     const navigate = useNavigate();
     const location = useLocation();
 
@@ -69,6 +77,24 @@ const GrantForm = ({ user, grant }: GrantFormProps) => {
             return 
         }
 
+        for (let i = 0; i < questionList.length; i++) {
+            if (questionList[i].required && !questionList[i].answer) {
+                setFeedback("All required questions must be answered.");
+                return;
+            }
+        }
+
+        uploadedFiles.map((files: File[], index) => {
+            if (files?.length) {
+                FileController.uploadFiles("question" + index, files, user).then((uploadedCount: number | undefined) => {
+                    if (uploadedCount && uploadedCount < files.length) {
+                        console.error("Error while uploading files");
+                        return;
+                    }
+                });
+            }
+        });
+
         ApplicationsController.submitApplication(user, {
             id: '',
             applicantID: user.accountID,
@@ -86,6 +112,26 @@ const GrantForm = ({ user, grant }: GrantFormProps) => {
         });
     };
 
+    const handleFileUpload = (index: number, droppedFiles: File[]) => {
+        const newQuestionList = [...questionList];
+        newQuestionList[index].answer = droppedFiles.map((file) => file.name).join(',');
+        setQuestionList(newQuestionList);
+
+        const newUploadedFiles = [...uploadedFiles];
+        newUploadedFiles[index] = droppedFiles;
+        setUploadedFiles(newUploadedFiles);
+    }
+
+    const FileDisplay = () => {
+        return (
+            <button type='button' className='p-2 px-5 m-2 bg-secondary hover:bg-primary
+                text-white font-bold rounded-lg shadow-md transition-colors duration-150 ease-in
+                text-base'>
+                Add File(s)
+            </button>
+        )
+    }
+
     return (
         <div className='py-10 flex justify-center'>
             <form onSubmit={handleSubmit} id="grantform" className=' border-4 bg-white lg:w-[70vw] w-[90vw]
@@ -95,20 +141,92 @@ const GrantForm = ({ user, grant }: GrantFormProps) => {
                     Application Form
                 </div>
 
+                <p>All questions marked with <span className='text-red-500'>*</span> are required.</p>
+
                 {questionList.map((questionElement, index) => (
                     <li key={index} className='list-none'>
                          <div className="flex flex-col gap-1 p-5 px-3">
-                            <label className='text-base'>{questionElement.question}</label>
-                            <textarea
-                                className='outline outline-2 p-3 pb-10 mt-3 ml-5 mr-5 rounded-md'
-                                value={questionList[index].answer || ''}
-                                placeholder="Type your answer here."
-                                key={index}
-                                onChange={(e) => setAnswer(index, e.target.value)}
-                            />
+                            <label className='text-base'>
+                                {questionElement.question}
+                                {questionElement.required ? <span className='text-red-500'>*</span> : ''}
+                            </label>
+                            {
+                                questionElement.type === GrantQuestionType.DROP_DOWN ? (
+                                    <DropDown options={questionElement.options} 
+                                              identity="Select Option" 
+                                              selected={questionList[index].answer}
+                                              selectCallback={(value: string) => setAnswer(index, value)}
+                                              />
+                                ) :
+                                questionElement.type === GrantQuestionType.CHECKBOX ? (
+                                    <div className="flex flex-row gap-2">
+                                        {questionElement.options.map((option, optionIndex) => (
+                                            <div key={optionIndex} className="flex flex-row items-center gap-2">
+                                                <input type="checkbox" 
+                                                    value={option} 
+                                                    checked={questionList[index].answer?.split(',').includes(option) || false}
+                                                    onChange={(e) => {
+                                                        const newAnswer = e.target.checked ? 
+                                                            (questionList[index].answer ? questionList[index].answer + ',' + option : option) :
+                                                            questionList[index].answer?.split(',').filter((item) => item !== option).join(',');
+                                                        setAnswer(index, newAnswer ?? '');
+                                                    }}/>
+                                                <label>{option}</label>
+                                            </div>
+                                        ))}
+                                    </div>
+                                ) :
+                                questionElement.type === GrantQuestionType.RADIO ? (
+                                    <div className="flex flex-row gap-2">
+                                        {questionElement.options.map((option, optionIndex) => (
+                                            <div key={optionIndex} className="flex flex-row items-center gap-2">
+                                                <input type="radio" 
+                                                    value={option} 
+                                                    checked={questionList[index].answer === option}
+                                                    onChange={(e) => setAnswer(index, option)}/>
+                                                <label>{option}</label>
+                                            </div>
+                                        ))}
+                                    </div>
+                                ) :
+                                questionElement.type === GrantQuestionType.FILE ?
+                                <div className="flex flex-row justify-between w-full">
+                                    <div className="flex flex-col max-h-40 overflow-y-auto">
+                                    {
+                                        uploadedFiles[index]?.length ?
+                                        uploadedFiles[index].map((file, fileIndex) => (
+                                            <div key={fileIndex} className="flex flex-row gap-2">
+                                                <label className="block text-gray-700 font-semibold">{file.name}</label>
+                                            </div>
+                                        ))
+                                        :
+                                        <label className="block text-gray-700 font-semibold">'No files uploaded.'</label>
+                                    }
+                                    </div>
+                                    <DropZoneFile
+                                        fileLimit={25}
+                                        FileCallback={(droppedFiles) => handleFileUpload(index, droppedFiles)}
+                                        dropZoneElement={FileDisplay()}
+                                        acceptedFileTypes={GrantQuestionFileTypesToAccept(questionElement.options as GrantQuestionFileType[])}
+                                    />
+                                </div>
+                                : <textarea
+                                    className='outline outline-2 p-3 pb-10 mt-3 ml-5 mr-5 rounded-md'
+                                    value={questionList[index].answer || ''}
+                                    placeholder="Type your answer here."
+                                    key={index}
+                                    onChange={(e) => setAnswer(index, e.target.value)}
+                                />
+                            }
                         </div>
                     </li>
                 ))}
+                {
+                    feedback &&
+                    <div className="flex flex-row justify-center">
+                        <span className="text-red-500">{feedback}</span>
+                    </div>
+                }
                 <div className="flex flex-row items-center justify-between">
                     
                     <Link to='/applications'>

@@ -18,7 +18,6 @@ const NavBarSettings = ({
 
 	// Update states upon sideMenuOn state change
 	useEffect(() => {
-		console.log("changed", sideMenuOn);
 		if (sideMenuOn) {
 			setSideMenuDisplay("block");
 			setSideMenuIcon(openSideMenu);
