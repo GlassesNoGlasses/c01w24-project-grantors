@@ -25,7 +25,7 @@ const GrantPage = ({}: GrantPageProps) => {
 const GrantFound = ({ grant }: { grant: Grant }) => {
     return (
         <div className="flex flex-col gap-3 py-3 px-5 bg-white border-4 border-primary mx-5 mt-24
-            rounded-2xl shadow-2xl shadow-black">
+            rounded-2xl shadow-2xl shadow-black" tabIndex={0}>
             <div className="flex flex-row justify-between items-center">
                 <h1 className="text-4xl font-bold">{grant.title}</h1>
                 <ApplyButton grantID={grant.id.toString()} />
@@ -74,7 +74,7 @@ const ApplyButton = ({ grantID }: { grantID: string }) => {
     const { user } = useUserContext();
     if (user && !user.isAdmin && !user.isSysAdmin) {
         return (
-            <Link
+            <Link role="button"
                 className='p-2 px-5 m-2 bg-secondary hover:bg-primary
                     text-white font-bold rounded-lg shadow-md transition-colors duration-150 ease-in
                     text-lg'
