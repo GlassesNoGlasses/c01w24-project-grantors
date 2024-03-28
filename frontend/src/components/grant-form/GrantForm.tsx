@@ -118,14 +118,14 @@ const GrantForm = ({ user, grant }: GrantFormProps) => {
         return (
             <button type='button' className='p-2 px-5 m-2 bg-secondary hover:bg-primary
                 text-white font-bold rounded-lg shadow-md transition-colors duration-150 ease-in
-                text-base'>
-                Add File(s)
+                text-base' tabIndex={-1}>
+                Add Files
             </button>
         )
     }
 
     return (
-        <div className='pt-28 pb-20 flex justify-center'>
+        <div className='pt-28 pb-20 flex justify-center' tabIndex={0}>
             <form onSubmit={handleSubmit} id="grantform" className=' border-4 bg-white lg:w-[70vw] w-[90vw]
             rounded-2xl border-primary shadow-2xl shadow-black p-6'>
 
@@ -136,7 +136,9 @@ const GrantForm = ({ user, grant }: GrantFormProps) => {
                 {questionList.map((questionElement, questionIndex) => (
                     <li key={questionIndex} className='list-none'>
                          <div className="flex flex-col gap-1 p-5 px-3">
-                            <label id={`question-${questionIndex}`} className='text-base'>{questionElement.question}</label>
+                            <label id={`question-${questionIndex}`} className='text-base' tabIndex={0}>
+                                {questionElement.question}
+                            </label>
                             {
                                 questionElement.type === GrantQuestionType.DROP_DOWN ? (
                                     <DropDown options={questionElement.options} 
@@ -216,7 +218,7 @@ const GrantForm = ({ user, grant }: GrantFormProps) => {
                 ))}
                 <div className="flex flex-row items-center justify-between">
                     
-                    <Link to='/applications'>
+                    <Link to='/applications' tabIndex={-1}>
                         <button 
                             className='p-2 px-5 m-7 mr-1 bg-red-500 hover:bg-red-600 active:bg-red-700
                             text-white font-bold rounded-lg shadow-md transition-colors duration-150 ease-in
