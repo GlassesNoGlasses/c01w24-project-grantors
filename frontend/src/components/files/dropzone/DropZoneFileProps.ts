@@ -1,4 +1,4 @@
-import { Accept } from "../../../interfaces/Accept";
+import { Accept } from "react-dropzone";
 
 export interface DropZoneFileProps {
     fileLimit: Number, // limit number of files to be submitted.

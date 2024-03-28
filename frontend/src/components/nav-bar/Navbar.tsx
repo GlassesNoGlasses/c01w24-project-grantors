@@ -51,10 +51,10 @@ const Navbar = ({}: NavbarProps) => {
 		return (
 			<>
 				<div className='flex items-center'>	
-					<div className='hidden md:flex justify-end lg:text-[20px] text-[17px] xl:gap-20 xl:mr-16 
-					mr-6 lg:gap-10 gap-6'>
-						<Link className='text-base hover:underline' to="/files">FileSys</Link>
-						<Link className='text-base hover:underline' to="/createGrant">Create Grants</Link>
+					<div className='hidden md:flex justify-end xl:text-[20px] text-[16px] xl:gap-20 xl:mr-16 
+					mr-4 lg:gap-10 gap-6'>
+						<Link className='hover:underline' to="/files">FileSys</Link>
+						<Link className='hover:underline' to="/createGrant">Create Grants</Link>
 						<a href='https://www.magnifyaccess.ai/about-us' 
 						className='hover:underline' target='blank'>About Us</a>
 						<a href='https://www.magnifyaccess.ai/additional-services' 
@@ -78,10 +78,10 @@ const Navbar = ({}: NavbarProps) => {
 		return (
 			<>	
 				<div className='flex items-center'>	
-					<div className='hidden md:flex justify-end lg:text-[20px] text-[17px] xl:gap-20 xl:mr-16 
+					<div className='hidden md:flex justify-end xl:text-[20px] text-[16px] xl:gap-20 xl:mr-16 
 					mr-6 lg:gap-10 gap-6'>
-						<Link className='text-base hover:underline' to="/files">FileSys</Link>
-						<Link className='text-base hover:underline' to="/grants">Grants</Link>
+						<Link className='hover:underline' to="/files">FileSys</Link>
+						<Link className='hover:underline' to="/grants">Grants</Link>
 						<a href='https://www.magnifyaccess.ai/about-us' 
 						className='hover:underline' target='blank'>About Us</a>
 						<a href='https://www.magnifyaccess.ai/additional-services' 
@@ -105,7 +105,7 @@ const Navbar = ({}: NavbarProps) => {
 	const DefaultTopNavigation = (): JSX.Element => {
 		return (
 			<div className='flex items-center'>	
-				<div className='hidden md:flex justify-end lg:text-[20px] text-[17px] xl:gap-20 xl:mr-16 
+				<div className='hidden md:flex justify-end xl:text-[20px] text-[16px] xl:gap-20 xl:mr-16 
 				mr-6 lg:gap-10 gap-6'>
 					<a href='https://www.magnifyaccess.ai/about-us' 
 					className='hover:underline' target='blank'>About Us</a>
@@ -125,7 +125,14 @@ const Navbar = ({}: NavbarProps) => {
 
 	const SystemAdminTopNavigation = (): JSX.Element => {
 		return (
-			<div className='flex xl:gap-10 gap-4'>
+			<div className='flex xl:gap-10 gap-4 items-center'>
+
+				<div className='hidden md:flex justify-end xl:text-[20px] text-[16px] xl:gap-20 xl:mr-16 
+					mr-4 lg:gap-10 gap-6'>
+					<Link className='hover:underline' to="/users">View Users</Link>
+					<Link className='hover:underline' to="/signup">Create New User</Link>
+				</div>
+
 				<div className='flex flex-row gap-4 items-center'>
 					<p className='text-base font-bold'>{user?.username}</p>
 					<SignOutButton />
@@ -145,7 +152,7 @@ const Navbar = ({}: NavbarProps) => {
 	return (
 		<div>
 			<nav className='flex flex-col sm:flex-row justify-between items-center lg:pr-8 
-			border-b-2 border-black bg-white fixed top-0 w-full'>
+			border-b-2 border-black bg-white fixed top-0 w-full z-50'>
 			
 				<div className='flex items-end'>
 					<Link to="/" className='nav-brand'>

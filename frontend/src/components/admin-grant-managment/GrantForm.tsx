@@ -2,19 +2,55 @@ import React from 'react'
 import { useState, useEffect} from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useUserContext } from '../contexts/userContext';
-import { Grant, GrantMilstone, GrantQuestion } from '../../interfaces/Grant' 
+import { Grant, GrantQuestion, GrantQuestionType, GrantMilestone } from '../../interfaces/Grant' 
 import { GrantFormProps, GrantFormType } from './GrantFormProps';
 import GrantsController from '../../controllers/GrantsController'
-import { Trash } from 'heroicons-react';
+import DropDown from '../displays/DropDown/DropDown';
+import { TrashIcon, XMarkIcon } from '@heroicons/react/24/solid';
 import { Modal } from '../modal/Modal';
 
+// default grant object
+const initialGrantState: Grant = {
+    id: '',
+    title: '',
+    description: '',
+    posted: new Date(),
+    deadline: new Date(),
+    minAmount: 0,
+    maxAmount: 100000,
+    organization: '',
+    category: '',
+    contact: '',
+    questions: [],
+    milestones: [],
+    publish: false,
+};
+
+const initalNewQuestion: GrantQuestion = {
+    id: -1,
+    question: '',
+    answer: '',
+    type: GrantQuestionType.NULL,
+    options: [],
+    required: false,
+}
+
+const initialFiletypeOption: string[] = [
+    "All", "Images", "PDF", "Word Doc",
+    "Text", "Excel", "Powerpoint", "Audio", 
+    "Video", "Zip"
+]
 
 
 const GrantForm: React.FC<GrantFormProps> = ({ type }) => {
-
     const {user} = useUserContext();
+    // state variables
+    const [newQuestion, setNewQuestion] = useState<GrantQuestion>(initalNewQuestion);
+    const [feedback, setFeedback] = useState("");
+    const [newQuestionFeedback, setNewQuestionFeedback] = useState<string>("");
+    const [unauthorized, setUnauthorized] = useState(false);
+    const navigate = useNavigate()
     
-    // extract the grantID from url
     const grantID = useParams()?.grantID ?? '';
 
     // default grant object
@@ -51,34 +87,8 @@ const GrantForm: React.FC<GrantFormProps> = ({ type }) => {
     // set initial form to conform to default empty grant
     const [grant, setGrant] = useState<Grant>(initialGrantState);
 
-    // function to retrieve a grant saved in the server, set the grant form to fill with the
-    // requested grant
-    const getSavedGrant = async(id: string) => {
-
-        const grant: Grant | undefined = await GrantsController.fetchGrant(id);
-        if (grant) {
-            setGrant(grant);
-        } else {
-            console.error("error creating grant:");
-            setFeedback("error creating grant");
-        }
-    }
-
-    // retrieve the grant if in edit mode only when mounting
-    useEffect(() => {
-        if (type === GrantFormType.EDIT) {
-            getSavedGrant(grantID)
-        }
-
-      }, []);
-
-    
-    // state variables
-    const [question, setQuestion] = useState<string>('');
-    const [feedback, setFeedback] = useState("");
     const [milestoneFeedback, setMilestoneFeedback] = useState("");
-    const navigate = useNavigate();
-    const [milestone, setMilestone] = useState<GrantMilstone>({
+    const [milestone, setMilestone] = useState<GrantMilestone>({
         id: '0',
         title: '',
         description: '',
@@ -86,31 +96,43 @@ const GrantForm: React.FC<GrantFormProps> = ({ type }) => {
         completed: false,
         evidence: ''
     });
-    
-    
-    // no user logged in or not admin
-    if (!user || !user.isAdmin) {
-        return (
-            <div className='flex font-bold text-xl justify-center mt-10'>Access Denied: Invalid Permission</div>
-        );
-    };
 
-    // not the owner of the grant
-    if (grant.organization != user.organization) {
-        return (
-            <div className='flex font-bold text-xl justify-center mt-10'>
-                Unauthorized: Permission Denied
-            </div>
-        );
-    };
+    const questionTypes = [ GrantQuestionType.TEXT,
+                            GrantQuestionType.CHECKBOX,
+                            GrantQuestionType.DROP_DOWN, 
+                            GrantQuestionType.RADIO,
+                            GrantQuestionType.FILE,
+    ];
 
-    // grant already published and cannot be editted
-    if (grant.publish) {
-        return (
-            <div className='flex font-bold text-xl justify-center mt-10'>
-                Bad Request: Grant Cannot Be Editted Once Published
-            </div>)
-    };
+    const [filetypeOptions, setFiletypeOptions] = useState<string[]>(initialFiletypeOption);
+
+    // retrieve the grant if in edit mode only when mounting
+    useEffect(() => {
+        if (type === GrantFormType.EDIT) {
+            GrantsController.fetchGrant(grantID).then((grant: Grant | undefined) => {
+                if (grant) {
+                    setGrant(grant);
+                } else {
+                    console.error("Error creating grant:");
+                    setFeedback("Error creating grant");
+                }
+            });
+        }
+
+      }, []);
+
+    useEffect(() => {
+        if (!user || !user.isAdmin) {
+            setUnauthorized(true);
+        } else if (type === GrantFormType.EDIT && grant.organization != user?.organization) {
+            setUnauthorized(true);
+        } else {
+            // Type is create, or user is admin or organization matches
+            initialGrantState.organization = user?.organization ?? '';
+            setGrant(initialGrantState);
+            setUnauthorized(false);
+        }
+    }, [user]);
 
     const setMilestoneTitle = (title: string) => {
         setMilestone({...milestone, title: title});
@@ -139,7 +161,7 @@ const GrantForm: React.FC<GrantFormProps> = ({ type }) => {
 
         const max = Math.max(0, ...grant.milestones.map(m => Number(m.id)));
 
-        const addMilestone = (prev: GrantMilstone[], newMilestone: GrantMilstone): GrantMilstone[] => {
+        const addMilestone = (prev: GrantMilestone[], newMilestone: GrantMilestone): GrantMilestone[] => {
             return [...prev, {id: String(max + 1), title: newMilestone.title, description: newMilestone.description, dueDate: newMilestone.dueDate, completed: false, evidence: ''}]
         };
 
@@ -153,69 +175,95 @@ const GrantForm: React.FC<GrantFormProps> = ({ type }) => {
 
     // function to delete a grant in the server with given id
     const deleteGrant = async(id: string) => {
-        GrantsController.deleteGrant(user, id).then((success: boolean) => {
-            if (!success) {
-                console.error('Failed to delete grant:');
-                setFeedback('Failed to delete grant')
-            }
-
-            navigate('/')
-        });
+        if (user) {
+            GrantsController.deleteGrant(user, id).then((success: boolean) => {
+                if (!success) {
+                    console.error('Failed to delete grant:');
+                    setFeedback('Failed to delete grant')
+                }
+    
+                navigate('/');
+            });
+        }
     };
     
     // handler for when a question is added in the form
     const handleQuestionSubmit = () => {
-        if (question == '') return;
+        if (newQuestion.question == '') return;
 
         let max = -1
 
-        grant.questions.forEach((q) => {
-            max = q['id'] > max ? q['id'] : max
+        grant.questions.forEach((question: GrantQuestion) => {
+            max = question.id > max ? question.id : max
         });
 
-        const addQuestion = (prev: GrantQuestion[], newQuesion: string): GrantQuestion[] => {
-            return [...prev, {id: max+1, question: newQuesion, answer: null}]
-        };
+        let questionOptionsCleaned = newQuestion.options.filter((option) => option != '');
+        let resetOptions: string[] = [];
+        if (newQuestion.type == GrantQuestionType.DROP_DOWN ||
+            newQuestion.type == GrantQuestionType.RADIO) {
+            if (questionOptionsCleaned.length < 2) {
+                setNewQuestionFeedback(`At least two options are required for ${newQuestion.type} questions`);
+                return;
+            }
+        } else if (newQuestion.type == GrantQuestionType.CHECKBOX) {
+            if (questionOptionsCleaned.length < 1) {
+                setNewQuestionFeedback('At least one option is required for checkbox questions');
+                return;
+            }
+        } else if (newQuestion.type == GrantQuestionType.FILE) {
+            if (questionOptionsCleaned.length < 1) {
+                setNewQuestionFeedback('At least one file type is required for file upload questions');
+                return;
+            }
+            setFiletypeOptions(initialFiletypeOption.filter((option) => option != 'All'));
+            resetOptions = ['All']
+        }
 
-        setGrant({ ...grant, questions: addQuestion(grant.questions, question)});
-        setQuestion('');
+        setNewQuestionFeedback('');
+
+        setGrant({ ...grant, questions: [...grant.questions, {...newQuestion, id: max+1, options: questionOptionsCleaned}]});
+        // Keep the type for the next question
+        setNewQuestion({...initalNewQuestion, type: newQuestion.type, options: resetOptions});
     };
 
     // function to save grant when publish==false or publish grant otherwise
     const saveGrant = async(publish: boolean) => {
-        if (type === GrantFormType.CREATE){
-            GrantsController.createGrant(user, {...grant, publish: publish}).then((grantID: string | undefined) => {
-                if (grantID) {
-                    setGrant(initialGrantState);
-                    if (publish) {
-                        setShowModal(true);
+        if (user) {
+            if (type === GrantFormType.CREATE){
+                GrantsController.createGrant(user, {...grant, publish: publish}).then((grantID: string | undefined) => {
+                    if (grantID) {
+                        setGrant(initialGrantState);
+                        if (publish) {
+                            setShowModal(true);
+                        } else {
+                            setShowSaveModal(true);
+                        }
                     } else {
-                        setShowSaveModal(true);
+                        setFeedback('Error creating grant')
                     }
-                } else {
-                    setFeedback('Error creating grant')
-                }
-            });
-        } else if (type === GrantFormType.EDIT) {
-            GrantsController.saveGrant(user, {...grant, publish: publish}).then((success: boolean) => {
-                if (success) {
-                    if (publish) {
-                        navigate('/admin/grants');
+                });
+            } else if (type === GrantFormType.EDIT) {
+                GrantsController.saveGrant(user, {...grant, publish: publish}).then((success: boolean) => {
+                    if (success) {
+                        if (publish) {
+                            navigate('/admin/grants');
+                        } else {
+                            setFeedback('Grant Saved!');
+                        }
                     } else {
-                        setFeedback('Grant Saved!');
+                        console.error('Failed to save grant');
+                        setFeedback('Error saving grant');
                     }
-                } else {
-                    console.error('Failed to save grant');
-                    setFeedback('Error saving grant');
-                }
-            });
+                });
+            }
         }
     };
 
     // when question input changes, update the question state
     const handleQuestionChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
         const { value } = e.target;
-        setQuestion(value)
+
+        setNewQuestion({...newQuestion, question: value});
     };
 
     // remove a question by filtering it out
@@ -239,19 +287,83 @@ const GrantForm: React.FC<GrantFormProps> = ({ type }) => {
     const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         if (grant.questions.length == 0) {
-            alert("At Least One Question Is Required To Be Published, Please Add A Custom Question")
-            console.log("missing questions")
+            setFeedback("At Least One Question Is Required To Be Published, Please Add A Custom Question")
         } else {
             saveGrant(true)
-            console.log('submitted')
         }
     };
+
+    const handleQuestionTypeChange = (selected: string) => {
+        if (!selected) {
+            selected = GrantQuestionType.NULL;
+        }
+        let options: string[] = []
+
+        if (selected === GrantQuestionType.FILE) {
+            options = ["All"];
+            setFiletypeOptions(initialFiletypeOption.filter((option) => option != 'All'));
+        }
+        setNewQuestion({
+            ...newQuestion, 
+            type: selected as GrantQuestionType,
+            options: options,
+        });
+    };
+
+    // handle when a multiple choice answer is changed
+    const handleAnswerChoicesChange = (index: number, value: string) => {
+        if (newQuestion.options) {
+            const newOptions = newQuestion.options.map((option, i) => {
+                return i == index ? value : option
+            });
+            setNewQuestion({...newQuestion, options: newOptions});
+        }
+    }
+
+    const addAcceptedFiletype = (selected: string) => {
+        if (!newQuestion.options.includes(selected)) {
+            if (selected == 'All') {
+                // if selected any, remove any other selections
+                setNewQuestion({...newQuestion, options: ['All']});
+                setFiletypeOptions(initialFiletypeOption.filter((option) => option != selected));
+                return;
+            } else if (newQuestion.options.includes('All')) {
+                // if adding specific file, remove any
+                setNewQuestion({...newQuestion, options: [selected]});
+                setFiletypeOptions(initialFiletypeOption.filter((option) => option != selected));
+                return;
+            }
+            // not dealing with any, add new option
+            setNewQuestion({...newQuestion, options: [...newQuestion.options, selected]});
+            setFiletypeOptions(filetypeOptions.filter((option) => option != selected));
+        }
+    }
+
+    const removeAcceptedFiletype = (index: number) => {
+        const newOptions = newQuestion.options.filter((option, i) => i != index);
+        setFiletypeOptions([...filetypeOptions, newQuestion.options[index]])
+        setNewQuestion({...newQuestion, options: newOptions});
+    }
 
     // formatter for dates
     const formatDateToYYYYMMDD = (date: Date) => {
         return new Date(date).toISOString().split('T')[0];
     };
 
+    if (unauthorized) {
+        return (
+            <div className='flex font-bold text-xl justify-center mt-10'>Access Denied: Invalid Permission</div>
+        );
+    };
+
+    // grant already published and cannot be editted
+    if (grant.publish) {
+        return (
+            <div className='flex font-bold text-xl justify-center mt-10'>
+                Bad Request: Grant Cannot Be Editted Once Published
+            </div>
+        );
+    };
     const today = formatDateToYYYYMMDD(new Date());
 
     return (
@@ -321,15 +433,86 @@ const GrantForm: React.FC<GrantFormProps> = ({ type }) => {
                             onChange={(e) => handleAmountChange('maxAmount', parseInt(e.target.value))}
                             className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-secondary focus:border-transparent" />
                     </div>
-                    
+
                     {/* Questions */}
                     <div className='mt-6'>
                         <label htmlFor="question" className="block text-gray-700 font-semibold mb-2">Add a Question for Applicants</label>
 
-                        <div className='flex items-center'>
-                            <input type="text" name="question" value={question} onChange={handleQuestionChange}
-                                className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-secondary focus:border-transparent mr-4" />
-                            <button type='button' className='p-2 bg-green-600 text-white pl-5 pr-5 rounded-lg hover:bg-green-800' onClick={handleQuestionSubmit}>Add</button>
+                        <div className="flex flex-col items-start gap-2">
+                            <div className='flex flex-row items-center gap-4 w-full'>
+                                {
+                                    newQuestion.type != GrantQuestionType.NULL ?
+                                    <>
+                                    <input type="text" name="question" value={newQuestion.question} onChange={handleQuestionChange}
+                                        className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-secondary focus:border-transparent" />
+                                    <button type='button' className='py-2 bg-green-600 text-white pl-5 pr-5 rounded-lg
+                                          hover:bg-green-800' onClick={handleQuestionSubmit}>
+                                            add
+                                    </button>
+                                    </>
+                                    : <></>
+                                }
+                                <DropDown options={questionTypes} identity="Question Type" selectCallback={handleQuestionTypeChange}/>
+                            </div>
+                            { // special question options
+                                newQuestion.type == GrantQuestionType.DROP_DOWN ||
+                                newQuestion.type == GrantQuestionType.CHECKBOX ||
+                                newQuestion.type == GrantQuestionType.RADIO ?
+                                    <div className="flex flex-col gap-2">
+                                        <span className="block text-gray-700 font-semibold">Question Options</span>
+                                        {
+                                            newQuestion.options.map((option, index) => (
+                                                <div className="flex flex-row items-center gap-1">
+                                                    <input key={index} type="text" name={`answer-option-${index}`} value={option} onChange={(e) => handleAnswerChoicesChange(index, e.target.value)}
+                                                        className="w-1/2 px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-secondary focus:border-transparent" />
+                                                    <button type="button" aria-label="remove answer option" onClick={() => setNewQuestion({...newQuestion, options: [...newQuestion.options.filter((op, ind) => ind != index)]})}>
+                                                        <XMarkIcon  className="text-red-700 h-7"/>
+                                                    </button>
+                                                </div>
+                                            ))
+                                        }
+                                        <button type='button' onClick={() => setNewQuestion({...newQuestion, options: [...newQuestion.options, '']})} 
+                                                className='py-2 bg-green-600 text-white pl-5 pr-5 rounded-lg hover:bg-green-800'>
+                                            Add Answer Option
+                                        </button>
+                                    </div>
+                                :
+                                newQuestion.type == GrantQuestionType.FILE ?
+                                    <div className="flex flex-col gap-2 w-full">
+                                        <label  htmlFor="fileType" className="block text-gray-700 font-semibold">File input options</label>
+                                        <div className="flex flex-row gap-2 justify-between w-full">
+                                            <DropDown options={filetypeOptions} identity='Select Filetypes' selectCallback={addAcceptedFiletype} />
+                                                {
+                                                    newQuestion.options.length > 0 ?
+                                                    <div className="flex flex-col items-end border-2 border-primary rounded-md p-2">
+                                                        {
+                                                        newQuestion.options.map((filetype, index) => (
+                                                            <div className='flex flex-row items-center'>
+                                                                <label className="block text-gray-700 font-semibold">{filetype}</label>
+                                                                <XMarkIcon onClick={() => removeAcceptedFiletype(index)}
+                                                                        className="h-6 text-red-700"/>
+                                                            </div>
+                                                        ))
+                                                        }
+                                                    </div>
+                                                    : <></>
+                                                }
+                                        </div>
+                                    </div>
+                                :
+                                <></>
+                            }
+                            {
+                                newQuestion.type != GrantQuestionType.NULL ? 
+                                <div className="flex flex-row gap-2">
+                                    <label className="block text-gray-700 font-semibold">Required Question</label>
+                                    <input type="checkbox" onClick={() => setNewQuestion({...newQuestion, required: !newQuestion.required})}
+                                        checked={newQuestion.required}/>
+                                </div>
+                                :
+                                <></>
+                            }
+                            {newQuestionFeedback && <div className='text-sm text-red-600'>{newQuestionFeedback}</div>}
                         </div>
                     </div>
 
@@ -337,12 +520,43 @@ const GrantForm: React.FC<GrantFormProps> = ({ type }) => {
                         <div className='mt-6'>
                             <h3 className="text-lg font-semibold text-gray-800 mb-4">Custom Questions</h3>
                             {grant.questions.map((question) => (
-                                <div key={question.id} className="mb-4 flex justify-between p-2 border-gray-300 border items-center rounded-lg">
-                                    <label htmlFor={`question-${question.id}`} className="block text-gray-700 font-semibold max-w-[80%]">
-                                        {question.question}
-                                    </label>
-                                    <button type='button'className='text-[1rem] p-2 bg-min-500 text-white pl-5 pr-5 rounded-lg hover:bg-red-600' 
-                                        onClick={() =>{ handleRemoveQuestion(question.id)} }>Remove</button>
+                                <div key={question.id} className="mb-4 flex flex-col justify-between p-2 border-gray-300 border items-center rounded-lg">
+                                    <div className="flex flex-row justify-between w-full items-center">
+                                        <label htmlFor={`question-${question.id}`} className="block text-gray-700 font-semibold max-w-[80%]">
+                                            {question.question}
+                                        </label>
+                                        <button type='button'className='text-[1rem] p-2 bg-red-500 text-white pl-5 pr-5 rounded-lg hover:bg-red-600'
+                                            onClick={() =>{ handleRemoveQuestion(question.id)} }>Remove</button>
+                                    </div>
+                                    <div className='flex flex-row w-full gap-3'>
+                                        {
+                                            question.type == GrantQuestionType.CHECKBOX ?
+                                                question.options.map((option, index) => (
+                                                    <div key={index} className='flex flex-row items-center gap-1'>
+                                                        <input type='checkbox' name={`question-${question.id}`} value={option} />
+                                                        <label htmlFor={`question-${question.id}`} className="block text-gray-700 font-semibold">
+                                                            {option}
+                                                        </label>
+                                                    </div>
+                                                ))
+                                            : question.type == GrantQuestionType.DROP_DOWN ?
+                                                <DropDown options={question.options} identity="Select Option"/>
+                                            : question.type == GrantQuestionType.RADIO ?
+                                                question.options.map((option, index) => (
+                                                    <div key={index} className='flex flex-row items-center gap-1'>
+                                                        <input type='radio' name={`question-${question.id}`} value={option} />
+                                                        <label htmlFor={`question-${question.id}`} className="block text-gray-700 font-semibold">
+                                                            {option}
+                                                        </label>
+                                                    </div>
+                                            ))
+                                            : question.type == GrantQuestionType.FILE ?
+                                                <div className="flex flex-row gap-1">
+                                                    <span className="block text-gray-700 font-semibold">Accepted filetypes: {question.options.join(", ")}</span>
+                                                </div>
+                                            : <></>
+                                        }
+                                    </div>
                                 </div>
                             ))}
                         </div>
@@ -393,7 +607,7 @@ const GrantForm: React.FC<GrantFormProps> = ({ type }) => {
                                         <h4 className='text-xl'>{milestone.title}</h4>
                                         <p className='text-sm'>Due: {formatDateToYYYYMMDD(milestone.dueDate)}</p>
                                         <p className='text-base'>{milestone.description}</p>
-                                        <Trash className='absolute text-magnify-dark-blue top-2 right-2 w-6 h-6 cursor-pointer invisible group-hover:visible'
+                                        <TrashIcon className='absolute text-magnify-dark-blue top-2 right-2 w-6 h-6 cursor-pointer invisible group-hover:visible'
                                                onClick={() => handleRemoveMilestone(milestone.id)}/>
                                     </div>
                                 ))}
@@ -456,4 +670,4 @@ const GrantForm: React.FC<GrantFormProps> = ({ type }) => {
     );
 };
 
-export default GrantForm
+export default GrantForm;
