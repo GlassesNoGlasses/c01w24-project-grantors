@@ -1,6 +1,6 @@
 export interface GrantStatsPageProps{};
 
-export type CategoryDictionary = 
+export type TableValues = 
     {
         [category: string]: number
     };

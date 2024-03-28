@@ -50,7 +50,7 @@ const Navbar = ({}: NavbarProps) => {
 	const AdminTopNaviation = (): JSX.Element =>  {
 		return (
 			<>
-				<div className='flex items-center'>	
+				<div className='flex items-center relative'>	
 					<div className='hidden md:flex justify-end lg:text-[20px] text-[17px] xl:gap-20 xl:mr-16 
 					mr-6 lg:gap-10 gap-6'>
 						<Link className='text-base hover:underline' to="/files">FileSys</Link>
