@@ -225,6 +225,36 @@ app.get('/user', express.json(), async (req, res) => {
 	});
 });
 
+app.get('/user/:userID', express.json(), async (req, res) => {
+	try {
+		const uid = req.params.userID
+		const userCollection = db.collection(COLLECTIONS.users);
+		const user = await userCollection.findOne({ _id: new ObjectId(uid) });
+
+		if (!user) {
+			return res.status(404).send(uid);
+		}
+
+		// Do not return password hash
+		res.status(200).json({ 
+			response: {
+				accountID: user._id,
+				username: user.username,
+				email: user.email,
+				firstName: user.firstName,
+				lastName: user.lastName,
+				isAdmin: user.isAdmin,
+				isSysAdmin: user.isSysAdmin,
+				organization: user.organization,
+				preferences: user.preferences,
+			} 
+		});
+	} catch (error) {
+		console.error(error);
+		res.status(500).json({ error: "Internal server error." });
+	}
+});
+
 app.patch('/users/:userID/favourites', express.json(), async (req, res) => {
 	const userID = req.params.userID;
 	const { grantID } = req.body;
@@ -921,8 +951,57 @@ app.get('/users', express.json(), async (req, res) => {
 		const userCollection = db.collection(COLLECTIONS.users)
 
 		const users = await userCollection.find({}).toArray();
+
+		const modifiedUsers = users.map(user => {
+            const { _id, ...rest } = user;
+            return { accountID: _id, ...rest };
+        });
 		
-		res.status(200).json({ users: users})
+		res.status(200).json({ users: modifiedUsers})
+	} catch (error) {
+		res.status(500).json({ error: "Internal server error." });
+	}
+})
+
+app.delete('/users/:userID/delete', express.json(), async (req, res) => {
+	try {
+		const uid = req.params.userID
+
+		const userCollection = db.collection(COLLECTIONS.users)
+
+		const deleted = await userCollection.deleteOne({
+			_id: new ObjectId(uid)
+		})
+
+		if (deleted.deletedCount != 1) {
+			res.status(404).json({ message: 'no changes have been made'})
+		}
+		else {
+			res.status(200).json({ message: `user ${uid} deleted`})
+		}
+		
+	} catch (error) {
+		res.status(500).json({ error: "Internal server error." });
+	}
+})
+
+app.put('/users/:userID/edit', express.json(), async (req, res) => {
+	try {
+		const uid = req.params.userID
+
+		const userCollection = db.collection(COLLECTIONS.users)
+
+		const deleted = await userCollection.deleteOne({
+			_id: new ObjectId(uid)
+		})
+
+		if (deleted.deletedCount != 1) {
+			res.status(404).json({ message: 'no changes have been made'})
+		}
+		else {
+			res.status(200).json({ message: `user ${uid} deleted`})
+		}
+		
 	} catch (error) {
 		res.status(500).json({ error: "Internal server error." });
 	}
