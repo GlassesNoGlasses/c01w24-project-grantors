@@ -85,7 +85,7 @@ const GrantForm = ({ user, grant }: GrantFormProps) => {
         }
 
         uploadedFiles.map((files: File[], index) => {
-            if (files.length) {
+            if (files?.length) {
                 FileController.uploadFiles("question" + index, files, user).then((uploadedCount: number | undefined) => {
                     if (uploadedCount && uploadedCount < files.length) {
                         console.error("Error while uploading files");
