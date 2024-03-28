@@ -127,6 +127,7 @@ const ClientApplicationList = ({}) => {
                             itemsPerPageOptions={itemsPerPageOptions}
                             defaultIPP={10}
                             defaultSort={columns[1]}
+                            onRowClick={onApplicationRowClick}
                     />
                     </div> :
                     <div className="text-white flex flex-row mt-2">
