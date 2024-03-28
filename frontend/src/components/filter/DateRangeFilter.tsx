@@ -17,15 +17,17 @@ const DateRangeFilter = ({label, rangeStartLabel,
             <div className="flex flex-row gap-4">
                 <div>
                     <label className="text-sm">{rangeStartLabel}</label>
-                    <input type="date" className="border border-black text-black bg-white rounded-lg text-sm p-1 px-2"
+                    <input id="date-range-start" type="date" className="border border-black text-black bg-white rounded-lg text-sm p-1 px-2"
                         value={rangeStart?.toISOString().split('T')[0] as string ?? ""}
-                        onChange={(event) => setRangeStart(event.target.valueAsDate)} />
+                        onChange={(event) => setRangeStart(event.target.valueAsDate)} 
+                        aria-labelledby="date-range-start"/>
                 </div>
                 <div>
-                    <label className="text-sm">{rangeEndLabel}</label>
+                    <label id="date-range-end" className="text-sm">{rangeEndLabel}</label>
                     <input type="date" className="border border-black text-black bg-white rounded-lg text-sm p-1 px-2"
                         value={rangeEnd?.toISOString().split('T')[0] as string ?? ""}
-                        onChange={(event) => setRangeEnd(event.target.valueAsDate)} />
+                        onChange={(event) => setRangeEnd(event.target.valueAsDate)} 
+                        aria-labelled="date-range-end"/>
                 </div>
             </div>
         </div>
