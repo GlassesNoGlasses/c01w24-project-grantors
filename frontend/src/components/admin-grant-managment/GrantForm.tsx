@@ -335,7 +335,9 @@ const GrantForm: React.FC<GrantFormProps> = ({ type }) => {
     return (
         <div className="flex items-center justify-center min-h-screen pt-20">
             <div className="w-full max-w-2xl px-8 py-10 bg-white rounded-xl mt-10 mb-10 border-4 border-primary shadow-2xl shadow-black">
-                <h2 className="text-2xl font-bold text-center text-gray-800 mb-8">{type === GrantFormType.CREATE ? 'Create a Grant': 'Edit Grant'}</h2>
+                <h2 className="text-2xl font-bold text-center text-gray-800 mb-8">
+                    {type === GrantFormType.CREATE ? 'Create a Grant': 'Edit Grant'}
+                </h2>
                 <form onSubmit={handleSubmit} className="space-y-6">
                     {/* Organization */}
                     <div>
@@ -410,9 +412,10 @@ const GrantForm: React.FC<GrantFormProps> = ({ type }) => {
                                     newQuestion.type != GrantQuestionType.NULL ?
                                     <>
                                     <input type="text" name="question" value={newQuestion.question} onChange={handleQuestionChange}
-                                        className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-secondary focus:border-transparent" />
+                                        className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2
+                                        focus:ring-secondary focus:border-transparent" aria-label="question"/>
                                     <button type='button' className='py-2 bg-green-600 text-white pl-5 pr-5 rounded-lg
-                                          hover:bg-green-800' onClick={handleQuestionSubmit}>
+                                          hover:bg-green-800' onClick={handleQuestionSubmit} aria-label="add question">
                                             add
                                     </button>
                                     </>
@@ -429,9 +432,12 @@ const GrantForm: React.FC<GrantFormProps> = ({ type }) => {
                                         {
                                             newQuestion.options.map((option, index) => (
                                                 <div className="flex flex-row items-center gap-1">
-                                                    <input key={index} type="text" name={`answer-option-${index}`} value={option} onChange={(e) => handleAnswerChoicesChange(index, e.target.value)}
-                                                        className="w-1/2 px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-secondary focus:border-transparent" />
-                                                    <button type="button" aria-label="remove answer option" onClick={() => setNewQuestion({...newQuestion, options: [...newQuestion.options.filter((op, ind) => ind != index)]})}>
+                                                    <input key={index} type="text" name={`answer-option-${index}`} value={option} 
+                                                           onChange={(e) => handleAnswerChoicesChange(index, e.target.value)}
+                                                           className="w-1/2 px-4 py-2 border border-gray-300 rounded-md 
+                                                           focus:outline-none focus:ring-2 focus:ring-secondary focus:border-transparent" 
+                                                           aria-label={`question option ${index + 1}`}/>
+                                                    <button type="button" aria-label={`remove answer option ${index + 1}`} onClick={() => setNewQuestion({...newQuestion, options: [...newQuestion.options.filter((op, ind) => ind != index)]})}>
                                                         <XMarkIcon  className="text-red-700 h-7"/>
                                                     </button>
                                                 </div>
@@ -471,9 +477,9 @@ const GrantForm: React.FC<GrantFormProps> = ({ type }) => {
                             {
                                 newQuestion.type != GrantQuestionType.NULL ? 
                                 <div className="flex flex-row gap-2">
-                                    <label className="block text-gray-700 font-semibold">Required Question</label>
+                                    <label id="required-question" className="block text-gray-700 font-semibold">Required Question</label>
                                     <input type="checkbox" onClick={() => setNewQuestion({...newQuestion, required: !newQuestion.required})}
-                                        checked={newQuestion.required}/>
+                                        checked={newQuestion.required} aria-labelledby='required-question'/>
                                 </div>
                                 :
                                 <></>
@@ -533,9 +539,14 @@ const GrantForm: React.FC<GrantFormProps> = ({ type }) => {
                         <h3 className="text-base text-gray-700 font-semibold mb-2">Milestones</h3>
                         <div className='flex flex-col gap-4'>
                             <div>
-                                <label htmlFor="milestoneTitle" className="block text-gray-700 font-semibold mb-2">Title</label>
-                                <input type="text" name="milestoneTitle" id="milestoneTitle" value={milestone.title} onChange={(e) => setMilestoneTitle(e.target.value)}
-                                    className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-secondary focus:border-transparent" />
+                                <label htmlFor="milestoneTitle" className="block text-gray-700 font-semibold mb-2"
+                                       id="milestone-title">
+                                    Title
+                                </label>
+                                <input type="text" name="milestoneTitle" id="milestoneTitle" value={milestone.title} 
+                                       onChange={(e) => setMilestoneTitle(e.target.value)} className="w-full px-4 py-2 border
+                                     border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-secondary 
+                                      focus:border-transparent" aria-labelledby="milestone-title"/>
                             </div>
                             <div>
                                 <label htmlFor="milestoneDescription" className="block text-gray-700 font-semibold mb-2">Description</label>
@@ -556,7 +567,7 @@ const GrantForm: React.FC<GrantFormProps> = ({ type }) => {
                             <button type='button'
                                     className='p-2 bg-green-600 text-white px-5 rounded-lg hover:bg-green-800'
                                     onClick={handleMilestoneSubmit}>
-                                Add Milstone
+                                Add Milestone
                             </button>
                             {milestoneFeedback && <div className='text-sm text-red-600'>{milestoneFeedback}</div>}
                         </div>
