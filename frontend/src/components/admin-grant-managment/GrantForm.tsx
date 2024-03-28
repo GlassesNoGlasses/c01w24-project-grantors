@@ -31,6 +31,7 @@ const initalNewQuestion: GrantQuestion = {
     answer: '',
     type: GrantQuestionType.NULL,
     options: [],
+    required: false,
 }
 
 const initialFiletypeOption: string[] = [
@@ -45,6 +46,7 @@ const GrantForm: React.FC<GrantFormProps> = ({ type }) => {
     // state variables
     const [newQuestion, setNewQuestion] = useState<GrantQuestion>(initalNewQuestion);
     const [feedback, setFeedback] = useState("");
+    const [newQuestionFeedback, setNewQuestionFeedback] = useState<string>("");
     const [unauthorized, setUnauthorized] = useState(false);
     const navigate = useNavigate()
     
@@ -166,22 +168,24 @@ const GrantForm: React.FC<GrantFormProps> = ({ type }) => {
         if (newQuestion.type == GrantQuestionType.DROP_DOWN ||
             newQuestion.type == GrantQuestionType.RADIO) {
             if (questionOptionsCleaned.length < 2) {
-                setFeedback('At least two options are required for multiple choice or checkbox questions');
+                setNewQuestionFeedback(`At least two options are required for ${newQuestion.type} questions`);
                 return;
             }
         } else if (newQuestion.type == GrantQuestionType.CHECKBOX) {
             if (questionOptionsCleaned.length < 1) {
-                setFeedback('At least one option is required for checkbox questions');
+                setNewQuestionFeedback('At least one option is required for checkbox questions');
                 return;
             }
         } else if (newQuestion.type == GrantQuestionType.FILE) {
             if (questionOptionsCleaned.length < 1) {
-                setFeedback('At least one file type is required for file upload questions');
+                setNewQuestionFeedback('At least one file type is required for file upload questions');
                 return;
             }
             setFiletypeOptions(initialFiletypeOption.filter((option) => option != 'All'));
             resetOptions = ['All']
         }
+
+        setNewQuestionFeedback('');
 
         setGrant({ ...grant, questions: [...grant.questions, {...newQuestion, id: max+1, options: questionOptionsCleaned}]});
         // Keep the type for the next question
@@ -400,14 +404,17 @@ const GrantForm: React.FC<GrantFormProps> = ({ type }) => {
                     <div className='mt-6'>
                         <label htmlFor="question" className="block text-gray-700 font-semibold mb-2">Add a Question for Applicants</label>
 
-                        <div className="flex flex-col items-start">
+                        <div className="flex flex-col items-start gap-2">
                             <div className='flex flex-row items-center gap-4 w-full'>
                                 {
                                     newQuestion.type != GrantQuestionType.NULL ?
                                     <>
                                     <input type="text" name="question" value={newQuestion.question} onChange={handleQuestionChange}
                                         className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-secondary focus:border-transparent" />
-                                    <button type='button' className='py-2 bg-green-600 text-white pl-5 pr-5 rounded-lg hover:bg-green-800' onClick={handleQuestionSubmit}>add</button>
+                                    <button type='button' className='py-2 bg-green-600 text-white pl-5 pr-5 rounded-lg
+                                          hover:bg-green-800' onClick={handleQuestionSubmit}>
+                                            add
+                                    </button>
                                     </>
                                     : <></>
                                 }
@@ -421,11 +428,19 @@ const GrantForm: React.FC<GrantFormProps> = ({ type }) => {
                                         <span className="block text-gray-700 font-semibold">Question Options</span>
                                         {
                                             newQuestion.options.map((option, index) => (
-                                                <input key={index} type="text" name={`answer-option-${index}`} value={option} onChange={(e) => handleAnswerChoicesChange(index, e.target.value)}
-                                                    className="w-1/2 px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-secondary focus:border-transparent" />
+                                                <div className="flex flex-row items-center gap-1">
+                                                    <input key={index} type="text" name={`answer-option-${index}`} value={option} onChange={(e) => handleAnswerChoicesChange(index, e.target.value)}
+                                                        className="w-1/2 px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-secondary focus:border-transparent" />
+                                                    <button type="button" aria-label="remove answer option" onClick={() => setNewQuestion({...newQuestion, options: [...newQuestion.options.filter((op, ind) => ind != index)]})}>
+                                                        <XMarkIcon  className="text-red-700 h-7"/>
+                                                    </button>
+                                                </div>
                                             ))
                                         }
-                                        <button type='button' onClick={() => setNewQuestion({...newQuestion, options: [...newQuestion.options, '']})} className='py-2 bg-green-600 text-white pl-5 pr-5 rounded-lg hover:bg-green-800'>Add Answer Option</button>
+                                        <button type='button' onClick={() => setNewQuestion({...newQuestion, options: [...newQuestion.options, '']})} 
+                                                className='py-2 bg-green-600 text-white pl-5 pr-5 rounded-lg hover:bg-green-800'>
+                                            Add Answer Option
+                                        </button>
                                     </div>
                                 :
                                 newQuestion.type == GrantQuestionType.FILE ?
@@ -453,6 +468,17 @@ const GrantForm: React.FC<GrantFormProps> = ({ type }) => {
                                 :
                                 <></>
                             }
+                            {
+                                newQuestion.type != GrantQuestionType.NULL ? 
+                                <div className="flex flex-row gap-2">
+                                    <label className="block text-gray-700 font-semibold">Required Question</label>
+                                    <input type="checkbox" onClick={() => setNewQuestion({...newQuestion, required: !newQuestion.required})}
+                                        checked={newQuestion.required}/>
+                                </div>
+                                :
+                                <></>
+                            }
+                            {newQuestionFeedback && <div className='text-sm text-red-600'>{newQuestionFeedback}</div>}
                         </div>
                     </div>
 

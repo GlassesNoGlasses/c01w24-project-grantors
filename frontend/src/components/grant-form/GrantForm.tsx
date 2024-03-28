@@ -13,6 +13,7 @@ import FileController from '../../controllers/FileController';
 const GrantForm = ({ user, grant }: GrantFormProps) => {
     const [questionList, setQuestionList] = useState<GrantQuestion[]>(grant.questions);
     const [uploadedFiles, setUploadedFiles] = useState<File[][]>([]);
+    const [feedback, setFeedback] = useState<string>("");
     const navigate = useNavigate();
     const location = useLocation();
 
@@ -74,8 +75,15 @@ const GrantForm = ({ user, grant }: GrantFormProps) => {
             return 
         }
 
+        for (let i = 0; i < questionList.length; i++) {
+            if (questionList[i].required && !questionList[i].answer) {
+                setFeedback("All required questions must be answered.");
+                return;
+            }
+        }
+
         uploadedFiles.map((files: File[], index) => {
-            if (files.length) {
+            if (files?.length) {
                 FileController.uploadFiles("question" + index, files, user).then((uploadedCount: number | undefined) => {
                     if (uploadedCount && uploadedCount < files.length) {
                         console.error("Error while uploading files");
@@ -131,11 +139,14 @@ const GrantForm = ({ user, grant }: GrantFormProps) => {
                     Application Form
                 </h1>
 
+                <p>All questions marked with <span className='text-red-500'>*</span> are required.</p>
+
                 {questionList.map((questionElement, questionIndex) => (
                     <li key={questionIndex} className='list-none'>
                          <div className="flex flex-col gap-1 p-5 px-3">
                             <h2 id={`question-${questionIndex}`} className='text-base'>
                                 {questionElement.question}
+                                {questionElement.required ? <span className='text-red-500'>*</span> : ''}
                             </h2>
                             {
                                 questionElement.type === GrantQuestionType.DROP_DOWN ? (
@@ -221,6 +232,12 @@ const GrantForm = ({ user, grant }: GrantFormProps) => {
                         </div>
                     </li>
                 ))}
+                {
+                    feedback &&
+                    <div className="flex flex-row justify-center">
+                        <span className="text-red-500">{feedback}</span>
+                    </div>
+                }
                 <div className="flex flex-row items-center justify-between">
                     
                     <Link to='/applications' tabIndex={-1}>

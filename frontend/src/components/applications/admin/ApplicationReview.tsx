@@ -11,12 +11,16 @@ import GrantsController from "../../../controllers/GrantsController";
 import ReviewController from "../../../controllers/ReviewController";
 import { useUserContext } from "../../contexts/userContext";
 import { useNavigate } from "react-router-dom";
+import { DownloadWrapper } from "../../files/download/DownloadWrapper";
+import FileController from "../../../controllers/FileController";
+import { FSFile } from "../../../interfaces/FSFile";
 
 const ApplicationReview = () => {
     const { user } = useUserContext();
     const { applicationID } = useParams();
     const [ application, setApplication ] = useState<Application | undefined>();
     const [ applicant, setApplicant ] = useState<Applicant | undefined>();
+    const [ files, setFiles ] = useState<FSFile[]>([]);
     const [ grant, setGrant ] = useState<Grant | undefined>();
     const [ rating, setRating ] = useState<number>(0);
     const [ hoverRating, setHoverRating ] = useState<number>(0);
@@ -90,13 +94,42 @@ const ApplicationReview = () => {
                     setGrant(grant);
                 }
             });
+
+            FileController.fetchUserFSFiles(application.applicantID).then((files: FSFile[] | undefined) => {
+                if (files) {
+                    console.log(files);
+                    const neededFiles = files.filter((file: FSFile) => {
+                        return application?.responses.some((response: GrantQuestion) => {
+                            return response.answer?.includes(file.title);
+                        });
+                    });
+                    setFiles(neededFiles);
+                }
+            });
         }
 
     }, [application, user]);
 
+
     const formatQuestionAnswer = (question: GrantQuestion) => {
-        return question.type != GrantQuestionType.CHECKBOX ? question.answer 
-                                : question.answer?.split(',').join(', ');
+        switch (question.type) {
+            case GrantQuestionType.CHECKBOX:
+                return question.answer?.split(',').join(', ');
+            case GrantQuestionType.FILE:
+                return question.answer ? 
+                    <div className="flex flex-col">
+                        {
+                        question.answer.split(',').map((fileName: string) => {
+                            const file: File | undefined = files.find((fsFile: FSFile) => fsFile.title === fileName)?.file;
+                            return file ? <DownloadWrapper element={<span className="underline">{fileName}</span>} file={file} /> 
+                            : 'Error loading file.'
+                        })
+                        }
+                    </div>
+                    : 'No file uploaded';
+            default:
+                return question.answer;
+        }
     };
 
     return (

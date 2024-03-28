@@ -142,14 +142,14 @@ export default class FileController {
         }
     };
 
-     // Returns the FSFile of the corresponding user, or undefined.
-     static async fetchUserFSFiles(user: User): Promise<FSFile[] | undefined> {
-        if (!user) {
+     // Returns the FSFile of the corresponding userID, or undefined.
+     static async fetchUserFSFiles(userID: string): Promise<FSFile[] | undefined> {
+        if (!userID) {
             return undefined;
         };
 
         try {
-            const res = await fetch(`http://localhost:${SERVER_PORT}/files/user/${user.accountID}`, {
+            const res = await fetch(`http://localhost:${SERVER_PORT}/files/user/${userID}`, {
                 method: 'GET',
             });
 
