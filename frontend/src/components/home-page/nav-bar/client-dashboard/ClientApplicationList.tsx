@@ -118,14 +118,19 @@ const ClientApplicationList = ({}) => {
             <div className="flex flex-col h-full items-start justify-start p-6 bg-primary
                 rounded-2xl border-4 border-white shadow-2xl shadow-black">
                 <span className="text-2xl text-white mb-4">My Applications</span>
-                    {applications.length > 0 ? 
-                        <Table items={tableData}
-                    columns={columns}
-                    itemsPerPageOptions={itemsPerPageOptions}
-                    defaultIPP={10}
-                    defaultSort={columns[1]}
-                    onRowClick={onApplicationRowClick}
-                    /> :
+
+                    {
+                    applications.length > 0 ?
+                    <div className="flex flex-row w-full gap-4">
+                        <TableFilter tableData={tableData} setTableData={setFilteredTableData} />
+                        <Table items={filteredTabledata}
+                            columns={columns}
+                            itemsPerPageOptions={itemsPerPageOptions}
+                            defaultIPP={10}
+                            defaultSort={columns[1]}
+                            onRowClick={onApplicationRowClick}
+                    />
+                    </div> :
                     <div className="text-white flex flex-row mt-2">
                         <h1>You Have No Applications</h1>
                         <p className="text-white">, Apply To Grants &nbsp;
