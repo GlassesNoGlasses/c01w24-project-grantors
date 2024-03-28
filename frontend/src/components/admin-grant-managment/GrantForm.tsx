@@ -6,6 +6,8 @@ import { Grant, GrantMilstone, GrantQuestion } from '../../interfaces/Grant'
 import { GrantFormProps, GrantFormType } from './GrantFormProps';
 import GrantsController from '../../controllers/GrantsController'
 import { Trash } from 'heroicons-react';
+import { Modal } from '../modal/Modal';
+
 
 
 const GrantForm: React.FC<GrantFormProps> = ({ type }) => {
@@ -31,6 +33,20 @@ const GrantForm: React.FC<GrantFormProps> = ({ type }) => {
         milestones: [],
         publish: false,
     };
+
+    const [showModal, setShowModal] = useState<boolean>(false);
+    const [showSaveModal, setShowSaveModal] = useState<boolean>(false);
+
+    const handleCloseModalAndNavigate = () => {
+        setShowModal(false);
+        navigate('/');
+    };
+
+    const handleCloseModalAndNavigateSave = () => {
+        setShowSaveModal(false);
+        navigate('/');
+    };
+
 
     // set initial form to conform to default empty grant
     const [grant, setGrant] = useState<Grant>(initialGrantState);
@@ -172,9 +188,9 @@ const GrantForm: React.FC<GrantFormProps> = ({ type }) => {
                 if (grantID) {
                     setGrant(initialGrantState);
                     if (publish) {
-                        setFeedback('Grant Published!');
+                        setShowModal(true);
                     } else {
-                        setFeedback('Grant Saved!')
+                        setShowSaveModal(true);
                     }
                 } else {
                     setFeedback('Error creating grant')
@@ -398,6 +414,44 @@ const GrantForm: React.FC<GrantFormProps> = ({ type }) => {
                    
                 </form>
             </div>
+            <Modal showModal={showModal} closeModal={handleCloseModalAndNavigate} openModal={() => setShowModal(true)}>
+			<div className='flex h-[100vh] w-[100vw] justify-center items-center'>
+				<div className='bg-white h-fit w-2/5 border-4 border-blue-400 border-solid rounded-lg'>
+					<div className='h-full w-full'>
+						<p className='text-xl text-center font-semibold'>
+							{`You have successfully created the grant.`}
+						</p>
+						<div className='flex flex-row justify-center'>
+							<button className='p-2 px-5 m-2 bg-blue-500 hover:bg-blue-600 active:bg-blue-700
+								text-white font-bold rounded-lg shadow-md transition-colors duration-150 ease-in
+								text-base text-center justify-center align-middle flex pb-1'
+								onClick={handleCloseModalAndNavigate}>
+								Close
+							</button>
+						</div>
+					</div>
+				</div>
+			</div>
+		</Modal>
+        <Modal showModal={showSaveModal} closeModal={handleCloseModalAndNavigateSave} openModal={() => setShowSaveModal(true)}>
+			<div className='flex h-[100vh] w-[100vw] justify-center items-center'>
+				<div className='bg-white h-fit w-2/5 border-4 border-blue-400 border-solid rounded-lg'>
+					<div className='h-full w-full'>
+						<p className='text-xl text-center font-semibold'>
+							{`You have successfully saved the grant.`}
+						</p>
+						<div className='flex flex-row justify-center'>
+							<button className='p-2 px-5 m-2 bg-blue-500 hover:bg-blue-600 active:bg-blue-700
+								text-white font-bold rounded-lg shadow-md transition-colors duration-150 ease-in
+								text-base text-center justify-center align-middle flex pb-1'
+								onClick={handleCloseModalAndNavigateSave}>
+								Close
+							</button>
+						</div>
+					</div>
+				</div>
+			</div>
+		</Modal>
         </div>
     );
 };
