@@ -20,10 +20,13 @@ const ClientDashboard = ({}: ClientDashboardProps) => {
 	return (
 		<div className="dashboard-container py-20 w-full h-full">
 
-			<div className='bg-white pb-8'>
-				<h2 className='text-6xl text-secondary pl-10 w-fit flex items-center flex-col'>
+			<div className='flex flex-col items-start pl-10 bg-white pb-8'>
+				<h1 className='text-6xl text-primary w-fit'>
+					Dashboard
+				</h1>
+				<h2 className='text-4xl text-secondary w-fit flex items-center flex-col'>
 					Welcome, {user?.username}!
-					<div className='bg-primary h-[8px] -mt-4 w-[105%]'/>
+					<div className='bg-primary h-[4px] -mt-4 w-[100%]'/>
 				</h2>
 			</div>
 
