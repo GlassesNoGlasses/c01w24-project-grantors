@@ -121,8 +121,10 @@ const Settings = () => {
                         <Attribute attribute='Full Name' value={user?.firstName + ' ' + user?.lastName}></Attribute>
                         <Attribute attribute='Username' value={user?.username}></Attribute>
                         <Attribute attribute='Email' value={user?.email}></Attribute>
-                        {user?.isAdmin ? <Attribute attribute='Account Type' value={'admin'}></Attribute> : 
-                        <Attribute attribute='Account Type' value={'applicant'}></Attribute>}
+                        {user?.isSysAdmin ? <Attribute attribute='Account Type' value={'admin'}/>
+                        :
+                        (user?.isAdmin ? <Attribute attribute='Account Type' value={'grantor'}/> : 
+                        <Attribute attribute='Account Type' value={'applicant'}></Attribute>)}
                         {user?.isAdmin ? <Attribute attribute='Organization' value={user?.organization}></Attribute> : <></>}
                     </div>
                     
