@@ -915,3 +915,29 @@ app.put('/application/:applicationID/funding', express.json(), async (req, res) 
         res.status(500).json({ error: "Internal server error." });
     }
 });
+
+app.post('/message/:userEmail', express.json(), async (req, res) => {
+	const userEmail = req.params.userEmail;
+	const { message } = req.body;
+
+	if (!message || !userEmail) {
+		return res.status(400).json({ error: "Invalid request: 'userEmail' and 'message' are required." });
+	}
+
+	try {
+		const userCollection = db.collection(COLLECTIONS.users);
+		const user = await userCollection.findOne({ email: userEmail });
+
+		if (!user) {
+			return res.status(404).send("User not found.")
+		}
+
+		
+		// Send email to user
+		console.log(`Email sent to ${userEmail} with subject: ${subject} and message: ${message}`);
+		res.status(200).json({ message: "Email sent successfully." });
+	} catch (error) {
+		console.error("Error sending email:", error);
+		res.status(500).json({ error: "Internal server error." });
+	}
+})

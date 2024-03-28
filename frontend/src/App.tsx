@@ -22,6 +22,7 @@ import Settings from "./components/settings-page/Settings";
 import React, { useEffect } from 'react';
 import Background from "./components/background/Background";
 import FundingView from "./components/applications/admin/fundingView"
+import { MessageBoard } from "./components/messages/message-board/MessageBoard";
 
 
 
@@ -76,6 +77,7 @@ function App() {
 							<Route path="applications/:applicationID/funding" element={<FundingView />} />
 							<Route path="applications/:applicationID" element={<ApplicationView />} />
 							<Route path="applications/submitted/:applicationID" element={<SubmittedView/>} />
+							<Route path="messages" element={<MessageBoard />} />
 							<Route path="settings" element={<Settings />} />
 							<Route path="*" element={<NotFoundPage />} />
 							

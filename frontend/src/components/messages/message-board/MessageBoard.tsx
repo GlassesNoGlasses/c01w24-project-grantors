@@ -12,13 +12,6 @@ export const MessageBoard = ({
 
 }: MessageBoardProps) => {
 
-  /* TODO:
-
-  Get list of applicant emails:
-  1. Fetch all organization applications with applicationController.
-  2. Fetch all appliciant emails from the applications.
-  */
-
   const [applicantEmails, setApplicantEmails] = useState<string[]>([]);
   const [showModal, setShowModal] = useState<boolean>(false);
 
