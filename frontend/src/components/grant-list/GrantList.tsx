@@ -8,7 +8,7 @@ import GrantsController from '../../controllers/GrantsController';
 
 const GrantList = ({ grants, favouriteGrants }: GrantListProps) => {
     return (
-        <ul className="flex flex-col gap-5 w-full pl-1 pr-4 pt-4 h-[100vh] overflow-scroll items-center">
+        <ul className="flex flex-col gap-5 w-full pl-1 pr-4 pt-4 h-[100vh] overflow-scroll items-center" tabIndex={-1}>
             {grants.map((grant, index) => (
                 <li key={index} className='w-[90%]'>
                     <GrantItem grant={grant} favourite={favouriteGrants.includes(grant.id)} />
@@ -73,7 +73,7 @@ export const GrantItem = ({ grant, link, favourite }: GrantItemProps) => {
                     <h1 className="text-2xl font-bold">{grant.title}</h1>
                     <div className="flex flex-row gap-2">
                         <h2 className="text-lg">{`CAD $${grant.minAmount.toString()} - $${grant.maxAmount.toString()}`}</h2>
-                        <button aria-label="favourite button" onClick={(e) => { 
+                        <button aria-label="favourite" onClick={(e) => { 
                             e.preventDefault();
                             toggleFavorite(); 
                         }}>

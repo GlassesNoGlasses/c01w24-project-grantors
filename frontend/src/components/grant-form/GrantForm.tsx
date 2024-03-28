@@ -146,7 +146,7 @@ const GrantForm = ({ user, grant }: GrantFormProps) => {
                          <div className="flex flex-col gap-1 p-5 px-3">
                             <h2 id={`question-${questionIndex}`} className='text-base'>
                                 {questionElement.question}
-                                {questionElement.required ? <span className='text-red-500'>*</span> : ''}
+                                {questionElement.required ? <span aria-label="required" className='text-red-500'>*</span> : ''}
                             </h2>
                             {
                                 questionElement.type === GrantQuestionType.DROP_DOWN ? (
@@ -171,6 +171,7 @@ const GrantForm = ({ user, grant }: GrantFormProps) => {
                                                             questionList[questionIndex].answer?.split(',').filter((item) => item !== option).join(',');
                                                         setAnswer(questionIndex, newAnswer ?? '');
                                                     }}
+                                                    required={questionElement.required}
                                                     />
                                                 <label id={`question-${questionIndex}-option-${optionIndex}`}>{option}</label>
                                             </div>
@@ -191,7 +192,8 @@ const GrantForm = ({ user, grant }: GrantFormProps) => {
                                                           e.preventDefault(); // Prevent the form submission
                                                           setAnswer(questionIndex, option);
                                                         }
-                                                      }}/>
+                                                      }}
+                                                    required={questionElement.required}/>
                                                 <label id={`question-${questionIndex}-option-${optionIndex}`}>{option}</label>
                                             </div>
                                         ))}
@@ -215,7 +217,7 @@ const GrantForm = ({ user, grant }: GrantFormProps) => {
                                         <DropZoneFile
                                             fileLimit={25}
                                             FileCallback={(droppedFiles) => handleFileUpload(questionIndex, droppedFiles)}
-                                            dropZoneElement={<FileDisplay aria-labelledby={`question-${questionIndex}`} />}
+                                            dropZoneElement={<FileDisplay aria-labelledby={`question-${questionIndex}`}/>}
                                             acceptedFileTypes={GrantQuestionFileTypesToAccept(questionElement.options as GrantQuestionFileType[])}
                                         />
                                     </div>

@@ -4,6 +4,8 @@ import { useEffect, useState } from "react";
 import { Grant } from "../../interfaces/Grant";
 import GrantList from "../grant-list/GrantList";
 import GrantsController from "../../controllers/GrantsController";
+import SearchFilter from "../filter/SearchFilter";
+import DateRangeFilter from "../filter/DateRangeFilter";
 
 const GrantBrowse = ({}: GrantBrowseProps) => {
     const { user } = useUserContext();
@@ -87,54 +89,39 @@ const GrantFilter = ({ grants, setGrants }: {
         }));
     }, [search, category, minAmount, maxAmount, postedAfter, dueBy, grants, setGrants]);
 
+    const onDeadlineFilterChange = (dateRange: (Date | null)[]) => {
+        setPostedAfter(dateRange[0]);
+        setDueBy(dateRange[1]);
+    };
+
     return (
         <div className="flex flex-col gap-1 pt-8 pb-16 px-10 border-4 bg-white rounded-xl
         border-primary shadow-2xl shadow-black h-fit">
             <h1 className="text-2xl font-bold mb-6">Grant Filter</h1>
-            <div className="flex flex-col gap-1">
-                <label className="text-base">Search</label>
-                <input type="text" className="border border-black rounded-lg text-sm p-1 px-2"
-                    value={search} onChange={(event) => setSearch(event.target.value)} />
-            </div>
-            <div className="flex flex-col gap-1">
-                <label className="text-base">Category</label>
-                <input type="text" className="border border-black rounded-lg text-sm p-1 px-2"
-                    value={category} onChange={(event) => setCategory(event.target.value)} />
-            </div>
+            <SearchFilter label="Search" setFilter={setSearch}/>
+            <SearchFilter label="Category" setFilter={setCategory}/>
+            {// TODO: Make a filter component for amount
+            }
             <div className="flex flex-col">
                 <div>
                     <label className="text-base">Amount</label>
                     <div className="flex flex-row gap-4 flex-wrap">
-                        <div>
-                            <label className="text-sm">Min</label>
+                        <div className="flex flex-row gap-1 items-center">
+                            <label id="min-amount" className="text-sm">Min</label>
                             <input type="number" className="border border-black rounded-lg text-sm p-1 px-2"
-                                value={minAmount as number} onChange={(event) => setMinAmount(event.target.valueAsNumber)} />
+                                value={minAmount as number} onChange={(event) => setMinAmount(event.target.valueAsNumber)} 
+                                aria-labelledby="min-amount"/>
                         </div>
-                        <div>
-                            <label className="text-sm">Max</label>
+                        <div className="flex flex-row gap-1 items-center">
+                            <label id="max-amount" className="text-sm">Max</label>
                             <input type="number" className="border border-black rounded-lg text-sm p-1 px-2"
-                                value={maxAmount as number} onChange={(event) => setMaxAmount(event.target.valueAsNumber)} />
+                                value={maxAmount as number} onChange={(event) => setMaxAmount(event.target.valueAsNumber)} 
+                                aria-labelledby="max-amount"/>
                         </div>
                     </div>
                 </div>
 
-                <div className="w-fit">
-                    <label className="text-base">Date</label>
-                    <div className="flex flex-row gap-4">
-                        <div>
-                            <label className="text-sm">Posted After</label>
-                            <input type="date" className="border border-black rounded-lg text-sm p-1 px-2"
-                                value={postedAfter?.toISOString().split('T')[0] as string}
-                                onChange={(event) => setPostedAfter(event.target.valueAsDate)} />
-                        </div>
-                        <div>
-                            <label className="text-sm">Due By</label>
-                            <input type="date" className="border border-black rounded-lg text-sm p-1 px-2"
-                                value={dueBy?.toISOString().split('T')[0] as string}
-                                onChange={(event) => setDueBy(event.target.valueAsDate)} />
-                        </div>
-                    </div>
-                </div>
+                <DateRangeFilter label="Date" rangeStartLabel="Posted After" rangeEndLabel="Due by" setFilter={onDeadlineFilterChange} />
             </div>
         </div>
 

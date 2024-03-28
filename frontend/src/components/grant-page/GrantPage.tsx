@@ -30,7 +30,7 @@ const GrantFound = ({ grant }: { grant: Grant }) => {
                 <h1 className="text-4xl font-bold">{grant.title}</h1>
                 <ApplyButton grantID={grant.id.toString()} />
             </div>
-            <h1 className="text-3xl">{`CAD $${grant.minAmount} - $${grant.maxAmount}`}</h1>
+            <h2 className="text-3xl">{`CAD $${grant.minAmount} - $${grant.maxAmount}`}</h2>
             <div className="flex flex-row justify-between">
                 <h2 className="text-2xl">{grant.organization}</h2>
                 <h2 className="text-2xl">{`Contact: ${grant.contact}`}</h2>
