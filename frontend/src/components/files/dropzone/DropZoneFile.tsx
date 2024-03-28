@@ -32,7 +32,7 @@ const DropZoneFile = ({
   };
 
   return (
-  <div className='flex align-middle justify-center h-full w-full pt-24 z-10'>
+  <div className='z-10'>
     <Dropzone 
     onDrop={files => OnDrop(files)}
     accept={acceptedFileTypes}
