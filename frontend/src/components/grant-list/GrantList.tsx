@@ -53,7 +53,7 @@ export const GrantItem = ({ grant, link, favourite }: GrantItemProps) => {
                     </div>
                 </div>
                 <div className="flex flex-row justify-between">
-                    <h3 className="text-lg">{`Org: ${grant.organization}`}</h3>
+                    <h3 className="text-lg">{`Organization: ${grant.organization}`}</h3>
                     <h4 className="text-base">{`Categories: ${grant.category}`}</h4>
                 </div>
                 <div className="flex flex-col">
@@ -82,7 +82,7 @@ export const GrantItem = ({ grant, link, favourite }: GrantItemProps) => {
                     </div>
                 </div>
                 <div className="flex flex-row justify-between">
-                    <h3 className="text-lg">{`Org: ${grant.organization}`}</h3>
+                    <h3 className="text-lg">{`Organization: ${grant.organization}`}</h3>
                     <h4 className="text-base">{`Categories: ${grant.category}`}</h4>
                 </div>
                 <div className="flex flex-col">
