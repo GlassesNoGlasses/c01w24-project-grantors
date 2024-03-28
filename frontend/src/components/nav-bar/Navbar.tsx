@@ -144,13 +144,13 @@ const Navbar = ({}: NavbarProps) => {
 		});
 	
 		return (
-			<div className="nav-breadcrumbs">
+			<div className="nav-breadcrumbs flex items-end">
 				{breadcrumbs.map(({ path, label }, index) => (
 					<div key={index}>
-						<Link to={path} className="breadcrumb-link">
+						<Link to={path} className="breadcrumb-link text-sm text-secondary hover:underline sm:text-base">
 							{label}
 						</Link>
-						{index !== breadcrumbs.length - 1 && <span className="breadcrumb-separator">{' > '}</span>}
+						{index !== breadcrumbs.length - 1 && <span className="breadcrumb-separator">{'>'}</span>}
 					</div>
 				))}
 			</div>
@@ -172,9 +172,9 @@ const Navbar = ({}: NavbarProps) => {
                         <img src={MAlogoImage} alt='grantors logo' 
                         className='lg:h-[40px] lg:w-[81px] h-[32px] w-[64px] mt-2 mb-2 ml-1'/>
                     </a>
-                    <Breadcrumbs />
                 </ div>
 
+				<Breadcrumbs />
                 {SetTopNavigation()}
             </nav>
             <Outlet />
