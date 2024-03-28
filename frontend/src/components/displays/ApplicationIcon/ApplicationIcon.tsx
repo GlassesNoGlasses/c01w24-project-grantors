@@ -16,7 +16,7 @@ const ApplicationIcon = ({
                     heroicon
                 ) }
             </div>
-            <p className='text-lg font-bold'>{label}</p>
+            <h2 className='text-lg font-bold'>{label}</h2>
         </button>
     );
 };
