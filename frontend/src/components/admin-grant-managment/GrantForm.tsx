@@ -45,6 +45,7 @@ const GrantForm: React.FC<GrantFormProps> = ({ type }) => {
     // state variables
     const [newQuestion, setNewQuestion] = useState<GrantQuestion>(initalNewQuestion);
     const [feedback, setFeedback] = useState("");
+    const [newQuestionFeedback, setNewQuestionFeedback] = useState<string>("");
     const [unauthorized, setUnauthorized] = useState(false);
     const navigate = useNavigate()
     
@@ -166,22 +167,25 @@ const GrantForm: React.FC<GrantFormProps> = ({ type }) => {
         if (newQuestion.type == GrantQuestionType.DROP_DOWN ||
             newQuestion.type == GrantQuestionType.RADIO) {
             if (questionOptionsCleaned.length < 2) {
-                setFeedback('At least two options are required for multiple choice or checkbox questions');
+                setNewQuestionFeedback('At least two options are required for multiple choice or checkbox questions');
+
                 return;
             }
         } else if (newQuestion.type == GrantQuestionType.CHECKBOX) {
             if (questionOptionsCleaned.length < 1) {
-                setFeedback('At least one option is required for checkbox questions');
+                setNewQuestionFeedback('At least one option is required for checkbox questions');
                 return;
             }
         } else if (newQuestion.type == GrantQuestionType.FILE) {
             if (questionOptionsCleaned.length < 1) {
-                setFeedback('At least one file type is required for file upload questions');
+                setNewQuestionFeedback('At least one file type is required for file upload questions');
                 return;
             }
             setFiletypeOptions(initialFiletypeOption.filter((option) => option != 'All'));
             resetOptions = ['All']
         }
+
+        setNewQuestionFeedback('');
 
         setGrant({ ...grant, questions: [...grant.questions, {...newQuestion, id: max+1, options: questionOptionsCleaned}]});
         // Keep the type for the next question
@@ -407,7 +411,10 @@ const GrantForm: React.FC<GrantFormProps> = ({ type }) => {
                                     <>
                                     <input type="text" name="question" value={newQuestion.question} onChange={handleQuestionChange}
                                         className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-secondary focus:border-transparent" />
-                                    <button type='button' className='py-2 bg-green-600 text-white pl-5 pr-5 rounded-lg hover:bg-green-800' onClick={handleQuestionSubmit}>add</button>
+                                    <button type='button' className='py-2 bg-green-600 text-white pl-5 pr-5 rounded-lg
+                                          hover:bg-green-800' onClick={handleQuestionSubmit}>
+                                            add
+                                    </button>
                                     </>
                                     : <></>
                                 }
@@ -461,6 +468,7 @@ const GrantForm: React.FC<GrantFormProps> = ({ type }) => {
                                 :
                                 <></>
                             }
+                            {newQuestionFeedback && <div className='text-sm text-red-600'>{newQuestionFeedback}</div>}
                         </div>
                     </div>
 
