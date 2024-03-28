@@ -82,6 +82,7 @@ const SignUp: React.FC<SignUpProps> = () => {
 							<input
 								type="firstName"
 								id="firstName"
+								aria-label='first name'
 								placeholder="Enter First Name"
 								value={firstName}
 								onChange={(e) => setFirstName(e.target.value)}
@@ -95,6 +96,7 @@ const SignUp: React.FC<SignUpProps> = () => {
 							<input
 								type="lastName"
 								id="lastName"
+								aria-label='last name'
 								placeholder="Enter Last Name"
 								value={lastName}
 								onChange={(e) => setLastName(e.target.value)}
@@ -112,6 +114,7 @@ const SignUp: React.FC<SignUpProps> = () => {
 						<input
 							type="text"
 							id="email"
+							aria-label='email'
 							placeholder="Enter Email"
 							value={email}
 							onChange={(e) => setEmail(e.target.value)}
@@ -127,6 +130,7 @@ const SignUp: React.FC<SignUpProps> = () => {
 						<input
 							type="text"
 							id="username"
+							aria-label='username'
 							placeholder="Enter Username"
 							value={username}
 							onChange={(e) => setUsername(e.target.value)}
@@ -142,6 +146,7 @@ const SignUp: React.FC<SignUpProps> = () => {
 						<input
 							type="password"
 							id="password"
+							aria-label='password'
 							placeholder="Enter Password"
 							value={password}
 							onChange={(e) => setPassword(e.target.value)}
@@ -157,6 +162,7 @@ const SignUp: React.FC<SignUpProps> = () => {
 							<input
 							type="text"
 							id="organization"
+							aria-label='organization'
 							placeholder="Enter Organization"
 							value={organization}
 							onChange={(e) => setOrganization(e.target.value)}
@@ -183,7 +189,7 @@ const SignUp: React.FC<SignUpProps> = () => {
 							required
 							/>
 						</div>
-						: <label className='flex flex-row gap-2 text-secondary text-sm ml-2'>
+						: <label className='flex flex-row gap-2 text-primary text-sm ml-2'>
 						Sign up as Grantor?
 						<input
 							type="checkbox"
@@ -194,7 +200,7 @@ const SignUp: React.FC<SignUpProps> = () => {
 					}
 					
 					{ !isAdmin ?
-						<label className='flex flex-row gap-2 text-secondary text-sm ml-2'>
+						<label className='flex flex-row gap-2 text-primary text-sm ml-2'>
 						Sign up as Admin?
 						<input
 							type="checkbox"
@@ -220,11 +226,11 @@ const SignUp: React.FC<SignUpProps> = () => {
 			</div>
 		</div>
 		<Modal showModal={showModal} closeModal={() => setShowModal(false)} openModal={() => setShowModal(true)}>
-			<div className='flex h-[100vh] w-[100vw] justify-center items-center'>
+			<div className='flex h-[100vh] w-[100vw] justify-center items-center' role="dialog" aria-modal="true" tabIndex={0}>
 				<div className='bg-white h-fit w-2/5 border-4 border-blue-400 border-solid rounded-lg'>
-					<p className='text-2xl text-center font-bold border-b-2 border-solid border-black'>
+					<h1 className='text-2xl text-center font-bold border-b-2 border-solid border-black'>
 						Thank you for signing up to Grantors!
-					</p>
+					</h1>
 					<div className='h-full w-full'>
 						<p className='text-xl text-center font-semibold'>
 							{`You have successfully signed up as ${username} with the email ${email}.`}
