@@ -63,7 +63,8 @@ function App() {
 							<Route path="about" element={<DefaultPage />} />
 							<Route path="files" element={<TestFileDisplay />} />
 							<Route path="login" element={<Login />} />
-							<Route path="signup" element={<SignUp />} />
+							<Route path="signup" element={<SignUp adminCreate={false}/>} />
+							<Route path="newUser" element={<SignUp adminCreate={true}/>} />
 							<Route path="createGrant" element={<CreateGrant />} />
 							<Route path="editGrant/:grantID" element={<EditGrant />} />
 							<Route path="users" element={<UserList />} />
