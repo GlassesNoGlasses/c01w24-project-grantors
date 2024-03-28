@@ -15,6 +15,7 @@ import { upload } from '@testing-library/user-event/dist/upload';
 const GrantForm = ({ user, grant }: GrantFormProps) => {
     const [questionList, setQuestionList] = useState<GrantQuestion[]>(grant.questions);
     const [uploadedFiles, setUploadedFiles] = useState<File[][]>([]);
+    const [feedback, setFeedback] = useState<string>("");
     const navigate = useNavigate();
     const location = useLocation();
 
@@ -76,6 +77,13 @@ const GrantForm = ({ user, grant }: GrantFormProps) => {
             return 
         }
 
+        for (let i = 0; i < questionList.length; i++) {
+            if (questionList[i].required && !questionList[i].answer) {
+                setFeedback("All required questions must be answered.");
+                return;
+            }
+        }
+
         uploadedFiles.map((files: File[], index) => {
             if (files.length) {
                 FileController.uploadFiles("question" + index, files, user).then((uploadedCount: number | undefined) => {
@@ -133,10 +141,15 @@ const GrantForm = ({ user, grant }: GrantFormProps) => {
                     Application Form
                 </div>
 
+                <p>All questions marked with <span className='text-red-500'>*</span> are required.</p>
+
                 {questionList.map((questionElement, index) => (
                     <li key={index} className='list-none'>
                          <div className="flex flex-col gap-1 p-5 px-3">
-                            <label className='text-base'>{questionElement.question}</label>
+                            <label className='text-base'>
+                                {questionElement.question}
+                                {questionElement.required ? <span className='text-red-500'>*</span> : ''}
+                            </label>
                             {
                                 questionElement.type === GrantQuestionType.DROP_DOWN ? (
                                     <DropDown options={questionElement.options} 
@@ -208,6 +221,12 @@ const GrantForm = ({ user, grant }: GrantFormProps) => {
                         </div>
                     </li>
                 ))}
+                {
+                    feedback &&
+                    <div className="flex flex-row justify-center">
+                        <span className="text-red-500">{feedback}</span>
+                    </div>
+                }
                 <div className="flex flex-row items-center justify-between">
                     
                     <Link to='/applications'>
