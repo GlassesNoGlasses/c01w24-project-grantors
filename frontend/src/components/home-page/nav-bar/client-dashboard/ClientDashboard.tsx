@@ -20,7 +20,7 @@ const ClientDashboard = ({}: ClientDashboardProps) => {
 	return (
 		<div className="dashboard-container py-20 w-full h-full">
 
-			<div className='flex flex-col items-start pl-10 bg-white pb-8'>
+			<div className='flex flex-col items-start pl-10 bg-white pb-8' tabIndex={0}>
 				<h1 className='text-6xl text-primary w-fit'>
 					Dashboard
 				</h1>
@@ -31,28 +31,28 @@ const ClientDashboard = ({}: ClientDashboardProps) => {
 			</div>
 
 			<div className="client-butons flex justify-evenly items-center py-10">
-				<Link to="/saved">
+				<Link to="/saved" tabIndex={-1}>
 					<ButtonIcon heroicon={<StarIcon />} label="Saved Grants" text={user?.preferences.hc ? 'text-white' : 'text-black'}/>
 				</Link>
-				<Link to="/milestones">
+				<Link to="/milestones" tabIndex={-1}>
 					<ButtonIcon heroicon={<TrophyIcon />} label="Milestones" text={user?.preferences.hc ? 'text-white' : 'text-black'}/>
 				</Link>
 				<ButtonIcon heroicon={<ChartBarIcon />} label="Statistics" text={user?.preferences.hc ? 'text-white' : 'text-black'}/>
-				<Link to='/settings'>
+				<Link to='/settings' tabIndex={-1}>
 					<ButtonIcon heroicon={<Cog6ToothIcon/>} label={"Settings"} text={user?.preferences.hc ? 'text-white' : 'text-black'}/>
 				</Link>
-				<Link to="/">
+				<Link to="/" tabIndex={-1}>
 					<ButtonIcon heroicon={<ArrowRightStartOnRectangleIcon />} label="Log out" callback={logout} text={user?.preferences.hc ? 'text-white' : 'text-black'}/>
 				</Link>
 			</div>
 			
 			<div className="application-buttons flex justify-evenly items-center h-1/4 pt-[5vh]">
-				<Link to="/grants">
+				<Link to="/grants" tabIndex={-1}>
 					<ApplicationIcon
 					heroicon={<ListBulletIcon className="h-40 w-40"/>}
 					label="View Available Grants" />
 				</Link>
-				<Link to="/applications">
+				<Link to="/applications" tabIndex={-1}>
 					<ApplicationIcon heroicon={<DocumentMagnifyingGlassIcon className="h-40 w-40"/>} label="My Applications" />
 				</Link>
 			</div>
