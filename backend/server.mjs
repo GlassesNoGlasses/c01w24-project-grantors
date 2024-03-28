@@ -124,7 +124,8 @@ app.post('/login', express.json(), async (req, res) => {
 
 		return res.status(200).send({ accountID: user._id, username: user.username, 
 		email: user.email, firstName: user.firstName, lastName: user.lastName,
-		isAdmin: user.isAdmin, organization: user.organization, authToken: token, preferences: user.preferences });
+		isAdmin: user.isAdmin, organization: user.organization, authToken: token, 
+		preferences: user.preferences, isSysAdmin: user.isSysAdmin });
 
 	} catch (err) {
 		console.error(err)
@@ -134,7 +135,8 @@ app.post('/login', express.json(), async (req, res) => {
 
 app.post("/signup", express.json(), async (req, res) => {
 	try {
-		const { username, email, password, firstName, lastName, isAdmin, organization } = req.body;
+		const { username, email, password, firstName, lastName, isAdmin, organization, isSysAdmin } = req.body;
+		
 
 		// Basic body request check
 		if (!username || !password || !email) {
@@ -162,6 +164,7 @@ app.post("/signup", express.json(), async (req, res) => {
 			lastName: lastName,
 			isAdmin: isAdmin,
 			organization: organization,
+			isSysAdmin: isSysAdmin,
 			preferences: {
 				hc: false,
 				sbg: false
@@ -213,6 +216,7 @@ app.get('/user', express.json(), async (req, res) => {
 				firstName: user.firstName,
 				lastName: user.lastName,
 				isAdmin: user.isAdmin,
+				isSysAdmin: user.isSysAdmin,
 				organization: user.organization,
 				preferences: user.preferences,
 				authToken: req.headers.authorization.split(" ")[1]
@@ -879,5 +883,35 @@ app.put('/users/:userID/preferences', express.json(), async (req, res) => {
     } catch (error) {
         console.error('Error updating user preferences:', error);
         res.status(500).json({ message: 'An error occurred while updating user preferences.' });
+    }
+});
+
+app.put('/application/:applicationID/funding', express.json(), async (req, res) => {
+    const applicationID = req.params.applicationID;
+    const { awarded } = req.body;
+
+    if (awarded === undefined || typeof awarded !== 'number') {
+        return res.status(400).json({ error: "Invalid request: 'awarded' must be a valid number." });
+    }
+
+    try {
+        const applicationCollection = db.collection(COLLECTIONS.applications);
+        const result = await applicationCollection.updateOne(
+            { _id: new ObjectId(applicationID) },
+            { $set: { awarded: awarded } }
+        );
+
+        if (result.matchedCount === 0) {
+            return res.status(404).json({ error: "Application not found." });
+        }
+
+        if (result.modifiedCount === 0) {
+            return res.status(304).send(); // Not Modified
+        }
+
+        res.status(200).json({ message: "Application funding updated successfully." });
+    } catch (error) {
+        console.error("Error updating application funding:", error);
+        res.status(500).json({ error: "Internal server error." });
     }
 });

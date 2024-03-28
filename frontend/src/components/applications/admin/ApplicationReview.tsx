@@ -53,6 +53,7 @@ const ApplicationReview = () => {
 
     const approveApplication = () => {
         submitApplicationReview(ApplicationStatus.approved);
+        navigate(`/applications/${applicationID}/funding`);
     };
 
     useEffect(() => {

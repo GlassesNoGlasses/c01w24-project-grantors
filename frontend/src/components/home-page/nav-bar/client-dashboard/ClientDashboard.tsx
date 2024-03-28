@@ -40,6 +40,7 @@ const ClientDashboard = ({}: ClientDashboardProps) => {
 					<ButtonIcon heroicon={<ArrowRightStartOnRectangleIcon />} label="Log out" callback={logout} text={user?.preferences.hc ? 'text-white' : 'text-black'}/>
 				</Link>
 			</div>
+			
 			<div className="application-buttons flex justify-evenly items-center h-1/4 pt-[5vh]">
 				<Link to="/grants">
 					<ApplicationIcon

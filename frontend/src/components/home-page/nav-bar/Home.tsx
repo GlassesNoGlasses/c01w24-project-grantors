@@ -3,6 +3,7 @@ import AdminDashboard from './admin-dashboard/AdminDashboard';
 import ClientDashboard from './client-dashboard/ClientDashboard';
 import { useUserContext } from '../../contexts/userContext';
 import { HomeProps } from './HomeProps';
+import SystemAdminDashboard from './system-admin-dashboard/SystemAdminDashboard';
 
 const Home = ({}: HomeProps) => {
 	// SECTION: States Used
@@ -12,9 +13,9 @@ const Home = ({}: HomeProps) => {
 	const RenderHomepage = () => {
 		if (!user) {
 			return (<DefaultPage/>);
-		}
-
-		return user.isAdmin ? (<AdminDashboard/>) : (<ClientDashboard/>);
+		}	
+		
+		return user.isSysAdmin ? (<SystemAdminDashboard/>) : (user.isAdmin ? (<AdminDashboard/>) : (<ClientDashboard/>));
 	};
 
 	return (

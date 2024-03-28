@@ -123,12 +123,23 @@ const Navbar = ({}: NavbarProps) => {
 		);
 	};
 
+	const SystemAdminTopNavigation = (): JSX.Element => {
+		return (
+			<div className='flex xl:gap-10 gap-4'>
+				<div className='flex flex-row gap-4 items-center'>
+					<p className='text-base font-bold'>{user?.username}</p>
+					<SignOutButton />
+				</div>
+			</div>
+		);
+	};
+
 	const SetTopNavigation = (): JSX.Element => {
 		if (!user) {
 			return DefaultTopNavigation();
 		}
 
-		return user.isAdmin ? AdminTopNaviation() : ClientTopNavigation();
+		return user.isSysAdmin ? (<SystemAdminTopNavigation />) : (user.isAdmin ? (<AdminTopNaviation/>) : (<ClientTopNavigation/>));
 	};
 
 	const Breadcrumbs = () => {
