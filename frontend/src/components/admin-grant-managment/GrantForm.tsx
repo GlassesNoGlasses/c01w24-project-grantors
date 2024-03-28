@@ -31,6 +31,7 @@ const initalNewQuestion: GrantQuestion = {
     answer: '',
     type: GrantQuestionType.NULL,
     options: [],
+    required: false,
 }
 
 const initialFiletypeOption: string[] = [
@@ -404,7 +405,7 @@ const GrantForm: React.FC<GrantFormProps> = ({ type }) => {
                     <div className='mt-6'>
                         <label htmlFor="question" className="block text-gray-700 font-semibold mb-2">Add a Question for Applicants</label>
 
-                        <div className="flex flex-col items-start">
+                        <div className="flex flex-col items-start gap-2">
                             <div className='flex flex-row items-center gap-4 w-full'>
                                 {
                                     newQuestion.type != GrantQuestionType.NULL ?
@@ -465,6 +466,16 @@ const GrantForm: React.FC<GrantFormProps> = ({ type }) => {
                                                 }
                                         </div>
                                     </div>
+                                :
+                                <></>
+                            }
+                            {
+                                newQuestion.type != GrantQuestionType.NULL ? 
+                                <div className="flex flex-row gap-2">
+                                    <label className="block text-gray-700 font-semibold">Required Question</label>
+                                    <input type="checkbox" onClick={() => setNewQuestion({...newQuestion, required: !newQuestion.required})}
+                                        checked={newQuestion.required}/>
+                                </div>
                                 :
                                 <></>
                             }

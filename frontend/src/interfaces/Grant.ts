@@ -13,6 +13,7 @@ export interface GrantQuestion {
     answer?: string;
     type: GrantQuestionType;
     options: string[];
+    required: boolean;
 }
 
 export interface GrantMilestone {
