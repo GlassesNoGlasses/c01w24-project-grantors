@@ -1,5 +1,5 @@
 import { NavbarProps } from './NavbarProps'
-import { Link, Outlet } from 'react-router-dom'
+import { Link, useLocation, Outlet } from 'react-router-dom'
 import logoImage from '../../images/logo.png'
 import MAlogoImage from '../../images/ma-logo.png'
 import { useUserContext } from '../contexts/userContext'
@@ -149,28 +149,60 @@ const Navbar = ({}: NavbarProps) => {
 		return user.isSysAdmin ? (<SystemAdminTopNavigation />) : (user.isAdmin ? (<AdminTopNaviation/>) : (<ClientTopNavigation/>));
 	};
 
+	const Breadcrumbs = () => {
+		const location = useLocation();
+		const paths = location.pathname.split('/').filter(Boolean);
+		const breadcrumbs = [{ path: '/', label: 'Home' }];	// Makes `Home` always visible in breadcrumbs by initializing it in the array
+	
+		paths.forEach((path, index) => {
+			breadcrumbs.push({
+				path: `/${paths.slice(0, index + 1).join('/')}`,
+				label: path.charAt(0).toUpperCase() + path.slice(1)
+			});
+		});
+	
+		return (
+			<div className="nav-breadcrumbs flex items-end">
+				{breadcrumbs.map(({ path, label }, index) => (
+					<div key={index}>
+						<Link to={path} className="breadcrumb-link text-sm text-secondary hover:underline sm:text-base mx-1">
+							{label}
+						</Link>
+						{index !== breadcrumbs.length - 1 && <span className="breadcrumb-separator">{'>'}</span>}
+					</div>
+				))}
+			</div>
+		);
+	};
+
 	return (
-		<div>
-			<nav className='flex flex-col sm:flex-row justify-between items-center lg:pr-8 
-			border-b-2 border-black bg-white fixed top-0 w-full'>
-			
-				<div className='flex items-end'>
-					<Link to="/" className='nav-brand'>
-						<img src={logoImage} alt='grantors logo' 
-						className='lg:h-[60px] h-[40px] lg:w-[200px] w-[120px] mt-2 mb-2 ml-4'/>
-					</ Link>
-					<p className='mb-4 text-md font-bold ml-2'>By</p>
-					<a href="https://www.magnifyaccess.ai/" target='blank'>
-						<img src={MAlogoImage} alt='grantors logo' 
-						className='lg:h-[40px] lg:w-[81px] h-[32px] w-[64px] mt-2 mb-2 ml-1'/>
-					</a>
-				</ div>
-			
-				{SetTopNavigation()}
-			</nav>
+        <div>
+			<div className='flex flex-col fixed top-0 w-[100vw] h-fit bg-white border-b-2 border-black'>
+				<nav className='flex flex-col sm:flex-row justify-between items-center lg:pr-8 
+				 bg-white w-full'>
+
+					<div className='flex items-end'>
+						<Link to="/" className='nav-brand'>
+							<img src={logoImage} alt='grantors logo' 
+							className='lg:h-[60px] h-[40px] lg:w-[200px] w-[120px] mt-2 mb-2 ml-4'/>
+						</ Link>
+						<p className='mb-4 text-md font-bold ml-2'>By</p>
+						<a href="https://www.magnifyaccess.ai/" target='blank'>
+							<img src={MAlogoImage} alt='grantors logo' 
+							className='lg:h-[40px] lg:w-[81px] h-[32px] w-[64px] mt-2 mb-2 ml-1'/>
+						</a>
+					</ div>
+
+					
+					{SetTopNavigation()}
+				</nav>
+				<div className='pl-5 text-sm -mt-3'>
+					<Breadcrumbs />
+				</div>
+			</div>
 			<Outlet />
-		</div>
-	);
+        </div>
+    );
 };
 
 export default Navbar
