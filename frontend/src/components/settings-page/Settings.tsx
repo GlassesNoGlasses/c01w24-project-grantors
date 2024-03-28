@@ -88,7 +88,6 @@ const Settings = () => {
             if (!user) return;
     
             // Prepare the preference body based on the preference number
-            console.log(user)
             let preferenceBody = {
                 "preferences" : {
                     "sbg": preference === 0 ? !checker[0] : checker[0],
@@ -96,7 +95,6 @@ const Settings = () => {
                 }
             };
             
-            console.log(preferenceBody)
             setChecker([preferenceBody.preferences.sbg, preferenceBody.preferences.hc])
     
             const res = await UserController.updatePreference(user.accountID, preferenceBody)

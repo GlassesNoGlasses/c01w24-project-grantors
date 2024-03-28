@@ -24,7 +24,7 @@ import Background from "./components/background/Background";
 import FundingView from "./components/applications/admin/fundingView"
 import UserList from "./components/user-list/UserList/UserList";
 import EditUser from "./components/settings-page/EditUser";
-
+import MilestonesPage from "./components/milestones-page/MilestonesPage";
 
 
 
@@ -80,6 +80,7 @@ function App() {
 							<Route path="applications/:applicationID/funding" element={<FundingView />} />
 							<Route path="applications/:applicationID" element={<ApplicationView />} />
 							<Route path="applications/submitted/:applicationID" element={<SubmittedView/>} />
+							<Route path="milestones" element={<MilestonesPage />} />
 							<Route path="settings" element={<Settings />} />
 							<Route path="*" element={<NotFoundPage />} />
 							
