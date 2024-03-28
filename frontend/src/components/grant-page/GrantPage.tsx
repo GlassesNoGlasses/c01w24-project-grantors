@@ -43,7 +43,7 @@ const GrantFound = ({ grant }: { grant: Grant }) => {
 
             <p className="text-base">{grant.description}</p>
             
-            <div className="flex flex-col gap-2">
+            {grant.milestones.length > 0 && <div className="flex flex-col gap-2">
                 <h2 className="text-xl">Milestones</h2>
                 <div className="flex flex-col gap-3">
                     {grant.milestones.map((milestone, index) => (
@@ -56,7 +56,7 @@ const GrantFound = ({ grant }: { grant: Grant }) => {
                         </div>
                     ))}
                 </div>
-            </div>
+            </div>}
         </div>
     );
 };

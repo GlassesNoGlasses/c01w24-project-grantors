@@ -19,14 +19,6 @@ const UserMilestonesPage = () => {
             setApprovedApplications(approved);
         });
     }, [user]);
-
-    const userMilestones = approvedApplications.map((application: Application) => application.milestones).flat();
-
-    const incompleteMilestones = userMilestones.filter((milestone) => !milestone.completed)
-                                               .sort((a, b) => new Date(a.dueDate).getTime() - new Date(b.dueDate).getTime());
-
-    const completedMilestones = userMilestones.filter((milestone) => milestone.completed)
-                                              .sort((a, b) => new Date(a.dueDate).getTime() - new Date(b.dueDate).getTime());
     
     const handleMilestoneSubmit = (e: FormEvent<HTMLFormElement>, milestone: GrantMilstone) => {
         e.preventDefault();
@@ -75,7 +67,8 @@ const UserMilestonesPage = () => {
                             className="p-3 px-5 text-base rounded-md ring-2 ring-primary focus:ring-secondary"
                             value={evidence} onChange={e => setEvidence(e.target.value)}></textarea>
                     </div>
-                    {!milestone.completed && <div className="flex flex-row justify-end">
+                    {!milestone.completed && <div className="flex flex-row gap-4 justify-end items-center">
+                        {milestone.evidence !== evidence && <p className="text-base text-red-500">Careful: There are unsubmitted changes</p>}
                         <button type="submit" 
                             className='p-2 px-5 m-2 bg-primary hover:bg-secondary 
                             text-white font-bold rounded-lg shadow-md transition-colors duration-150 ease-in
@@ -88,21 +81,32 @@ const UserMilestonesPage = () => {
         )
     }
 
+    const GrantItem = ({ application }: { application: Application }) => {
+        return (
+            <div key={application.id} className="flex flex-col gap-2 py-4 px-5 border-2 border-magnify-dark-blue rounded-md bg-white shadow-lg">
+                <div className="flex flex-row justify-between align-middle">
+                    <h2 className="text-2xl font-bold">{application.grantTitle}</h2>
+                    <p className="text-lg">Awarded ${application.awarded}</p>
+                </div>
+                <p className="text-base">{application.grantCategory}</p>
+                <h3 className="text-xl font-bold">Milestones</h3>
+                <div className="flex flex-col gap-2">
+                    {application.milestones.map((milestone) => (
+                        <MilestoneItem key={milestone.id} milestone={milestone} />
+                    ))}
+                </div>
+            </div>
+        )
+    }
+
     return (
         <div className="py-24 px-5 flex flex-col gap-10">
             <div className="flex flex-col gap-2">
-                <h2 className="text-2xl font-bold">Incomplete Milestones</h2>
-                {incompleteMilestones.length > 0 ? incompleteMilestones.map((milestone) => (
-                    <MilestoneItem key={milestone.id} milestone={milestone} />
-                )) :
-                <p className="text-lg">There are no incomplete milestones.</p>}
-            </div>
-            <div className="flex flex-col gap-2">
-                <h2 className="text-2xl font-bold">Complete Milestones</h2>
-                {completedMilestones.length > 0 ? completedMilestones.map((milestone) => (
-                    <MilestoneItem key={milestone.id} milestone={milestone} />
-                )) :
-                <p className="text-lg">There are no complete milestones.</p>}
+                <h1 className="text-3xl font-bold">Grants Awarded</h1>
+                {approvedApplications.length > 0 ? 
+                    approvedApplications.map((application: Application) =>
+                        <GrantItem key={application.id} application={application} />) :
+                    <p className="text-lg">There have been no grants awarded to you.</p>}
             </div>
         </div>
     );

@@ -60,6 +60,7 @@ const GrantForm: React.FC<GrantFormProps> = ({ type }) => {
     // state variables
     const [question, setQuestion] = useState<string>('');
     const [feedback, setFeedback] = useState("");
+    const [milestoneFeedback, setMilestoneFeedback] = useState("");
     const navigate = useNavigate();
     const [milestone, setMilestone] = useState<GrantMilstone>({
         id: '0',
@@ -108,7 +109,17 @@ const GrantForm: React.FC<GrantFormProps> = ({ type }) => {
     }
 
     const handleMilestoneSubmit = () => {
-        if (milestone.title == '' || milestone.description == '') return;
+        if (milestone.title == '') {
+            setMilestoneFeedback('Title is required');
+            return;
+        }
+
+        if (milestone.description == '') {
+            setMilestoneFeedback('Description is required');
+            return;
+        }
+
+        setMilestoneFeedback('');
 
         const max = Math.max(0, ...grant.milestones.map(m => Number(m.id)));
 
@@ -351,6 +362,7 @@ const GrantForm: React.FC<GrantFormProps> = ({ type }) => {
                                     onClick={handleMilestoneSubmit}>
                                 Add Milstone
                             </button>
+                            {milestoneFeedback && <div className='text-sm text-red-600'>{milestoneFeedback}</div>}
                         </div>
                     </div>
 
