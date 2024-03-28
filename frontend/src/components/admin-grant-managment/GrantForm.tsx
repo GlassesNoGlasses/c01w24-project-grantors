@@ -6,7 +6,7 @@ import { Grant, GrantQuestion, GrantQuestionType, GrantMilestone } from '../../i
 import { GrantFormProps, GrantFormType } from './GrantFormProps';
 import GrantsController from '../../controllers/GrantsController'
 import DropDown from '../displays/DropDown/DropDown';
-import { TrashIcon } from '@heroicons/react/24/solid';
+import { TrashIcon, XMarkIcon } from '@heroicons/react/24/solid';
 
 // default grant object
 const initialGrantState: Grant = {
@@ -33,6 +33,12 @@ const initalNewQuestion: GrantQuestion = {
     options: [],
 }
 
+const initialFiletypeOption: string[] = [
+    "All", "Images", "PDF", "Word Doc",
+    "Text", "Excel", "Powerpoint", "Audio", 
+    "Video", "Zip"
+]
+
 
 const GrantForm: React.FC<GrantFormProps> = ({ type }) => {
     const {user} = useUserContext();
@@ -58,8 +64,11 @@ const GrantForm: React.FC<GrantFormProps> = ({ type }) => {
     const questionTypes = [ GrantQuestionType.TEXT,
                             GrantQuestionType.CHECKBOX,
                             GrantQuestionType.DROP_DOWN, 
-                            GrantQuestionType.RADIO
+                            GrantQuestionType.RADIO,
+                            GrantQuestionType.FILE,
     ];
+
+    const [filetypeOptions, setFiletypeOptions] = useState<string[]>(initialFiletypeOption);
 
     // retrieve the grant if in edit mode only when mounting
     useEffect(() => {
@@ -153,6 +162,7 @@ const GrantForm: React.FC<GrantFormProps> = ({ type }) => {
         });
 
         let questionOptionsCleaned = newQuestion.options.filter((option) => option != '');
+        let resetOptions: string[] = [];
         if (newQuestion.type == GrantQuestionType.DROP_DOWN ||
             newQuestion.type == GrantQuestionType.RADIO) {
             if (questionOptionsCleaned.length < 2) {
@@ -164,11 +174,18 @@ const GrantForm: React.FC<GrantFormProps> = ({ type }) => {
                 setFeedback('At least one option is required for checkbox questions');
                 return;
             }
+        } else if (newQuestion.type == GrantQuestionType.FILE) {
+            if (questionOptionsCleaned.length < 1) {
+                setFeedback('At least one file type is required for file upload questions');
+                return;
+            }
+            setFiletypeOptions(initialFiletypeOption.filter((option) => option != 'All'));
+            resetOptions = ['All']
         }
 
         setGrant({ ...grant, questions: [...grant.questions, {...newQuestion, id: max+1, options: questionOptionsCleaned}]});
         // Keep the type for the next question
-        setNewQuestion({...initalNewQuestion, type: newQuestion.type});
+        setNewQuestion({...initalNewQuestion, type: newQuestion.type, options: resetOptions});
     };
 
     // function to save grant when publish==false or publish grant otherwise
@@ -242,10 +259,16 @@ const GrantForm: React.FC<GrantFormProps> = ({ type }) => {
         if (!selected) {
             selected = GrantQuestionType.NULL;
         }
+        let options: string[] = []
+
+        if (selected === GrantQuestionType.FILE) {
+            options = ["All"];
+            setFiletypeOptions(initialFiletypeOption.filter((option) => option != 'All'));
+        }
         setNewQuestion({
             ...newQuestion, 
             type: selected as GrantQuestionType,
-            options: [],
+            options: options,
         });
     };
 
@@ -257,6 +280,31 @@ const GrantForm: React.FC<GrantFormProps> = ({ type }) => {
             });
             setNewQuestion({...newQuestion, options: newOptions});
         }
+    }
+
+    const addAcceptedFiletype = (selected: string) => {
+        if (!newQuestion.options.includes(selected)) {
+            if (selected == 'All') {
+                // if selected any, remove any other selections
+                setNewQuestion({...newQuestion, options: ['All']});
+                setFiletypeOptions(initialFiletypeOption.filter((option) => option != selected));
+                return;
+            } else if (newQuestion.options.includes('All')) {
+                // if adding specific file, remove any
+                setNewQuestion({...newQuestion, options: [selected]});
+                setFiletypeOptions(initialFiletypeOption.filter((option) => option != selected));
+                return;
+            }
+            // not dealing with any, add new option
+            setNewQuestion({...newQuestion, options: [...newQuestion.options, selected]});
+            setFiletypeOptions(filetypeOptions.filter((option) => option != selected));
+        }
+    }
+
+    const removeAcceptedFiletype = (index: number) => {
+        const newOptions = newQuestion.options.filter((option, i) => i != index);
+        setFiletypeOptions([...filetypeOptions, newQuestion.options[index]])
+        setNewQuestion({...newQuestion, options: newOptions});
     }
 
     // formatter for dates
@@ -369,16 +417,39 @@ const GrantForm: React.FC<GrantFormProps> = ({ type }) => {
                                 newQuestion.type == GrantQuestionType.DROP_DOWN ||
                                 newQuestion.type == GrantQuestionType.CHECKBOX ||
                                 newQuestion.type == GrantQuestionType.RADIO ?
-                                <div className="flex flex-col gap-2">
-                                    <span className="block text-gray-700 font-semibold">Question Options</span>
-                                    {
-                                        newQuestion.options.map((option, index) => (
-                                            <input key={index} type="text" name={`answer-option-${index}`} value={option} onChange={(e) => handleAnswerChoicesChange(index, e.target.value)}
-                                                className="w-1/2 px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-secondary focus:border-transparent" />
-                                        ))
-                                    }
-                                    <button type='button' onClick={() => setNewQuestion({...newQuestion, options: [...newQuestion.options, '']})} className='py-2 bg-green-600 text-white pl-5 pr-5 rounded-lg hover:bg-green-800'>Add Answer Option</button>
-                                </div>
+                                    <div className="flex flex-col gap-2">
+                                        <span className="block text-gray-700 font-semibold">Question Options</span>
+                                        {
+                                            newQuestion.options.map((option, index) => (
+                                                <input key={index} type="text" name={`answer-option-${index}`} value={option} onChange={(e) => handleAnswerChoicesChange(index, e.target.value)}
+                                                    className="w-1/2 px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-secondary focus:border-transparent" />
+                                            ))
+                                        }
+                                        <button type='button' onClick={() => setNewQuestion({...newQuestion, options: [...newQuestion.options, '']})} className='py-2 bg-green-600 text-white pl-5 pr-5 rounded-lg hover:bg-green-800'>Add Answer Option</button>
+                                    </div>
+                                :
+                                newQuestion.type == GrantQuestionType.FILE ?
+                                    <div className="flex flex-col gap-2 w-full">
+                                        <label  htmlFor="fileType" className="block text-gray-700 font-semibold">File input options</label>
+                                        <div className="flex flex-row gap-2 justify-between w-full">
+                                            <DropDown options={filetypeOptions} identity='Select Filetypes' selectCallback={addAcceptedFiletype} />
+                                                {
+                                                    newQuestion.options.length > 0 ?
+                                                    <div className="flex flex-col items-end border-2 border-primary rounded-md p-2">
+                                                        {
+                                                        newQuestion.options.map((filetype, index) => (
+                                                            <div className='flex flex-row items-center'>
+                                                                <label className="block text-gray-700 font-semibold">{filetype}</label>
+                                                                <XMarkIcon onClick={() => removeAcceptedFiletype(index)}
+                                                                        className="h-6 text-red-700"/>
+                                                            </div>
+                                                        ))
+                                                        }
+                                                    </div>
+                                                    : <></>
+                                                }
+                                        </div>
+                                    </div>
                                 :
                                 <></>
                             }
@@ -418,7 +489,12 @@ const GrantForm: React.FC<GrantFormProps> = ({ type }) => {
                                                             {option}
                                                         </label>
                                                     </div>
-                                            )) : <></>
+                                            ))
+                                            : question.type == GrantQuestionType.FILE ?
+                                                <div className="flex flex-row gap-1">
+                                                    <span className="block text-gray-700 font-semibold">Accepted filetypes: {question.options.join(", ")}</span>
+                                                </div>
+                                            : <></>
                                         }
                                     </div>
                                 </div>
