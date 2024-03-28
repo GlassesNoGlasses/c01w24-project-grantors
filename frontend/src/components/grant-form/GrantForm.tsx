@@ -174,7 +174,13 @@ const GrantForm = ({ user, grant }: GrantFormProps) => {
                                                     aria-labelledby={`question-${questionIndex}-option-${optionIndex}`}
                                                     value={option} 
                                                     checked={questionList[questionIndex].answer === option}
-                                                    onChange={(e) => setAnswer(questionIndex, option)}/>
+                                                    onChange={(e) => setAnswer(questionIndex, option)}
+                                                    onKeyDown={(e) => {
+                                                        if (e.key === 'Enter') {
+                                                          e.preventDefault(); // Prevent the form submission
+                                                          setAnswer(questionIndex, option);
+                                                        }
+                                                      }}/>
                                                 <label id={`question-${questionIndex}-option-${optionIndex}`}>{option}</label>
                                             </div>
                                         ))}
