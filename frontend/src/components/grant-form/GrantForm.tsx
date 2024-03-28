@@ -7,10 +7,8 @@ import { useNavigate } from 'react-router-dom';
 import { Link, useLocation } from 'react-router-dom';
 import DropDown from '../displays/DropDown/DropDown';
 import DropZoneFile from '../files/dropzone/DropZoneFile';
-import { Accept } from 'react-dropzone';
 import { GrantQuestionFileType, GrantQuestionFileTypesToAccept } from '../files/FileUtils';
 import FileController from '../../controllers/FileController';
-import { upload } from '@testing-library/user-event/dist/upload';
 
 const GrantForm = ({ user, grant }: GrantFormProps) => {
     const [questionList, setQuestionList] = useState<GrantQuestion[]>(grant.questions);
@@ -114,31 +112,31 @@ const GrantForm = ({ user, grant }: GrantFormProps) => {
         setUploadedFiles(newUploadedFiles);
     }
 
-    const FileDisplay = () => {
+    const FileDisplay = (props: React.ButtonHTMLAttributes<HTMLButtonElement>) => {
         return (
             <button type='button' className='p-2 px-5 m-2 bg-secondary hover:bg-primary
                 text-white font-bold rounded-lg shadow-md transition-colors duration-150 ease-in
-                text-base' tabIndex={-1}>
+                text-base' tabIndex={-1} {...props}>
                 Add Files
             </button>
         )
     }
 
     return (
-        <div className='pt-28 pb-20 flex justify-center' tabIndex={0}>
+        <div className='pt-28 pb-20 flex justify-center'>
             <form onSubmit={handleSubmit} id="grantform" className=' border-4 bg-white lg:w-[70vw] w-[90vw]
             rounded-2xl border-primary shadow-2xl shadow-black p-6'>
 
-                <div className='text-center font-bold text-2xl'>
+                <h1 className='text-center font-bold text-2xl'>
                     Application Form
-                </div>
+                </h1>
 
                 {questionList.map((questionElement, questionIndex) => (
                     <li key={questionIndex} className='list-none'>
                          <div className="flex flex-col gap-1 p-5 px-3">
-                            <label id={`question-${questionIndex}`} className='text-base' tabIndex={0}>
+                            <h2 id={`question-${questionIndex}`} className='text-base'>
                                 {questionElement.question}
-                            </label>
+                            </h2>
                             {
                                 questionElement.type === GrantQuestionType.DROP_DOWN ? (
                                     <DropDown options={questionElement.options} 
@@ -189,20 +187,21 @@ const GrantForm = ({ user, grant }: GrantFormProps) => {
                                         uploadedFiles[questionIndex]?.length ?
                                         uploadedFiles[questionIndex].map((file, fileIndex) => (
                                             <div key={fileIndex} className="flex flex-row gap-2">
-                                                <label className="block text-gray-700 font-semibold">{file.name}</label>
+                                                <p className="block text-gray-700 font-semibold">{file.name}</p>
                                             </div>
                                         ))
                                         :
-                                        <label className="block text-gray-700 font-semibold">'No files uploaded.'</label>
+                                        <p className="block text-gray-700 font-semibold">'No files uploaded.'</p>
                                     }
                                     </div>
-                                    <DropZoneFile
-                                        aria-labelledby={`question-${questionIndex}`}
-                                        fileLimit={25}
-                                        FileCallback={(droppedFiles) => handleFileUpload(questionIndex, droppedFiles)}
-                                        dropZoneElement={FileDisplay()}
-                                        acceptedFileTypes={GrantQuestionFileTypesToAccept(questionElement.options as GrantQuestionFileType[])}
-                                    />
+                                    <div aria-labelledby={`question-${questionIndex}`}>
+                                        <DropZoneFile
+                                            fileLimit={25}
+                                            FileCallback={(droppedFiles) => handleFileUpload(questionIndex, droppedFiles)}
+                                            dropZoneElement={<FileDisplay aria-labelledby={`question-${questionIndex}`} />}
+                                            acceptedFileTypes={GrantQuestionFileTypesToAccept(questionElement.options as GrantQuestionFileType[])}
+                                        />
+                                    </div>
                                 </div>
                                 : <textarea
                                     aria-labelledby={`question-${questionIndex}`}
