@@ -50,7 +50,7 @@ const Settings = () => {
 		);
 	};
 
-    const SettingStyle = 'bg-white min-w-[40vw] min-h-[80vh] border-4 border-primary shadow-2xl \
+    const SettingStyle = 'bg-white min-w-[40vw] min-h-[60vh] border-4 border-primary shadow-2xl \
                     shadow-black rounded-xl flex flex-col p-4 justify-between items-center'
 
     interface AttributeProps {

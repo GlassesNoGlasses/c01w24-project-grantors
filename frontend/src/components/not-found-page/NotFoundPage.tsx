@@ -3,7 +3,7 @@ import { FaceFrownIcon } from "@heroicons/react/24/outline";
 
 const NotFoundPage = () => {
     return (
-        <div className="flex flex-col items-center">
+        <div className="flex flex-col items-center pt-10">
             <div className='flex flex-col gap-8 m-2 p-6 rounded-2xl items-center border-4 border-primary
 					bg-white shadow-md shadow-black transition-shadow duration-150 ease-in'>
                 <h1 className="text-5xl font-bold">404: Page Not Found</h1>

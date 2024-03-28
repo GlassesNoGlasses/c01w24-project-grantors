@@ -160,9 +160,12 @@ const Navbar = ({}: NavbarProps) => {
 				label: path.charAt(0).toUpperCase() + path.slice(1)
 			});
 		});
+
 	
 		return (
-			<div className="nav-breadcrumbs flex items-end">
+			breadcrumbs.length ===  1 ? <></>
+			:
+			<div className="nav-breadcrumbs flex items-end pl-5 text-sm -mt-3">
 				{breadcrumbs.map(({ path, label }, index) => (
 					<div key={index}>
 						<Link to={path} className="breadcrumb-link text-sm text-secondary hover:underline sm:text-base mx-1">
@@ -177,7 +180,7 @@ const Navbar = ({}: NavbarProps) => {
 
 	return (
         <div>
-			<div className='flex flex-col sticky top-0 w-[100vw] h-fit bg-white border-b-2 border-black'>
+			<div className='flex flex-col sticky top-0 w-full h-fit bg-white border-b-2 border-black'>
 				<nav className='flex flex-col sm:flex-row justify-between items-center lg:pr-8 
 				 bg-white w-full'>
 
@@ -196,9 +199,9 @@ const Navbar = ({}: NavbarProps) => {
 					
 					{SetTopNavigation()}
 				</nav>
-				<div className='pl-5 text-sm -mt-3'>
-					<Breadcrumbs />
-				</div>
+				
+				<Breadcrumbs />
+				
 			</div>
 			<Outlet />
         </div>

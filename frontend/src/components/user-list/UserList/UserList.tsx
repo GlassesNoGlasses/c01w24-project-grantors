@@ -121,12 +121,12 @@ const UserList = () => {
     }, []);
 
     return (
-        <div className='pt-24 px-10 flex justify-around'>
+        <div className='p-10 flex justify-around'>
             <div className='pt-28'>
                 <UserFilter users={users} setFilteredUsers={setFilteredUsers}/>
             </div>
 
-            <div className='flex flex-col gap-6 h-[95vh] w-[60vw] overflow-scroll p-10'>
+            <div className='flex flex-col gap-6 h-[80vh] w-[60vw] overflow-scroll p-10'>
                 {filteredUsers.length === 0 ?
                 <div className='text-center font-bold text-base'>Hmmm.... There are no users with the given searching citeria</div>
                 :filteredUsers.map((user, index) => {

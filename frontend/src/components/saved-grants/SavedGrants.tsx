@@ -8,7 +8,7 @@ import { Link } from "react-router-dom";
 const SavedGrants = () => {
     const { user } = useUserContext();
     return (
-        <div className="pt-20">
+        <div className="pt-5">
             <UserGrantBrowse />
         </div> 
     )
