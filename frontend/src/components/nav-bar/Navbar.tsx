@@ -149,12 +149,12 @@ const Navbar = ({}: NavbarProps) => {
 			
 				<div className='flex items-end'>
 					<Link to="/" className='nav-brand'>
-						<img src={logoImage} alt='grantors logo' 
+						<img src={logoImage} alt='Grantors logo' 
 						className='lg:h-[60px] h-[40px] lg:w-[200px] w-[120px] mt-2 mb-2 ml-4'/>
 					</ Link>
 					<p className='mb-4 text-md font-bold ml-2'>By</p>
 					<a href="https://www.magnifyaccess.ai/" target='blank'>
-						<img src={MAlogoImage} alt='grantors logo' 
+						<img src={MAlogoImage} alt='Magnify Access logo' 
 						className='lg:h-[40px] lg:w-[81px] h-[32px] w-[64px] mt-2 mb-2 ml-1'/>
 					</a>
 				</ div>
