@@ -2,10 +2,11 @@ import React from 'react'
 import { useState, useEffect} from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useUserContext } from '../contexts/userContext';
-import { Grant, GrantQuestion, GrantQuestionType } from '../../interfaces/Grant' 
+import { Grant, GrantQuestion, GrantQuestionType, GrantMilstone } from '../../interfaces/Grant' 
 import { GrantFormProps, GrantFormType } from './GrantFormProps';
 import GrantsController from '../../controllers/GrantsController'
 import DropDown from '../displays/DropDown/DropDown';
+import { TrashIcon } from '@heroicons/react/24/solid';
 
 // default grant object
 const initialGrantState: Grant = {
@@ -20,6 +21,7 @@ const initialGrantState: Grant = {
     category: '',
     contact: '',
     questions: [],
+    milestones: [],
     publish: false,
 };
 
@@ -42,6 +44,16 @@ const GrantForm: React.FC<GrantFormProps> = ({ type }) => {
     
     const grantID = useParams()?.grantID ?? '';
     const [grant, setGrant] = useState<Grant>(initialGrantState);
+
+    const [milestoneFeedback, setMilestoneFeedback] = useState("");
+    const [milestone, setMilestone] = useState<GrantMilstone>({
+        id: '0',
+        title: '',
+        description: '',
+        dueDate: new Date(),
+        completed: false,
+        evidence: ''
+    });
 
     const questionTypes = [ GrantQuestionType.TEXT,
                             GrantQuestionType.CHECKBOX,
@@ -76,6 +88,45 @@ const GrantForm: React.FC<GrantFormProps> = ({ type }) => {
             setUnauthorized(false);
         }
     }, [user]);
+
+    const setMilestoneTitle = (title: string) => {
+        setMilestone({...milestone, title: title});
+    }
+
+    const setMilestoneDescription = (description: string) => {
+        setMilestone({...milestone, description: description});
+    }
+
+    const setMilestoneDueDate = (dueDate: Date) => {
+        setMilestone({...milestone, dueDate: dueDate});
+    }
+
+    const handleMilestoneSubmit = () => {
+        if (milestone.title == '') {
+            setMilestoneFeedback('Title is required');
+            return;
+        }
+
+        if (milestone.description == '') {
+            setMilestoneFeedback('Description is required');
+            return;
+        }
+
+        setMilestoneFeedback('');
+
+        const max = Math.max(0, ...grant.milestones.map(m => Number(m.id)));
+
+        const addMilestone = (prev: GrantMilstone[], newMilestone: GrantMilstone): GrantMilstone[] => {
+            return [...prev, {id: String(max + 1), title: newMilestone.title, description: newMilestone.description, dueDate: newMilestone.dueDate, completed: false, evidence: ''}]
+        };
+
+        setGrant({ ...grant, milestones: addMilestone(grant.milestones, milestone)});
+        setMilestone({id: '0', title: '', description: '', dueDate: new Date(), completed: false, evidence: ''});
+    }
+
+    const handleRemoveMilestone = (id: string) => {
+        setGrant({ ...grant, milestones: grant.milestones.filter(m => m.id != id)});
+    }
 
     // function to delete a grant in the server with given id
     const deleteGrant = async(id: string) => {
@@ -271,7 +322,7 @@ const GrantForm: React.FC<GrantFormProps> = ({ type }) => {
                                 const newDate = newValue ? new Date(newValue) : new Date(); // Fallback to current date if empty
                                 setGrant({ ...grant, deadline: newDate });
                             }}                            
-                            className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent" />
+                            className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-secondary focus:border-transparent" />
                     </div>
                     
                     {/* Contact */}
@@ -375,7 +426,60 @@ const GrantForm: React.FC<GrantFormProps> = ({ type }) => {
                         </div>
                     )}
 
-                    <div className='h-[40px] flex justify-center items-center'>{feedback}</div>
+                    {/* Milestones */}
+                    <div className='border-2 border-primary rounded-md bg-magnify-light-blue p-4 px-5'>
+                        <h3 className="text-base text-gray-700 font-semibold mb-2">Milestones</h3>
+                        <div className='flex flex-col gap-4'>
+                            <div>
+                                <label htmlFor="milestoneTitle" className="block text-gray-700 font-semibold mb-2">Title</label>
+                                <input type="text" name="milestoneTitle" id="milestoneTitle" value={milestone.title} onChange={(e) => setMilestoneTitle(e.target.value)}
+                                    className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-secondary focus:border-transparent" />
+                            </div>
+                            <div>
+                                <label htmlFor="milestoneDescription" className="block text-gray-700 font-semibold mb-2">Description</label>
+                                <textarea name="milestoneDescription" id="milestoneDescription" value={milestone.description} onChange={(e) => setMilestoneDescription(e.target.value)}
+                                    className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-secondary focus:border-transparent" rows={3}></textarea>
+                            </div>
+                            <div>
+                                <label htmlFor="milestoneDueDate" className="block text-gray-700 font-semibold mb-2">Due Date</label>
+                                <input type="date" name="milestoneDueDate" id="milestoneDueDate" value={formatDateToYYYYMMDD(milestone.dueDate)}
+                                    min={today}
+                                    onChange={(e) => {
+                                        const newValue = e.target.value;
+                                        const newDate = newValue ? new Date(newValue) : new Date(); // Fallback to current date if empty
+                                        setMilestoneDueDate(newDate);
+                                    }}                            
+                                    className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-secondary focus:border-transparent" />
+                            </div>
+                            <button type='button'
+                                    className='p-2 bg-green-600 text-white px-5 rounded-lg hover:bg-green-800'
+                                    onClick={handleMilestoneSubmit}>
+                                Add Milstone
+                            </button>
+                            {milestoneFeedback && <div className='text-sm text-red-600'>{milestoneFeedback}</div>}
+                        </div>
+                    </div>
+
+                    {grant.milestones && grant.milestones.length > 0 && (
+                        <div className='flex flex-col gap-4'>
+                            <h3 className="text-lg font-semibold text-gray-800">Milestones</h3>
+                            <div className='flex flex-col gap-6'>
+                                {grant.milestones.map((milestone) => (
+                                    <div key={milestone.id}
+                                        className='p-2 px-4 border-2 border-magnify-dark-blue rounded-md
+                                                   flex flex-col gap-2 relative group'>
+                                        <h4 className='text-xl'>{milestone.title}</h4>
+                                        <p className='text-sm'>Due: {formatDateToYYYYMMDD(milestone.dueDate)}</p>
+                                        <p className='text-base'>{milestone.description}</p>
+                                        <TrashIcon className='absolute text-magnify-dark-blue top-2 right-2 w-6 h-6 cursor-pointer invisible group-hover:visible'
+                                               onClick={() => handleRemoveMilestone(milestone.id)}/>
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+                    )}
+
+                    {feedback && <div className='flex justify-center items-center'>{feedback}</div>}
 
         
                     <div className={`flex ${type === GrantFormType.CREATE ? 'justify-end' : 'justify-between'} gap-8 `}>

@@ -57,6 +57,7 @@ const GrantForm = ({ user, grant }: GrantFormProps) => {
             status: ApplicationStatus.inProgress,
             awarded: 0,
             responses: questionList,
+            milestones: grant.milestones,
         }).then(() => {
             navigate('/');
         });
@@ -80,6 +81,7 @@ const GrantForm = ({ user, grant }: GrantFormProps) => {
             status: ApplicationStatus.submitted,
             awarded: 0,
             responses: questionList,
+            milestones: grant.milestones,
         }).then(() => {
             navigate('/');
         });
