@@ -95,7 +95,7 @@ const ApplicationReview = () => {
     }, [application, user]);
 
     return (
-        <div className="p-10 pt-24">
+        <div className="p-10">
 
             <div id="review-container" className="flex flex-col rounded-xl border-4 border-primary pb-8 bg-white
             shadow-2xl shadow-black">

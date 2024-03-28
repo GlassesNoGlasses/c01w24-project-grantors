@@ -177,7 +177,7 @@ const Navbar = ({}: NavbarProps) => {
 
 	return (
         <div>
-			<div className='flex flex-col fixed top-0 w-[100vw] h-fit bg-white border-b-2 border-black'>
+			<div className='flex flex-col sticky top-0 w-[100vw] h-fit bg-white border-b-2 border-black'>
 				<nav className='flex flex-col sm:flex-row justify-between items-center lg:pr-8 
 				 bg-white w-full'>
 

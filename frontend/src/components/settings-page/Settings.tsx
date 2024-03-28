@@ -111,7 +111,7 @@ const Settings = () => {
     };
     
     return (
-        <div className='py-24'>
+        <div className='py-10'>
             <div className='flex justify-around'>
                 
                 <div className={`${SettingStyle}`}>
