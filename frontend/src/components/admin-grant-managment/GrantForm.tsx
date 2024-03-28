@@ -421,11 +421,19 @@ const GrantForm: React.FC<GrantFormProps> = ({ type }) => {
                                         <span className="block text-gray-700 font-semibold">Question Options</span>
                                         {
                                             newQuestion.options.map((option, index) => (
-                                                <input key={index} type="text" name={`answer-option-${index}`} value={option} onChange={(e) => handleAnswerChoicesChange(index, e.target.value)}
-                                                    className="w-1/2 px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-secondary focus:border-transparent" />
+                                                <div className="flex flex-row items-center gap-1">
+                                                    <input key={index} type="text" name={`answer-option-${index}`} value={option} onChange={(e) => handleAnswerChoicesChange(index, e.target.value)}
+                                                        className="w-1/2 px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-secondary focus:border-transparent" />
+                                                    <button type="button" aria-label="remove answer option" onClick={() => setNewQuestion({...newQuestion, options: [...newQuestion.options.filter((op, ind) => ind != index)]})}>
+                                                        <XMarkIcon  className="text-red-700 h-7"/>
+                                                    </button>
+                                                </div>
                                             ))
                                         }
-                                        <button type='button' onClick={() => setNewQuestion({...newQuestion, options: [...newQuestion.options, '']})} className='py-2 bg-green-600 text-white pl-5 pr-5 rounded-lg hover:bg-green-800'>Add Answer Option</button>
+                                        <button type='button' onClick={() => setNewQuestion({...newQuestion, options: [...newQuestion.options, '']})} 
+                                                className='py-2 bg-green-600 text-white pl-5 pr-5 rounded-lg hover:bg-green-800'>
+                                            Add Answer Option
+                                        </button>
                                     </div>
                                 :
                                 newQuestion.type == GrantQuestionType.FILE ?
