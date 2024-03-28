@@ -1,7 +1,28 @@
+export enum GrantQuestionType {
+    TEXT = "Text",
+    DROP_DOWN = "Drop Down",
+    CHECKBOX = "Checkbox",
+    RADIO = "Radio",
+    FILE = "File",
+    NULL = "Null",
+}
+
 export interface GrantQuestion {
     id: number;
     question: string;
-    answer: string | null;
+    answer?: string;
+    type: GrantQuestionType;
+    options: string[];
+    required: boolean;
+}
+
+export interface GrantMilestone {
+    id: string;
+    title: string;
+    description: string;
+    dueDate: Date;
+    completed: boolean;
+    evidence: string;
 }
 
 export interface Grant {
@@ -16,5 +37,6 @@ export interface Grant {
     category: string;
     contact: string;
     questions: GrantQuestion[];
+    milestones: GrantMilestone[];
     publish: boolean;
 }

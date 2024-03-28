@@ -145,7 +145,7 @@ const Navbar = ({}: NavbarProps) => {
 	return (
 		<div>
 			<nav className='flex flex-col sm:flex-row justify-between items-center lg:pr-8 
-			border-b-2 border-black bg-white fixed top-0 w-full'>
+			border-b-2 border-black bg-white fixed top-0 w-full z-50'>
 			
 				<div className='flex items-end'>
 					<Link to="/" className='nav-brand'>

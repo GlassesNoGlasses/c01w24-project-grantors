@@ -10,13 +10,13 @@ const GrantPage = ({}: GrantPageProps) => {
     const [grant, setGrant] = useState<Grant | undefined>(undefined);
 
     useEffect(() => {
-        if (grantID) {
-            GrantsController.fetchGrant(grantID).then((grant: Grant | undefined) => {
-                if (grant) {
-                    setGrant(grant);
-                }
-            });
-        }
+        if (!grantID) return;
+
+        GrantsController.fetchGrant(grantID).then((grant: Grant | undefined) => {
+            if (!grant) return;
+
+            setGrant(grant);
+        });
     }, []);
 
     return grant ? <GrantFound grant={grant} /> : <GrantNotFound /> ;
@@ -42,6 +42,21 @@ const GrantFound = ({ grant }: { grant: Grant }) => {
             </div>
 
             <p className="text-base">{grant.description}</p>
+            
+            {grant.milestones.length > 0 && <div className="flex flex-col gap-2">
+                <h2 className="text-xl">Milestones</h2>
+                <div className="flex flex-col gap-3">
+                    {grant.milestones.map((milestone, index) => (
+                        <div key={index}
+                        className='p-2 px-4 border-2 border-magnify-dark-blue rounded-md
+                                   flex flex-col gap-2 bg-magnify-light-blue'>
+                            <h4 className='text-xl'>{milestone.title}</h4>
+                            <p className='text-sm'>{`Due: ${new Date(milestone.dueDate).toDateString()}`}</p>
+                            <p className='text-base'>{milestone.description}</p>
+                        </div>
+                    ))}
+                </div>
+            </div>}
         </div>
     );
 };

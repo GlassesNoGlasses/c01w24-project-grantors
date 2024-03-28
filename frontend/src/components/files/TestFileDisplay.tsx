@@ -1,11 +1,10 @@
 
 import React, { useState } from 'react'
 import DropZoneFile from './dropzone/DropZoneFile'
-import { SERVER_PORT } from '../../constants/ServerConstants';
-import { Accept } from '../../interfaces/Accept';
 import { useUserContext } from '../contexts/userContext';
 import FileController from '../../controllers/FileController';
 import { FSFile } from '../../interfaces/FSFile';
+import { Accept } from 'react-dropzone';
 
 const TestFileDisplay = () => {
 
@@ -93,7 +92,7 @@ const TestFileDisplay = () => {
         return;
     }
 
-    FileController.fetchUserFSFiles(user)
+    FileController.fetchUserFSFiles(user.accountID)
     .then((fsFiles: FSFile[] | undefined) => {
         if (fsFiles) {
             setDownloadLinks(fsFiles);
@@ -115,12 +114,14 @@ const TestFileDisplay = () => {
     <div className='min-h-fill min-w-full'>
         <form onSubmit={handleImageSubmit}
         encType="multipart/form-data">
-            <DropZoneFile
-            fileLimit={2}
-            FileCallback={(droppedFiles) => setImageFiles(droppedFiles)}
-            dropZoneElement={FileDisplay()}
-            acceptedFileTypes={acceptedFileTypesImages}
-            />
+            <div className='flex align-middle justify-center h-full w-full pt-24'>
+                <DropZoneFile
+                fileLimit={2}
+                FileCallback={(droppedFiles) => setImageFiles(droppedFiles)}
+                dropZoneElement={FileDisplay()}
+                acceptedFileTypes={acceptedFileTypesImages}
+                />
+            </div>
             {imageFiles.map((file, index) => (
                 <li key={index} className='list-none'>
                     <div className="flex flex-col gap-1 p-5 px-3">

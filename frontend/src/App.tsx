@@ -23,6 +23,7 @@ import React, { useEffect } from 'react';
 import Background from "./components/background/Background";
 import FundingView from "./components/applications/admin/fundingView"
 import { MessageBoard } from "./components/messages/message-board/MessageBoard";
+import MilestonesPage from "./components/milestones-page/MilestonesPage";
 
 
 
@@ -78,6 +79,7 @@ function App() {
 							<Route path="applications/:applicationID" element={<ApplicationView />} />
 							<Route path="applications/submitted/:applicationID" element={<SubmittedView/>} />
 							<Route path="messages" element={<MessageBoard />} />
+							<Route path="milestones" element={<MilestonesPage />} />
 							<Route path="settings" element={<Settings />} />
 							<Route path="*" element={<NotFoundPage />} />
 							

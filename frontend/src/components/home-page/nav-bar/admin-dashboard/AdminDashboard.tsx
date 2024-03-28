@@ -54,7 +54,9 @@ const AdminDashboard = ({
 						<ButtonIcon heroicon={<FolderPlusIcon/>} label={"New Grant"} text={user?.preferences.hc ? 'text-white' : 'text-black'}/>
 					</ Link>
 				</div>
-				<ButtonIcon heroicon={<TrophyIcon/>} label={"Milestones"} text={user?.preferences.hc ? 'text-white' : 'text-black'}/>
+				<Link to='/milestones'>
+					<ButtonIcon heroicon={<TrophyIcon/>} label={"Milestones"} text={user?.preferences.hc ? 'text-white' : 'text-black'}/>
+				</Link>
 				<ButtonIcon heroicon={<ChartBarIcon />} label="Statistics" text={user?.preferences.hc ? 'text-white' : 'text-black'}/>
 				<Link to='/settings'>
 					<ButtonIcon heroicon={<Cog6ToothIcon/>} label={"Settings"} text={user?.preferences.hc ? 'text-white' : 'text-black'}/>
