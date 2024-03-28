@@ -2,7 +2,7 @@ import React from 'react'
 import { useState, useEffect} from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useUserContext } from '../contexts/userContext';
-import { Grant, GrantQuestion, GrantQuestionType, GrantMilstone } from '../../interfaces/Grant' 
+import { Grant, GrantQuestion, GrantQuestionType, GrantMilestone } from '../../interfaces/Grant' 
 import { GrantFormProps, GrantFormType } from './GrantFormProps';
 import GrantsController from '../../controllers/GrantsController'
 import DropDown from '../displays/DropDown/DropDown';
@@ -46,7 +46,7 @@ const GrantForm: React.FC<GrantFormProps> = ({ type }) => {
     const [grant, setGrant] = useState<Grant>(initialGrantState);
 
     const [milestoneFeedback, setMilestoneFeedback] = useState("");
-    const [milestone, setMilestone] = useState<GrantMilstone>({
+    const [milestone, setMilestone] = useState<GrantMilestone>({
         id: '0',
         title: '',
         description: '',
@@ -116,7 +116,7 @@ const GrantForm: React.FC<GrantFormProps> = ({ type }) => {
 
         const max = Math.max(0, ...grant.milestones.map(m => Number(m.id)));
 
-        const addMilestone = (prev: GrantMilstone[], newMilestone: GrantMilstone): GrantMilstone[] => {
+        const addMilestone = (prev: GrantMilestone[], newMilestone: GrantMilestone): GrantMilestone[] => {
             return [...prev, {id: String(max + 1), title: newMilestone.title, description: newMilestone.description, dueDate: newMilestone.dueDate, completed: false, evidence: ''}]
         };
 

@@ -14,7 +14,7 @@ export interface GrantQuestion {
     options: string[];
 }
 
-export interface GrantMilstone {
+export interface GrantMilestone {
     id: string;
     title: string;
     description: string;
@@ -35,6 +35,6 @@ export interface Grant {
     category: string;
     contact: string;
     questions: GrantQuestion[];
-    milestones: GrantMilstone[];
+    milestones: GrantMilestone[];
     publish: boolean;
 }

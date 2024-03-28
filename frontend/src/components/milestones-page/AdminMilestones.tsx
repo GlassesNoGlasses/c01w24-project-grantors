@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { GrantMilstone } from "../../interfaces/Grant";
+import { GrantMilestone } from "../../interfaces/Grant";
 import { Application, ApplicationStatus } from "../../interfaces/Application";
 import { useUserContext } from "../contexts/userContext";
 import ApplicationsController from "../../controllers/ApplicationsController";
@@ -23,7 +23,7 @@ const AdminMilestonesPage = () => {
         });
     }, [user]);
 
-    const handleMilestoneComplete = (milestone: GrantMilstone) => {
+    const handleMilestoneComplete = (milestone: GrantMilestone) => {
         if (!user) return;
 
         const updatedApplications = approvedApplications.map((application: Application) => {
@@ -51,7 +51,7 @@ const AdminMilestonesPage = () => {
         });
     }
 
-    const MilestoneItem = ({ milestone }: { milestone: GrantMilstone }) => {
+    const MilestoneItem = ({ milestone }: { milestone: GrantMilestone }) => {
         return (
             <div className="flex flex-col gap-2 py-4 px-5 border-2 border-magnify-dark-blue rounded-md bg-magnify-light-blue">
                 <div className="flex flex-row justify-between align-middle">

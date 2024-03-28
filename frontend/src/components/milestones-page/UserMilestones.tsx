@@ -2,7 +2,7 @@ import { FormEvent, useEffect, useState } from "react";
 import ApplicationsController from "../../controllers/ApplicationsController";
 import { Application, ApplicationStatus } from "../../interfaces/Application";
 import { useUserContext } from "../contexts/userContext";
-import { GrantMilstone } from "../../interfaces/Grant";
+import { GrantMilestone } from "../../interfaces/Grant";
 import { Check, X } from "heroicons-react";
 import { CheckIcon, XMarkIcon } from "@heroicons/react/24/solid";
 
@@ -21,7 +21,7 @@ const UserMilestonesPage = () => {
         });
     }, [user]);
     
-    const handleMilestoneSubmit = (e: FormEvent<HTMLFormElement>, milestone: GrantMilstone) => {
+    const handleMilestoneSubmit = (e: FormEvent<HTMLFormElement>, milestone: GrantMilestone) => {
         e.preventDefault();
         if (!user) return;
 
@@ -50,7 +50,7 @@ const UserMilestonesPage = () => {
         });
     }
 
-    const MilestoneItem = ({ milestone }: { milestone: GrantMilstone }) => {
+    const MilestoneItem = ({ milestone }: { milestone: GrantMilestone }) => {
         const [evidence, setEvidence] = useState<string>(milestone.evidence);
 
         return (
