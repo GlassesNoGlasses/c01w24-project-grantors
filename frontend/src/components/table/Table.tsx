@@ -119,8 +119,8 @@ function Table<T>(
                 </div>
                 <div className="bg-slate-50 rounded-md" aria-label="Items per page">
                     <ul className="flex flex-row items-center text-sm">
-                        <li className="flex items-center justify-center px-3 h-8 hover:bg-slate-300 hover:rounded-md">
-                            <span>Items per page</span>
+                        <li className="flex items-center justify-center px-3 h-8">
+                            <label>Items per page</label>
                         </li>
                         {Array.from(itemsPerPageOptions).map((value, index) => (
                             <li key={index} className={`flex items-center justify-center px-3 h-8 hover:bg-slate-300 hover:rounded-md ${itemsPerPage === value ? "bg-slate-300 rounded-md" : ''}`}>
