@@ -2,10 +2,16 @@ import { ChevronDownIcon } from "@heroicons/react/24/solid";
 import { useEffect, useRef, useState } from "react";
 import DropDownProps from "./DropDownProps";
 
-const DropDown = ({ options, identity, selectCallback }: DropDownProps) => {
+const DropDown = ({ options, identity, selected, selectCallback }: DropDownProps) => {
     const [isOpen, setIsOpen] = useState(false);
     const [selectedItem, setSelectedItem] = useState(identity);
     const dropdownRef = useRef<HTMLDivElement>(null);
+
+    useEffect(() => {
+        if (selected) {
+            setSelectedItem(selected);
+        }
+    }, [selected]);
 
     useEffect(() => {
         function handleClickOutside(event: MouseEvent) {
@@ -14,7 +20,6 @@ const DropDown = ({ options, identity, selectCallback }: DropDownProps) => {
             }
         }
 
-        // Bind the event listener if the dropdown is open
         if (isOpen) {
             document.addEventListener('mousedown', handleClickOutside);
         }
