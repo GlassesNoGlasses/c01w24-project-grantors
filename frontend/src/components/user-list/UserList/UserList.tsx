@@ -6,7 +6,7 @@ import DropDownFilter from '../../filter/DropDownFilter';
 import { Link } from 'react-router-dom';
 
 const UserCard = ({ user } : {user: User}) => {
-    return (<div className='flex justify-between p-6 w-[60vw] items-center rounded-xl
+    return (<div className='flex justify-between p-6 w-full items-center rounded-xl
             border-4 border-primary shadow-xl shadow-black bg-white text-base'>
         <div className='flex flex-col justify-around'>
             <h2>
@@ -34,9 +34,9 @@ const UserCard = ({ user } : {user: User}) => {
 }
 
 
-const UserFilter = ({ users, setUsers }: {
+const UserFilter = ({ users, setFilteredUsers }: {
     users: User[],
-    setUsers: (grants: User[]) => void,
+    setFilteredUsers: (grants: User[]) => void,
 }) => {
     const [search, setSearch] = useState<string>("");
     const [ userType, setUserType ] = useState<UserTypes | undefined>(undefined);
@@ -44,7 +44,7 @@ const UserFilter = ({ users, setUsers }: {
     const userTypeDropDownOptions = Object.values(UserTypes);
 
     useEffect(() => {
-        setUsers(users.filter(user => {
+        setFilteredUsers(users.filter(user => {
             if (search !== "" && !user.email?.toLowerCase().includes(search.toLowerCase()))
                 return false;
             if (search !== "" && !user.username?.toLowerCase().includes(search.toLowerCase()))
@@ -110,12 +110,14 @@ const UserList = () => {
   return (
     <div className='pt-24 px-10 flex justify-around'>
         <div className='pt-28'>
-            <UserFilter users={users} setUsers={setFilteredUsers}/>
+            <UserFilter users={users} setFilteredUsers={setFilteredUsers}/>
         </div>
 
-        <div className='flex flex-col gap-6 h-[95vh] overflow-scroll p-10'>
-            {filteredUsers.map((user, index) => {
-            return <UserCard user={user} key={index}/>
+        <div className='flex flex-col gap-6 h-[95vh] w-[60vw] overflow-scroll p-10'>
+            {filteredUsers.length === 0 ?
+            <div className='text-center font-bold text-base'>Hmmm.... There are no users with the given searching citeria</div>
+            :filteredUsers.map((user, index) => {
+                return <UserCard user={user} key={index}/>
             })}
         </div>
         
