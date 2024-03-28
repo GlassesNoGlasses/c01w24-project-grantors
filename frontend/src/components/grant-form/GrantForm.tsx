@@ -119,7 +119,7 @@ const GrantForm = ({ user, grant }: GrantFormProps) => {
             <button type='button' className='p-2 px-5 m-2 bg-secondary hover:bg-primary
                 text-white font-bold rounded-lg shadow-md transition-colors duration-150 ease-in
                 text-base'>
-                Add File
+                Add File(s)
             </button>
         )
     }
@@ -180,7 +180,7 @@ const GrantForm = ({ user, grant }: GrantFormProps) => {
                                 <div className="flex flex-row justify-between w-full">
                                     <div className="flex flex-col max-h-40 overflow-y-auto">
                                     {
-                                        uploadedFiles[index].length ?
+                                        uploadedFiles[index]?.length ?
                                         uploadedFiles[index].map((file, fileIndex) => (
                                             <div key={fileIndex} className="flex flex-row gap-2">
                                                 <label className="block text-gray-700 font-semibold">{file.name}</label>
