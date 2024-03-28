@@ -30,7 +30,7 @@ const SystemAdminDashboard = () => {
 				<Link to="/users">
 					<ButtonIcon heroicon={<UsersIcon />} label="View Users" text={user?.preferences.hc ? 'text-white' : 'text-black'}/>
 				</Link>
-				<Link to="/signup">
+				<Link to="/newUser">
 					<ButtonIcon heroicon={<UserPlusIcon />} label="Create User" text={user?.preferences.hc ? 'text-white' : 'text-black'}/>
 				</Link>
 				<Link to='/settings'>
