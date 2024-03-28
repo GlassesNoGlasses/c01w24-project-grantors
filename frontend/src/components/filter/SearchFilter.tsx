@@ -10,7 +10,7 @@ function SearchFilter({label, setFilter, className}: SearchFilterProps ) {
 
     return (
         <div className={`flex flex-col gap-1t ${className}`}>
-            <p className="text-base">{label}</p>
+            <label className="text-base">{label}</label>
             <input type="text" className="border border-black rounded-lg text-sm p-1 px-2 text-black"
                 value={search} onChange={(event) => setSearch(event.target.value)} />
         </div>
