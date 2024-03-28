@@ -73,7 +73,7 @@ export const GrantItem = ({ grant, link, favourite }: GrantItemProps) => {
                     <h1 className="text-2xl font-bold">{grant.title}</h1>
                     <div className="flex flex-row gap-2">
                         <h2 className="text-lg">{`CAD $${grant.minAmount.toString()} - $${grant.maxAmount.toString()}`}</h2>
-                        <button onClick={(e) => { 
+                        <button aria-label="favourite button" onClick={(e) => { 
                             e.preventDefault();
                             toggleFavorite(); 
                         }}>
