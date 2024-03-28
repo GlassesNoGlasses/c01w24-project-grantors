@@ -3,6 +3,7 @@ export enum GrantQuestionType {
     DROP_DOWN = "Drop Down",
     CHECKBOX = "Checkbox",
     RADIO = "Radio",
+    FILE = "File",
     NULL = "Null",
 }
 
