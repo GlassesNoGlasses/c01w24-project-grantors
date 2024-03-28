@@ -18,7 +18,7 @@ import passwordIcon from '../../images/iconPassword.png';
 
         const { userID } = useParams()
 
-        const gett = async () => {
+        const setInitUser = async () => {
             if (userID) {
                 const user = await UserController.fetchAUser(userID)
                 if (!user) {return}
@@ -30,7 +30,7 @@ import passwordIcon from '../../images/iconPassword.png';
         }
         
         useEffect(() =>{
-            gett()
+            setInitUser()
         }, [])
 
         const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {

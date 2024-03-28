@@ -972,7 +972,7 @@ app.get('/users', express.json(), async (req, res) => {
 	}
 })
 
-app.delete('/users/:userID/delete', express.json(), async (req, res) => {
+app.delete('/users/:userID', express.json(), async (req, res) => {
 	try {
 		const uid = req.params.userID
 
@@ -994,7 +994,7 @@ app.delete('/users/:userID/delete', express.json(), async (req, res) => {
 	}
 })
 
-app.put('/users/:userID/edit', express.json(), async (req, res) => {
+app.put('/users/:userID', express.json(), async (req, res) => {
 	try {
 		const uid = req.params.userID
 

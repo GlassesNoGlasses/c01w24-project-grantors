@@ -67,7 +67,7 @@ function App() {
 							<Route path="createGrant" element={<CreateGrant />} />
 							<Route path="editGrant/:grantID" element={<EditGrant />} />
 							<Route path="users" element={<UserList />} />
-							<Route path="users/:userID/edit" element={<EditUser/>} />
+							<Route path="users/:userID/" element={<EditUser/>} />
 							<Route path="grants" element={<GrantBrowse />} />
 							<Route path="grants/:grantID" element={<GrantPage />} />
 							<Route path="admin/grants" element={<AdminGrants />} />

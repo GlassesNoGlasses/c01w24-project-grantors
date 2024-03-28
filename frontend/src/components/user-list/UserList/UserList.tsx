@@ -28,7 +28,7 @@ const UserCard = ({ user } : {user: User}) => {
 
             <div className='flex gap-4'>
 
-                <Link to={`/users/${user.accountID}/edit`} className='bg-orange-400 hover:bg-orange-500 
+                <Link to={`/users/${user.accountID}`} className='bg-orange-400 hover:bg-orange-500 
                 h-fit w-fit py-2 px-4 rounded-xl text-white'>
                     Edit
                 </Link>

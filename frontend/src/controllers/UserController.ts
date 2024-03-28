@@ -122,7 +122,7 @@ export default class UserController {
     static async updateUser(userId: string, username: string, email: string, 
                             firstName: string, lastName: string, password: string): Promise<String | undefined> {
         try {
-            const res = await fetch(`http://localhost:${SERVER_PORT}/users/${userId}/edit`, {
+            const res = await fetch(`http://localhost:${SERVER_PORT}/users/${userId}`, {
                 method: 'PUT',
                 headers: {'Content-Type': 'application/json',},
                 body: JSON.stringify({
@@ -208,7 +208,7 @@ export default class UserController {
 
     static async deleteUser(userId: string): Promise<String> {
         try {
-            const res = await fetch(`http://localhost:${SERVER_PORT}/users/${userId}/delete`, {
+            const res = await fetch(`http://localhost:${SERVER_PORT}/users/${userId}`, {
                 method: 'DELETE',
                 headers: {
                     'Content-Type': 'application/json',
