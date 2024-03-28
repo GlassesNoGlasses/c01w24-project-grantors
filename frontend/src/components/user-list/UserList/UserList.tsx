@@ -5,7 +5,6 @@ import { Cookies } from 'react-cookie';
 import DropDownFilter from '../../filter/DropDownFilter';
 import { Link } from 'react-router-dom';
 
-
 const UserCard = ({ user } : {user: User}) => {
     return (<div className='flex justify-between p-6 w-[60vw] items-center rounded-xl
             border-4 border-primary shadow-xl shadow-black bg-white text-base'>
@@ -54,16 +53,16 @@ const UserFilter = ({ users, setUsers }: {
                 return false;
             if (search !== "" && !user.lastName?.toLowerCase().includes(search.toLowerCase()))
                 return false;
-            if (userType && userType == UserTypes.admin)
-                return user.isSysAdmin;
-            if (userType && userType == UserTypes.grantor)
-                return user.isAdmin && !user.isSysAdmin;
-            if (userType && userType == UserTypes.grantee)
-                return !user.isAdmin && !user.isSysAdmin;
+            if (userType && userType == UserTypes.admin && !user.isSysAdmin)
+                return false;
+            if (userType && userType == UserTypes.grantor && (user.isSysAdmin || !user.isAdmin))
+                return false;
+            if (userType && userType == UserTypes.grantee && (user.isSysAdmin || user.isAdmin))
+                return false;
 
             return true;
         }));
-    }, [search, userType, users, setUsers]);
+    }, [search, userType]);
 
     const onAccountTypeFilterChange = (type: string) => {
         if (Object.values(UserTypes).includes(type as UserTypes)) {
@@ -93,6 +92,7 @@ const UserFilter = ({ users, setUsers }: {
 const UserList = () => {
 
     const [users, setUsers] = useState<User[]>([]);
+    const [filteredUsers, setFilteredUsers] = useState<User[]>([]);
 
 
     useEffect(() => {
@@ -102,20 +102,20 @@ const UserList = () => {
         
         UserController.fetchUsers(userToken).then((users: User[] | undefined) => {
             if (users) setUsers(users);
+            if (users) setFilteredUsers(users)
         });
 
-    }, [users]);
+    }, []);
 
-    console.log(users)
   return (
     <div className='pt-24 px-10 flex justify-around'>
         <div className='pt-28'>
-            <UserFilter users={users} setUsers={setUsers}/>
+            <UserFilter users={users} setUsers={setFilteredUsers}/>
         </div>
 
         <div className='flex flex-col gap-6 h-[95vh] overflow-scroll p-10'>
-            {users.map((user) => {
-            return <UserCard user={user}/>
+            {filteredUsers.map((user, index) => {
+            return <UserCard user={user} key={index}/>
             })}
         </div>
         
