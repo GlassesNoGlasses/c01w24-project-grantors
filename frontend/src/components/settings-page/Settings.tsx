@@ -74,7 +74,7 @@ const Settings = () => {
 
     const Extension: React.FC<ExtensionProps> = ({ image, browser, link}) => {
         return(
-                <a href={link} target='blank' className='flex items-center gap-2 border-[3px] p-1 px-3 rounded-xl 
+                <a role="button" href={link} target='blank' className='flex items-center gap-2 border-[3px] p-1 px-3 rounded-xl 
                 border-secondary hover:border-black font-semibold shadow-md shadow-black'>
                     <img src={image} alt={browser} className='h-8 w-8'/>
                     {browser}
@@ -197,12 +197,12 @@ const Settings = () => {
                                 <ul className='flex flex-col ml-4'>
                                     <li className='flex gap-2'>
                                         <b>Simple Background Graphics</b>
-                                        <input type="checkbox" checked={checker[0]}
-                                            onChange={() => preferenceHandler(0)}/>
+                                        <input type="checkbox" aria-label="Toggle simple background graphics"  checked={checker[0]}
+                                               onChange={() => preferenceHandler(0)}/>
                                     </li>           
                                     <li className='flex gap-2'>
                                         <b>High Contrast</b>
-                                        <input type="checkbox" checked={checker[1]}
+                                        <input type="checkbox" aria-label="Toggle high contrast" checked={checker[1]}
                                             onChange={() => preferenceHandler(1)}/>
                                     </li>   
                                 </ul>
