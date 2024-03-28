@@ -26,6 +26,7 @@ const grantNotFound: Grant = {
     category: '',
     contact: '',
     questions: [],
+    milestones: [],
     publish: false,
 }
 

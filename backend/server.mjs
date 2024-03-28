@@ -332,7 +332,7 @@ app.post("/grant", express.json(), async (req, res) => {
 	try {
 		// frontend guarantees that all these fields are provided so omit param check
 		const { title, description, deadline, posted, minAmount, maxAmount,
-			organization, category, contact, questions, publish } = req.body;
+			organization, category, contact, questions, milestones, publish } = req.body;
 
 		const grantCollection = db.collection(COLLECTIONS.grants);
 
@@ -347,6 +347,7 @@ app.post("/grant", express.json(), async (req, res) => {
 			category: category,
 			contact: contact,
 			questions: questions,
+			milestones: milestones,
 			publish: publish,
 		});
 
@@ -485,7 +486,8 @@ app.post("/application", express.json(), async (req, res) => {
 			submissionDate,
 			status,
 			awarded,
-			responses, } = req.body;
+			responses,
+			milestones } = req.body;
 
 		const applicationCollection = db.collection(COLLECTIONS.applications);
 		const existingApplication = await applicationCollection.findOne({
@@ -503,6 +505,7 @@ app.post("/application", express.json(), async (req, res) => {
 						status: status,
 						awarded: awarded,
 						responses: responses,
+						milestones: milestones,
 					}
 				});
 			if (update.modifiedCount === 1) {
@@ -511,6 +514,11 @@ app.post("/application", express.json(), async (req, res) => {
 
 			return res.status(500).json( {error: "Failed to update application."} );
 		}
+
+		// Update milestones to have real IDs
+		milestones.forEach((milestone) => {
+			milestone.id = new ObjectId();
+		});
 
 		const inserted = await applicationCollection.insertOne(
 			{
@@ -523,6 +531,7 @@ app.post("/application", express.json(), async (req, res) => {
 				status: status,
 				awarded: awarded,
 				responses: responses,
+				milestones: milestones,
 			}
 		);
 
