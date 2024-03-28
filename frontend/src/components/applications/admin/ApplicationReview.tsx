@@ -6,7 +6,7 @@ import { Application, ApplicationStatus } from "../../../interfaces/Application"
 import { ApplicationReview as ApplicationReviewType } from "../../../interfaces/ApplicationReview";
 import UserController from "../../../controllers/UserController";
 import { Applicant } from "../../../interfaces/Applicant";
-import { Grant, GrantQuestion } from "../../../interfaces/Grant";
+import { Grant, GrantQuestion, GrantQuestionType } from "../../../interfaces/Grant";
 import GrantsController from "../../../controllers/GrantsController";
 import ReviewController from "../../../controllers/ReviewController";
 import { useUserContext } from "../../contexts/userContext";
@@ -94,6 +94,11 @@ const ApplicationReview = () => {
 
     }, [application, user]);
 
+    const formatQuestionAnswer = (question: GrantQuestion) => {
+        return question.type != GrantQuestionType.CHECKBOX ? question.answer 
+                                : question.answer?.split(',').join(', ');
+    };
+
     return (
         <div className="p-10 pt-24">
 
@@ -136,7 +141,7 @@ const ApplicationReview = () => {
                                 application ? application.responses.map((grantQuestion: GrantQuestion, index: number) => (
                                     <li key={index}>
                                         <div id={`question-${index}`} className="font-bold italic">Question: {grantQuestion.question}</div>
-                                        <div id={`response-${index}`}>{grantQuestion.answer}</div>
+                                        <div id={`response-${index}`}>{formatQuestionAnswer(grantQuestion)}</div>
                                     </li>
                                 ))
 
