@@ -168,8 +168,7 @@ const GrantForm: React.FC<GrantFormProps> = ({ type }) => {
         if (newQuestion.type == GrantQuestionType.DROP_DOWN ||
             newQuestion.type == GrantQuestionType.RADIO) {
             if (questionOptionsCleaned.length < 2) {
-                setNewQuestionFeedback('At least two options are required for multiple choice or checkbox questions');
-
+                setNewQuestionFeedback(`At least two options are required for ${newQuestion.type} questions`);
                 return;
             }
         } else if (newQuestion.type == GrantQuestionType.CHECKBOX) {
