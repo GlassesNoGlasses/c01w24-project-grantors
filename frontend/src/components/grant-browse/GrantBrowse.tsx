@@ -92,26 +92,26 @@ const GrantFilter = ({ grants, setGrants }: {
         border-primary shadow-2xl shadow-black h-fit">
             <h1 className="text-2xl font-bold mb-6">Grant Filter</h1>
             <div className="flex flex-col gap-1">
-                <p className="text-base">Search</p>
+                <label className="text-base">Search</label>
                 <input type="text" className="border border-black rounded-lg text-sm p-1 px-2"
                     value={search} onChange={(event) => setSearch(event.target.value)} />
             </div>
             <div className="flex flex-col gap-1">
-                <p className="text-base">Category</p>
+                <label className="text-base">Category</label>
                 <input type="text" className="border border-black rounded-lg text-sm p-1 px-2"
                     value={category} onChange={(event) => setCategory(event.target.value)} />
             </div>
             <div className="flex flex-col">
                 <div>
-                    <p className="text-base">Amount</p>
+                    <label className="text-base">Amount</label>
                     <div className="flex flex-row gap-4 flex-wrap">
                         <div>
-                            <p className="text-sm">Min</p>
+                            <label className="text-sm">Min</label>
                             <input type="number" className="border border-black rounded-lg text-sm p-1 px-2"
                                 value={minAmount as number} onChange={(event) => setMinAmount(event.target.valueAsNumber)} />
                         </div>
                         <div>
-                            <p className="text-sm">Max</p>
+                            <label className="text-sm">Max</label>
                             <input type="number" className="border border-black rounded-lg text-sm p-1 px-2"
                                 value={maxAmount as number} onChange={(event) => setMaxAmount(event.target.valueAsNumber)} />
                         </div>
@@ -119,16 +119,16 @@ const GrantFilter = ({ grants, setGrants }: {
                 </div>
 
                 <div className="w-fit">
-                    <p className="text-base">Date</p>
+                    <label className="text-base">Date</label>
                     <div className="flex flex-row gap-4">
                         <div>
-                            <p className="text-sm">Posted After</p>
+                            <label className="text-sm">Posted After</label>
                             <input type="date" className="border border-black rounded-lg text-sm p-1 px-2"
                                 value={postedAfter?.toISOString().split('T')[0] as string}
                                 onChange={(event) => setPostedAfter(event.target.valueAsDate)} />
                         </div>
                         <div>
-                            <p className="text-sm">Due By</p>
+                            <label className="text-sm">Due By</label>
                             <input type="date" className="border border-black rounded-lg text-sm p-1 px-2"
                                 value={dueBy?.toISOString().split('T')[0] as string}
                                 onChange={(event) => setDueBy(event.target.valueAsDate)} />
