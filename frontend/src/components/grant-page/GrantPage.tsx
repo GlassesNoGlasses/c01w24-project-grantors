@@ -10,13 +10,13 @@ const GrantPage = ({}: GrantPageProps) => {
     const [grant, setGrant] = useState<Grant | undefined>(undefined);
 
     useEffect(() => {
-        if (grantID) {
-            GrantsController.fetchGrant(grantID).then((grant: Grant | undefined) => {
-                if (grant) {
-                    setGrant(grant);
-                }
-            });
-        }
+        if (!grantID) return;
+
+        GrantsController.fetchGrant(grantID).then((grant: Grant | undefined) => {
+            if (!grant) return;
+
+            setGrant(grant);
+        });
     }, []);
 
     return grant ? <GrantFound grant={grant} /> : <GrantNotFound /> ;
