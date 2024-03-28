@@ -14,38 +14,74 @@ import SavedGrants from "./components/saved-grants/SavedGrants";
 import GrantApply from "./components/grant-apply/GrantApply";
 import ApplicationReview from "./components/applications/admin/ApplicationReview";
 import DefaultPage from "./components/home-page/nav-bar/default-page/DefaultPage";
+import TestFileDisplay from "./components/files/TestFileDisplay";
+import ApplicationView from "./components/home-page/nav-bar/client-dashboard/ApplicationView"
 import NotFoundPage from "./components/not-found-page/NotFoundPage";
+import SubmittedView from "./components/home-page/nav-bar/client-dashboard/SubmittedApplicationView"
+import Settings from "./components/settings-page/Settings";
+import React, { useEffect } from 'react';
+import Background from "./components/background/Background";
+import FundingView from "./components/applications/admin/fundingView"
+
+
+
 
 function App() {
+
+	useEffect(() => {
+        const handleKeyDown = (event: KeyboardEvent) => {
+            if ((event.altKey || event.metaKey) && event.key === 'h') {
+                window.location.href = '/'; 
+            }
+			if ((event.altKey || event.metaKey) && event.key === 'g') {
+                window.location.href = '/grants'; 
+            }
+			if ((event.altKey || event.metaKey) && event.key === 'i') {
+                window.location.href = '/applications'; 
+            }
+        };
+
+        window.addEventListener('keydown', handleKeyDown);
+
+        return () => {
+            window.removeEventListener('keydown', handleKeyDown);
+        };
+    }, []);
+
 	return (
 		<div className="App w-full h-full">
-			<div className="bg-home-background bg-cover 
-    		bg-no-repeat bg-center h-[100vh] w-[100vw] fixed z-[-1]"/>
 			
 			{UserContextProvider(
-				<Routes>
-					<Route path="/" element={<Navbar />}>
-						<Route index element={<Home />} />
-						<Route path="about" element={<DefaultPage />} />
-						<Route path="services" element={<Home />} />
-						<Route path="gallery" element={<Home />} />
-						<Route path="contact" element={<Home />} />
-						<Route path="login" element={<Login />} />
-						<Route path="signup" element={<SignUp />} />
-						<Route path="createGrant" element={<CreateGrant />} />
-						<Route path="editGrant/:grantID" element={<EditGrant />} />
-						<Route path="grants" element={<GrantBrowse />} />
-						<Route path="grants/:grantID" element={<GrantPage />} />
-						<Route path="admin/grants" element={<AdminGrants />} />
-						<Route path="admin/grants/:grantID" element={<EditGrant />} />
-						<Route path="saved" element={<SavedGrants />} />
-						<Route path=":organization/applications" element={<AdminApplicationList/>} />
-						<Route path="applications" element={<ClientApplicationList />} />
-						<Route path="grants/:grantID/apply" element={<GrantApply />} /> 
-						<Route path="application/:applicationID/review" element={<ApplicationReview />} />
-						<Route path="*" element={<NotFoundPage />} />
-					</Route>
-				</Routes>
+				<div>
+					<Background />
+
+					<Routes>
+						<Route path="/" element={<Navbar />}>
+							<Route index element={<Home />} />
+							<Route path="about" element={<DefaultPage />} />
+							<Route path="files" element={<TestFileDisplay />} />
+							<Route path="login" element={<Login />} />
+							<Route path="signup" element={<SignUp />} />
+							<Route path="createGrant" element={<CreateGrant />} />
+							<Route path="editGrant/:grantID" element={<EditGrant />} />
+							<Route path="grants" element={<GrantBrowse />} />
+							<Route path="grants/:grantID" element={<GrantPage />} />
+							<Route path="admin/grants" element={<AdminGrants />} />
+							<Route path="admin/grants/:grantID" element={<EditGrant />} />
+							<Route path="saved" element={<SavedGrants />} />
+							<Route path=":organization/applications" element={<AdminApplicationList/>} />
+							<Route path="applications" element={<ClientApplicationList />} />
+							<Route path="grants/:grantID/apply" element={<GrantApply />} /> 
+							<Route path="application/:applicationID/review" element={<ApplicationReview />} />
+							<Route path="applications/:applicationID/funding" element={<FundingView />} />
+							<Route path="applications/:applicationID" element={<ApplicationView />} />
+							<Route path="applications/submitted/:applicationID" element={<SubmittedView/>} />
+							<Route path="settings" element={<Settings />} />
+							<Route path="*" element={<NotFoundPage />} />
+							
+						</Route>
+					</Routes>
+				</div>
 			)}
 		</div>
 	);

@@ -105,4 +105,26 @@ export default class ApplicationsController {
             return false;
         }
     };
+
+    static async updateAwardedAmount(user: User, applicationID: string, awarded: number): Promise<boolean> {
+        try {
+            const response = await fetch(`http://localhost:${SERVER_PORT}/application/${applicationID}/funding`, {
+                method: "PUT",
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": `Bearer ${user.authToken}`,
+                },
+                body: JSON.stringify({ awarded }),
+            });
+    
+            if (!response.ok) {
+                console.error("Server failed to update awarded amount:", response.status);
+                return false;
+            }
+            return true;
+        } catch (error) {
+            console.error("Fetch function failed to update awarded amount:", error);
+            return false;
+        }
+    }
 }

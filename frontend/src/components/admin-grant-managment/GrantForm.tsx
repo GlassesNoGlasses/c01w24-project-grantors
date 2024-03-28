@@ -31,6 +31,7 @@ const initalNewQuestion: GrantQuestion = {
     options: [],
 }
 
+
 const GrantForm: React.FC<GrantFormProps> = ({ type }) => {
     const {user} = useUserContext();
     // state variables
@@ -214,6 +215,7 @@ const GrantForm: React.FC<GrantFormProps> = ({ type }) => {
             </div>
         );
     };
+    const today = formatDateToYYYYMMDD(new Date());
 
     return (
         <div className="flex items-center justify-center min-h-screen pt-20">
@@ -251,8 +253,13 @@ const GrantForm: React.FC<GrantFormProps> = ({ type }) => {
                     <div>
                         <label htmlFor="deadline" className="block text-gray-700 font-semibold mb-2">Deadline</label>
                         <input type="date" name="deadline" id="deadline" value={formatDateToYYYYMMDD(grant.deadline)}
-                            onChange={(e) => setGrant({ ...grant, deadline: new Date(e.target.value) })}
-                            className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-secondary focus:border-transparent" />
+                            min={today}
+                            onChange={(e) => {
+                                const newValue = e.target.value;
+                                const newDate = newValue ? new Date(newValue) : new Date(); // Fallback to current date if empty
+                                setGrant({ ...grant, deadline: newDate });
+                            }}                            
+                            className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent" />
                     </div>
                     
                     {/* Contact */}
