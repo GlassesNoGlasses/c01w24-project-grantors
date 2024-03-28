@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from 'react'
 import UserController from '../../controllers/UserController'
-import { useParams } from 'react-router-dom'
+import { Link, useParams } from 'react-router-dom'
 import emailIcon from '../../images/iconMail.png';
 import nameIcon from '../../images/iconName.png';
+import passwordIcon from '../../images/iconPassword.png';
 
     const EditUser = () => {
 
@@ -10,6 +11,10 @@ import nameIcon from '../../images/iconName.png';
         const [email, setEmail] = useState('')
         const [firstName, setFirstName] = useState('')
         const [lastName, setLastName] = useState('')
+        const [changePassword, setChangePassword] = useState(false)
+        const [password, setPassword] = useState('')
+        const [feedback, setFeedback] = useState<String | undefined>('')
+        
 
         const { userID } = useParams()
 
@@ -30,8 +35,9 @@ import nameIcon from '../../images/iconName.png';
 
         const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
             event.preventDefault();
-
-            
+            if (!userID) return
+            const response = await UserController.updateUser(userID, username, email, firstName, lastName, password);
+            setFeedback(response)
         };
     
 
@@ -43,7 +49,7 @@ import nameIcon from '../../images/iconName.png';
                     flex flex-col gap-4 border-4 border-primary shadow-2xl shadow-black"
                     style={{ boxShadow: '-10px 10px 30px 0 rgba(0, 0, 0, 0.1)' }}>
                     <h3 className="text-xl font-bold text-center sm:text-2xl text-gray-700">Edit User</h3>
-                    <form className='flex flex-col gap-4' onSubmit={handleSubmit}>
+                    <form className='flex flex-col gap-4' onSubmit={handleSubmit} onChange={() => setFeedback('')}>
                         <div className='flex flex-row'>
                             <div className="flex items-center w-[49%] mr-[2%]">
                                 <img src={nameIcon} alt="Password"
@@ -105,19 +111,55 @@ import nameIcon from '../../images/iconName.png';
                                 required
                             />
                         </div>
+
+                        { changePassword ?
+						<div className="flex items-center">
+							<img src={passwordIcon} alt="Username"
+                                className="mr-2 h-5 w-5 flex-shrink-0 text-green-500" />
+							<input
+							type="password"
+							id="organization"
+							placeholder="Enter New Password"
+							value={password}
+							onChange={(e) => setPassword(e.target.value)}
+							className="w-full px-3 py-2 mt-2 border border-gray-200 rounded-full focus:outline-none
+								focus:ring focus:ring-green-600 sm:px-4 sm:py-3"
+							style={{ boxShadow: 'inset -4px 4px 6px rgba(0, 0, 0, 0.1)'}}
+							required
+							/>
+						</div>
+						: null
+					}
                         
+                        <label className='flex flex-row gap-2 text-secondary text-sm ml-2'>
+                            Change Password?
+                            <input
+                                type="checkbox"
+                                checked={changePassword}
+                                onChange={() => setChangePassword(!changePassword)}
+						/>
+						</label>
                         
-                        
-                        <div className="flex justify-center">
+                        <div className="flex justify-between items-center">
+
+                            <Link
+                                to='/users'
+                                type="button" 
+                                className='p-2 px-5 bg-primary hover:bg-[#7db8b7] w-fit h-fit text-center
+                                text-white font-bold rounded-lg shadow-md transition-colors duration-150 ease-in
+                                text-base'>Back to Users
+                            </Link>
                             <button
                                 type="submit" 
-                                className='p-2 px-5 m-2 bg-secondary hover:bg-primary w-full
+                                className='p-2 px-5 m-2 bg-secondary hover:bg-[#7db8b7] w-fit
                                 text-white font-bold rounded-lg shadow-md transition-colors duration-150 ease-in
-                                text-base'>Save Changes</button>
+                                text-base'>Save Changes
+                            </button>
+                           
                         </div>
                     </form>
-                    <div className='flex items-center justify-center'>
-                        <span className='font-bold text-red-500'></span>
+                    <div className='flex items-center h-5 justify-center'>
+                        <span className='font-bold'>{feedback}</span>
                     </div>
                 </div>
             </div>

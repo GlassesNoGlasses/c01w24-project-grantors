@@ -989,20 +989,47 @@ app.put('/users/:userID/edit', express.json(), async (req, res) => {
 	try {
 		const uid = req.params.userID
 
-		const userCollection = db.collection(COLLECTIONS.users)
+		const { username, email, firstName, lastName, password } = req.body
 
-		const deleted = await userCollection.deleteOne({
+		const userCollection = db.collection(COLLECTIONS.users)
+		
+		const usernameExists = await userCollection.findOne({
+			username: username
+		})
+
+		const emailExists = await userCollection.findOne({
+			email: email
+		})
+	
+		if ((usernameExists && !usernameExists._id.equals(uid)) || (emailExists && !emailExists._id.equals(uid))) {
+				res.status(400).json({message: 'username or email already exists'})
+				return
+		}
+		
+		const cur = await userCollection.findOne({
 			_id: new ObjectId(uid)
 		})
 
-		if (deleted.deletedCount != 1) {
-			res.status(404).json({ message: 'no changes have been made'})
-		}
+		const update = await userCollection.updateOne(
+			{ _id: new ObjectId(uid)},
+			{ $set: {
+				username: username,
+				email: email,
+				firstName: firstName,
+				lastName: lastName,
+				password: password === '' ? cur.password :
+				await bcrypt.hash(password, 10)
+			}}
+		)
+
+		if (update.matchedCount !== 1) {
+			res.status(404).json({message: "error updating user"})
+		} 
 		else {
-			res.status(200).json({ message: `user ${uid} deleted`})
+			res.status(200).json({message: 'account infomation updated'})
 		}
-		
 	} catch (error) {
 		res.status(500).json({ error: "Internal server error." });
+		console.log(error)
 	}
 })

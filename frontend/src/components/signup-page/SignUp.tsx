@@ -174,7 +174,7 @@ const SignUp: React.FC<SignUpProps> = () => {
 							<input
 							type="text"
 							id="organization"
-							placeholder="Enter Access Code"
+							placeholder="Enter Access Code: CSCC01"
 							value={code}
 							onChange={(e) => setCode(e.target.value)}
 							className="w-full px-3 py-2 mt-2 border border-gray-200 rounded-full focus:outline-none

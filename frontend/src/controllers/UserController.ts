@@ -119,6 +119,33 @@ export default class UserController {
         }
     }
 
+    static async updateUser(userId: string, username: string, email: string, 
+                            firstName: string, lastName: string, password: string): Promise<String | undefined> {
+        try {
+            const res = await fetch(`http://localhost:${SERVER_PORT}/users/${userId}/edit`, {
+                method: 'PUT',
+                headers: {'Content-Type': 'application/json',},
+                body: JSON.stringify({
+                    username: username,
+                    email: email,
+                    firstName: firstName,
+                    lastName: lastName,
+                    password: password,
+                })
+            });
+
+            if (res.ok) {
+                return await res.json().then((data: { message: string}) => {
+                    return data.message;
+                });
+            } else {
+                console.error("Failed to update user", res);
+            }
+        } catch (error) {
+            console.error("Error while updating users", error);
+        }
+    }
+
     static async fetchApplicant(applicantID: string): Promise<Applicant | undefined> {
         try {
             const res = await fetch(`http://localhost:${SERVER_PORT}/applicant/${applicantID}`, {
