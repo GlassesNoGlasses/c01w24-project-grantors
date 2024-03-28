@@ -43,7 +43,11 @@ const GrantForm: React.FC<GrantFormProps> = ({ type }) => {
     const grantID = useParams()?.grantID ?? '';
     const [grant, setGrant] = useState<Grant>(initialGrantState);
 
-    const questionTypes = Object.values(GrantQuestionType);
+    const questionTypes = [ GrantQuestionType.TEXT,
+                            GrantQuestionType.CHECKBOX,
+                            GrantQuestionType.DROP_DOWN, 
+                            GrantQuestionType.RADIO
+    ];
 
     // retrieve the grant if in edit mode only when mounting
     useEffect(() => {
@@ -98,10 +102,15 @@ const GrantForm: React.FC<GrantFormProps> = ({ type }) => {
         });
 
         let questionOptionsCleaned = newQuestion.options.filter((option) => option != '');
-        if (newQuestion.type == GrantQuestionType.MULTIPLE_CHOICE ||
-            newQuestion.type == GrantQuestionType.CHECKBOX) {
+        if (newQuestion.type == GrantQuestionType.DROP_DOWN ||
+            newQuestion.type == GrantQuestionType.RADIO) {
             if (questionOptionsCleaned.length < 2) {
                 setFeedback('At least two options are required for multiple choice or checkbox questions');
+                return;
+            }
+        } else if (newQuestion.type == GrantQuestionType.CHECKBOX) {
+            if (questionOptionsCleaned.length < 1) {
+                setFeedback('At least one option is required for checkbox questions');
                 return;
             }
         }
@@ -172,13 +181,16 @@ const GrantForm: React.FC<GrantFormProps> = ({ type }) => {
     const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         if (grant.questions.length == 0) {
-            alert("At Least One Question Is Required To Be Published, Please Add A Custom Question")
+            setFeedback("At Least One Question Is Required To Be Published, Please Add A Custom Question")
         } else {
             saveGrant(true)
         }
     };
 
     const handleQuestionTypeChange = (selected: string) => {
+        if (!selected) {
+            selected = GrantQuestionType.NULL;
+        }
         setNewQuestion({
             ...newQuestion, 
             type: selected as GrantQuestionType,
@@ -187,7 +199,7 @@ const GrantForm: React.FC<GrantFormProps> = ({ type }) => {
     };
 
     // handle when a multiple choice answer is changed
-    const handleMCAnswerChange = (index: number, value: string) => {
+    const handleAnswerChoicesChange = (index: number, value: string) => {
         if (newQuestion.options) {
             const newOptions = newQuestion.options.map((option, i) => {
                 return i == index ? value : option
@@ -303,13 +315,14 @@ const GrantForm: React.FC<GrantFormProps> = ({ type }) => {
                                 <DropDown options={questionTypes} identity="Question Type" selectCallback={handleQuestionTypeChange}/>
                             </div>
                             { // special question options
-                                newQuestion.type == GrantQuestionType.MULTIPLE_CHOICE ||
-                                newQuestion.type == GrantQuestionType.CHECKBOX ?
+                                newQuestion.type == GrantQuestionType.DROP_DOWN ||
+                                newQuestion.type == GrantQuestionType.CHECKBOX ||
+                                newQuestion.type == GrantQuestionType.RADIO ?
                                 <div className="flex flex-col gap-2">
                                     <span className="block text-gray-700 font-semibold">Question Options</span>
                                     {
                                         newQuestion.options.map((option, index) => (
-                                            <input key={index} type="text" name={`answer-option-${index}`} value={option} onChange={(e) => handleMCAnswerChange(index, e.target.value)}
+                                            <input key={index} type="text" name={`answer-option-${index}`} value={option} onChange={(e) => handleAnswerChoicesChange(index, e.target.value)}
                                                 className="w-1/2 px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-secondary focus:border-transparent" />
                                         ))
                                     }
@@ -344,10 +357,17 @@ const GrantForm: React.FC<GrantFormProps> = ({ type }) => {
                                                         </label>
                                                     </div>
                                                 ))
-                                            : question.type == GrantQuestionType.MULTIPLE_CHOICE ?
+                                            : question.type == GrantQuestionType.DROP_DOWN ?
                                                 <DropDown options={question.options} identity="Select Option"/>
-                                            :
-                                                <></>
+                                            : question.type == GrantQuestionType.RADIO ?
+                                                question.options.map((option, index) => (
+                                                    <div key={index} className='flex flex-row items-center gap-1'>
+                                                        <input type='radio' name={`question-${question.id}`} value={option} />
+                                                        <label htmlFor={`question-${question.id}`} className="block text-gray-700 font-semibold">
+                                                            {option}
+                                                        </label>
+                                                    </div>
+                                            )) : <></>
                                         }
                                     </div>
                                 </div>

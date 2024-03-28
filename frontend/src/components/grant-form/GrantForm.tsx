@@ -99,9 +99,10 @@ const GrantForm = ({ user, grant }: GrantFormProps) => {
                          <div className="flex flex-col gap-1 p-5 px-3">
                             <label className='text-base'>{questionElement.question}</label>
                             {
-                                questionElement.type == GrantQuestionType.MULTIPLE_CHOICE ? (
+                                questionElement.type == GrantQuestionType.DROP_DOWN ? (
                                     <DropDown options={questionElement.options} 
                                               identity="Select Option" 
+                                              selected={questionList[index].answer}
                                               selectCallback={(value: string) => setAnswer(index, value)}
                                               />
                                 ) :
@@ -118,6 +119,19 @@ const GrantForm = ({ user, grant }: GrantFormProps) => {
                                                             questionList[index].answer?.split(',').filter((item) => item !== option).join(',');
                                                         setAnswer(index, newAnswer ?? '');
                                                     }}/>
+                                                <label>{option}</label>
+                                            </div>
+                                        ))}
+                                    </div>
+                                ) :
+                                questionElement.type == GrantQuestionType.RADIO ? (
+                                    <div className="flex flex-row gap-2">
+                                        {questionElement.options.map((option, optionIndex) => (
+                                            <div key={optionIndex} className="flex flex-row items-center gap-2">
+                                                <input type="radio" 
+                                                    value={option} 
+                                                    checked={questionList[index].answer === option}
+                                                    onChange={(e) => setAnswer(index, option)}/>
                                                 <label>{option}</label>
                                             </div>
                                         ))}
