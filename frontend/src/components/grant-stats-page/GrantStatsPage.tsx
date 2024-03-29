@@ -63,7 +63,7 @@ const DisplayUserStats = ({optionalUser} : DisplayStatsProps) => {
     }, [user, optionalUser]);
 
     useEffect(() => {
-        if (user) {
+        if (user || optionalUser) {
             GrantsController.fetchGrants(appliedGrants(applications)).then((grants: Grant[] | undefined) => {
                 if (grants) {
                     setGrants(grants);
