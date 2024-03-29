@@ -34,14 +34,15 @@ const TextDropFilter = ({
         onChange={handleInputChange}
         placeholder="Type to search..."
         className=' border-1 border-gray-400'
+        required
       />
       {isOpen && (
-        <div className="">
+        <div className="z-30">
           {filteredOptions.map((option) => (
             <div
-              key={option.toString()}
-              className=""
-              onClick={() => handleSelect(option)}
+            key={option.toString()}
+            className=""
+            onClick={() => handleSelect(option)}
             >
               {option}
             </div>

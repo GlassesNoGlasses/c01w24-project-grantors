@@ -26,6 +26,7 @@ const COLLECTIONS = {
 	grants: "grants",
 	favouriteGrants: "favouriteGrants",
 	files: "files",
+	messages: "messages",
 };
 
 // Uploading files
@@ -926,9 +927,9 @@ app.put('/application/:applicationID/funding', express.json(), async (req, res) 
     }
 });
 
-app.post('/message/:userEmail', express.json(), async (req, res) => {
+app.post('/sendMessage/:userEmail', express.json(), async (req, res) => {
 	const userEmail = req.params.userEmail;
-	const { message } = req.body;
+	const message = req.body;
 
 	if (!message || !userEmail) {
 		return res.status(400).json({ error: "Invalid request: 'userEmail' and 'message' are required." });
@@ -942,12 +943,73 @@ app.post('/message/:userEmail', express.json(), async (req, res) => {
 			return res.status(404).send("User not found.")
 		}
 
+		const messageCollection = db.collection(COLLECTIONS.messages);
+
+		const messageID = await messageCollection.insertOne({
+			title: message.title,
+			senderEmail: userEmail,
+			receiverEmail: message.receiverEmail,
+			description: message.description,
+			dateSent: new Date(),
+		});
 		
-		// Send email to user
-		console.log(`Email sent to ${userEmail} with subject: ${subject} and message: ${message}`);
-		res.status(200).json({ message: "Email sent successfully." });
+		res.status(200).json({ message: "Message sent successfully." });
 	} catch (error) {
-		console.error("Error sending email:", error);
-		res.status(500).json({ error: "Internal server error." });
+		console.error("Error sending message: ", error);
+		res.status(500).json({ error: error.message });
 	}
-})
+});
+
+app.post('/getSentMessages/:userEmail', express.json(), async (req, res) => {
+	const userEmail = req.params.userEmail;
+
+	if (!userEmail) {
+		return res.status(400).json({ error: "Invalid request: 'userEmail' is required." });
+	}
+
+	try {
+		const userCollection = db.collection(COLLECTIONS.users);
+		const user = await userCollection.findOne({ email: userEmail });
+
+		if (!user) {
+			return res.status(404).send("User not found.")
+		}
+
+		const messageCollection = db.collection(COLLECTIONS.messages);
+		const sentMessages = await messageCollection.find({ senderEmail: userEmail }).toArray();
+		
+		res.status(200).json({
+			response: sentMessages.map((message) => dbIDToFrontendID(message))
+		});
+	} catch (error) {
+		console.error("Error sending message: ", error);
+		res.status(500).json({ error: error.message });
+	}
+});
+
+app.post('/getReceivedMessages/:userEmail', express.json(), async (req, res) => {
+	const userEmail = req.params.userEmail;
+
+	if (!userEmail) {
+		return res.status(400).json({ error: "Invalid request: 'userEmail' is required." });
+	}
+
+	try {
+		const userCollection = db.collection(COLLECTIONS.users);
+		const user = await userCollection.findOne({ email: userEmail });
+
+		if (!user) {
+			return res.status(404).send("User not found.")
+		}
+
+		const messageCollection = db.collection(COLLECTIONS.messages);
+		const receivedMessages = await messageCollection.find({ receiverEmail: userEmail }).toArray();
+		
+		res.status(200).json({
+			response: receivedMessages.map((message) => dbIDToFrontendID(message))
+		});
+	} catch (error) {
+		console.error("Error sending message: ", error);
+		res.status(500).json({ error: error.message });
+	}
+});

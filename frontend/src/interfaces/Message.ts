@@ -1,4 +1,3 @@
-import { FSFile } from "./FSFile";
 
 export interface Message {
     id: String,
@@ -7,5 +6,4 @@ export interface Message {
     receiverEmail: String, // email of person receiving message
     description: String,
     dateSent: Date,
-    Files?: FSFile[]
 }

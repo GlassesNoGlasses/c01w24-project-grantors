@@ -1,5 +1,6 @@
 
 export interface MessageFormProps {
+    title: String,
     showModal: boolean,
     callbackOpen: () => void,
     callbackClose: () => void,

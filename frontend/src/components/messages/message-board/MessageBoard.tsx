@@ -51,6 +51,7 @@ export const MessageBoard = ({
           {
             showModal ?
             <MessageForm
+            title={"Creating A New Message"}
             showModal={showModal}
             callbackClose={() => setShowModal(false)}
             callbackOpen={() => setShowModal(true)}
