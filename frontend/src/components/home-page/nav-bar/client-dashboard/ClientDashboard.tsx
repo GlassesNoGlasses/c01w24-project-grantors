@@ -18,7 +18,7 @@ const ClientDashboard = ({}: ClientDashboardProps) => {
 	}
 
 	return (
-		<div className="dashboard-container py-20 w-full h-full">
+		<div className="dashboard-container w-full h-full">
 
 			<div className='bg-white pb-8'>
 				<h2 className='text-6xl text-secondary pl-10 w-fit flex items-center flex-col'>

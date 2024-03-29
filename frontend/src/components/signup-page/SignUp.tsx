@@ -66,16 +66,14 @@ const SignUp: React.FC<SignUpProps> = ({adminCreate}) => {
 	}
 
   return (
-  	<div>
-    	<div className="flex items-center justify-center min-h-screen pt-20 bg-home-background bg-cover 
-    		bg-no-repeat bg-center h-[100vh] w-[100vw] fixed z-[-1]">
+  	<div className='flex h-[85vh] items-center'>
     		<div className="w-full max-w-xs px-4 py-6 mx-auto bg-white rounded-xl 
 				sm:px-6 sm:py-8 md:max-w-sm lg:max-w-md xl:max-w-lg 2xl:max-w-xl
 				flex flex-col gap-4 border-4 border-primary shadow-2xl shadow-black"
           		style={{ boxShadow: '-10px 10px 30px 0 rgba(0, 0, 0, 0.1)' }}>
 				<h3 className="text-xl font-bold text-center sm:text-2xl text-gray-700">{adminCreate ?
 				"Create an account for Grantors" : "Sign up for Grantors"}</h3>
-				<form className='flex flex-col gap-4' onSubmit={handleSubmit}>
+				<form className='flex flex-col gap-4' onSubmit={handleSubmit} onChange={() => setFeedback('')}>
 					<div className='flex flex-row'>
 						<div className="flex items-center w-[49%] mr-[2%]">
 							<img src={nameIcon} alt="Password"
@@ -216,9 +214,9 @@ const SignUp: React.FC<SignUpProps> = ({adminCreate}) => {
 					</div>
 				</form>
 				<div className='flex items-center justify-center'>
-					<span className='font-bold text-red-500'>{feedback}</span>
+					<span className='font-bold text-red-500 h-5'>{feedback}</span>
 				</div>
-			</div>
+			
 		</div>
 		{adminCreate?
 		<Modal showModal={showModal} closeModal={() => setShowModal(false)} openModal={() => setShowModal(true)}>
