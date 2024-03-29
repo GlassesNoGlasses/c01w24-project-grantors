@@ -121,7 +121,7 @@ const UserMilestonesPage = () => {
 				<div className='bg-white h-fit w-2/5 border-4 border-blue-400 border-solid rounded-lg'>
 					<div className='h-full w-full'>
 						<p className='text-xl text-center font-semibold'>
-							{`You have submitted created the milestone successfully.`}
+							{`You have submitted the milestone successfully.`}
 						</p>
 						<div className='flex flex-row justify-center'>
 							<button className='p-2 px-5 m-2 bg-blue-500 hover:bg-blue-600 active:bg-blue-700
