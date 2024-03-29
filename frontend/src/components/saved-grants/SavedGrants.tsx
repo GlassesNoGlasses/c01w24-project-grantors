@@ -8,7 +8,7 @@ import { Link } from "react-router-dom";
 const SavedGrants = () => {
     const { user } = useUserContext();
     return (
-        <div className="pt-20">
+        <div className="pt-5">
             <UserGrantBrowse />
         </div> 
     )
@@ -31,7 +31,7 @@ const UserGrantBrowse = () => {
         <div className="flex flex-col lg:flex-row gap-3 p-2">
             <GrantList grants={filteredGrants} favouriteGrants={filteredGrants.map((grant) => grant.id)} />
         </div> :
-        <div className="py-10 pl-10 bg-white">
+        <div className="pl-10 bg-white">
             <p className="font-bold text-xl mb-4">Hey There! It Looks Like You Have No Saved Grants</p>
             <p>You Can Favourite a Grant From The List &nbsp;
                 <Link to='/grants' className="underline text-blue-500 hover:text-blue-800">here</Link> !

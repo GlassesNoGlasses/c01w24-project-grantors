@@ -149,7 +149,7 @@ const GrantForm = ({ user, grant }: GrantFormProps) => {
     }
 
     return (
-        <div className='pt-28 pb-20 flex justify-center'>
+        <div className='py-10 flex justify-center'>
             <form onSubmit={handleSubmit} id="grantform" className=' border-4 bg-white lg:w-[70vw] w-[90vw]
             rounded-2xl border-primary shadow-2xl shadow-black p-6'>
 
