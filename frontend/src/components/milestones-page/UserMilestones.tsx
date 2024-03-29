@@ -2,8 +2,9 @@ import { FormEvent, useEffect, useState } from "react";
 import ApplicationsController from "../../controllers/ApplicationsController";
 import { Application, ApplicationStatus } from "../../interfaces/Application";
 import { useUserContext } from "../contexts/userContext";
-import { GrantMilstone } from "../../interfaces/Grant";
+import { GrantMilestone } from "../../interfaces/Grant";
 import { Check, X } from "heroicons-react";
+import { CheckIcon, XMarkIcon } from "@heroicons/react/24/solid";
 
 const UserMilestonesPage = () => {
     const { user } = useUserContext();
@@ -20,7 +21,7 @@ const UserMilestonesPage = () => {
         });
     }, [user]);
     
-    const handleMilestoneSubmit = (e: FormEvent<HTMLFormElement>, milestone: GrantMilstone) => {
+    const handleMilestoneSubmit = (e: FormEvent<HTMLFormElement>, milestone: GrantMilestone) => {
         e.preventDefault();
         if (!user) return;
 
@@ -49,14 +50,14 @@ const UserMilestonesPage = () => {
         });
     }
 
-    const MilestoneItem = ({ milestone }: { milestone: GrantMilstone }) => {
+    const MilestoneItem = ({ milestone }: { milestone: GrantMilestone }) => {
         const [evidence, setEvidence] = useState<string>(milestone.evidence);
 
         return (
             <div className="flex flex-col gap-2 py-4 px-5 border-2 border-magnify-dark-blue rounded-md bg-magnify-light-blue">
                 <div className="flex flex-row justify-between align-middle">
                     <h3 className="text-lg font-bold">{milestone.title}</h3>
-                    {milestone.completed ? <Check className="h-10 w-10 text-green-500" /> : <X className="h-10 w-10 text-red-500" />}
+                    {milestone.completed ? <CheckIcon className="h-10 w-10 text-green-500" /> : <XMarkIcon className="h-10 w-10 text-red-500" />}
                 </div>
                 <p className="text-sm">Due: {new Date(milestone.dueDate).toDateString()}</p>
                 <p className="text-base">{milestone.description}</p>

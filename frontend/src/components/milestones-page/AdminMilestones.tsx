@@ -1,10 +1,10 @@
-import { Check, X } from "heroicons-react";
 import { useEffect, useState } from "react";
-import { GrantMilstone } from "../../interfaces/Grant";
+import { GrantMilestone } from "../../interfaces/Grant";
 import { Application, ApplicationStatus } from "../../interfaces/Application";
 import { useUserContext } from "../contexts/userContext";
 import ApplicationsController from "../../controllers/ApplicationsController";
 import UserController from "../../controllers/UserController";
+import { CheckIcon, XMarkIcon } from "@heroicons/react/24/solid";
 
 const AdminMilestonesPage = () => {
     const { user } = useUserContext();
@@ -23,7 +23,7 @@ const AdminMilestonesPage = () => {
         });
     }, [user]);
 
-    const handleMilestoneComplete = (milestone: GrantMilstone) => {
+    const handleMilestoneComplete = (milestone: GrantMilestone) => {
         if (!user) return;
 
         const updatedApplications = approvedApplications.map((application: Application) => {
@@ -51,12 +51,12 @@ const AdminMilestonesPage = () => {
         });
     }
 
-    const MilestoneItem = ({ milestone }: { milestone: GrantMilstone }) => {
+    const MilestoneItem = ({ milestone }: { milestone: GrantMilestone }) => {
         return (
             <div className="flex flex-col gap-2 py-4 px-5 border-2 border-magnify-dark-blue rounded-md bg-magnify-light-blue">
                 <div className="flex flex-row justify-between align-middle">
                     <h3 className="text-lg font-bold">{milestone.title}</h3>
-                    {milestone.completed ? <Check className="h-10 w-10 text-green-500" /> : <X className="h-10 w-10 text-red-500" />}
+                    {milestone.completed ? <CheckIcon className="h-10 w-10 text-green-500" /> : <XMarkIcon className="h-10 w-10 text-red-500" />}
                 </div>
                 <p className="text-sm">Due: {new Date(milestone.dueDate).toDateString()}</p>
                 <p className="text-base">{milestone.description}</p>

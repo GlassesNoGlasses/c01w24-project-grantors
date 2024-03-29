@@ -1,4 +1,4 @@
-import { GrantMilstone, GrantQuestion } from "./Grant";
+import { GrantMilestone, GrantQuestion } from "./Grant";
 
 export enum ApplicationStatus {
     submitted = "Submitted",
@@ -19,5 +19,5 @@ export interface Application {
     status: ApplicationStatus,
     awarded: number,
     responses: GrantQuestion[];
-    milestones: GrantMilstone[];
+    milestones: GrantMilestone[];
 }

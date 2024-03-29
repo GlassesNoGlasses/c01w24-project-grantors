@@ -82,6 +82,70 @@ export default class UserController {
         }
     }
 
+    static async fetchAUser(uid: string): Promise<User | undefined> {
+        try {
+            const res = await fetch(`http://localhost:${SERVER_PORT}/user/${uid}`, {
+                method: 'GET',
+            });
+
+            if (res.ok) {
+                return await res.json().then((data: { response: User }) => {
+                    return data.response;
+                });
+            } else {
+                console.error("Failed to fetch user", res);
+            }
+        } catch (error) {
+            console.error("Error while fetching user", error);
+        }
+    }
+
+    static async fetchUsers(authToken: string): Promise<User[] | undefined> {
+        try {
+            const res = await fetch(`http://localhost:${SERVER_PORT}/users`, {
+                method: 'GET',
+                headers: { 'Authorization': `Bearer ${authToken}` }
+            });
+
+            if (res.ok) {
+                return await res.json().then((data: { users: User[] }) => {
+                    return data.users;
+                });
+            } else {
+                console.error("Failed to fetch users", res);
+            }
+        } catch (error) {
+            console.error("Error while fetching users", error);
+        }
+    }
+
+    static async updateUser(userId: string, username: string, email: string, 
+                            firstName: string, lastName: string, password: string): Promise<String | undefined> {
+        try {
+            const res = await fetch(`http://localhost:${SERVER_PORT}/users/${userId}`, {
+                method: 'PUT',
+                headers: {'Content-Type': 'application/json',},
+                body: JSON.stringify({
+                    username: username,
+                    email: email,
+                    firstName: firstName,
+                    lastName: lastName,
+                    password: password,
+                })
+            });
+
+            if (res.ok) {
+                return await res.json().then((data: { message: string}) => {
+                    return data.message;
+                });
+            } else {
+                console.error("Failed to update user", res);
+            }
+        } catch (error) {
+            console.error("Error while updating users", error);
+        }
+    }
+
     static async fetchApplicant(applicantID: string): Promise<Applicant | undefined> {
         try {
             const res = await fetch(`http://localhost:${SERVER_PORT}/applicant/${applicantID}`, {
@@ -139,6 +203,25 @@ export default class UserController {
         } catch (error) {
             console.error("Error while updating preferences", error);
             return false
+        }
+    }
+
+    static async deleteUser(userId: string): Promise<String> {
+        try {
+            const res = await fetch(`http://localhost:${SERVER_PORT}/users/${userId}`, {
+                method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            });
+            
+            return await res.json().then((message: String) => {
+                return message
+            });
+
+        } catch (error) {
+            console.error("Error while updating preferences", error);
+            return "Error while deleting"
         }
     }
 }
