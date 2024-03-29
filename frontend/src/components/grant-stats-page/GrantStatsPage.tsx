@@ -6,11 +6,15 @@ import { Application, ApplicationStatus } from "../../interfaces/Application";
 import { Chart } from "react-google-charts";
 
 const GrantStatsPage = ({}: GrantStatsPageProps) => {
-
-    return <DisplayStats />;
+    const { user } = useUserContext();
+    return user?.isAdmin ? <DisplayAdminStats/> : <DisplayUserStats />;
 };
 
-const DisplayStats = () => {
+const DisplayAdminStats = () => {
+    return <div></div>
+}
+
+const DisplayUserStats = () => {
     const {user} = useUserContext();
     const [applications, setApplications] = useState<Application[]>([]);
     const header = ["Category", "Frequency", { role: "style" }];
@@ -51,7 +55,9 @@ const DisplayStats = () => {
         [`Received Amount: ${grantsAwarded}`]: grantsAwarded
     }, header)
 
-    const grantCategoriesData = formatData(countCategories(applications), header);
+    const grantCategoriesData = formatData(
+        countCategories(applications), 
+    header);
 
     const applicationsSubmitted = countApplicationsSubmitted(applications);
     const applicationsInProgress = countApplicationsInProgress(applications);
@@ -85,23 +91,29 @@ const DisplayStats = () => {
                 <Chart chartType="ColumnChart" width="100%" height="400px" data={grantStatusData} options={options} />
             </div>
         </div>
-        
     );
 }
 
 const countCategories = (applications: Application[]) => 
 {
-    const result: TableValues = {};
+    const data: TableValues = {};
     for (const application of applications)
     {
-        result[application.grantCategory] = result[application.grantCategory] ? result[application.grantCategory] + 1 : 1;
+        data[application.grantCategory] = data[application.grantCategory] ? data[application.grantCategory] + 1 : 1;
+    }
+
+    const result: TableValues = {};
+    for (const key in data)
+    {
+        result[key + `: ${data[key]}`] = data[key];
     }
     return result;
 }
 
 const formatData = (values: TableValues, header: any[]) =>
 {
-
+    let colors: string[] = ["#22525D", "#7DB8B7"];
+    let i: number = 0;
     let result: (string | number)[][] = [];
     result.push(header)
     for (const key in values)
@@ -110,7 +122,8 @@ const formatData = (values: TableValues, header: any[]) =>
         
         arr.push(key);
         arr.push(values[key]);
-        arr.push("black");
+        arr.push(colors[i % colors.length]);
+        i = i + 1;
         result.push(arr);
     }
 
