@@ -7,12 +7,20 @@ import { Chart } from "react-google-charts";
 import {User} from '../../interfaces/User'
 
 const GrantStatsPage = ({}: GrantStatsPageProps) => {
-
-    return <DisplayStats />;
+    const { user } = useUserContext();
+    return user?.isAdmin ? <AdminDisplayStats /> : <DisplayStats />;
 };
 
 interface DisplayStatsProps {
     optionalUser? : User
+}
+
+const AdminDisplayStats = () => {
+    return(
+        <div>
+
+        </div>
+    )
 }
 
 const DisplayStats = ({optionalUser} : DisplayStatsProps) => {
@@ -95,9 +103,7 @@ const DisplayStats = ({optionalUser} : DisplayStatsProps) => {
                     <Chart chartType="ColumnChart" width="100%" height="400px" data={grantStatusData} options={options} />
                 </div>
             </div>
-        </div>
-        
-        
+        </div>   
     );
 }
 
