@@ -3,8 +3,10 @@ import { GrantFormProps } from "./GrantFormProps";
 import { GrantQuestion, GrantQuestionType } from "../../interfaces/Grant";
 import { Application, ApplicationStatus } from '../../interfaces/Application';
 import ApplicationsController from '../../controllers/ApplicationsController';
-import { useNavigate } from 'react-router-dom';
 import { Link, useLocation } from 'react-router-dom';
+import { Modal } from '../modal/Modal';
+import { useNavigate, useParams } from 'react-router-dom';
+
 import DropDown from '../displays/DropDown/DropDown';
 import DropZoneFile from '../files/dropzone/DropZoneFile';
 import { Accept } from 'react-dropzone';
@@ -18,6 +20,20 @@ const GrantForm = ({ user, grant }: GrantFormProps) => {
     const [feedback, setFeedback] = useState<string>("");
     const navigate = useNavigate();
     const location = useLocation();
+
+    
+    const [showModal, setShowModal] = useState<boolean>(false);
+    const [showSaveModal, setShowSaveModal] = useState<boolean>(false);
+
+    const handleCloseModalAndNavigate = () => {
+        setShowModal(false);
+        navigate('/');
+    };
+
+    const handleCloseModalAndNavigateSave = () => {
+        setShowSaveModal(false);
+        navigate('/');
+    };
 
     const applicationIDParam = new URLSearchParams(location.search).get('applicationID');
 
@@ -66,7 +82,7 @@ const GrantForm = ({ user, grant }: GrantFormProps) => {
             responses: questionList,
             milestones: grant.milestones,
         }).then(() => {
-            navigate('/');
+            setShowSaveModal(true);
         });
     };
 
@@ -108,7 +124,7 @@ const GrantForm = ({ user, grant }: GrantFormProps) => {
             responses: questionList,
             milestones: grant.milestones,
         }).then(() => {
-            navigate('/');
+            setShowModal(true);
         });
     };
 
@@ -264,6 +280,44 @@ const GrantForm = ({ user, grant }: GrantFormProps) => {
                     
                 </div>
             </form>
+            <Modal showModal={showModal} closeModal={handleCloseModalAndNavigate} openModal={() => setShowModal(true)}>
+			<div className='flex h-[100vh] w-[100vw] justify-center items-center'>
+				<div className='bg-white h-fit w-2/5 border-4 border-blue-400 border-solid rounded-lg'>
+					<div className='h-full w-full'>
+						<p className='text-xl text-center font-semibold'>
+							{`You have successfully submitted the grant.`}
+						</p>
+						<div className='flex flex-row justify-center'>
+							<button className='p-2 px-5 m-2 bg-blue-500 hover:bg-blue-600 active:bg-blue-700
+								text-white font-bold rounded-lg shadow-md transition-colors duration-150 ease-in
+								text-base text-center justify-center align-middle flex pb-1'
+								onClick={handleCloseModalAndNavigate}>
+								Close
+							</button>
+						</div>
+					</div>
+				</div>
+			</div>
+		</Modal>
+        <Modal showModal={showSaveModal} closeModal={handleCloseModalAndNavigateSave} openModal={() => setShowSaveModal(true)}>
+			<div className='flex h-[100vh] w-[100vw] justify-center items-center'>
+				<div className='bg-white h-fit w-2/5 border-4 border-blue-400 border-solid rounded-lg'>
+					<div className='h-full w-full'>
+						<p className='text-xl text-center font-semibold'>
+							{`You have successfully saved the grant.`}
+						</p>
+						<div className='flex flex-row justify-center'>
+							<button className='p-2 px-5 m-2 bg-blue-500 hover:bg-blue-600 active:bg-blue-700
+								text-white font-bold rounded-lg shadow-md transition-colors duration-150 ease-in
+								text-base text-center justify-center align-middle flex pb-1'
+								onClick={handleCloseModalAndNavigateSave}>
+								Close
+							</button>
+						</div>
+					</div>
+				</div>
+			</div>
+		</Modal>
         </div>
     );
 

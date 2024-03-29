@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from 'react'
 import UserController from '../../controllers/UserController'
-import { Link, useParams } from 'react-router-dom'
+import { Link, useParams, useNavigate } from 'react-router-dom'
 import emailIcon from '../../images/iconMail.png';
 import nameIcon from '../../images/iconName.png';
 import passwordIcon from '../../images/iconPassword.png';
+import { Modal } from '../modal/Modal'; 
 
     const EditUser = () => {
 
@@ -14,6 +15,15 @@ import passwordIcon from '../../images/iconPassword.png';
         const [changePassword, setChangePassword] = useState(false)
         const [password, setPassword] = useState('')
         const [feedback, setFeedback] = useState<String | undefined>('')
+        const [showModal, setShowModal] = useState<boolean>(false);
+        const navigate = useNavigate()
+
+    
+        const handleCloseModalAndNavigate = () => {
+            setShowModal(false);
+            navigate('/');
+        };
+    
         
 
         const { userID } = useParams()
@@ -38,6 +48,7 @@ import passwordIcon from '../../images/iconPassword.png';
             if (!userID) return
             const response = await UserController.updateUser(userID, username, email, firstName, lastName, password);
             setFeedback(response)
+            setShowModal(true);
         };
     
 
@@ -163,6 +174,25 @@ import passwordIcon from '../../images/iconPassword.png';
                         </div>
                     </div>
                 </div>
+                <Modal showModal={showModal} closeModal={handleCloseModalAndNavigate} openModal={() => setShowModal(true)}>
+			<div className='flex h-[100vh] w-[100vw] justify-center items-center'>
+				<div className='bg-white h-fit w-2/5 border-4 border-blue-400 border-solid rounded-lg'>
+					<div className='h-full w-full'>
+						<p className='text-xl text-center font-semibold'>
+							{`You have successfully edited the user.`}
+						</p>
+						<div className='flex flex-row justify-center'>
+							<button className='p-2 px-5 m-2 bg-blue-500 hover:bg-blue-600 active:bg-blue-700
+								text-white font-bold rounded-lg shadow-md transition-colors duration-150 ease-in
+								text-base text-center justify-center align-middle flex pb-1'
+								onClick={handleCloseModalAndNavigate}>
+								Close
+							</button>
+						</div>
+					</div>
+				</div>
+			</div>
+		</Modal>
             </div>
         )
     }
