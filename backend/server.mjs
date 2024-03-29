@@ -606,63 +606,68 @@ app.get("/applications", express.json(), async (req, res) => {
         return res.status(400).json({ error: "Missing required parameters. Include userID or organization." });
     }
 
-    verifyRequestAuth(req, async (err, decoded) => {
-        if (err || (userID && userID != decoded.userID)) {
-            return res.status(401).send("Unauthorized.");
-        }
+	verifyRequestAuth(req, async (err, decoded) => {
+		if (err) {
+			return res.status(401).send("Unauthorized.");
+		}
 
-        let pipeline = [];
-        if (userID) {
-            pipeline.push({
-                $match: {
-                    applicantID: userID
-                }
-            });
-        }
+		const userCollection = db.collection(COLLECTIONS.users);
+		const user = await userCollection.findOne({ _id: new ObjectId(decoded.userID) });
 
-        if (organization) {
-            const userCollection = db.collection(COLLECTIONS.users);
-            const user = await userCollection.findOne({ _id: new ObjectId(decoded.userID) });
-            if (!user) {
-                return res.status(404).send("Organization not found.")
-            }
+		if (userID && !user.isSysAdmin && userID != decoded.userID) {
+			console.log("USER INVALID")
+			return res.status(401).send("Unauthorized.");
+		}
 
-            if (user.organization != organization) {
-                return res.status(401).send("Unauthorized.");
-            }
+		let pipeline = [];
+		if (userID) {
+			pipeline.push({
+				$match: {
+					applicantID: userID
+				}
+			});
+		}
 
-            pipeline.push({
-                $addFields: {
-                    convertedGrantID: { $toObjectId: "$grantID" }
-                }
-            });
+		if (organization) {
+			if (!user) {
+				return res.status(404).send("Organization not found.")
+			}
 
-            pipeline.push({
-                $lookup: {
-                    from: COLLECTIONS.grants,
-                    localField: "convertedGrantID",
-                    foreignField: "_id",
-                    as: "grant",
-                }
-            });
+			if (user.organization != organization && !user.isSysAdmin) {
+				return res.status(401).send("Unauthorized.");
+			}
 
-            pipeline.push({
-                $unwind: "$grant"
-            });
+			pipeline.push({
+				$addFields: {
+					convertedGrantID: { $toObjectId: "$grantID" }
+				}
+			});
 
-            pipeline.push({
-                $match: {
-                    "grant.organization": organization
-                }
-            });
-        }
+			pipeline.push({
+				$lookup: {
+					from: COLLECTIONS.grants,
+					localField: "convertedGrantID",
+					foreignField: "_id",
+					as: "grant",
+				}
+			});
 
-        const applicationsCollection = db.collection(COLLECTIONS.applications);
-        const applications = await applicationsCollection.aggregate(pipeline).toArray();
+			pipeline.push({
+				$unwind: "$grant"
+			});
 
-        res.json({ response: applications.map((app) => dbIDToFrontendID(app)) });
-    });
-    
+			pipeline.push({
+				$match: {
+					"grant.organization": organization
+				}
+			});
+		}
+
+		const applicationsCollection = db.collection(COLLECTIONS.applications);
+		const applications = await applicationsCollection.aggregate(pipeline).toArray();
+
+		res.json({ response: applications.map((app) => dbIDToFrontendID(app)) });
+	});
 });
 
 app.get("/applicant/:applicantID", express.json(), async (req, res) => {
