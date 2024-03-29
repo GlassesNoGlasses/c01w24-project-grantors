@@ -53,7 +53,6 @@ const Navbar = ({}: NavbarProps) => {
 				<div className='flex items-center'>	
 					<div className='hidden md:flex justify-end xl:text-[20px] text-[16px] xl:gap-20 xl:mr-16 
 					mr-4 lg:gap-10 gap-6'>
-						<Link className='hover:underline' to="/files">FileSys</Link>
 						<Link className='hover:underline' to="/createGrant">Create Grants</Link>
 						<a href='https://www.magnifyaccess.ai/about-us' 
 						className='hover:underline' target='blank'>About Us</a>
@@ -80,7 +79,6 @@ const Navbar = ({}: NavbarProps) => {
 				<div className='flex items-center'>	
 					<div className='hidden md:flex justify-end xl:text-[20px] text-[16px] xl:gap-20 xl:mr-16 
 					mr-6 lg:gap-10 gap-6'>
-						<Link className='hover:underline' to="/files">FileSys</Link>
 						<Link className='hover:underline' to="/grants">Grants</Link>
 						<a href='https://www.magnifyaccess.ai/about-us' 
 						className='hover:underline' target='blank'>About Us</a>
