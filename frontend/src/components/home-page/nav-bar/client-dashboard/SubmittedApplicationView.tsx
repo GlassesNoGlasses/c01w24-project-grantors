@@ -33,9 +33,9 @@ const ApplicationView = () => {
             <div id="view-container" className="flex flex-col rounded-xl border-4 border-primary pb-8 bg-white
             shadow-2xl shadow-black w-[90vw]">
                 <div id="view-header" className="px-8 py-4">
-                    <span className="text-xl font-bold">Your Application is being processed</span>
+                    <h1 className="text-xl font-bold">Your Application is being processed</h1>
                     <br></br>
-                    <span className="text-xl font-bold">Please wait until a decision is made on your application</span>
+                    <h2 className="text-xl font-bold">Please wait until a decision is made on your application</h2>
                 </div>
             </div>
         </div>

@@ -5,13 +5,13 @@ import { User } from "../interfaces/User";
 
 export default class ApplicationsController {
 
-    static async fetchUserApplications(user: User): Promise<Application[]> {
+    static async fetchUserApplications(userFetch: User, userAuth: User): Promise<Application[]> {
         try {
-            const res = await fetch(`http://localhost:${SERVER_PORT}/applications?userID=${user.accountID}`, {
+            const res = await fetch(`http://localhost:${SERVER_PORT}/applications?userID=${userFetch.accountID}`, {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${user.authToken}`
+                    'Authorization': `Bearer ${userAuth.authToken}`
                 },
             });
 

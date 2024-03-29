@@ -50,13 +50,13 @@ const DisplayUserStats = ({optionalUser} : DisplayStatsProps) => {
 
     useEffect(() => {
         if (user) {
-            ApplicationsController.fetchUserApplications(user).then((applications: Application[]) => {
+            ApplicationsController.fetchUserApplications(user, user).then((applications: Application[]) => {
                 setApplications(applications);
             });
         }
         
-        if (optionalUser) {
-            ApplicationsController.fetchUserApplications(optionalUser).then((applications: Application[]) => {
+        if (optionalUser && user) {
+            ApplicationsController.fetchUserApplications(optionalUser, user).then((applications: Application[]) => {
                 setApplications(applications);
             });
         }
@@ -81,33 +81,32 @@ const DisplayUserStats = ({optionalUser} : DisplayStatsProps) => {
 
     const applicationsSubmitted = countApplicationsSubmitted(applications);
     const applicationsInProgress = countApplicationsInProgress(applications);
-    const applicationsResolved = countApplicationsResolved(applications);
     const applicationsApproved = countApplicationsApproved(applications);
     const applicationsRejected = countApplicationsRejected(applications);
 
     const grantStatusData = formatData({
         [`Submitted: ${applicationsSubmitted}`]: applicationsSubmitted,
         [`In Progress: ${applicationsInProgress}`]: applicationsInProgress,
-        [`Resolved: ${applicationsResolved}`]: applicationsResolved,
         [`Approved: ${applicationsApproved}`]: applicationsApproved,
         [`Rejected: ${applicationsRejected}`]: applicationsRejected
     }, header);
 
     return(
         <div className='overflow-auto py-10 px-20 h-[90vh]'>
-            <div className=" bg-white  rounded-xl border-4 border-primary shadow-2xl shadow-black"> 
+            <div className=" flex flex-col items-center bg-white pt-4 rounded-xl border-4 border-primary shadow-2xl shadow-black justify-around"> 
+                <h1 className="text-4xl ">Grant Statistics</h1>
                 <div className="flex items-center mt-10">
                     <div className="m-10 text-center text-3xl">Total Grant Funding Applied (Max Estimate): ${countTotalAppliedAmount(grants)}</div>
                     <div className="m-10 text-center text-3xl">Total Grant Funding Received: ${grantsAwarded}</div>
                 </div>
                 
                 <div className="flex items-center">
-                    <div className="m-10 ml-20 text-center text-3xl">Grant Categories Breakdown</div>
+                    <h2 className="m-10 ml-20 text-center text-3xl">Grant Categories Breakdown</h2>
                     <Chart chartType="ColumnChart" width="100%" height="400px" data={grantCategoriesData} options={options} />
                 </div>
                 
                 <div className="flex items-center">
-                    <div className="m-10 text-center text-3xl">Grant Status Breakdown</div>
+                    <h2 className="m-10 text-center text-3xl">Grant Status Breakdown</h2>
                     <Chart chartType="ColumnChart" width="100%" height="400px" data={grantStatusData} options={options} />
                 </div>
             </div>

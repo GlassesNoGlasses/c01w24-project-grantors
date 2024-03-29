@@ -25,12 +25,12 @@ const GrantPage = ({}: GrantPageProps) => {
 const GrantFound = ({ grant }: { grant: Grant }) => {
     return (
         <div className="flex flex-col gap-3 py-3 px-5 bg-white border-4 border-primary mx-5 mt-10
-            rounded-2xl shadow-2xl shadow-black">
+            rounded-2xl shadow-2xl shadow-black" tabIndex={0}>
             <div className="flex flex-row justify-between items-center">
                 <h1 className="text-4xl font-bold">{grant.title}</h1>
                 <ApplyButton grantID={grant.id.toString()} />
             </div>
-            <h1 className="text-3xl">{`CAD $${grant.minAmount} - $${grant.maxAmount}`}</h1>
+            <h2 className="text-3xl">{`CAD $${grant.minAmount} - $${grant.maxAmount}`}</h2>
             <div className="flex flex-row justify-between">
                 <h2 className="text-2xl">{grant.organization}</h2>
                 <h2 className="text-2xl">{`Contact: ${grant.contact}`}</h2>
@@ -50,7 +50,7 @@ const GrantFound = ({ grant }: { grant: Grant }) => {
                         <div key={index}
                         className='p-2 px-4 border-2 border-magnify-dark-blue rounded-md
                                    flex flex-col gap-2 bg-magnify-light-blue'>
-                            <h4 className='text-xl'>{milestone.title}</h4>
+                            <h3 className='text-xl'>{milestone.title}</h3>
                             <p className='text-sm'>{`Due: ${new Date(milestone.dueDate).toDateString()}`}</p>
                             <p className='text-base'>{milestone.description}</p>
                         </div>
@@ -74,7 +74,7 @@ const ApplyButton = ({ grantID }: { grantID: string }) => {
     const { user } = useUserContext();
     if (user && !user.isAdmin && !user.isSysAdmin) {
         return (
-            <Link
+            <Link role="button"
                 className='p-2 px-5 m-2 bg-secondary hover:bg-primary
                     text-white font-bold rounded-lg shadow-md transition-colors duration-150 ease-in
                     text-lg'

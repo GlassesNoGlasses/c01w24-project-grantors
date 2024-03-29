@@ -64,6 +64,7 @@ const Login: React.FC<LoginProps> = () => {
 						<input
 							type="text"
 							id="email"
+							aria-label='email or username'
 							placeholder="Enter email or username"
 							value={username}
 							onChange={(e) => setUsername(e.target.value)}
@@ -79,6 +80,7 @@ const Login: React.FC<LoginProps> = () => {
 						<input
 							type="password"
 							id="password"
+							aria-label='password'
 							placeholder="Enter password"
 							value={password}
 							onChange={(e) => setPassword(e.target.value)}
@@ -101,9 +103,9 @@ const Login: React.FC<LoginProps> = () => {
 					</div>
 					<div className="form-footer-container" style={{ marginTop: '5%' }}>
 						<Link to="/signup" className="underline" style={{ textDecoration: 'underline' }}>Sign Up</Link>
-						<a href="#" className="forgot-password text-sm text-secondary hover:underline sm:text-base " style={{ display: 'flex', float: 'right' }}>
-              Forgot password?
-            </a>
+						<a role="button" href="#" className="forgot-password text-sm text-primary hover:underline sm:text-base " style={{ display: 'flex', float: 'right' }}>
+							Forgot password?
+						</a>
 					</div>
 				</form>
 			</div>

@@ -131,23 +131,34 @@ const ApplicationReview = () => {
         }
     };
 
+    const onStarKeyDown = (e: React.KeyboardEvent, star: number) => {
+        console.log(e.key);
+        if (e.key === 'Enter' && !reviewed) {
+            console.log('Enter key pressed');
+            setRating(star);
+            setHoverRating(star);
+        }
+    }
+
     return (
         <div className="p-10">
 
             <div id="review-container" className="flex flex-col rounded-xl border-4 border-primary pb-8 bg-white
             shadow-2xl shadow-black">
                 <div id="review-header" className="flex flex-row justify-between items-center px-8">
-                    <span className="py-4 text-xl font-bold">Review Grant Application</span>
+                    <h1 className="py-4 text-xl font-bold">Review Grant Application</h1>
                     <div id="star-rating" className="flex flex-row items-center gap-3">
-                        <span className="text-lg">Rating</span>
-                        <div id="stars:">
+                        <label className="text-lg">Rating</label>
+                        <div id="stars:" tabIndex={-1}>
                             {[1,2,3,4,5].map((star) => (
                                 <button 
                                     type="button"
                                     key={star}
                                     onClick={() => reviewed || setRating(star)}
+                                    onKeyDown={(e: React.KeyboardEvent) => onStarKeyDown(e, star)}
                                     onMouseEnter={() => reviewed || setHoverRating(star)}
                                     onMouseLeave={() => reviewed || setHoverRating(rating)} // set hoverRating to rating when not hovering
+                                    aria-label={`Rate ${star} star`}
                                 >
                                     <StarIcon className={`h-8 w-8 ${star <= hoverRating ? 'text-yellow-500' : 'text-gray-500'}`}/>
                                 </button>
@@ -158,56 +169,56 @@ const ApplicationReview = () => {
                 <div className="flex flex-row justify-between px-8 gap-8">
                     <div id="application-info-container" className="flex flex-col w-3/4 gap-8">
                         <div id="applicant-info" className="flex flex-col border-2 rounded border-magnify-blue p-2">
-                            <span className="text-lg">Applicant</span>
+                            <h2 className="text-lg">Applicant</h2>
                             <div id="name" className="flex flex-row justify-between">
-                                <span>Name:</span>
-                                <span>{applicant ? applicant.firstName + ' ' + applicant.lastName : 'Applicant not found'}</span>
+                                <h3>Name:</h3>
+                                <p>{applicant ? applicant.firstName + ' ' + applicant.lastName : 'Applicant not found'}</p>
                             </div>
                             <div id="email" className="flex flex-row justify-between">
-                                <span>Email:</span> 
-                                <span>{applicant ? applicant.email : 'Applicant not found'}</span>
+                                <h3>Email:</h3> 
+                                <p>{applicant ? applicant.email : 'Applicant not found'}</p>
                             </div>
                         </div>
                         <ul id="application-fields" className="flex flex-col border-2 rounded border-magnify-blue p-2 gap-4">
                             {
                                 application ? application.responses.map((grantQuestion: GrantQuestion, index: number) => (
                                     <li key={index}>
-                                        <div id={`question-${index}`} className="font-bold italic">Question: {grantQuestion.question}</div>
-                                        <div id={`response-${index}`}>{formatQuestionAnswer(grantQuestion)}</div>
+                                        <h3 id={`question-${index}`} className="font-bold italic">Question: {grantQuestion.question}</h3>
+                                        <p id={`response-${index}`}>{formatQuestionAnswer(grantQuestion)}</p>
                                     </li>
                                 ))
 
-                                : <div>Application not found</div>
+                                : <p>Application not found</p>
                             }
                         </ul>
                     </div>
                     <div id="right-col" className="flex flex-col w-1/2 gap-4">
                         <div id="grant-info-container" className="flex flex-col p-2 border-2 rounded border-magnify-blue">
-                            <span className="text-lg">Grant Info</span>
+                            <h2 className="text-lg">Grant Info</h2>
                             <div id="grant-title" className="flex flex-row justify-between">
-                                <span>Title:</span>
-                                <span>{grant ? grant.title : "Grant not found"}</span>
+                                <h3>Title:</h3>
+                                <p>{grant ? grant.title : "Grant not found"}</p>
                             </div>
                             <div id="grant-description" className="flex flex-row justify-between gap-5">
-                                <span>Description:</span>
-                                <span className="text-right">{grant ? grant.description : "Grant not found."}</span>
+                                <h3>Description:</h3>
+                                <p className="text-right">{grant ? grant.description : "Grant not found."}</p>
                             </div>
                             <div id="grant-category" className="flex flex-row justify-between">
-                                <span>Category:</span>
-                                <span>{grant ? grant.category : "Grant not found."}</span>
+                                <h3>Category:</h3>
+                                <p>{grant ? grant.category : "Grant not found."}</p>
                             </div>
                             <div id="grant-funding" className="flex flex-row justify-between">
-                                <span>Funding Amount:</span>
-                                <span>{grant ? grant.minAmount + " - " + grant.maxAmount : "Grant not found."}</span>
+                                <h3>Funding Amount:</h3>
+                                <p>{grant ? grant.minAmount + " - " + grant.maxAmount : "Grant not found."}</p>
                             </div>
                             <div id="grant-deadline" className="flex flex-row justify-between">
-                                <span>Deadline:</span>
-                                <span>{grant ? grant.deadline.toLocaleDateString('en-GB', {
+                                <h3>Deadline:</h3>
+                                <p>{grant ? grant.deadline.toLocaleDateString('en-GB', {
                                                     day: '2-digit',
                                                     month: 'short',
                                                     year: 'numeric'})
                                             : "Grant not found."}
-                                </span>
+                                </p>
                             </div>
                         </div>
                         <div id="notes" className="p-1 h-full">
