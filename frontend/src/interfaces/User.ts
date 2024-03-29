@@ -1,4 +1,10 @@
 /* Inferface of Users to be used. */
+export enum UserTypes {
+    admin = "admin",
+    grantor = "grantor",
+    grantee = "grantee", 
+}
+
 export interface User {
     accountID: string,
     isAdmin: boolean,

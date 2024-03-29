@@ -23,9 +23,10 @@ import React, { useEffect } from 'react';
 import Background from "./components/background/Background";
 import FundingView from "./components/applications/admin/fundingView"
 import { MessageBoard } from "./components/messages/message-board/MessageBoard";
+import UserList from "./components/user-list/UserList/UserList";
+import EditUser from "./components/settings-page/EditUser";
 import MilestonesPage from "./components/milestones-page/MilestonesPage";
 import { MessageView } from "./components/messages/MessageView";
-
 
 
 
@@ -64,9 +65,12 @@ function App() {
 							<Route path="about" element={<DefaultPage />} />
 							<Route path="files" element={<TestFileDisplay />} />
 							<Route path="login" element={<Login />} />
-							<Route path="signup" element={<SignUp />} />
+							<Route path="signup" element={<SignUp adminCreate={false}/>} />
+							<Route path="newUser" element={<SignUp adminCreate={true}/>} />
 							<Route path="createGrant" element={<CreateGrant />} />
 							<Route path="editGrant/:grantID" element={<EditGrant />} />
+							<Route path="users" element={<UserList />} />
+							<Route path="users/:userID/" element={<EditUser/>} />
 							<Route path="grants" element={<GrantBrowse />} />
 							<Route path="grants/:grantID" element={<GrantPage />} />
 							<Route path="admin/grants" element={<AdminGrants />} />
