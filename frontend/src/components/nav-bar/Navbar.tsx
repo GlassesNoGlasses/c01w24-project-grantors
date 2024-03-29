@@ -191,7 +191,7 @@ const Navbar = ({}: NavbarProps) => {
 						</ Link>
 						<p className='mb-4 text-md font-bold ml-2'>By</p>
 						<a href="https://www.magnifyaccess.ai/" target='blank'>
-							<img src={MAlogoImage} alt='grantors logo' 
+							<img src={MAlogoImage} alt='Magnify Access logo' 
 							className='lg:h-[40px] lg:w-[81px] h-[32px] w-[64px] mt-2 mb-2 ml-1'/>
 						</a>
 					</ div>

@@ -1,5 +1,5 @@
 import { ChevronDownIcon } from "@heroicons/react/24/solid";
-import { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import DropDownProps from "./DropDownProps";
 
 const DropDown = ({ options, identity, selected, selectCallback }: DropDownProps) => {
@@ -36,27 +36,36 @@ const DropDown = ({ options, identity, selected, selectCallback }: DropDownProps
         selectCallback && selectCallback(option);
     };
 
-    const handleIdentityClick = () => {
-        setSelectedItem(identity);
-        setIsOpen(false);
-        selectCallback && selectCallback("");
+    const handleKeyDown = (event: React.KeyboardEvent, option: string) => {
+        console.log(event.key);
+        if (event.key === 'Enter') {
+            handleSelect(option);
+        } else if (event.key === 'Escape') {
+            setIsOpen(false);
+        }
     }
+
 
     return (
         <div className="relative">
             <div className="flex flex-col relative w-fit" ref={dropdownRef}>
-                <button type='button' className="dropdown-button flex flex-row gap-2 border-2 border-magnify-blue p-2 rounded-lg
-                    bg-white text-black hover:bg-gray-400 transition ease-in-out duration-200 whitespace-nowrap" onClick={() => setIsOpen(!isOpen)}>
+                <button type='button' role="button" className="dropdown-button flex flex-row gap-2 border-2
+                     border-magnify-blue p-2 rounded-lg bg-white text-black hover:bg-gray-400 transition
+                     ease-in-out duration-200 whitespace-nowrap" onClick={() => setIsOpen(!isOpen)} aria-haspopup="true"
+                     aria-expanded={isOpen} onKeyDown={(e) => handleKeyDown(e, selectedItem)}>
                     {selectedItem}
                     <ChevronDownIcon className="h-5"/>
                 </button>
                 {isOpen && (
-                    <ul className="dropdown-content rounded bg-magnify-grey text-white absolute top-full">
-                        <li className="p-2 hover:bg-gray-400" onClick={handleIdentityClick}>
+                    <ul className="dropdown-content rounded bg-magnify-grey text-white absolute top-full"
+                        role="menu">
+                        <li className="p-2 hover:bg-gray-400" onClick={() => handleSelect(identity)} role="menuitem"
+                            tabIndex={0} onKeyDown={(e) => handleKeyDown(e, identity)}>
                             {identity}
                         </li>
                         {options.map(option => (
-                            <li key={option} className="p-2 hover:bg-gray-400" onClick={() => handleSelect(option)}>
+                            <li key={option} className="p-2 hover:bg-gray-400" onClick={() => handleSelect(option)}
+                                role="menuitem" tabIndex={0} onKeyDown={(e) => handleKeyDown(e, option)}>
                                 {option}
                             </li>
                         ))}

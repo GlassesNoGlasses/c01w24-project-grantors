@@ -64,7 +64,7 @@ export const MessageForm = ({
     return (
       <button type='button' className='p-2 px-5 m-2 bg-secondary hover:bg-primary
           text-white font-bold rounded-lg shadow-md transition-colors duration-150 ease-in
-          text-base'>
+          text-base' tabIndex={-1}>
           Add File(s)
       </button>
     )
@@ -75,9 +75,9 @@ export const MessageForm = ({
       <form onSubmit={handleSubmit} id="messageForm"
       className='border-4 bg-white lg:w-[70vw] w-[90vw]
       rounded-2xl border-primary shadow-2xl shadow-black p-6 gap-4 flex flex-col'>
-        <div className='text-center font-bold text-2xl'>
+        <h1 className='text-center font-bold text-2xl'>
           {title}
-        </div>
+        </h1>
 
         <div className='flex flex-col'>
           <label htmlFor="title" className='font-bold'>Title:</label>
