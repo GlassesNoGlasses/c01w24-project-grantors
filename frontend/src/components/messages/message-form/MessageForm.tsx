@@ -74,29 +74,29 @@ export const MessageForm = ({
     <Modal showModal={showModal} closeModal={callbackClose} openModal={callbackOpen}>
       <form onSubmit={handleSubmit} id="messageForm"
       className='border-4 bg-white lg:w-[70vw] w-[90vw]
-      rounded-2xl border-primary shadow-2xl shadow-black p-6'>
+      rounded-2xl border-primary shadow-2xl shadow-black p-6 gap-4 flex flex-col'>
         <div className='text-center font-bold text-2xl'>
           {title}
         </div>
 
         <div className='flex flex-col'>
-          <label htmlFor="title">Title:</label>
+          <label htmlFor="title" className='font-bold'>Title:</label>
           <input type="text" id="title" name="title"
           onChange={(e) => setMessage({...message, title: e.target.value})}
-          className=' border-2 border-black'
+          className=' border-2 border-gray-500 rounded-md focus:border-black p-2'
           required/>
         </div>
 
         <div className='flex flex-col'>
-          <label htmlFor="description">Description:</label>
+          <label htmlFor="description" className='font-bold'>Description:</label>
           <input type="text" id="description" name="description"
           onChange={(e) => setMessage({...message, description: e.target.value})}
-          className=' border-2 border-black'
+          className='border-2 border-gray-500 rounded-md focus:border-black p-2'
           required/>
         </div>
 
         {receiverEmail ? 
-          <p className=' border-1 border-gray-400'>
+          <p className=' border-2 p-2 rounded-md border-gray-500'>
             {`To: ${receiverEmail}`}
           </p>
         :
@@ -107,7 +107,7 @@ export const MessageForm = ({
           />
         }
 
-        <div className="flex flex-row justify-between w-full">
+        <div className="flex flex-row justify-between w-full items-center">
             <div className="flex flex-col max-h-40 overflow-y-auto">
             {
               uploadedFiles.length ?
@@ -117,7 +117,7 @@ export const MessageForm = ({
                   </div>
               ))
               :
-              <label className="block text-gray-700 font-semibold text-2xl">'No files uploaded.'</label>
+              <label className="flex text-gray-700 font-semibold text-base">'No files uploaded.'</label>
             }
             </div>
             <DropZoneFile
@@ -129,14 +129,6 @@ export const MessageForm = ({
         </div>
 
         <div className='flex justify-between'>
-          <button 
-            className='p-2 px-5 m-7 mr-14 bg-green-500 hover:bg-green-600 active:bg-green-700
-            text-white font-bold rounded-lg shadow-md transition-colors duration-150 ease-in
-            text-lg' 
-            type="submit" 
-            name="submit">
-            Submit Form
-          </button>
 
           <button
             className='p-2 px-5 m-7 mr-14 bg-blue-500 hover:bg-blue-600 active:bg-blue-700
@@ -145,6 +137,16 @@ export const MessageForm = ({
             onClick={callbackClose}>
 						Close
 					</button>
+
+          <button 
+            className='p-2 px-5 m-7 mr-14 bg-green-500 hover:bg-green-600 active:bg-green-700
+            text-white font-bold rounded-lg shadow-md transition-colors duration-150 ease-in
+            text-lg' 
+            type="submit" 
+            name="submit">
+            Submit
+          </button>
+
         </div>
       </form>
     </Modal>

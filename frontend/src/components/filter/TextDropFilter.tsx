@@ -20,35 +20,39 @@ const TextDropFilter = ({
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setInputValue(event.target.value);
-    setIsOpen(true);
+    setIsOpen(event.target.value != '');
   };
 
   return (
     <div className="flex flex-col">
-      <div className="text-black">
+      <div className="text-black font-bold">
         {label}
       </div>
-      <input
-        type="text"
-        value={inputValue}
-        onChange={handleInputChange}
-        placeholder="Type to search..."
-        className=' border-1 border-gray-400'
-        required
-      />
+      <div>
+        <input
+          type="text"
+          value={inputValue}
+          onChange={handleInputChange}
+          placeholder="Type to search..."
+          className=' border-2 border-gray-500 p-2 rounded-md w-[30vw]'
+          required
+        />
+
       {isOpen && (
-        <div className="z-30">
-          {filteredOptions.map((option) => (
-            <div
-            key={option}
-            className=""
-            onClick={() => handleSelect(option)}
-            >
-              {option}
-            </div>
-          ))}
-        </div>
-      )}
+          <div className='absolute w-[30vw]'>
+            {filteredOptions.map((option) => (
+              <div
+              key={option}
+              className="bg-gray-200 hover:bg-gray-300 p-1"
+              onClick={() => handleSelect(option)}
+              >
+                {option}
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
+    
     </div>
   );
 };

@@ -615,7 +615,6 @@ app.get("/applications", express.json(), async (req, res) => {
 		const user = await userCollection.findOne({ _id: new ObjectId(decoded.userID) });
 
 		if (userID && !user.isSysAdmin && userID != decoded.userID) {
-			console.log("USER INVALID")
 			return res.status(401).send("Unauthorized.");
 		}
 

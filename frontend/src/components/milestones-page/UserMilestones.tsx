@@ -21,7 +21,7 @@ const UserMilestonesPage = () => {
     useEffect(() => {
         if (!user) return;
 
-        ApplicationsController.fetchUserApplications(user).then((applications: Application[]) => {
+        ApplicationsController.fetchUserApplications(user, user).then((applications: Application[]) => {
             const approved = applications.filter((application: Application) => 
                 application.status === ApplicationStatus.approved);
             setApprovedApplications(approved);
