@@ -62,7 +62,7 @@ const DisplayStats = () => {
     const grantStatusData = formatData({
         [`Submitted: ${applicationsSubmitted}`]: applicationsSubmitted,
         [`In Progress: ${applicationsInProgress}`]: applicationsInProgress,
-        [`Resolved: ${applicationsInProgress}`]: applicationsResolved,
+        [`Resolved: ${applicationsResolved}`]: applicationsResolved,
         [`Approved: ${applicationsApproved}`]: applicationsApproved,
         [`Rejected: ${applicationsRejected}`]: applicationsRejected
     }, header);
