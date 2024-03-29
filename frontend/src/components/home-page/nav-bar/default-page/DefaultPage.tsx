@@ -23,9 +23,7 @@ const DefaultPage = () => {
   
 	return (
 		<div>
-			<div className='bg-home-background bg-cover 
-				bg-no-repeat bg-center h-[100vh] w-[100vw] fixed z-[-1]'/>
-			<div className='flex justify-center pt-24 z-10'>
+			<div className='flex justify-center pt-5 z-10'>
 				<div className='flex flex-col py-2 lg:w-1/2'>
 					<div className='flex flex-col gap-8 m-2 p-6 rounded-2xl text-center border-4 border-primary
 					bg-white shadow-2xl shadow-black transition-shadow duration-150 ease-in'>

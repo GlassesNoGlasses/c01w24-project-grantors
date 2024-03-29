@@ -55,7 +55,7 @@ const ApplicationFunding = () => {
     };
 
     return (
-        <div className="py-28">
+        <div className="py-10">
             <div className="container mx-auto p-6 bg-white border-4 border-primary shadow-2xl
                 rounded-2xl shadow-black hover:border-black">
                 <h1 className="text-2xl font-bold mb-4">Assign Funding Amount</h1>

@@ -24,7 +24,7 @@ const GrantPage = ({}: GrantPageProps) => {
 
 const GrantFound = ({ grant }: { grant: Grant }) => {
     return (
-        <div className="flex flex-col gap-3 py-3 px-5 bg-white border-4 border-primary mx-5 mt-24
+        <div className="flex flex-col gap-3 py-3 px-5 bg-white border-4 border-primary mx-5 mt-10
             rounded-2xl shadow-2xl shadow-black">
             <div className="flex flex-row justify-between items-center">
                 <h1 className="text-4xl font-bold">{grant.title}</h1>
