@@ -8,7 +8,7 @@ const NotFoundPage = () => {
 					bg-white shadow-md shadow-black transition-shadow duration-150 ease-in'>
                 <h1 className="text-5xl font-bold">404: Page Not Found</h1>
 
-                <FaceFrownIcon className="w-24 h-24 text-primary" />
+                <FaceFrownIcon aria-label="sad face symbol" className="w-24 h-24 text-primary" />
             
                 <h2 className="text-xl">Sorry, the page you are looking for does not exist</h2>
 
@@ -20,7 +20,7 @@ const NotFoundPage = () => {
 
 const HomeButton = () => {
     return (
-        <Link className='p-2 px-5 mt-4 bg-primary hover:bg-secondary 
+        <Link role="button" className='p-2 px-5 mt-4 bg-primary hover:bg-secondary 
         text-white font-bold rounded-lg shadow-md transition-colors duration-150 ease-in
         text-base w-fit'
         to='/'>
