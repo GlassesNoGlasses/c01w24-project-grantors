@@ -35,7 +35,7 @@ const AdminDashboard = ({
 	}
 
 	return (
-		<div className='h-full flex flex-col py-20'>
+		<div className='h-full flex flex-col'>
 			
 			<div className='bg-white pb-8 flex justify-between'>
 				<h2 className='text-6xl text-secondary pl-10 w-fit flex items-center flex-col'>

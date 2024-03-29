@@ -14,6 +14,7 @@ import SavedGrants from "./components/saved-grants/SavedGrants";
 import GrantApply from "./components/grant-apply/GrantApply";
 import ApplicationReview from "./components/applications/admin/ApplicationReview";
 import DefaultPage from "./components/home-page/nav-bar/default-page/DefaultPage";
+import { GrantStatsPage } from "./components/grant-stats-page/GrantStatsPage";
 import TestFileDisplay from "./components/files/TestFileDisplay";
 import ApplicationView from "./components/home-page/nav-bar/client-dashboard/ApplicationView"
 import NotFoundPage from "./components/not-found-page/NotFoundPage";
@@ -27,6 +28,8 @@ import UserList from "./components/user-list/UserList/UserList";
 import EditUser from "./components/settings-page/EditUser";
 import MilestonesPage from "./components/milestones-page/MilestonesPage";
 import { MessageView } from "./components/messages/MessageView";
+import GranteeStats from "./components/user-list/GranteeStats";
+import UserStats from "./components/user-list/UserList/UserStats";
 
 
 
@@ -71,6 +74,7 @@ function App() {
 							<Route path="editGrant/:grantID" element={<EditGrant />} />
 							<Route path="users" element={<UserList />} />
 							<Route path="users/:userID/" element={<EditUser/>} />
+							<Route path="users/:userID/stats" element={<UserStats/>} />
 							<Route path="grants" element={<GrantBrowse />} />
 							<Route path="grants/:grantID" element={<GrantPage />} />
 							<Route path="admin/grants" element={<AdminGrants />} />
@@ -88,8 +92,8 @@ function App() {
 							<Route path="milestones" element={<MilestonesPage />} />
 							<Route path="settings" element={<Settings />} />
 							<Route path="*" element={<NotFoundPage />} />
-							
-						</Route>
+							<Route path="/stats" element={<GrantStatsPage />} />
+					</Route>
 					</Routes>
 				</div>
 			)}

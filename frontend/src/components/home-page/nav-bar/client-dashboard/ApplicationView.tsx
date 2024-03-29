@@ -30,7 +30,7 @@ const ApplicationView = () => {
     }, [application]);
 
     return (
-        <div className="py-24 px-10">
+        <div className="py-10 px-10">
             <div id="view-container" className="flex flex-col rounded-xl border-4 border-primary pb-8 bg-white
             shadow-2xl shadow-black">
                 <div id="view-header" className="px-8 py-4">

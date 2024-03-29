@@ -5,15 +5,23 @@ import GrantsController from "../../../controllers/GrantsController";
 import { Application } from "../../../interfaces/Application";
 import { Grant } from "../../../interfaces/Grant";
 import { useUserContext } from "../../contexts/userContext";
+import { Modal } from '../../modal/Modal';
+
 
 const ApplicationFunding = () => {
     const { applicationID } = useParams();
     const [application, setApplication] = useState<Application | undefined>();
     const [grant, setGrant] = useState<Grant | undefined>();
     const [fundingAmount, setFundingAmount] = useState<string>("");
+    const [showModal, setShowModal] = useState<boolean>(false);
     const navigate = useNavigate();
 
     const { user } = useUserContext();
+
+    const handleCloseModalAndNavigate = () => {
+        setShowModal(false);
+        navigate('/');
+    };
 
     useEffect(() => {
         if (applicationID) {
@@ -48,14 +56,14 @@ const ApplicationFunding = () => {
     
         const success = await ApplicationsController.updateAwardedAmount(user, applicationID, numericFundingAmount);
         if (success) {
-            navigate("/");
+            setShowModal(true);
         } else {
             console.error("Error updating application with funding amount.");
         }
     };
 
     return (
-        <div className="py-28">
+        <div className="py-10">
             <div className="container mx-auto p-6 bg-white border-4 border-primary shadow-2xl
                 rounded-2xl shadow-black hover:border-black">
                 <h1 className="text-2xl font-bold mb-4">Assign Funding Amount</h1>
@@ -85,6 +93,25 @@ const ApplicationFunding = () => {
                     Submit Funding Amount
                 </button>
             </div>
+            <Modal showModal={showModal} closeModal={handleCloseModalAndNavigate} openModal={() => setShowModal(true)}>
+			<div className='flex h-[100vh] w-[100vw] justify-center items-center'>
+				<div className='bg-white h-fit w-2/5 border-4 border-blue-400 border-solid rounded-lg'>
+					<div className='h-full w-full'>
+						<p className='text-xl text-center font-semibold'>
+							{`You have successfully reviewed the grant.`}
+						</p>
+						<div className='flex flex-row justify-center'>
+							<button className='p-2 px-5 m-2 bg-blue-500 hover:bg-blue-600 active:bg-blue-700
+								text-white font-bold rounded-lg shadow-md transition-colors duration-150 ease-in
+								text-base text-center justify-center align-middle flex pb-1'
+								onClick={handleCloseModalAndNavigate}>
+								Close
+							</button>
+						</div>
+					</div>
+				</div>
+			</div>
+		</Modal>
         </div>
     );
 };

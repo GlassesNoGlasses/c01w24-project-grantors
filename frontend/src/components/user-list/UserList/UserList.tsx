@@ -5,8 +5,17 @@ import { Cookies } from 'react-cookie';
 import DropDownFilter from '../../filter/DropDownFilter';
 import { Link } from 'react-router-dom';
 import { useUserContext } from '../../contexts/userContext';
+import { Modal } from '../../modal/Modal'; 
 
-const UserCard = ({ user } : {user: User}) => {
+const UserCard = ({ user, curUser} : {user: User, curUser: User | null}) => {
+
+    const [showModal, setShowModal] = useState<boolean>(false);
+
+    const handleCloseModalAndNavigate = () => {
+        setShowModal(false);
+        window.location.reload();
+    };
+
     return (<div className='flex justify-between p-6 w-full items-center rounded-xl
             border-4 border-primary shadow-xl shadow-black bg-white text-base'>
         <div className='flex flex-col justify-around'>
@@ -21,10 +30,11 @@ const UserCard = ({ user } : {user: User}) => {
         </div>
         
         <div className='flex flex-col gap-4 items-end'>
-            <Link to='/statistics' className='bg-primary hover:bg-secondary h-fit w-full py-2 px-4
+            {user.isSysAdmin ? <></> :
+            <Link to={`/users/${user.accountID}/stats`} className='bg-primary hover:bg-secondary h-fit w-full py-2 px-4
                 rounded-xl text-white text-center'>
                 Statistics
-            </Link>
+            </Link>}
 
             <div className='flex gap-4'>
 
@@ -33,15 +43,37 @@ const UserCard = ({ user } : {user: User}) => {
                     Edit
                 </Link>
 
-                <button className='bg-red-500 hover:bg-red-600 
-                h-fit w-fit py-2 px-4 rounded-xl text-white' onClick={async () => {
-                    await UserController.deleteUser(user.accountID)
-                    alert(`User with username: ${user.username} has been successfully deleted`)
-                    window.location.reload()
+                {user.accountID === curUser?.accountID ? <></> : <button className='bg-red-500 hover:bg-red-600 h-fit w-fit py-2 px-4 rounded-xl text-white' onClick={async () => {
+                try {
+                    await UserController.deleteUser(user.accountID);
+                    setShowModal(true);
+                } catch (error) {
+                    console.error("Failed to delete user", error);
+                }
                 }}>
                     Remove
-                </button>
+                </button>}
+
             </div>
+            <Modal showModal={showModal} closeModal={handleCloseModalAndNavigate} openModal={() => setShowModal(true)}>
+			<div className='flex h-[100vh] w-[100vw] justify-center items-center'>
+				<div className='bg-white h-fit w-2/5 border-4 border-blue-400 border-solid rounded-lg'>
+					<div className='h-full w-full'>
+						<p className='text-xl text-center font-semibold'>
+							{`User with username: ${user.username} has been successfully deleted.`}
+						</p>
+						<div className='flex flex-row justify-center'>
+							<button className='p-2 px-5 m-2 bg-blue-500 hover:bg-blue-600 active:bg-blue-700
+								text-white font-bold rounded-lg shadow-md transition-colors duration-150 ease-in
+								text-base text-center justify-center align-middle flex pb-1'
+								onClick={handleCloseModalAndNavigate}>
+								Close
+							</button>
+						</div>
+					</div>
+				</div>
+			</div>
+		</Modal>
         </div>
         
     </div>)
@@ -104,6 +136,7 @@ const UserList = () => {
 
     const [users, setUsers] = useState<User[]>([]);
     const [filteredUsers, setFilteredUsers] = useState<User[]>([]);
+    const {user} = useUserContext()
 
     const init = () => {
         const userToken = new Cookies().get('user-token');
@@ -121,16 +154,16 @@ const UserList = () => {
     }, []);
 
     return (
-        <div className='pt-24 px-10 flex justify-around'>
+        <div className='p-10 flex justify-around'>
             <div className='pt-28'>
                 <UserFilter users={users} setFilteredUsers={setFilteredUsers}/>
             </div>
 
-            <div className='flex flex-col gap-6 h-[95vh] w-[60vw] overflow-scroll p-10'>
+            <div className='flex flex-col gap-6 h-[80vh] w-[60vw] overflow-scroll p-10'>
                 {filteredUsers.length === 0 ?
                 <div className='text-center font-bold text-base'>Hmmm.... There are no users with the given searching citeria</div>
-                :filteredUsers.map((user, index) => {
-                    return <UserCard user={user} key={index}/>
+                :filteredUsers.map((notCurUser, index) => {
+                    return <UserCard user={notCurUser} curUser={user} key={index}/>
                 })}
             </div>
             
