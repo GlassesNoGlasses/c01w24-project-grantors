@@ -11,7 +11,7 @@ function DropDownFilter({label, options, identity, setFilter, className}: DropDo
 
     return (
         <div className={`dropdown flex flex-col items-start ${className}`}>    
-            <span className="text-base">{label}</span>
+            <label className="text-base">{label}</label>
             <DropDown options={options} identity={identity} selectCallback={setSelectedItem} />
         </div>
     );

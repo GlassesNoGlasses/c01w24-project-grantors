@@ -37,11 +37,16 @@ const AdminDashboard = ({
 	return (
 		<div className='h-full flex flex-col'>
 			
-			<div className='bg-white pb-8 flex justify-between'>
-				<h2 className='text-6xl text-secondary pl-10 w-fit flex items-center flex-col'>
-					Welcome, {user?.username}!
-					<div className='bg-primary h-[8px] -mt-4 w-[105%]'/>
-				</h2>
+			<div className='flex flex-row justify-between px-10 pb-8 pt-1'>
+				<div className='flex flex-col items-start'>
+					<h1 className='text-6xl text-primary w-fit'>
+						Dashboard
+					</h1>
+					<h2 className='text-4xl text-secondary w-fit flex items-center flex-col'>
+						Welcome, {user?.username}!
+						<div className='bg-primary h-[4px] -mt-4 w-[100%]'/>
+					</h2>
+				</div>
 				<Link to='/messages'>
 					<ButtonIcon heroicon={<InboxIcon/>} label={"Messages"} text={user?.preferences.hc ? 'text-white' : 'text-black'}/>
 				</Link>
@@ -50,29 +55,29 @@ const AdminDashboard = ({
 				
 			<div className='flex justify-evenly items-center py-10'>
 				<div>
-					<Link to='/createGrant'>
+					<Link to='/createGrant' tabIndex={-1}>
 						<ButtonIcon heroicon={<FolderPlusIcon/>} label={"New Grant"} text={user?.preferences.hc ? 'text-white' : 'text-black'}/>
 					</ Link>
 				</div>
-				<Link to='/milestones'>
+				<Link to='/milestones' tabIndex={-1}>
 					<ButtonIcon heroicon={<TrophyIcon/>} label={"Milestones"} text={user?.preferences.hc ? 'text-white' : 'text-black'}/>
 				</Link>
 				<ButtonIcon heroicon={<ChartBarIcon />} label="Statistics" text={user?.preferences.hc ? 'text-white' : 'text-black'}/>
-				<Link to='/settings'>
+				<Link to='/settings' tabIndex={-1}>
 					<ButtonIcon heroicon={<Cog6ToothIcon/>} label={"Settings"} text={user?.preferences.hc ? 'text-white' : 'text-black'}/>
 				</Link>
-				<Link to="/">
+				<Link to="/" tabIndex={-1}>
 					<ButtonIcon heroicon={<ArrowRightStartOnRectangleIcon/>} label={"Log Out"} callback={logout} text={user?.preferences.hc ? 'text-white' : 'text-black'}/>
 				</Link>
 			</div>
 
 			<div className='flex justify-evenly items-center h-1/4 pt-[5vh]'>
-				<Link to={`admin/grants`}>
+				<Link to={`admin/grants`} tabIndex={-1}>
 				<ApplicationIcon
 					heroicon={<ListBulletIcon className="h-40 w-40"/>}
 					label="Grants You Created" />
 				</Link>
-				<Link to={`${encodedOrg}/applications`}>
+				<Link to={`${encodedOrg}/applications`} tabIndex={-1}>
 					<ApplicationIcon heroicon={<DocumentMagnifyingGlassIcon className="h-40 w-40"/>} label={"Review Applications"}/>
 				</Link>
 			</div>
