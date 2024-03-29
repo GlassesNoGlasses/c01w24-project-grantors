@@ -15,6 +15,7 @@ import FileController from '../../controllers/FileController';
 import { upload } from '@testing-library/user-event/dist/upload';
 
 const GrantForm = ({ user, grant }: GrantFormProps) => {
+    const navigate = useNavigate();
     const [questionList, setQuestionList] = useState<GrantQuestion[]>(grant.questions);
     const [uploadedFiles, setUploadedFiles] = useState<File[][]>([]);
     const [feedback, setFeedback] = useState<string>("");
