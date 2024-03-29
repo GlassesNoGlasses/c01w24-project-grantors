@@ -617,7 +617,8 @@ app.get("/applications", express.json(), async (req, res) => {
 
 	if (organization) {
 		const userCollection = db.collection(COLLECTIONS.users);
-		const user = await userCollection.findOne({ _id: new ObjectId(decoded.userID) });
+		const user = await userCollection.findOne({ _id: new ObjectId(userID) });
+
 		if (!user) {
 			return res.status(404).send("Organization not found.")
 		}

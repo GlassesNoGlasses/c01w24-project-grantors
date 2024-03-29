@@ -77,6 +77,7 @@ const AdminApplicationList = ({}: AdminApplicationListProps) => {
             }
 
             ApplicationsController.fetchOrgApplications(user).then((applications: Application[] | undefined) => {
+                console.log(applications);
                 if (applications) {
                     setApplications(applications.map((application: Application) => {
                         return application;
