@@ -34,7 +34,9 @@ const ClientDashboard = ({}: ClientDashboardProps) => {
 				<Link to="/milestones">
 					<ButtonIcon heroicon={<TrophyIcon />} label="Milestones" text={user?.preferences.hc ? 'text-white' : 'text-black'}/>
 				</Link>
+				<Link to="/stats">
 				<ButtonIcon heroicon={<ChartBarIcon />} label="Statistics" text={user?.preferences.hc ? 'text-white' : 'text-black'}/>
+				</Link>
 				<Link to='/settings'>
 					<ButtonIcon heroicon={<Cog6ToothIcon/>} label={"Settings"} text={user?.preferences.hc ? 'text-white' : 'text-black'}/>
 				</Link>
