@@ -11,7 +11,7 @@ import list from '../../../../images/list.png'
 import search from '../../../../images/search.png'
 import { Link } from 'react-router-dom';
 import UserController from '../../../../controllers/UserController';
-import { Cog6ToothIcon, ArrowRightStartOnRectangleIcon, FolderPlusIcon, ListBulletIcon, TrophyIcon, DocumentMagnifyingGlassIcon, ChartBarIcon} from '@heroicons/react/24/solid';
+import { Cog6ToothIcon, ArrowRightStartOnRectangleIcon, FolderPlusIcon, ListBulletIcon, TrophyIcon, DocumentMagnifyingGlassIcon, ChartBarIcon, InboxIcon} from '@heroicons/react/24/solid';
 
 const AdminDashboard = ({
 
@@ -37,11 +37,14 @@ const AdminDashboard = ({
 	return (
 		<div className='h-full flex flex-col'>
 			
-			<div className='bg-white pb-8'>
+			<div className='bg-white pb-8 flex justify-between'>
 				<h2 className='text-6xl text-secondary pl-10 w-fit flex items-center flex-col'>
 					Welcome, {user?.username}!
 					<div className='bg-primary h-[8px] -mt-4 w-[105%]'/>
 				</h2>
+				<Link to='/messages'>
+					<ButtonIcon heroicon={<InboxIcon/>} label={"Messages"} text={user?.preferences.hc ? 'text-white' : 'text-black'}/>
+				</Link>
 			</div>
 			
 				

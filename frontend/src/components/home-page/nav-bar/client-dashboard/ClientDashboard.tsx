@@ -1,7 +1,8 @@
 import { useUserContext } from '../../../contexts/userContext';
 import ButtonIcon from '../../../displays/ButtonIcon/ButtonIcon';
 import { Cog6ToothIcon, ArrowRightStartOnRectangleIcon, DocumentMagnifyingGlassIcon, StarIcon, 
-	ListBulletIcon, TrophyIcon, ChartBarIcon} from '@heroicons/react/24/solid';
+	ListBulletIcon, TrophyIcon, ChartBarIcon,
+	InboxIcon} from '@heroicons/react/24/solid';
 import search from '../../../../images/search.png'
 import ApplicationIcon from '../../../displays/ApplicationIcon/ApplicationIcon';
 import { Link } from 'react-router-dom';
@@ -20,11 +21,14 @@ const ClientDashboard = ({}: ClientDashboardProps) => {
 	return (
 		<div className="dashboard-container w-full h-full">
 
-			<div className='bg-white pb-8'>
+			<div className='bg-white pb-8 flex justify-between'>
 				<h2 className='text-6xl text-secondary pl-10 w-fit flex items-center flex-col'>
 					Welcome, {user?.username}!
 					<div className='bg-primary h-[8px] -mt-4 w-[105%]'/>
 				</h2>
+				<Link to='/messages'>
+					<ButtonIcon heroicon={<InboxIcon/>} label={"Messages"} text={user?.preferences.hc ? 'text-white' : 'text-black'}/>
+				</Link>
 			</div>
 
 			<div className="client-butons flex justify-evenly items-center py-10">

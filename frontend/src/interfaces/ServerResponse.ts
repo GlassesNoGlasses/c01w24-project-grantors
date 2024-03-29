@@ -3,6 +3,7 @@ import { Application } from "./Application";
 import { FSFile } from "./FSFile";
 import { ApplicationReview } from "./ApplicationReview";
 import { Grant } from "./Grant";
+import { Message } from "./Message";
 
 export interface ServerLoginResponse {
     accountID: string,
@@ -68,5 +69,15 @@ export interface GetFSFilesResponse {
 }
 export interface GetReviewResponse {
     response?: ApplicationReview,
+    error?: string,
+}
+
+export interface GetMessagesResponse {
+    response?: Message[],
+    error?: string,
+}
+
+export interface GetMessageResponse {
+    response?: Message,
     error?: string,
 }
