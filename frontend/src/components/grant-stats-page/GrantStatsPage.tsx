@@ -44,13 +44,13 @@ const DisplayUserStats = ({optionalUser} : DisplayStatsProps) => {
 
     useEffect(() => {
         if (user) {
-            ApplicationsController.fetchUserApplications(user).then((applications: Application[]) => {
+            ApplicationsController.fetchUserApplications(user, user).then((applications: Application[]) => {
                 setApplications(applications);
             });
         }
         
-        if (optionalUser) {
-            ApplicationsController.fetchUserApplications(optionalUser).then((applications: Application[]) => {
+        if (optionalUser && user) {
+            ApplicationsController.fetchUserApplications(optionalUser, user).then((applications: Application[]) => {
                 setApplications(applications);
             });
         }

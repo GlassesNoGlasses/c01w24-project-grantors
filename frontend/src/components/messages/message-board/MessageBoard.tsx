@@ -120,15 +120,17 @@ export const MessageBoard = ({
   ];
 
   return (
-    <div className='h-full flex flex-col py-20'>
+    <div className='h-full flex flex-col m-10 p-4 rounded-2xl bg-primary border-4 border-white shadow-2xl shadow-black'>
       {
         !user || !user?.email ? 
           <div className='flex font-bold text-xl justify-center mt-10'>Access Denied: Invalid Permission</div>
         :
         <div className='flex'>
-          <button onClick={() => setShowModal(true)}>
+          { user.isAdmin ?
+          <button onClick={() => setShowModal(true)}
+            className='bg-white px-4 py-2 rounded-lg font-bold hover:bg-blue-200 mb-5 border-[3px] border-black'>
             Create new Message!
-          </button>
+          </button> : <></>}
           {
             showModal ?
             <MessageForm

@@ -21,18 +21,14 @@ const ClientDashboard = ({}: ClientDashboardProps) => {
 	return (
 		<div className="dashboard-container w-full h-full">
 
-			<div className='flex flex-row justify-between px-10 pb-8 pt-1'>
-				<div className='flex flex-col items-start bg-white'>
-					<h1 className='text-6xl text-primary w-fit'>
-						Dashboard
-					</h1>
-					<h2 className='text-4xl text-secondary w-fit flex items-center flex-col'>
-						Welcome, {user?.username}!
-						<div className='bg-primary h-[4px] -mt-4 w-[100%]'/>
-					</h2>
-				</div>
-				<Link to='/messages'>
-					<ButtonIcon heroicon={<InboxIcon/>} label={"Messages"} text={user?.preferences.hc ? 'text-white' : 'text-black'}/>
+			<div className='bg-white pb-8 flex justify-between items-center'>
+				<h2 className='text-6xl text-secondary pl-10 w-fit flex items-center flex-col'>
+					Welcome, {user?.username}!
+					<div className='bg-primary h-[8px] -mt-4 w-[105%]'/>
+				</h2>
+				<Link to='/messages' className='border-4 border-primary px-4 py-1 rounded-2xl mr-10
+												shadow-md shadow-black'>
+					<h1 className='font-bold text-base flex items-center gap-2'> <InboxIcon className='h-[40px] w-[40px]'/> Messages</h1>
 				</Link>
 			</div>
 
