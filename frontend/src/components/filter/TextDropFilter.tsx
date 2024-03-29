@@ -25,11 +25,12 @@ const TextDropFilter = ({
 
   return (
     <div className="flex flex-col">
-      <div className="text-black">
+      <label htmlFor={`text-drop-filter-${label}`} className="text-black">
         {label}
-      </div>
+      </label>
       <input
         type="text"
+        id={`text-drop-filter-${label}`}
         value={inputValue}
         onChange={handleInputChange}
         placeholder="Type to search..."
