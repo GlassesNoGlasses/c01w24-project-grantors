@@ -802,8 +802,7 @@ app.get("/files/downloadable/:fileID", express.json(), async (req, res) => {
 		if (!file) {
 			return res.status(404).send("File not found.")
 		}
-
-		console.log(file.path);
+		
 		return res.download(file.path, file.title, (err) => {
 			if (err) {
 				// Error in downloading a file.
