@@ -4,13 +4,18 @@ import { GrantStatsPageProps, TableValues } from "./GrantStatsPageProps";
 import ApplicationsController from "../../controllers/ApplicationsController"
 import { Application, ApplicationStatus } from "../../interfaces/Application";
 import { Chart } from "react-google-charts";
+import {User} from '../../interfaces/User'
 
 const GrantStatsPage = ({}: GrantStatsPageProps) => {
 
     return <DisplayStats />;
 };
 
-const DisplayStats = () => {
+interface DisplayStatsProps {
+    optionalUser? : User
+}
+
+const DisplayStats = ({optionalUser} : DisplayStatsProps) => {
     const {user} = useUserContext();
     const [applications, setApplications] = useState<Application[]>([]);
     const header = ["Category", "Frequency", { role: "style" }];
@@ -38,10 +43,14 @@ const DisplayStats = () => {
             ApplicationsController.fetchUserApplications(user).then((applications: Application[]) => {
                 setApplications(applications);
             });
-            
         }
-        console.log(applications);
-    }, [user]);
+        
+        if (optionalUser) {
+            ApplicationsController.fetchUserApplications(optionalUser).then((applications: Application[]) => {
+                setApplications(applications);
+            });
+        }
+    }, [user, optionalUser]);
 
     const grantsApplied = countTotalAppliedAmount(applications);
     const grantsAwarded = countTotalAwardedAmount(applications);
@@ -68,23 +77,26 @@ const DisplayStats = () => {
     }, header);
 
     return(
-        <div className=" bg-white m-20 rounded-xl border-4 border-primary shadow-2xl shadow-black h-fit"> 
-            <div className="flex items-center">
-                <div className="m-10 text-center text-3xl">Total Grant Funding Received</div>
-                <div className="m-10 text-center text-3xl">${grantsAwarded}</div>
-                <Chart chartType="ColumnChart" width="100%" height="400px" data={grantValueData} options={options} />
-            </div>
-            
-            <div className="flex items-center">
-                <div className="m-10 ml-20 text-center text-3xl">Grant Categories Breakdown</div>
-                <Chart chartType="ColumnChart" width="100%" height="400px" data={grantCategoriesData} options={options} />
-            </div>
-            
-            <div className="flex items-center">
-                <div className="m-10 text-center text-3xl">Grant Status Breakdown</div>
-                <Chart chartType="ColumnChart" width="100%" height="400px" data={grantStatusData} options={options} />
+        <div className='overflow-auto py-10 px-20 h-[90vh]'>
+            <div className=" bg-white  rounded-xl border-4 border-primary shadow-2xl shadow-black"> 
+                <div className="flex items-center">
+                    <div className="m-10 text-center text-3xl">Total Grant Funding Received</div>
+                    <div className="m-10 text-center text-3xl">${grantsAwarded}</div>
+                    <Chart chartType="ColumnChart" width="100%" height="400px" data={grantValueData} options={options} />
+                </div>
+                
+                <div className="flex items-center">
+                    <div className="m-10 ml-20 text-center text-3xl">Grant Categories Breakdown</div>
+                    <Chart chartType="ColumnChart" width="100%" height="400px" data={grantCategoriesData} options={options} />
+                </div>
+                
+                <div className="flex items-center">
+                    <div className="m-10 text-center text-3xl">Grant Status Breakdown</div>
+                    <Chart chartType="ColumnChart" width="100%" height="400px" data={grantStatusData} options={options} />
+                </div>
             </div>
         </div>
+        
         
     );
 }
@@ -132,4 +144,4 @@ const countTotalAppliedAmount = (applications: Application[]) => applications.fi
 
 const countTotalAwardedAmount = (applications: Application[]) => applications.filter((application) => application.status === ApplicationStatus.approved).reduce((n, {awarded}) => n + awarded, 0);
 
-export default GrantStatsPage;
+export {GrantStatsPage, DisplayStats};
