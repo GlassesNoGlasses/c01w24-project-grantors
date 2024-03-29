@@ -26,6 +26,7 @@ const COLLECTIONS = {
 	grants: "grants",
 	favouriteGrants: "favouriteGrants",
 	files: "files",
+	messages: "messages",
 };
 
 // Uploading files
@@ -358,6 +359,28 @@ app.get('/users/:userID/favourites', express.json(), async (req, res) => {
 	}
 });
 
+app.get('/users/:userEmail', express.json(), async (req, res) => {
+	const userEmail = req.params.userEmail;
+
+	if (!userEmail) {
+		return res.status(400).json({ error: "Invalid request." });
+	}
+
+	try {
+		const userCollection = db.collection(COLLECTIONS.users);
+		const user = await userCollection.findOne({ email: userEmail });
+
+		if (!user) {
+			return res.status(404).send({ error: "User not found." });
+		}
+
+		res.status(200).json({ response: {...dbIDToFrontendID(user), accountID: user._id} });
+	} catch (error) {
+		console.error(error);
+		res.status(500).json({ error: "Internal server error." });
+	}
+});
+
 app.post("/grant", express.json(), async (req, res) => {
 	try {
 		// frontend guarantees that all these fields are provided so omit param check
@@ -577,63 +600,74 @@ app.post("/application", express.json(), async (req, res) => {
 });
 
 app.get("/applications", express.json(), async (req, res) => {
-	const { userID, organization } = req.query;
+    const { userID, organization } = req.query;
 
-	if (!userID && !organization) {
-		return res.status(400).json({ error: "Missing required parameters. Include userID or organization." });
-	}
+    if (!userID && !organization) {
+        return res.status(400).json({ error: "Missing required parameters. Include userID or organization." });
+    }
 
-	let pipeline = [];
-	if (userID) {
-		pipeline.push({
-			$match: {
-				applicantID: userID
-			}
-		});
-	}
-
-	if (organization) {
-		const userCollection = db.collection(COLLECTIONS.users);
-		const user = await userCollection.findOne({ _id: new ObjectId(decoded.userID) });
-		if (!user) {
-			return res.status(404).send("Organization not found.")
-		}
-
-		if (user.organization != organization) {
+	verifyRequestAuth(req, async (err, decoded) => {
+		if (err) {
 			return res.status(401).send("Unauthorized.");
 		}
 
-		pipeline.push({
-			$addFields: {
-				convertedGrantID: { $toObjectId: "$grantID" }
+		const userCollection = db.collection(COLLECTIONS.users);
+		const user = await userCollection.findOne({ _id: new ObjectId(decoded.userID) });
+
+		if (userID && !user.isSysAdmin && userID != decoded.userID) {
+			console.log("USER INVALID")
+			return res.status(401).send("Unauthorized.");
+		}
+
+		let pipeline = [];
+		if (userID) {
+			pipeline.push({
+				$match: {
+					applicantID: userID
+				}
+			});
+		}
+
+		if (organization) {
+			if (!user) {
+				return res.status(404).send("Organization not found.")
 			}
-		});
 
-		pipeline.push({
-			$lookup: {
-				from: COLLECTIONS.grants,
-				localField: "convertedGrantID",
-				foreignField: "_id",
-				as: "grant",
+			if (user.organization != organization && !user.isSysAdmin) {
+				return res.status(401).send("Unauthorized.");
 			}
-		});
 
-		pipeline.push({
-			$unwind: "$grant"
-		});
+			pipeline.push({
+				$addFields: {
+					convertedGrantID: { $toObjectId: "$grantID" }
+				}
+			});
 
-		pipeline.push({
-			$match: {
-				"grant.organization": organization
-			}
-		});
-	}
+			pipeline.push({
+				$lookup: {
+					from: COLLECTIONS.grants,
+					localField: "convertedGrantID",
+					foreignField: "_id",
+					as: "grant",
+				}
+			});
 
-	const applicationsCollection = db.collection(COLLECTIONS.applications);
-	const applications = await applicationsCollection.aggregate(pipeline).toArray();
+			pipeline.push({
+				$unwind: "$grant"
+			});
 
-	res.json({ response: applications.map((app) => dbIDToFrontendID(app)) });
-	
+			pipeline.push({
+				$match: {
+					"grant.organization": organization
+				}
+			});
+		}
+
+		const applicationsCollection = db.collection(COLLECTIONS.applications);
+		const applications = await applicationsCollection.aggregate(pipeline).toArray();
+
+		res.json({ response: applications.map((app) => dbIDToFrontendID(app)) });
+	});
 });
 
 app.get("/applicant/:applicantID", express.json(), async (req, res) => {
@@ -774,8 +808,7 @@ app.get("/files/downloadable/:fileID", express.json(), async (req, res) => {
 		if (!file) {
 			return res.status(404).send("File not found.")
 		}
-
-		console.log(file.path);
+		
 		return res.download(file.path, file.title, (err) => {
 			if (err) {
 				// Error in downloading a file.
@@ -951,6 +984,147 @@ app.put('/application/:applicationID/funding', express.json(), async (req, res) 
     }
 });
 
+app.post('/sendMessage/:userEmail', express.json(), async (req, res) => {
+	const userEmail = req.params.userEmail;
+	const message = req.body;
+
+	if (!message || !userEmail) {
+		return res.status(400).json({ error: "Invalid request: 'userEmail' and 'message' are required." });
+	}
+
+	try {
+		const userCollection = db.collection(COLLECTIONS.users);
+		const user = await userCollection.findOne({ email: userEmail });
+
+		if (!user) {
+			return res.status(404).send("User not found.")
+		}
+
+		const messageCollection = db.collection(COLLECTIONS.messages);
+
+		const messageID = await messageCollection.insertOne({
+			title: message.title,
+			senderEmail: userEmail,
+			receiverEmail: message.receiverEmail,
+			description: message.description,
+			dateSent: new Date(),
+			read: message.read,
+			fileNames: message.fileNames
+		});
+		
+		res.status(200).json({ message: "Message sent successfully." });
+	} catch (error) {
+		console.error("Error sending message: ", error);
+		res.status(500).json({ error: error.message });
+	}
+});
+
+app.get('/getMessage/:messageID', express.json(), async (req, res) => {
+	const messageID = req.params.messageID;
+
+	if (!messageID) {
+		return res.status(400).json({ error: "Invalid request: 'messageID' is required." });
+	}
+
+	try {
+
+		const messageCollection = db.collection(COLLECTIONS.messages);
+		const message = await messageCollection.findOne({ _id: new ObjectId(messageID) });
+
+		if(!message) {
+			return res.status(404).json({message: "Message not found."});
+		}
+		
+		res.status(200).json({ response: message });
+	} catch (error) {
+		console.error("Error sending message: ", error);
+		res.status(500).json({ error: error.message });
+	}
+});
+
+app.get('/getSentMessages/:userEmail', express.json(), async (req, res) => {
+	const userEmail = req.params.userEmail;
+
+	if (!userEmail) {
+		return res.status(400).json({ error: "Invalid request: 'userEmail' is required." });
+	}
+
+	try {
+		const userCollection = db.collection(COLLECTIONS.users);
+		const user = await userCollection.findOne({ email: userEmail });
+
+		if (!user) {
+			return res.status(404).send("User not found.")
+		}
+
+		const messageCollection = db.collection(COLLECTIONS.messages);
+		const sentMessages = await messageCollection.find({ senderEmail: userEmail }).toArray();
+		
+		res.status(200).json({
+			response: sentMessages.map((message) => dbIDToFrontendID(message))
+		});
+	} catch (error) {
+		console.error("Error sending message: ", error);
+		res.status(500).json({ error: error.message });
+	}
+});
+
+app.get('/getReceivedMessages/:userEmail', express.json(), async (req, res) => {
+	const userEmail = req.params.userEmail;
+
+	if (!userEmail) {
+		return res.status(400).json({ error: "Invalid request: 'userEmail' is required." });
+	}
+
+	try {
+		const userCollection = db.collection(COLLECTIONS.users);
+		const user = await userCollection.findOne({ email: userEmail });
+
+		if (!user) {
+			return res.status(404).json({message: "User not found."})
+		}
+
+		const messageCollection = db.collection(COLLECTIONS.messages);
+		const receivedMessages = await messageCollection.find({ receiverEmail: userEmail }).toArray();
+		
+		res.status(200).json({
+			response: receivedMessages.map((message) => dbIDToFrontendID(message))
+		});
+	} catch (error) {
+		console.error("Error sending message: ", error);
+		res.status(500).json({ error: error.message });
+	}
+});
+
+app.put('/markMessageRead/:messageID', express.json(), async (req, res) => {
+	const messageID = req.params.messageID;
+	const message = req.body;
+
+	if (!messageID || !message) {
+		return res.status(400).json({ error: "Invalid request: 'message' or 'messageID' are required." });
+	}
+
+	try {
+		const messageCollection = db.collection(COLLECTIONS.messages);
+
+		await messageCollection.updateOne(
+			{ _id: new ObjectId(messageID)},
+			{$set: {
+			title: message.title,
+			senderEmail: message.senderEmail,
+			receiverEmail: message.receiverEmail,
+			description: message.description,
+			dateSent: message.dateSent,
+			read: true,
+			fileNames: message.fileNames
+		}});
+		
+		res.status(200).json({ message: "Message read successfully." });
+	} catch (error) {
+		console.error("Error sending message: ", error);
+		res.status(500).json({ error: error.message });
+	}
+});
 app.get('/users', express.json(), async (req, res) => {
 	try {
 		const userCollection = db.collection(COLLECTIONS.users)

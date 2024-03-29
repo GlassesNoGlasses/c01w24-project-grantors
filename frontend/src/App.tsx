@@ -23,10 +23,11 @@ import Settings from "./components/settings-page/Settings";
 import React, { useEffect } from 'react';
 import Background from "./components/background/Background";
 import FundingView from "./components/applications/admin/fundingView"
+import { MessageBoard } from "./components/messages/message-board/MessageBoard";
 import UserList from "./components/user-list/UserList/UserList";
 import EditUser from "./components/settings-page/EditUser";
 import MilestonesPage from "./components/milestones-page/MilestonesPage";
-import GranteeStats from "./components/user-list/GranteeStats";
+import { MessageView } from "./components/messages/MessageView";
 import UserStats from "./components/user-list/UserList/UserStats";
 
 
@@ -85,6 +86,8 @@ function App() {
 							<Route path="applications/:applicationID/funding" element={<FundingView />} />
 							<Route path="applications/:applicationID" element={<ApplicationView />} />
 							<Route path="applications/submitted/:applicationID" element={<SubmittedView/>} />
+							<Route path="messages" element={<MessageBoard />} />
+							<Route path="messages/:messageID" element={<MessageView />} />
 							<Route path="milestones" element={<MilestonesPage />} />
 							<Route path="settings" element={<Settings />} />
 							<Route path="*" element={<NotFoundPage />} />

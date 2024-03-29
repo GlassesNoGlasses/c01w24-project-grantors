@@ -8,7 +8,7 @@ import {User} from '../../interfaces/User'
 
 const GrantStatsPage = ({}: GrantStatsPageProps) => {
     const { user } = useUserContext();
-    return user?.isAdmin ? <AdminDisplayStats /> : <DisplayStats />;
+    return user?.isAdmin ? <AdminDisplayStats /> : <DisplayUserStats />;
 };
 
 interface DisplayStatsProps {
@@ -23,7 +23,11 @@ const AdminDisplayStats = () => {
     )
 }
 
-const DisplayStats = ({optionalUser} : DisplayStatsProps) => {
+const DisplayAdminStats = () => {
+    return <div></div>
+}
+
+const DisplayUserStats = ({optionalUser} : DisplayStatsProps) => {
     const {user} = useUserContext();
     const [applications, setApplications] = useState<Application[]>([]);
     const header = ["Category", "Frequency", { role: "style" }];
@@ -68,7 +72,9 @@ const DisplayStats = ({optionalUser} : DisplayStatsProps) => {
         [`Received Amount: ${grantsAwarded}`]: grantsAwarded
     }, header)
 
-    const grantCategoriesData = formatData(countCategories(applications), header);
+    const grantCategoriesData = formatData(
+        countCategories(applications), 
+    header);
 
     const applicationsSubmitted = countApplicationsSubmitted(applications);
     const applicationsInProgress = countApplicationsInProgress(applications);
@@ -79,7 +85,7 @@ const DisplayStats = ({optionalUser} : DisplayStatsProps) => {
     const grantStatusData = formatData({
         [`Submitted: ${applicationsSubmitted}`]: applicationsSubmitted,
         [`In Progress: ${applicationsInProgress}`]: applicationsInProgress,
-        [`Resolved: ${applicationsInProgress}`]: applicationsResolved,
+        [`Resolved: ${applicationsResolved}`]: applicationsResolved,
         [`Approved: ${applicationsApproved}`]: applicationsApproved,
         [`Rejected: ${applicationsRejected}`]: applicationsRejected
     }, header);
@@ -109,17 +115,24 @@ const DisplayStats = ({optionalUser} : DisplayStatsProps) => {
 
 const countCategories = (applications: Application[]) => 
 {
-    const result: TableValues = {};
+    const data: TableValues = {};
     for (const application of applications)
     {
-        result[application.grantCategory] = result[application.grantCategory] ? result[application.grantCategory] + 1 : 1;
+        data[application.grantCategory] = data[application.grantCategory] ? data[application.grantCategory] + 1 : 1;
+    }
+
+    const result: TableValues = {};
+    for (const key in data)
+    {
+        result[key + `: ${data[key]}`] = data[key];
     }
     return result;
 }
 
 const formatData = (values: TableValues, header: any[]) =>
 {
-
+    let colors: string[] = ["#22525D", "#7DB8B7"];
+    let i: number = 0;
     let result: (string | number)[][] = [];
     result.push(header)
     for (const key in values)
@@ -128,7 +141,8 @@ const formatData = (values: TableValues, header: any[]) =>
         
         arr.push(key);
         arr.push(values[key]);
-        arr.push("black");
+        arr.push(colors[i % colors.length]);
+        i = i + 1;
         result.push(arr);
     }
 
@@ -150,4 +164,4 @@ const countTotalAppliedAmount = (applications: Application[]) => applications.fi
 
 const countTotalAwardedAmount = (applications: Application[]) => applications.filter((application) => application.status === ApplicationStatus.approved).reduce((n, {awarded}) => n + awarded, 0);
 
-export {GrantStatsPage, DisplayStats};
+export {GrantStatsPage, DisplayUserStats};
