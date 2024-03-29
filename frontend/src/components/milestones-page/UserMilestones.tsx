@@ -3,7 +3,6 @@ import ApplicationsController from "../../controllers/ApplicationsController";
 import { Application, ApplicationStatus } from "../../interfaces/Application";
 import { useUserContext } from "../contexts/userContext";
 import { GrantMilestone } from "../../interfaces/Grant";
-import { Check, X } from "heroicons-react";
 import { CheckIcon, XMarkIcon } from "@heroicons/react/24/solid";
 
 const UserMilestonesPage = () => {
@@ -56,15 +55,19 @@ const UserMilestonesPage = () => {
         return (
             <div className="flex flex-col gap-2 py-4 px-5 border-2 border-magnify-dark-blue rounded-md bg-magnify-light-blue">
                 <div className="flex flex-row justify-between align-middle">
-                    <h3 className="text-lg font-bold">{milestone.title}</h3>
-                    {milestone.completed ? <CheckIcon className="h-10 w-10 text-green-500" /> : <XMarkIcon className="h-10 w-10 text-red-500" />}
+                    <h4 className="text-lg font-bold">{milestone.title}</h4>
+                    {
+                    milestone.completed ? 
+                    <CheckIcon className="h-10 w-10 text-green-500" aria-label="milestone completed"/> 
+                    : 
+                    <XMarkIcon className="h-10 w-10 text-red-500" aria-label="milestone not completed" />}
                 </div>
                 <p className="text-sm">Due: {new Date(milestone.dueDate).toDateString()}</p>
                 <p className="text-base">{milestone.description}</p>
                 <form onSubmit={e => handleMilestoneSubmit(e, {...milestone, evidence: evidence})} className="flex flex-col gap-2">
                     <div className="flex flex-col gap-1">
-                        <label htmlFor="evidence" className="text-base">Evidence</label>
-                        <textarea name="evidence" id="evidence" required readOnly={milestone.completed}
+                        <label id={`evidence-label-${milestone.id}`} className="text-base">Evidence</label>
+                        <textarea id="evidence" aria-labelledby={`evidence-label-${milestone.id}`} required readOnly={milestone.completed}
                             className="p-3 px-5 text-base rounded-md ring-2 ring-primary focus:ring-secondary"
                             value={evidence} onChange={e => setEvidence(e.target.value)}></textarea>
                     </div>
