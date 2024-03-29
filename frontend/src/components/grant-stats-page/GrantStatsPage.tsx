@@ -14,13 +14,6 @@ const DisplayStats = () => {
     const {user} = useUserContext();
     const [applications, setApplications] = useState<Application[]>([]);
     const header = ["Category", "Frequency", { role: "style" }];
-    const data = [
-        ["Category", "Frequency", { role: "style" }],
-        ["Charity", 2, "#blue"], 
-        ["Government", 4, "#blue"],
-        ["Development", 1, "#blue"],
-        ["Miscellaneous", 0, "#blue"],
-      ];
 
     const options = {
         'fontName': 'SF-Compact-Rounded-Regular',
@@ -37,7 +30,7 @@ const DisplayStats = () => {
           },
         'legend': {
             position: 'none'
-        }
+        },
     }
 
     useEffect(() => {
@@ -50,32 +43,44 @@ const DisplayStats = () => {
         console.log(applications);
     }, [user]);
 
-    const grantCategoriesData = formatData(countCategories(applications), header);
+    const grantsApplied = countTotalAppliedAmount(applications);
+    const grantsAwarded = countTotalAwardedAmount(applications);
 
     const grantValueData = formatData({
-        "Applied": 0, 
-        "Received": 0
+        [`Applied Amount: ${grantsApplied}`]: grantsApplied, 
+        [`Received Amount: ${grantsAwarded}`]: grantsAwarded
     }, header)
 
+    const grantCategoriesData = formatData(countCategories(applications), header);
+
+    const applicationsSubmitted = countApplicationsSubmitted(applications);
+    const applicationsInProgress = countApplicationsInProgress(applications);
+    const applicationsResolved = countApplicationsResolved(applications);
+    const applicationsApproved = countApplicationsApproved(applications);
+    const applicationsRejected = countApplicationsRejected(applications);
+
     const grantStatusData = formatData({
-        "Submitted": countApplicationsSubmitted(applications),
-        "In Progress": countApplicationsInProgress(applications),
-        "Resolved": countApplicationsResolved(applications),
-        "Approved": countApplicationsApproved(applications),
-        "Rejected": countApplicationsRejected(applications) 
+        [`Submitted: ${applicationsSubmitted}`]: applicationsSubmitted,
+        [`In Progress: ${applicationsInProgress}`]: applicationsInProgress,
+        [`Resolved: ${applicationsInProgress}`]: applicationsResolved,
+        [`Approved: ${applicationsApproved}`]: applicationsApproved,
+        [`Rejected: ${applicationsRejected}`]: applicationsRejected
     }, header);
 
     return(
         <div className=" bg-white m-20 rounded-xl border-4 border-primary shadow-2xl shadow-black h-fit"> 
-            <div className="">
-                <div className="m-10 text-center text-3xl">Grant Categories Breakdown</div>
-                <Chart chartType="ColumnChart" width="100%" height="400px" data={grantCategoriesData} options={options} />
-            </div>
-            <div>
-                <div className="m-10 text-center text-3xl">Total Grant Value Breakdown</div>
+            <div className="flex items-center">
+                <div className="m-10 text-center text-3xl">Total Grant Funding Received</div>
+                <div className="m-10 text-center text-3xl">${grantsAwarded}</div>
                 <Chart chartType="ColumnChart" width="100%" height="400px" data={grantValueData} options={options} />
             </div>
-            <div>
+            
+            <div className="flex items-center">
+                <div className="m-10 ml-20 text-center text-3xl">Grant Categories Breakdown</div>
+                <Chart chartType="ColumnChart" width="100%" height="400px" data={grantCategoriesData} options={options} />
+            </div>
+            
+            <div className="flex items-center">
                 <div className="m-10 text-center text-3xl">Grant Status Breakdown</div>
                 <Chart chartType="ColumnChart" width="100%" height="400px" data={grantStatusData} options={options} />
             </div>
@@ -93,18 +98,6 @@ const countCategories = (applications: Application[]) =>
     }
     return result;
 }
-
-const countApplicationStatus = (applications: Application[]) =>
-{
-    const result: TableValues = {};
-    for (const application of applications)
-    {
-        result[application.status] = result[application.status] ? result[application.grantCategory] + 1 : 1;
-    }
-    return result;
-
-}
-
 
 const formatData = (values: TableValues, header: any[]) =>
 {
@@ -125,8 +118,6 @@ const formatData = (values: TableValues, header: any[]) =>
 
 }
 
-const countApplications = (applications: Application[]) => applications.length;
-
 const countApplicationsSubmitted = (applications: Application[]) => applications.filter((application) => application.status === ApplicationStatus.submitted).length;
 
 const countApplicationsInProgress = (applications: Application[]) => applications.filter((application) => application.status === ApplicationStatus.inProgress).length;
@@ -137,7 +128,7 @@ const countApplicationsApproved = (applications: Application[]) => applications.
 
 const countApplicationsRejected = (applications: Application[]) =>  applications.filter((application) => application.status === ApplicationStatus.rejected).length;
 
-const countTotalAppliedAmount = (applications: Application[]) => applications.reduce((n, {awarded}) => n + awarded, 0);
+const countTotalAppliedAmount = (applications: Application[]) => applications.filter((application) => application.status != ApplicationStatus.rejected).reduce((n, {awarded}) => n + awarded, 0);
 
 const countTotalAwardedAmount = (applications: Application[]) => applications.filter((application) => application.status === ApplicationStatus.approved).reduce((n, {awarded}) => n + awarded, 0);
 
