@@ -1,10 +1,11 @@
 
 export interface MessageFormProps {
-    title: String,
+    title: string,
     showModal: boolean,
     callbackOpen: () => void,
     callbackClose: () => void,
-    senderEmail: String,
-    receiverEmail?: String,
-    applicantEmails: String[]
+    setCreatedMessage?: (created: boolean) => void,
+    senderEmail: string,
+    receiverEmail?: string,
+    applicantEmails: string[]
 }

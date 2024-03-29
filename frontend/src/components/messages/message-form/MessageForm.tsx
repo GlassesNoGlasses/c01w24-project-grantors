@@ -3,18 +3,19 @@ import React, { useState } from 'react'
 import { MessageFormProps } from './MessageFormProps'
 import { Modal } from '../../modal/Modal'
 import { Message } from '../../../interfaces/Message'
-import { User } from '../../../interfaces/User'
 import DropdownText from '../../filter/TextDropFilter'
 import DropZoneFile from '../../files/dropzone/DropZoneFile'
 import { GrantQuestionFileType, GrantQuestionFileTypesToAccept } from '../../files/FileUtils'
 import MessageController from '../../../controllers/MessageController'
 import { useUserContext } from '../../contexts/userContext'
+import FileController from '../../../controllers/FileController'
 
 export const MessageForm = ({
     title,
     showModal,
     callbackOpen,
     callbackClose,
+    setCreatedMessage,
     senderEmail,
     receiverEmail,
     applicantEmails
@@ -27,6 +28,8 @@ export const MessageForm = ({
     receiverEmail: receiverEmail ? receiverEmail : "",
     dateSent: new Date(),
     description: "",
+    read: false,
+    fileNames: []
   };
 
   const [message, setMessage] = useState<Message>(emptyMessage);
@@ -40,12 +43,20 @@ export const MessageForm = ({
       return;
     }
 
-    MessageController.sendMessage(message, user).then((response) =>  {
-      if (response) {
-        console.log("Message sent successfully.");
-      } else {
-        console.log("Failed to send message.");
+    message.fileNames = uploadedFiles.map((file) => {return file.name});
+
+    FileController.uploadFiles(message.title, uploadedFiles, user).then((response: number | undefined) => {
+      if (!response) {
+        console.error("Error while uploading files");
+        return;
       }
+    })
+
+    MessageController.sendMessage(message, user).then((response: boolean) =>  {
+      if (setCreatedMessage) {
+        response ? setCreatedMessage(true) : setCreatedMessage(false);
+      }
+      callbackClose();
     })
   };
 
@@ -84,11 +95,17 @@ export const MessageForm = ({
           required/>
         </div>
 
-        <DropdownText
-        label={"Search for Receiver Email:"}
-        options={applicantEmails}
-        onSelect={(option) => setMessage({...message, receiverEmail: option})}
-        />
+        {receiverEmail ? 
+          <p className=' border-1 border-gray-400'>
+            {`To: ${receiverEmail}`}
+          </p>
+        :
+          <DropdownText
+          label={"Search for Receiver Email:"}
+          options={applicantEmails}
+          onSelect={(option) => setMessage({...message, receiverEmail: option})}
+          />
+        }
 
         <div className="flex flex-row justify-between w-full">
             <div className="flex flex-col max-h-40 overflow-y-auto">
@@ -111,14 +128,24 @@ export const MessageForm = ({
             />
         </div>
 
-        <button 
+        <div className='flex justify-between'>
+          <button 
             className='p-2 px-5 m-7 mr-14 bg-green-500 hover:bg-green-600 active:bg-green-700
             text-white font-bold rounded-lg shadow-md transition-colors duration-150 ease-in
             text-lg' 
             type="submit" 
             name="submit">
             Submit Form
-        </button>
+          </button>
+
+          <button
+            className='p-2 px-5 m-7 mr-14 bg-blue-500 hover:bg-blue-600 active:bg-blue-700
+            text-white font-bold rounded-lg shadow-md transition-colors duration-150 ease-in
+            text-base text-center justify-center align-middle'
+            onClick={callbackClose}>
+						Close
+					</button>
+        </div>
       </form>
     </Modal>
   )

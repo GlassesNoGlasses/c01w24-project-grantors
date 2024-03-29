@@ -1,6 +1,6 @@
 
 export interface TextDropFilterProps {
-    label: String,
-    options: String[],
-    onSelect: (option: String) => void
+    label: string,
+    options: string[],
+    onSelect: (option: string) => void
 }

@@ -329,6 +329,28 @@ app.get('/users/:userID/favourites', express.json(), async (req, res) => {
 	}
 });
 
+app.get('/users/:userEmail', express.json(), async (req, res) => {
+	const userEmail = req.params.userEmail;
+
+	if (!userEmail) {
+		return res.status(400).json({ error: "Invalid request." });
+	}
+
+	try {
+		const userCollection = db.collection(COLLECTIONS.users);
+		const user = await userCollection.findOne({ email: userEmail });
+
+		if (!user) {
+			return res.status(404).send({ error: "User not found." });
+		}
+
+		res.status(200).json({ response: {...dbIDToFrontendID(user), accountID: user._id} });
+	} catch (error) {
+		console.error(error);
+		res.status(500).json({ error: "Internal server error." });
+	}
+});
+
 app.post("/grant", express.json(), async (req, res) => {
 	try {
 		// frontend guarantees that all these fields are provided so omit param check
@@ -951,6 +973,8 @@ app.post('/sendMessage/:userEmail', express.json(), async (req, res) => {
 			receiverEmail: message.receiverEmail,
 			description: message.description,
 			dateSent: new Date(),
+			read: message.read,
+			fileNames: message.fileNames
 		});
 		
 		res.status(200).json({ message: "Message sent successfully." });
@@ -960,7 +984,30 @@ app.post('/sendMessage/:userEmail', express.json(), async (req, res) => {
 	}
 });
 
-app.post('/getSentMessages/:userEmail', express.json(), async (req, res) => {
+app.get('/getMessage/:messageID', express.json(), async (req, res) => {
+	const messageID = req.params.messageID;
+
+	if (!messageID) {
+		return res.status(400).json({ error: "Invalid request: 'messageID' is required." });
+	}
+
+	try {
+
+		const messageCollection = db.collection(COLLECTIONS.messages);
+		const message = await messageCollection.findOne({ _id: new ObjectId(messageID) });
+
+		if(!message) {
+			return res.status(404).json({message: "Message not found."});
+		}
+		
+		res.status(200).json({ response: message });
+	} catch (error) {
+		console.error("Error sending message: ", error);
+		res.status(500).json({ error: error.message });
+	}
+});
+
+app.get('/getSentMessages/:userEmail', express.json(), async (req, res) => {
 	const userEmail = req.params.userEmail;
 
 	if (!userEmail) {
@@ -987,7 +1034,7 @@ app.post('/getSentMessages/:userEmail', express.json(), async (req, res) => {
 	}
 });
 
-app.post('/getReceivedMessages/:userEmail', express.json(), async (req, res) => {
+app.get('/getReceivedMessages/:userEmail', express.json(), async (req, res) => {
 	const userEmail = req.params.userEmail;
 
 	if (!userEmail) {
@@ -999,7 +1046,7 @@ app.post('/getReceivedMessages/:userEmail', express.json(), async (req, res) => 
 		const user = await userCollection.findOne({ email: userEmail });
 
 		if (!user) {
-			return res.status(404).send("User not found.")
+			return res.status(404).json({message: "User not found."})
 		}
 
 		const messageCollection = db.collection(COLLECTIONS.messages);
@@ -1008,6 +1055,36 @@ app.post('/getReceivedMessages/:userEmail', express.json(), async (req, res) => 
 		res.status(200).json({
 			response: receivedMessages.map((message) => dbIDToFrontendID(message))
 		});
+	} catch (error) {
+		console.error("Error sending message: ", error);
+		res.status(500).json({ error: error.message });
+	}
+});
+
+app.put('/markMessageRead/:messageID', express.json(), async (req, res) => {
+	const messageID = req.params.messageID;
+	const message = req.body;
+
+	if (!messageID || !message) {
+		return res.status(400).json({ error: "Invalid request: 'message' or 'messageID' are required." });
+	}
+
+	try {
+		const messageCollection = db.collection(COLLECTIONS.messages);
+
+		await messageCollection.updateOne(
+			{ _id: new ObjectId(messageID)},
+			{$set: {
+			title: message.title,
+			senderEmail: message.senderEmail,
+			receiverEmail: message.receiverEmail,
+			description: message.description,
+			dateSent: message.dateSent,
+			read: true,
+			fileNames: message.fileNames
+		}});
+		
+		res.status(200).json({ message: "Message read successfully." });
 	} catch (error) {
 		console.error("Error sending message: ", error);
 		res.status(500).json({ error: error.message });

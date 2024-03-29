@@ -76,3 +76,8 @@ export interface GetMessagesResponse {
     response?: Message[],
     error?: string,
 }
+
+export interface GetMessageResponse {
+    response?: Message,
+    error?: string,
+}

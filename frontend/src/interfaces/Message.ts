@@ -1,9 +1,11 @@
 
 export interface Message {
-    id: String,
-    title: String,
-    senderEmail: String, // email of person sending message
-    receiverEmail: String, // email of person receiving message
-    description: String,
+    id: string,
+    title: string,
+    senderEmail: string, // email of person sending message
+    receiverEmail: string, // email of person receiving message
+    description: string,
     dateSent: Date,
+    read: boolean,
+    fileNames: string[],
 }

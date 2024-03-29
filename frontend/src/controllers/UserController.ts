@@ -3,6 +3,7 @@ import { SERVER_PORT } from "../constants/ServerConstants";
 import { User } from "../interfaces/User";
 import { GetApplicantResponse, GetApplicantsResponse } from "../interfaces/ServerResponse";
 import { Applicant } from "../interfaces/Applicant";
+import { Message } from "../interfaces/Message";
 
 
 export default class UserController {
@@ -133,12 +134,39 @@ export default class UserController {
             if (res.ok) {
                 return true
             } else {
-                console.log('error')
                 return false
             }
         } catch (error) {
             console.error("Error while updating preferences", error);
             return false
+        }
+    }
+
+    static async fetchMessageSender(message: Message, user: User): Promise<User | undefined> {
+        if (message.receiverEmail !== user.email && message.senderEmail !== user.email) {
+            return undefined;
+        }
+
+        try {
+            const res = await fetch(`http://localhost:${SERVER_PORT}/users/${message.senderEmail}`, {
+                method: 'GET',
+            });
+            
+            if (!res.ok) {
+                return undefined;
+            }
+
+            return await res.json().then((data: { response: User }) => {
+                if (!data || !data.response) {
+                    return undefined;
+                }
+
+                return data.response;
+            });
+
+        } catch (error) {
+            console.error("Error while updating preferences", error);
+            return undefined
         }
     }
 }

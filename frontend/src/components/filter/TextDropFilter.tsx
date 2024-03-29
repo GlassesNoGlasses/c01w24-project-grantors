@@ -12,8 +12,8 @@ const TextDropFilter = ({
     option => option.toLowerCase().includes(inputValue.toLowerCase())
   );
 
-  const handleSelect = (option: String) => {
-    setInputValue(option.toString());
+  const handleSelect = (option: string) => {
+    setInputValue(option);
     onSelect(option);
     setIsOpen(false);
   };
@@ -40,7 +40,7 @@ const TextDropFilter = ({
         <div className="z-30">
           {filteredOptions.map((option) => (
             <div
-            key={option.toString()}
+            key={option}
             className=""
             onClick={() => handleSelect(option)}
             >
