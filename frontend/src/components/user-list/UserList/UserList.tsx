@@ -7,7 +7,7 @@ import { Link } from 'react-router-dom';
 import { useUserContext } from '../../contexts/userContext';
 import { Modal } from '../../modal/Modal'; 
 
-const UserCard = ({ user } : {user: User}) => {
+const UserCard = ({ user, curUser} : {user: User, curUser: User | null}) => {
 
     const [showModal, setShowModal] = useState<boolean>(false);
 
@@ -30,10 +30,11 @@ const UserCard = ({ user } : {user: User}) => {
         </div>
         
         <div className='flex flex-col gap-4 items-end'>
+            {user.isSysAdmin ? <></> :
             <Link to='/statistics' className='bg-primary hover:bg-secondary h-fit w-full py-2 px-4
                 rounded-xl text-white text-center'>
                 Statistics
-            </Link>
+            </Link>}
 
             <div className='flex gap-4'>
 
@@ -42,16 +43,16 @@ const UserCard = ({ user } : {user: User}) => {
                     Edit
                 </Link>
 
-                <button className='bg-red-500 hover:bg-red-600 h-fit w-fit py-2 px-4 rounded-xl text-white' onClick={async () => {
+                {user.accountID === curUser?.accountID ? <></> : <button className='bg-red-500 hover:bg-red-600 h-fit w-fit py-2 px-4 rounded-xl text-white' onClick={async () => {
                 try {
                     await UserController.deleteUser(user.accountID);
                     setShowModal(true);
                 } catch (error) {
                     console.error("Failed to delete user", error);
                 }
-            }}>
-                Remove
-            </button>
+                }}>
+                    Remove
+                </button>}
 
             </div>
             <Modal showModal={showModal} closeModal={handleCloseModalAndNavigate} openModal={() => setShowModal(true)}>
@@ -135,6 +136,7 @@ const UserList = () => {
 
     const [users, setUsers] = useState<User[]>([]);
     const [filteredUsers, setFilteredUsers] = useState<User[]>([]);
+    const {user} = useUserContext()
 
     const init = () => {
         const userToken = new Cookies().get('user-token');
@@ -160,8 +162,8 @@ const UserList = () => {
             <div className='flex flex-col gap-6 h-[80vh] w-[60vw] overflow-scroll p-10'>
                 {filteredUsers.length === 0 ?
                 <div className='text-center font-bold text-base'>Hmmm.... There are no users with the given searching citeria</div>
-                :filteredUsers.map((user, index) => {
-                    return <UserCard user={user} key={index}/>
+                :filteredUsers.map((notCurUser, index) => {
+                    return <UserCard user={notCurUser} curUser={user} key={index}/>
                 })}
             </div>
             
