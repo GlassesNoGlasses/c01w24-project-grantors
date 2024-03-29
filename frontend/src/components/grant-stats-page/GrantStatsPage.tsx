@@ -77,14 +77,13 @@ const DisplayUserStats = ({optionalUser} : DisplayStatsProps) => {
     const grantStatusData = formatData({
         [`Submitted: ${applicationsSubmitted}`]: applicationsSubmitted,
         [`In Progress: ${applicationsInProgress}`]: applicationsInProgress,
-        [`Resolved: ${applicationsResolved}`]: applicationsResolved,
         [`Approved: ${applicationsApproved}`]: applicationsApproved,
         [`Rejected: ${applicationsRejected}`]: applicationsRejected
     }, header);
 
     return(
         <div className='overflow-auto py-10 px-20 h-[90vh]'>
-            <div className=" flex flex-col items-center bg-white pt-4 rounded-xl border-4 border-primary shadow-2xl shadow-black"> 
+            <div className=" flex flex-col items-center bg-white pt-4 rounded-xl border-4 border-primary shadow-2xl shadow-black justify-around"> 
                 <h1 className="text-4xl ">Grant Statistics</h1>
                 <div className="flex items-center">
                     <h2 className="m-10 text-center text-3xl">Total Grant Funding Received</h2>
