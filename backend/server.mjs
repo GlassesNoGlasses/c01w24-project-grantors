@@ -600,64 +600,69 @@ app.post("/application", express.json(), async (req, res) => {
 });
 
 app.get("/applications", express.json(), async (req, res) => {
-	const { userID, organization } = req.query;
+    const { userID, organization } = req.query;
 
-	if (!userID && !organization) {
-		return res.status(400).json({ error: "Missing required parameters. Include userID or organization." });
-	}
+    if (!userID && !organization) {
+        return res.status(400).json({ error: "Missing required parameters. Include userID or organization." });
+    }
 
-	let pipeline = [];
-	if (userID) {
-		pipeline.push({
-			$match: {
-				applicantID: userID
-			}
-		});
-	}
+    verifyRequestAuth(req, async (err, decoded) => {
+        if (err || (userID && userID != decoded.userID)) {
+            return res.status(401).send("Unauthorized.");
+        }
 
-	if (organization) {
-		const userCollection = db.collection(COLLECTIONS.users);
-		const user = await userCollection.findOne({ _id: new ObjectId(userID) });
+        let pipeline = [];
+        if (userID) {
+            pipeline.push({
+                $match: {
+                    applicantID: userID
+                }
+            });
+        }
 
-		if (!user) {
-			return res.status(404).send("Organization not found.")
-		}
+        if (organization) {
+            const userCollection = db.collection(COLLECTIONS.users);
+            const user = await userCollection.findOne({ _id: new ObjectId(decoded.userID) });
+            if (!user) {
+                return res.status(404).send("Organization not found.")
+            }
 
-		if (user.organization != organization) {
-			return res.status(401).send("Unauthorized.");
-		}
+            if (user.organization != organization) {
+                return res.status(401).send("Unauthorized.");
+            }
 
-		pipeline.push({
-			$addFields: {
-				convertedGrantID: { $toObjectId: "$grantID" }
-			}
-		});
+            pipeline.push({
+                $addFields: {
+                    convertedGrantID: { $toObjectId: "$grantID" }
+                }
+            });
 
-		pipeline.push({
-			$lookup: {
-				from: COLLECTIONS.grants,
-				localField: "convertedGrantID",
-				foreignField: "_id",
-				as: "grant",
-			}
-		});
+            pipeline.push({
+                $lookup: {
+                    from: COLLECTIONS.grants,
+                    localField: "convertedGrantID",
+                    foreignField: "_id",
+                    as: "grant",
+                }
+            });
 
-		pipeline.push({
-			$unwind: "$grant"
-		});
+            pipeline.push({
+                $unwind: "$grant"
+            });
 
-		pipeline.push({
-			$match: {
-				"grant.organization": organization
-			}
-		});
-	}
+            pipeline.push({
+                $match: {
+                    "grant.organization": organization
+                }
+            });
+        }
 
-	const applicationsCollection = db.collection(COLLECTIONS.applications);
-	const applications = await applicationsCollection.aggregate(pipeline).toArray();
+        const applicationsCollection = db.collection(COLLECTIONS.applications);
+        const applications = await applicationsCollection.aggregate(pipeline).toArray();
 
-	res.json({ response: applications.map((app) => dbIDToFrontendID(app)) });
-	
+        res.json({ response: applications.map((app) => dbIDToFrontendID(app)) });
+    });
+    
 });
 
 app.get("/applicant/:applicantID", express.json(), async (req, res) => {
