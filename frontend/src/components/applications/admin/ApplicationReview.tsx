@@ -132,6 +132,15 @@ const ApplicationReview = () => {
         }
     };
 
+    const onStarKeyDown = (e: React.KeyboardEvent, star: number) => {
+        console.log(e.key);
+        if (e.key === 'Enter' && !reviewed) {
+            console.log('Enter key pressed');
+            setRating(star);
+            setHoverRating(star);
+        }
+    }
+
     return (
         <div className="p-10 pt-24">
 
@@ -141,12 +150,13 @@ const ApplicationReview = () => {
                     <h1 className="py-4 text-xl font-bold">Review Grant Application</h1>
                     <div id="star-rating" className="flex flex-row items-center gap-3">
                         <label className="text-lg">Rating</label>
-                        <div id="stars:">
+                        <div id="stars:" tabIndex={-1}>
                             {[1,2,3,4,5].map((star) => (
                                 <button 
                                     type="button"
                                     key={star}
                                     onClick={() => reviewed || setRating(star)}
+                                    onKeyDown={(e: React.KeyboardEvent) => onStarKeyDown(e, star)}
                                     onMouseEnter={() => reviewed || setHoverRating(star)}
                                     onMouseLeave={() => reviewed || setHoverRating(rating)} // set hoverRating to rating when not hovering
                                     aria-label={`Rate ${star} star`}
