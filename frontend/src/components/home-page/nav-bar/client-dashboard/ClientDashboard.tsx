@@ -1,7 +1,8 @@
 import { useUserContext } from '../../../contexts/userContext';
 import ButtonIcon from '../../../displays/ButtonIcon/ButtonIcon';
 import { Cog6ToothIcon, ArrowRightStartOnRectangleIcon, DocumentMagnifyingGlassIcon, StarIcon, 
-	ListBulletIcon, TrophyIcon, ChartBarIcon} from '@heroicons/react/24/solid';
+	ListBulletIcon, TrophyIcon, ChartBarIcon,
+	InboxIcon} from '@heroicons/react/24/solid';
 import search from '../../../../images/search.png'
 import ApplicationIcon from '../../../displays/ApplicationIcon/ApplicationIcon';
 import { Link } from 'react-router-dom';
@@ -18,16 +19,21 @@ const ClientDashboard = ({}: ClientDashboardProps) => {
 	}
 
 	return (
-		<div className="dashboard-container py-20 w-full h-full">
+		<div className="dashboard-container w-full h-full">
 
-			<div className='flex flex-col items-start pl-10 bg-white pb-8'>
-				<h1 className='text-6xl text-primary w-fit'>
-					Dashboard
-				</h1>
-				<h2 className='text-4xl text-secondary w-fit flex items-center flex-col'>
-					Welcome, {user?.username}!
-					<div className='bg-primary h-[4px] -mt-4 w-[100%]'/>
-				</h2>
+			<div className='flex flex-row justify-between px-10 pb-8 pt-1'>
+				<div className='flex flex-col items-start bg-white'>
+					<h1 className='text-6xl text-primary w-fit'>
+						Dashboard
+					</h1>
+					<h2 className='text-4xl text-secondary w-fit flex items-center flex-col'>
+						Welcome, {user?.username}!
+						<div className='bg-primary h-[4px] -mt-4 w-[100%]'/>
+					</h2>
+				</div>
+				<Link to='/messages'>
+					<ButtonIcon heroicon={<InboxIcon/>} label={"Messages"} text={user?.preferences.hc ? 'text-white' : 'text-black'}/>
+				</Link>
 			</div>
 
 			<div className="client-butons flex justify-evenly items-center py-10">
@@ -37,7 +43,9 @@ const ClientDashboard = ({}: ClientDashboardProps) => {
 				<Link to="/milestones" tabIndex={-1}>
 					<ButtonIcon heroicon={<TrophyIcon />} label="Milestones" text={user?.preferences.hc ? 'text-white' : 'text-black'}/>
 				</Link>
+				<Link to="/stats">
 				<ButtonIcon heroicon={<ChartBarIcon />} label="Statistics" text={user?.preferences.hc ? 'text-white' : 'text-black'}/>
+				</Link>
 				<Link to='/settings' tabIndex={-1}>
 					<ButtonIcon heroicon={<Cog6ToothIcon/>} label={"Settings"} text={user?.preferences.hc ? 'text-white' : 'text-black'}/>
 				</Link>

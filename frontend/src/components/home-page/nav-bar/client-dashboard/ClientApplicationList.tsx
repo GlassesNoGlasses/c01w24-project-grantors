@@ -114,7 +114,7 @@ const ClientApplicationList = ({}) => {
     }, [tableData]);
 
     return (
-        <div className="pt-28 p-4">
+        <div className="py-10 p-4">
             <div className="flex flex-col h-full items-start justify-start p-6 bg-primary
                 rounded-2xl border-4 border-white shadow-2xl shadow-black">
                 <span className="text-2xl text-white mb-4">My Applications</span>

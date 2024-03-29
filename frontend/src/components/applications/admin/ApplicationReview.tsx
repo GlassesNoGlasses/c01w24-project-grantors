@@ -97,7 +97,6 @@ const ApplicationReview = () => {
 
             FileController.fetchUserFSFiles(application.applicantID).then((files: FSFile[] | undefined) => {
                 if (files) {
-                    console.log(files);
                     const neededFiles = files.filter((file: FSFile) => {
                         return application?.responses.some((response: GrantQuestion) => {
                             return response.answer?.includes(file.title);
@@ -142,7 +141,7 @@ const ApplicationReview = () => {
     }
 
     return (
-        <div className="p-10 pt-24">
+        <div className="p-10">
 
             <div id="review-container" className="flex flex-col rounded-xl border-4 border-primary pb-8 bg-white
             shadow-2xl shadow-black">

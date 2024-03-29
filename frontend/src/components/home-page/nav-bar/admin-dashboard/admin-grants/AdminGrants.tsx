@@ -159,7 +159,7 @@ const AdminGrants = () => {
     };
 
     return (
-        <div className='flex py-20 flex-col min-h-full min-w-full space-y-2 items-center px-20'>
+        <div className='flex py-4 flex-col min-h-full min-w-full space-y-2 items-center px-20'>
             <div className='flex w-full justify-center align-middle p-4'>
                 <div className='w-3/4'>
                     <Tab items={tabItems}/>

@@ -17,7 +17,7 @@ const SystemAdminDashboard = () => {
 	}
 
     return (
-        <div className="dashboard-container py-20 w-full h-full">
+        <div className="dashboard-container w-full h-full">
 
 			<div className='bg-white pb-8'>
 				<h2 className='text-6xl text-secondary pl-10 w-fit flex items-center flex-col'>
@@ -30,7 +30,7 @@ const SystemAdminDashboard = () => {
 				<Link to="/users">
 					<ButtonIcon heroicon={<UsersIcon />} label="View Users" text={user?.preferences.hc ? 'text-white' : 'text-black'}/>
 				</Link>
-				<Link to="/signup">
+				<Link to="/newUser">
 					<ButtonIcon heroicon={<UserPlusIcon />} label="Create User" text={user?.preferences.hc ? 'text-white' : 'text-black'}/>
 				</Link>
 				<Link to='/settings'>

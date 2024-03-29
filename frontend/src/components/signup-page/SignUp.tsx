@@ -12,7 +12,7 @@ import { User } from '../../interfaces/User';
 
 const ACCESS_CODE = 'CSCC01'
 
-const SignUp: React.FC<SignUpProps> = () => {
+const SignUp: React.FC<SignUpProps> = ({adminCreate}) => {
 	const [firstName, setFirstName] = useState('');
 	const [lastName, setLastName] = useState('');
 	const [email, setEmail] = useState('');
@@ -66,15 +66,14 @@ const SignUp: React.FC<SignUpProps> = () => {
 	}
 
   return (
-  	<div>
-    	<div className="flex items-center justify-center min-h-screen pt-20 bg-home-background bg-cover 
-    		bg-no-repeat bg-center h-[100vh] w-[100vw] fixed z-[-1]">
+  	<div className='flex h-[85vh] items-center'>
     		<div className="w-full max-w-xs px-4 py-6 mx-auto bg-white rounded-xl 
 				sm:px-6 sm:py-8 md:max-w-sm lg:max-w-md xl:max-w-lg 2xl:max-w-xl
 				flex flex-col gap-4 border-4 border-primary shadow-2xl shadow-black"
           		style={{ boxShadow: '-10px 10px 30px 0 rgba(0, 0, 0, 0.1)' }}>
-				<h3 className="text-xl font-bold text-center sm:text-2xl text-gray-700">Create an account for Grantors</h3>
-				<form className='flex flex-col gap-4' onSubmit={handleSubmit}>
+				<h3 className="text-xl font-bold text-center sm:text-2xl text-gray-700">{adminCreate ?
+				"Create an account for Grantors" : "Sign up for Grantors"}</h3>
+				<form className='flex flex-col gap-4' onSubmit={handleSubmit} onChange={() => setFeedback('')}>
 					<div className='flex flex-row'>
 						<div className="flex items-center w-[49%] mr-[2%]">
 							<img src={nameIcon} alt="Password"
@@ -180,7 +179,7 @@ const SignUp: React.FC<SignUpProps> = () => {
 							<input
 							type="text"
 							id="organization"
-							placeholder="Enter Access Code"
+							placeholder="Enter Access Code: CSCC01"
 							value={code}
 							onChange={(e) => setCode(e.target.value)}
 							className="w-full px-3 py-2 mt-2 border border-gray-200 rounded-full focus:outline-none
@@ -221,10 +220,36 @@ const SignUp: React.FC<SignUpProps> = () => {
 					</div>
 				</form>
 				<div className='flex items-center justify-center'>
-					<span className='font-bold text-red-500'>{feedback}</span>
+					<span className='font-bold text-red-500 h-5'>{feedback}</span>
+				</div>
+			
+		</div>
+		{adminCreate?
+		<Modal showModal={showModal} closeModal={() => setShowModal(false)} openModal={() => setShowModal(true)}>
+			<div className='flex h-[100vh] w-[100vw] justify-center items-center'>
+				<div className='bg-white h-fit w-2/5 border-4 border-blue-400 border-solid rounded-lg'>
+					<p className='text-2xl text-center font-bold border-b-2 border-solid border-black'>
+						Account Created!
+					</p>
+					<div className='h-full w-full'>
+						<p className='text-xl text-center font-semibold'>
+							{`You have successfully created an acccount as ${username} with the email ${email}.`}
+						</p>
+						<p className='text-xl text-center font-normal'>
+							Press "Esc" or click "Close" below to continue where you left off.
+						</p>
+						<div className='flex justify-center'>
+							<button className='p-2 px-5 m-2 bg-blue-500 hover:bg-blue-600 active:bg-blue-700
+								text-white font-bold rounded-lg shadow-md transition-colors duration-150 ease-in
+								text-base text-center justify-center align-middle flex pb-1'
+								onClick={() => setShowModal(false)}>
+								Close
+							</button>
+						</div>
+					</div>
 				</div>
 			</div>
-		</div>
+		</Modal> : 
 		<Modal showModal={showModal} closeModal={() => setShowModal(false)} openModal={() => setShowModal(true)}>
 			<div className='flex h-[100vh] w-[100vw] justify-center items-center' role="dialog" aria-modal="true" tabIndex={0}>
 				<div className='bg-white h-fit w-2/5 border-4 border-blue-400 border-solid rounded-lg'>
@@ -259,6 +284,7 @@ const SignUp: React.FC<SignUpProps> = () => {
 				</div>
 			</div>
 		</Modal>
+}
     </div>
   );
 };

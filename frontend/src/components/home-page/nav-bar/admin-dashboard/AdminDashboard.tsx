@@ -11,7 +11,7 @@ import list from '../../../../images/list.png'
 import search from '../../../../images/search.png'
 import { Link } from 'react-router-dom';
 import UserController from '../../../../controllers/UserController';
-import { Cog6ToothIcon, ArrowRightStartOnRectangleIcon, FolderPlusIcon, ListBulletIcon, TrophyIcon, DocumentMagnifyingGlassIcon, ChartBarIcon} from '@heroicons/react/24/solid';
+import { Cog6ToothIcon, ArrowRightStartOnRectangleIcon, FolderPlusIcon, ListBulletIcon, TrophyIcon, DocumentMagnifyingGlassIcon, ChartBarIcon, InboxIcon} from '@heroicons/react/24/solid';
 
 const AdminDashboard = ({
 
@@ -35,16 +35,21 @@ const AdminDashboard = ({
 	}
 
 	return (
-		<div className='h-full flex flex-col py-20'>
+		<div className='h-full flex flex-col'>
 			
-			<div className='flex flex-col items-start pl-10 bg-white pb-8'>
-				<h1 className='text-6xl text-primary w-fit'>
-					Dashboard
-				</h1>
-				<h2 className='text-4xl text-secondary w-fit flex items-center flex-col'>
-					Welcome, {user?.username}!
-					<div className='bg-primary h-[4px] -mt-4 w-[100%]'/>
-				</h2>
+			<div className='flex flex-row justify-between px-10 pb-8 pt-1'>
+				<div className='flex flex-col items-start'>
+					<h1 className='text-6xl text-primary w-fit'>
+						Dashboard
+					</h1>
+					<h2 className='text-4xl text-secondary w-fit flex items-center flex-col'>
+						Welcome, {user?.username}!
+						<div className='bg-primary h-[4px] -mt-4 w-[100%]'/>
+					</h2>
+				</div>
+				<Link to='/messages'>
+					<ButtonIcon heroicon={<InboxIcon/>} label={"Messages"} text={user?.preferences.hc ? 'text-white' : 'text-black'}/>
+				</Link>
 			</div>
 			
 				

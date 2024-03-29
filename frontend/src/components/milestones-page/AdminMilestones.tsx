@@ -108,7 +108,7 @@ const AdminMilestonesPage = () => {
     }
 
     return (
-        <div className="py-24 px-5 flex flex-col gap-10">
+        <div className="p-8 px-6 flex flex-col gap-10">
             <div className="flex flex-col gap-2">
                 <h1 className="text-3xl font-bold">Grants Awarded</h1>
                 {approvedApplications.length > 0 ? 

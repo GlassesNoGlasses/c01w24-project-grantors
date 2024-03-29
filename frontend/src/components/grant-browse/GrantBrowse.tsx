@@ -41,8 +41,8 @@ const UserGrantBrowse = () => {
     };
 
     return (
-        <div className="flex flex-col lg:flex-row gap-8 pl-8 py-20 h-[100vh]">
-            <div className="flex items-center relative top-16">
+        <div className="flex flex-col lg:flex-row gap-8 pl-8 h-[85vh]">
+            <div className="flex items-center">
                 <GrantFilter grants={grants} setGrants={setFilteredGrants} />
             </div>
 

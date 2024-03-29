@@ -26,6 +26,7 @@ const COLLECTIONS = {
 	grants: "grants",
 	favouriteGrants: "favouriteGrants",
 	files: "files",
+	messages: "messages",
 };
 
 // Uploading files
@@ -225,6 +226,36 @@ app.get('/user', express.json(), async (req, res) => {
 	});
 });
 
+app.get('/user/:userID', express.json(), async (req, res) => {
+	try {
+		const uid = req.params.userID
+		const userCollection = db.collection(COLLECTIONS.users);
+		const user = await userCollection.findOne({ _id: new ObjectId(uid) });
+
+		if (!user) {
+			return res.status(404).send(uid);
+		}
+
+		// Do not return password hash
+		res.status(200).json({ 
+			response: {
+				accountID: user._id,
+				username: user.username,
+				email: user.email,
+				firstName: user.firstName,
+				lastName: user.lastName,
+				isAdmin: user.isAdmin,
+				isSysAdmin: user.isSysAdmin,
+				organization: user.organization,
+				preferences: user.preferences,
+			} 
+		});
+	} catch (error) {
+		console.error(error);
+		res.status(500).json({ error: "Internal server error." });
+	}
+});
+
 app.patch('/users/:userID/favourites', express.json(), async (req, res) => {
 	const userID = req.params.userID;
 	const { grantID } = req.body;
@@ -322,6 +353,28 @@ app.get('/users/:userID/favourites', express.json(), async (req, res) => {
 		}).toArray();
 
 		res.status(200).json({ response: grants.map(grant => dbIDToFrontendID(grant)) });
+	} catch (error) {
+		console.error(error);
+		res.status(500).json({ error: "Internal server error." });
+	}
+});
+
+app.get('/users/:userEmail', express.json(), async (req, res) => {
+	const userEmail = req.params.userEmail;
+
+	if (!userEmail) {
+		return res.status(400).json({ error: "Invalid request." });
+	}
+
+	try {
+		const userCollection = db.collection(COLLECTIONS.users);
+		const user = await userCollection.findOne({ email: userEmail });
+
+		if (!user) {
+			return res.status(404).send({ error: "User not found." });
+		}
+
+		res.status(200).json({ response: {...dbIDToFrontendID(user), accountID: user._id} });
 	} catch (error) {
 		console.error(error);
 		res.status(500).json({ error: "Internal server error." });
@@ -547,14 +600,22 @@ app.post("/application", express.json(), async (req, res) => {
 });
 
 app.get("/applications", express.json(), async (req, res) => {
-	const { userID, organization } = req.query;
+    const { userID, organization } = req.query;
 
-	if (!userID && !organization) {
-		return res.status(400).json({ error: "Missing required parameters. Include userID or organization." });
-	}
+    if (!userID && !organization) {
+        return res.status(400).json({ error: "Missing required parameters. Include userID or organization." });
+    }
 
 	verifyRequestAuth(req, async (err, decoded) => {
-		if (err || (userID && userID != decoded.userID)) {
+		if (err) {
+			return res.status(401).send("Unauthorized.");
+		}
+
+		const userCollection = db.collection(COLLECTIONS.users);
+		const user = await userCollection.findOne({ _id: new ObjectId(decoded.userID) });
+
+		if (userID && !user.isSysAdmin && userID != decoded.userID) {
+			console.log("USER INVALID")
 			return res.status(401).send("Unauthorized.");
 		}
 
@@ -568,13 +629,11 @@ app.get("/applications", express.json(), async (req, res) => {
 		}
 
 		if (organization) {
-			const userCollection = db.collection(COLLECTIONS.users);
-			const user = await userCollection.findOne({ _id: new ObjectId(decoded.userID) });
 			if (!user) {
 				return res.status(404).send("Organization not found.")
 			}
 
-			if (user.organization != organization) {
+			if (user.organization != organization && !user.isSysAdmin) {
 				return res.status(401).send("Unauthorized.");
 			}
 
@@ -749,8 +808,7 @@ app.get("/files/downloadable/:fileID", express.json(), async (req, res) => {
 		if (!file) {
 			return res.status(404).send("File not found.")
 		}
-
-		console.log(file.path);
+		
 		return res.download(file.path, file.title, (err) => {
 			if (err) {
 				// Error in downloading a file.
@@ -925,3 +983,232 @@ app.put('/application/:applicationID/funding', express.json(), async (req, res) 
         res.status(500).json({ error: "Internal server error." });
     }
 });
+
+app.post('/sendMessage/:userEmail', express.json(), async (req, res) => {
+	const userEmail = req.params.userEmail;
+	const message = req.body;
+
+	if (!message || !userEmail) {
+		return res.status(400).json({ error: "Invalid request: 'userEmail' and 'message' are required." });
+	}
+
+	try {
+		const userCollection = db.collection(COLLECTIONS.users);
+		const user = await userCollection.findOne({ email: userEmail });
+
+		if (!user) {
+			return res.status(404).send("User not found.")
+		}
+
+		const messageCollection = db.collection(COLLECTIONS.messages);
+
+		const messageID = await messageCollection.insertOne({
+			title: message.title,
+			senderEmail: userEmail,
+			receiverEmail: message.receiverEmail,
+			description: message.description,
+			dateSent: new Date(),
+			read: message.read,
+			fileNames: message.fileNames
+		});
+		
+		res.status(200).json({ message: "Message sent successfully." });
+	} catch (error) {
+		console.error("Error sending message: ", error);
+		res.status(500).json({ error: error.message });
+	}
+});
+
+app.get('/getMessage/:messageID', express.json(), async (req, res) => {
+	const messageID = req.params.messageID;
+
+	if (!messageID) {
+		return res.status(400).json({ error: "Invalid request: 'messageID' is required." });
+	}
+
+	try {
+
+		const messageCollection = db.collection(COLLECTIONS.messages);
+		const message = await messageCollection.findOne({ _id: new ObjectId(messageID) });
+
+		if(!message) {
+			return res.status(404).json({message: "Message not found."});
+		}
+		
+		res.status(200).json({ response: message });
+	} catch (error) {
+		console.error("Error sending message: ", error);
+		res.status(500).json({ error: error.message });
+	}
+});
+
+app.get('/getSentMessages/:userEmail', express.json(), async (req, res) => {
+	const userEmail = req.params.userEmail;
+
+	if (!userEmail) {
+		return res.status(400).json({ error: "Invalid request: 'userEmail' is required." });
+	}
+
+	try {
+		const userCollection = db.collection(COLLECTIONS.users);
+		const user = await userCollection.findOne({ email: userEmail });
+
+		if (!user) {
+			return res.status(404).send("User not found.")
+		}
+
+		const messageCollection = db.collection(COLLECTIONS.messages);
+		const sentMessages = await messageCollection.find({ senderEmail: userEmail }).toArray();
+		
+		res.status(200).json({
+			response: sentMessages.map((message) => dbIDToFrontendID(message))
+		});
+	} catch (error) {
+		console.error("Error sending message: ", error);
+		res.status(500).json({ error: error.message });
+	}
+});
+
+app.get('/getReceivedMessages/:userEmail', express.json(), async (req, res) => {
+	const userEmail = req.params.userEmail;
+
+	if (!userEmail) {
+		return res.status(400).json({ error: "Invalid request: 'userEmail' is required." });
+	}
+
+	try {
+		const userCollection = db.collection(COLLECTIONS.users);
+		const user = await userCollection.findOne({ email: userEmail });
+
+		if (!user) {
+			return res.status(404).json({message: "User not found."})
+		}
+
+		const messageCollection = db.collection(COLLECTIONS.messages);
+		const receivedMessages = await messageCollection.find({ receiverEmail: userEmail }).toArray();
+		
+		res.status(200).json({
+			response: receivedMessages.map((message) => dbIDToFrontendID(message))
+		});
+	} catch (error) {
+		console.error("Error sending message: ", error);
+		res.status(500).json({ error: error.message });
+	}
+});
+
+app.put('/markMessageRead/:messageID', express.json(), async (req, res) => {
+	const messageID = req.params.messageID;
+	const message = req.body;
+
+	if (!messageID || !message) {
+		return res.status(400).json({ error: "Invalid request: 'message' or 'messageID' are required." });
+	}
+
+	try {
+		const messageCollection = db.collection(COLLECTIONS.messages);
+
+		await messageCollection.updateOne(
+			{ _id: new ObjectId(messageID)},
+			{$set: {
+			title: message.title,
+			senderEmail: message.senderEmail,
+			receiverEmail: message.receiverEmail,
+			description: message.description,
+			dateSent: message.dateSent,
+			read: true,
+			fileNames: message.fileNames
+		}});
+		
+		res.status(200).json({ message: "Message read successfully." });
+	} catch (error) {
+		console.error("Error sending message: ", error);
+		res.status(500).json({ error: error.message });
+	}
+});
+app.get('/users', express.json(), async (req, res) => {
+	try {
+		const userCollection = db.collection(COLLECTIONS.users)
+
+		const users = await userCollection.find({}).toArray();
+
+		const modifiedUsers = users.map(user => {
+            const { _id, ...rest } = user;
+            return { accountID: _id, ...rest };
+        });
+		
+		res.status(200).json({ users: modifiedUsers})
+	} catch (error) {
+		res.status(500).json({ error: "Internal server error." });
+	}
+})
+
+app.delete('/users/:userID', express.json(), async (req, res) => {
+	try {
+		const uid = req.params.userID
+
+		const userCollection = db.collection(COLLECTIONS.users)
+
+		const deleted = await userCollection.deleteOne({
+			_id: new ObjectId(uid)
+		})
+
+		if (deleted.deletedCount != 1) {
+			res.status(404).json({ message: 'no changes have been made'})
+		}
+		else {
+			res.status(200).json({ message: `user ${uid} deleted`})
+		}
+		
+	} catch (error) {
+		res.status(500).json({ error: "Internal server error." });
+	}
+})
+
+app.put('/users/:userID', express.json(), async (req, res) => {
+	try {
+		const uid = req.params.userID
+
+		const { username, email, firstName, lastName, password } = req.body
+
+		const userCollection = db.collection(COLLECTIONS.users)
+		
+		const usernameExists = await userCollection.findOne({
+			username: username
+		})
+
+		const emailExists = await userCollection.findOne({
+			email: email
+		})
+	
+		if ((usernameExists && !usernameExists._id.equals(uid)) || (emailExists && !emailExists._id.equals(uid))) {
+				res.status(400).json({message: 'username or email already exists'})
+				return
+		}
+		
+		const cur = await userCollection.findOne({
+			_id: new ObjectId(uid)
+		})
+
+		const update = await userCollection.updateOne(
+			{ _id: new ObjectId(uid)},
+			{ $set: {
+				username: username,
+				email: email,
+				firstName: firstName,
+				lastName: lastName,
+				password: password === '' ? cur.password :
+				await bcrypt.hash(password, 10)
+			}}
+		)
+
+		if (update.matchedCount !== 1) {
+			res.status(404).json({message: "error updating user"})
+		} 
+		else {
+			res.status(200).json({message: 'account infomation updated'})
+		}
+	} catch (error) {
+		res.status(500).json({ error: "Internal server error." });
+		console.log(error)
+	}
+})
