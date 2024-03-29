@@ -2,9 +2,11 @@ import { useUserContext } from '../contexts/userContext';
 import { useEffect, useState } from "react";
 import { GrantStatsPageProps, TableValues } from "./GrantStatsPageProps";
 import ApplicationsController from "../../controllers/ApplicationsController"
+import GrantsController from "../../controllers/GrantsController"
 import { Application, ApplicationStatus } from "../../interfaces/Application";
 import { Chart } from "react-google-charts";
 import {User} from '../../interfaces/User'
+import {Grant} from '../../interfaces/Grant'
 
 const GrantStatsPage = ({}: GrantStatsPageProps) => {
     const { user } = useUserContext();
@@ -18,18 +20,14 @@ interface DisplayStatsProps {
 const AdminDisplayStats = () => {
     return(
         <div>
-
         </div>
     )
-}
-
-const DisplayAdminStats = () => {
-    return <div></div>
 }
 
 const DisplayUserStats = ({optionalUser} : DisplayStatsProps) => {
     const {user} = useUserContext();
     const [applications, setApplications] = useState<Application[]>([]);
+    const [grants, setGrants] = useState<Grant[]>([]);
     const header = ["Category", "Frequency", { role: "style" }];
 
     const options = {
@@ -64,13 +62,18 @@ const DisplayUserStats = ({optionalUser} : DisplayStatsProps) => {
         }
     }, [user, optionalUser]);
 
-    const grantsApplied = countTotalAppliedAmount(applications);
-    const grantsAwarded = countTotalAwardedAmount(applications);
+    useEffect(() => {
+        if (user) {
+            GrantsController.fetchGrants(appliedGrants(applications)).then((grants: Grant[] | undefined) => {
+                if (grants) {
+                    setGrants(grants);
+                }
+            });
+        }
 
-    const grantValueData = formatData({
-        [`Applied Amount: ${grantsApplied}`]: grantsApplied, 
-        [`Received Amount: ${grantsAwarded}`]: grantsAwarded
-    }, header)
+    }, [user]);
+
+    const grantsAwarded = countTotalAwardedAmount(applications);
 
     const grantCategoriesData = formatData(
         countCategories(applications), 
@@ -93,10 +96,9 @@ const DisplayUserStats = ({optionalUser} : DisplayStatsProps) => {
     return(
         <div className='overflow-auto py-10 px-20 h-[90vh]'>
             <div className=" bg-white  rounded-xl border-4 border-primary shadow-2xl shadow-black"> 
-                <div className="flex items-center">
-                    <div className="m-10 text-center text-3xl">Total Grant Funding Received</div>
-                    <div className="m-10 text-center text-3xl">${grantsAwarded}</div>
-                    <Chart chartType="ColumnChart" width="100%" height="400px" data={grantValueData} options={options} />
+                <div className="flex items-center mt-10">
+                    <div className="m-10 text-center text-3xl">Total Grant Funding Applied (Max Estimate): ${countTotalAppliedAmount(grants)}</div>
+                    <div className="m-10 text-center text-3xl">Total Grant Funding Received: ${grantsAwarded}</div>
                 </div>
                 
                 <div className="flex items-center">
@@ -145,9 +147,7 @@ const formatData = (values: TableValues, header: any[]) =>
         i = i + 1;
         result.push(arr);
     }
-
     return result
-
 }
 
 const countApplicationsSubmitted = (applications: Application[]) => applications.filter((application) => application.status === ApplicationStatus.submitted).length;
@@ -160,7 +160,18 @@ const countApplicationsApproved = (applications: Application[]) => applications.
 
 const countApplicationsRejected = (applications: Application[]) =>  applications.filter((application) => application.status === ApplicationStatus.rejected).length;
 
-const countTotalAppliedAmount = (applications: Application[]) => applications.filter((application) => application.status != ApplicationStatus.rejected).reduce((n, {awarded}) => n + awarded, 0);
+const appliedGrants = (applications: Application[]) => {
+    const values: Application[] = applications.filter((application) => application.status !== ApplicationStatus.rejected)
+    const grants: string[] = [];
+   
+    for (let i=0; i<values.length; i++)
+    {
+        grants.push(values[i].grantID)
+    }
+
+    return grants
+}
+const countTotalAppliedAmount = (grants: Grant[]) => grants.reduce((n, {maxAmount}) => n + maxAmount.valueOf(), 0);
 
 const countTotalAwardedAmount = (applications: Application[]) => applications.filter((application) => application.status === ApplicationStatus.approved).reduce((n, {awarded}) => n + awarded, 0);
 
