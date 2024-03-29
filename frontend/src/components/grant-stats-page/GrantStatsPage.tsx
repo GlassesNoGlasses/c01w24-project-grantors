@@ -68,23 +68,26 @@ const DisplayStats = () => {
     }, header);
 
     return(
-        <div className=" bg-white m-20 rounded-xl border-4 border-primary shadow-2xl shadow-black h-fit"> 
-            <div className="flex items-center">
-                <div className="m-10 text-center text-3xl">Total Grant Funding Received</div>
-                <div className="m-10 text-center text-3xl">${grantsAwarded}</div>
-                <Chart chartType="ColumnChart" width="100%" height="400px" data={grantValueData} options={options} />
-            </div>
-            
-            <div className="flex items-center">
-                <div className="m-10 ml-20 text-center text-3xl">Grant Categories Breakdown</div>
-                <Chart chartType="ColumnChart" width="100%" height="400px" data={grantCategoriesData} options={options} />
-            </div>
-            
-            <div className="flex items-center">
-                <div className="m-10 text-center text-3xl">Grant Status Breakdown</div>
-                <Chart chartType="ColumnChart" width="100%" height="400px" data={grantStatusData} options={options} />
+        <div className='overflow-auto py-10 px-20 h-[90vh]'>
+            <div className=" bg-white  rounded-xl border-4 border-primary shadow-2xl shadow-black"> 
+                <div className="flex items-center">
+                    <div className="m-10 text-center text-3xl">Total Grant Funding Received</div>
+                    <div className="m-10 text-center text-3xl">${grantsAwarded}</div>
+                    <Chart chartType="ColumnChart" width="100%" height="400px" data={grantValueData} options={options} />
+                </div>
+                
+                <div className="flex items-center">
+                    <div className="m-10 ml-20 text-center text-3xl">Grant Categories Breakdown</div>
+                    <Chart chartType="ColumnChart" width="100%" height="400px" data={grantCategoriesData} options={options} />
+                </div>
+                
+                <div className="flex items-center">
+                    <div className="m-10 text-center text-3xl">Grant Status Breakdown</div>
+                    <Chart chartType="ColumnChart" width="100%" height="400px" data={grantStatusData} options={options} />
+                </div>
             </div>
         </div>
+        
         
     );
 }
@@ -132,4 +135,5 @@ const countTotalAppliedAmount = (applications: Application[]) => applications.fi
 
 const countTotalAwardedAmount = (applications: Application[]) => applications.filter((application) => application.status === ApplicationStatus.approved).reduce((n, {awarded}) => n + awarded, 0);
 
-export default GrantStatsPage;
+export {GrantStatsPage, countApplicationsApproved, countApplicationsInProgress, countApplicationsRejected, countApplicationsResolved, countApplicationsSubmitted,
+                countTotalAppliedAmount, countTotalAwardedAmount};

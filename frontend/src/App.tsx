@@ -14,7 +14,7 @@ import SavedGrants from "./components/saved-grants/SavedGrants";
 import GrantApply from "./components/grant-apply/GrantApply";
 import ApplicationReview from "./components/applications/admin/ApplicationReview";
 import DefaultPage from "./components/home-page/nav-bar/default-page/DefaultPage";
-import GrantsStatsPage from "./components/grant-stats-page/GrantStatsPage";
+import { GrantStatsPage } from "./components/grant-stats-page/GrantStatsPage";
 import TestFileDisplay from "./components/files/TestFileDisplay";
 import ApplicationView from "./components/home-page/nav-bar/client-dashboard/ApplicationView"
 import NotFoundPage from "./components/not-found-page/NotFoundPage";
@@ -85,7 +85,7 @@ function App() {
 							<Route path="milestones" element={<MilestonesPage />} />
 							<Route path="settings" element={<Settings />} />
 							<Route path="*" element={<NotFoundPage />} />
-							<Route path="/stats" element={<GrantsStatsPage />} />
+							<Route path="/stats" element={<GrantStatsPage />} />
 					</Route>
 					</Routes>
 				</div>
