@@ -5,10 +5,17 @@ import { useUserContext } from "../contexts/userContext";
 import { GrantMilestone } from "../../interfaces/Grant";
 import { Check, X } from "heroicons-react";
 import { CheckIcon, XMarkIcon } from "@heroicons/react/24/solid";
+import { Modal } from '../modal/Modal'; 
 
 const UserMilestonesPage = () => {
     const { user } = useUserContext();
     const [approvedApplications, setApprovedApplications] = useState<Application[]>([]);
+    const [showModal, setShowModal] = useState<boolean>(false);
+
+    
+    const handleCloseModalAndNavigate = () => {
+        setShowModal(false);
+    };
 
     // Fetch user applications
     useEffect(() => {
@@ -44,7 +51,7 @@ const UserMilestonesPage = () => {
                 console.log("Milestone submission failed.");
                 return;
             }
-
+            setShowModal(true);
             console.log("Milestone submitted successfully.");
             setApprovedApplications(updatedApplications);
         });
@@ -109,6 +116,25 @@ const UserMilestonesPage = () => {
                         <GrantItem key={application.id} application={application} />) :
                     <p className="text-lg">There have been no grants awarded to you.</p>}
             </div>
+            <Modal showModal={showModal} closeModal={handleCloseModalAndNavigate} openModal={() => setShowModal(true)}>
+			<div className='flex h-[100vh] w-[100vw] justify-center items-center'>
+				<div className='bg-white h-fit w-2/5 border-4 border-blue-400 border-solid rounded-lg'>
+					<div className='h-full w-full'>
+						<p className='text-xl text-center font-semibold'>
+							{`You have submitted created the milestone successfully.`}
+						</p>
+						<div className='flex flex-row justify-center'>
+							<button className='p-2 px-5 m-2 bg-blue-500 hover:bg-blue-600 active:bg-blue-700
+								text-white font-bold rounded-lg shadow-md transition-colors duration-150 ease-in
+								text-base text-center justify-center align-middle flex pb-1'
+								onClick={handleCloseModalAndNavigate}>
+								Close
+							</button>
+						</div>
+					</div>
+				</div>
+			</div>
+		</Modal>
         </div>
     );
 };
