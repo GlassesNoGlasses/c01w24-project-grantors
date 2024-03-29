@@ -97,7 +97,6 @@ const ApplicationReview = () => {
 
             FileController.fetchUserFSFiles(application.applicantID).then((files: FSFile[] | undefined) => {
                 if (files) {
-                    console.log(files);
                     const neededFiles = files.filter((file: FSFile) => {
                         return application?.responses.some((response: GrantQuestion) => {
                             return response.answer?.includes(file.title);

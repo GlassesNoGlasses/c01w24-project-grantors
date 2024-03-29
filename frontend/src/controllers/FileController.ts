@@ -145,6 +145,7 @@ export default class FileController {
      // Returns the FSFile of the corresponding userID, or undefined.
      static async fetchUserFSFiles(userID: string): Promise<FSFile[] | undefined> {
         if (!userID) {
+            console.log("here")
             return undefined;
         };
 
@@ -155,6 +156,7 @@ export default class FileController {
 
             // Bad request, return undefined.
             if (!res.ok) {
+                console.log("here1")
                 return undefined;
             }
 
@@ -163,6 +165,7 @@ export default class FileController {
             });
 
             if (!fsFiles) {
+                console.log("here2")
                 return undefined;
             }
 

@@ -158,4 +158,4 @@ const countTotalAppliedAmount = (applications: Application[]) => applications.fi
 
 const countTotalAwardedAmount = (applications: Application[]) => applications.filter((application) => application.status === ApplicationStatus.approved).reduce((n, {awarded}) => n + awarded, 0);
 
-export {GrantStatsPage, DisplayStats};
+export {GrantStatsPage, DisplayUserStats};

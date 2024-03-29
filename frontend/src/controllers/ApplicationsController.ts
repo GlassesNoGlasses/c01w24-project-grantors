@@ -42,6 +42,7 @@ export default class ApplicationsController {
                     'Content-Type': 'application/json',
                     'Authorization': `Bearer ${user.authToken}`
                 },
+
             });
 
             if (res.ok) {
@@ -67,7 +68,7 @@ export default class ApplicationsController {
                 {
                     method: "GET",
                     headers: {
-                        "Content-Type": "application/json"
+                        "Content-Type": "application/json",
                         // TODO: send user.authToken to authenticate submission
                     },
                 });
@@ -90,7 +91,8 @@ export default class ApplicationsController {
                 {
                     method: "POST",
                     headers: {
-                        "Content-Type": "application/json"
+                        "Content-Type": "application/json",
+                        'Authorization': `Bearer ${user.authToken}`
                         // TODO: send user.authToken to authenticate submission
                     },
                     body: JSON.stringify(application),
