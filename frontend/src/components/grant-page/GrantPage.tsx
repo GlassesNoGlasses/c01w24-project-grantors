@@ -50,7 +50,7 @@ const GrantFound = ({ grant }: { grant: Grant }) => {
                         <div key={index}
                         className='p-2 px-4 border-2 border-magnify-dark-blue rounded-md
                                    flex flex-col gap-2 bg-magnify-light-blue'>
-                            <h4 className='text-xl'>{milestone.title}</h4>
+                            <h3 className='text-xl'>{milestone.title}</h3>
                             <p className='text-sm'>{`Due: ${new Date(milestone.dueDate).toDateString()}`}</p>
                             <p className='text-base'>{milestone.description}</p>
                         </div>
