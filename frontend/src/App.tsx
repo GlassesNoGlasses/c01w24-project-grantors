@@ -28,7 +28,6 @@ import UserList from "./components/user-list/UserList/UserList";
 import EditUser from "./components/settings-page/EditUser";
 import MilestonesPage from "./components/milestones-page/MilestonesPage";
 import { MessageView } from "./components/messages/MessageView";
-import GranteeStats from "./components/user-list/GranteeStats";
 import UserStats from "./components/user-list/UserList/UserStats";
 
 
