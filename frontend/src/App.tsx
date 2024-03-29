@@ -26,6 +26,8 @@ import FundingView from "./components/applications/admin/fundingView"
 import UserList from "./components/user-list/UserList/UserList";
 import EditUser from "./components/settings-page/EditUser";
 import MilestonesPage from "./components/milestones-page/MilestonesPage";
+import GranteeStats from "./components/user-list/GranteeStats";
+import UserStats from "./components/user-list/UserList/UserStats";
 
 
 
@@ -70,6 +72,7 @@ function App() {
 							<Route path="editGrant/:grantID" element={<EditGrant />} />
 							<Route path="users" element={<UserList />} />
 							<Route path="users/:userID/" element={<EditUser/>} />
+							<Route path="users/:userID/stats" element={<UserStats/>} />
 							<Route path="grants" element={<GrantBrowse />} />
 							<Route path="grants/:grantID" element={<GrantPage />} />
 							<Route path="admin/grants" element={<AdminGrants />} />

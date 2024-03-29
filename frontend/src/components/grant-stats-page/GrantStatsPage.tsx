@@ -4,13 +4,18 @@ import { GrantStatsPageProps, TableValues } from "./GrantStatsPageProps";
 import ApplicationsController from "../../controllers/ApplicationsController"
 import { Application, ApplicationStatus } from "../../interfaces/Application";
 import { Chart } from "react-google-charts";
+import {User} from '../../interfaces/User'
 
 const GrantStatsPage = ({}: GrantStatsPageProps) => {
 
     return <DisplayStats />;
 };
 
-const DisplayStats = () => {
+interface DisplayStatsProps {
+    optionalUser? : User
+}
+
+const DisplayStats = ({optionalUser} : DisplayStatsProps) => {
     const {user} = useUserContext();
     const [applications, setApplications] = useState<Application[]>([]);
     const header = ["Category", "Frequency", { role: "style" }];
@@ -38,10 +43,14 @@ const DisplayStats = () => {
             ApplicationsController.fetchUserApplications(user).then((applications: Application[]) => {
                 setApplications(applications);
             });
-            
         }
-        console.log(applications);
-    }, [user]);
+        
+        if (optionalUser) {
+            ApplicationsController.fetchUserApplications(optionalUser).then((applications: Application[]) => {
+                setApplications(applications);
+            });
+        }
+    }, [user, optionalUser]);
 
     const grantsApplied = countTotalAppliedAmount(applications);
     const grantsAwarded = countTotalAwardedAmount(applications);
@@ -135,5 +144,4 @@ const countTotalAppliedAmount = (applications: Application[]) => applications.fi
 
 const countTotalAwardedAmount = (applications: Application[]) => applications.filter((application) => application.status === ApplicationStatus.approved).reduce((n, {awarded}) => n + awarded, 0);
 
-export {GrantStatsPage, countApplicationsApproved, countApplicationsInProgress, countApplicationsRejected, countApplicationsResolved, countApplicationsSubmitted,
-                countTotalAppliedAmount, countTotalAwardedAmount};
+export {GrantStatsPage, DisplayStats};

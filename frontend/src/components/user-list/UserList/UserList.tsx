@@ -31,7 +31,7 @@ const UserCard = ({ user, curUser} : {user: User, curUser: User | null}) => {
         
         <div className='flex flex-col gap-4 items-end'>
             {user.isSysAdmin ? <></> :
-            <Link to='/statistics' className='bg-primary hover:bg-secondary h-fit w-full py-2 px-4
+            <Link to={`/users/${user.accountID}/stats`} className='bg-primary hover:bg-secondary h-fit w-full py-2 px-4
                 rounded-xl text-white text-center'>
                 Statistics
             </Link>}
