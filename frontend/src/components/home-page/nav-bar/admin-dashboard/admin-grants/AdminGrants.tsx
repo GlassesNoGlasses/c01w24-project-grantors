@@ -144,11 +144,11 @@ const AdminGrants = () => {
                     </h2>
 
                     <Table items={unpublishedGrants}
-                    columns={columns}
-                    itemsPerPageOptions={itemsPerPageOptions}
-                    defaultIPP={5}
-                    defaultSort={columns[0]}
-                    onRowClick={onSavedGrantRowClick}
+                        columns={columns}
+                        itemsPerPageOptions={itemsPerPageOptions}
+                        defaultIPP={5}
+                        defaultSort={columns[0]}
+                        onRowClick={onSavedGrantRowClick}
                     />
                 </div>
                  : (

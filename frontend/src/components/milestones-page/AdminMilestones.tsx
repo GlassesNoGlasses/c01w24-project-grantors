@@ -5,10 +5,14 @@ import { useUserContext } from "../contexts/userContext";
 import ApplicationsController from "../../controllers/ApplicationsController";
 import UserController from "../../controllers/UserController";
 import { CheckIcon, XMarkIcon } from "@heroicons/react/24/solid";
+import { FSFile } from "../../interfaces/FSFile";
+import FileController from "../../controllers/FileController";
+import { DownloadWrapper } from "../files/download/DownloadWrapper";
 
 const AdminMilestonesPage = () => {
     const { user } = useUserContext();
     const [approvedApplications, setApprovedApplications] = useState<Application[]>([]);
+    const [neededFiles, setFiles] = useState<FSFile[]>([]); // [FSFile
 
     // Fetch org applications
     useEffect(() => {
@@ -22,6 +26,26 @@ const AdminMilestonesPage = () => {
             setApprovedApplications(approved);
         });
     }, [user]);
+
+    useEffect(() => {
+        if (user) {
+            approvedApplications.forEach((application: Application) => {
+                FileController.fetchUserFSFiles(application?.applicantID).then((files: FSFile[] | undefined) => {
+                    if (files) {
+                        const neededFiles = files.filter((file: FSFile) => {
+                            return approvedApplications?.some((application: Application) => {
+                                return application.milestones.some((milestone: GrantMilestone) => {
+                                    return milestone.evidence.files?.includes(file.title);
+                                });
+                            });
+                        });
+                        setFiles((prev) => [...prev, ...neededFiles]);
+                    }
+                });
+            });
+        }
+        
+    }, [approvedApplications, user]);
 
     const handleMilestoneComplete = (milestone: GrantMilestone) => {
         if (!user) return;
@@ -51,6 +75,18 @@ const AdminMilestonesPage = () => {
         });
     }
 
+    const formatFileLink = (file: string) => {
+        const fsFile = neededFiles.find((fsFile: FSFile) => fsFile.title === file);
+        return fsFile?.file ?
+                <div key={file} className="flex flex-col">
+                    {
+                        <DownloadWrapper element={<span className="underline">{file}</span>} file={fsFile.file} /> 
+                    }
+                </div>
+                :
+                <p key={file} className="block text-gray-700 font-semibold">'No files uploaded.'</p>;
+    }
+
     const MilestoneItem = ({ milestone }: { milestone: GrantMilestone }) => {
         return (
             <div className="flex flex-col gap-2 py-4 px-5 border-2 border-magnify-dark-blue rounded-md bg-magnify-light-blue">
@@ -63,9 +99,19 @@ const AdminMilestonesPage = () => {
                 <div className="flex flex-col gap-2">
                     <div className="flex flex-col gap-1">
                         <label htmlFor="evidence" className="text-base">Evidence</label>
+                        <div className="flex flex-col max-h-40 overflow-y-auto">
+                                {
+                                    milestone.evidence.files?.length ?
+                                    milestone.evidence.files.map((file) => (
+                                        formatFileLink(file)
+                                    ))
+                                    :
+                                    <p className="block text-gray-700 font-semibold">'No files uploaded.'</p>
+                                }
+                        </div>
                         <textarea name="evidence" id="evidence" required readOnly
                             className="p-3 px-5 text-base rounded-md ring-2 ring-primary focus:ring-secondary"
-                            value={milestone.evidence}></textarea>
+                            value={milestone.evidence.text}></textarea>
                     </div>
                     <div className="flex flex-row justify-end">
                         {!milestone.completed && <button onClick={() => handleMilestoneComplete(milestone)}

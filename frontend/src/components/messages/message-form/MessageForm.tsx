@@ -9,6 +9,8 @@ import { GrantQuestionFileType, GrantQuestionFileTypesToAccept } from '../../fil
 import MessageController from '../../../controllers/MessageController'
 import { useUserContext } from '../../contexts/userContext'
 import FileController from '../../../controllers/FileController'
+import { useNavigate } from 'react-router-dom';
+
 
 export const MessageForm = ({
     title,
@@ -35,6 +37,14 @@ export const MessageForm = ({
   const [message, setMessage] = useState<Message>(emptyMessage);
   const [uploadedFiles, setUploadedFiles] = useState<File[]>([]);
   const {user} = useUserContext();
+  const [showSubmitModal, setShowSubmitModal] = useState<boolean>(false);
+  const navigate = useNavigate();
+
+
+  const handleCloseModalAndNavigate = () => {
+    setShowSubmitModal(false);
+    callbackClose();
+};
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -56,7 +66,7 @@ export const MessageForm = ({
       if (setCreatedMessage) {
         response ? setCreatedMessage(true) : setCreatedMessage(false);
       }
-      callbackClose();
+      setShowSubmitModal(true);
     })
   };
 
@@ -148,6 +158,25 @@ export const MessageForm = ({
           </button>
 
         </div>
+        <Modal showModal={showSubmitModal} closeModal={handleCloseModalAndNavigate} openModal={() => setShowSubmitModal(true)}>
+			<div className='flex h-[100vh] w-[100vw] justify-center items-center'>
+				<div className='bg-white h-fit w-2/5 border-4 border-blue-400 border-solid rounded-lg'>
+					<div className='h-full w-full'>
+						<p className='text-xl text-center font-semibold'>
+							{`You have successfully sent the message.`}
+						</p>
+						<div className='flex flex-row justify-center'>
+							<button className='p-2 px-5 m-2 bg-blue-500 hover:bg-blue-600 active:bg-blue-700
+								text-white font-bold rounded-lg shadow-md transition-colors duration-150 ease-in
+								text-base text-center justify-center align-middle flex pb-1'
+								onClick={handleCloseModalAndNavigate}>
+								Close
+							</button>
+						</div>
+					</div>
+				</div>
+			</div>
+		</Modal>
       </form>
     </Modal>
   )
