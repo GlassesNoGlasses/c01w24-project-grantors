@@ -132,7 +132,7 @@ const GrantForm = ({ user, grant }: GrantFormProps) => {
         setQuestionList(newQuestionList);
 
         const newUploadedFiles = [...uploadedFiles];
-        newUploadedFiles[index] = droppedFiles;
+        newUploadedFiles[index] = [...uploadedFiles[index], ...droppedFiles];
         setUploadedFiles(newUploadedFiles);
     }
 

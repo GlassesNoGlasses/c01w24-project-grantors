@@ -1,3 +1,8 @@
+export interface MilestoneEvidence {
+    text: string;
+    files: string[];
+}
+
 export enum GrantQuestionType {
     TEXT = "Text",
     DROP_DOWN = "Drop Down",
@@ -22,7 +27,7 @@ export interface GrantMilestone {
     description: string;
     dueDate: Date;
     completed: boolean;
-    evidence: string;
+    evidence: MilestoneEvidence;
 }
 
 export interface Grant {

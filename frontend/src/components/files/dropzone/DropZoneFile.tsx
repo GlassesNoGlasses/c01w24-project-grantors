@@ -15,14 +15,11 @@ const DropZoneFile = ({
 
   // TODO: Remove after debugging
   React.useEffect(() => {
-    console.log("EFFECT")
-    console.log(droppedFiles);
     FileCallback(droppedFiles);
   }, [droppedFiles]);
   
   // Functions
   const OnDrop = (files: File[]): void => {
-    console.log(files);
     UpdateDroppedFiles(files);
   };
 
