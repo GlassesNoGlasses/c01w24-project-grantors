@@ -10,16 +10,40 @@ import {Grant} from '../../interfaces/Grant'
 
 const GrantStatsPage = ({}: GrantStatsPageProps) => {
     const { user } = useUserContext();
-    return user?.isAdmin ? <AdminDisplayStats /> : <DisplayUserStats />;
+    return user?.isAdmin ? <DisplayGrantorStats /> : <DisplayUserStats />;
 };
 
 interface DisplayStatsProps {
     optionalUser? : User
 }
 
-const AdminDisplayStats = () => {
+const DisplayGrantorStats = ({optionalUser} : DisplayStatsProps) => {
+    const {user} = useUserContext();
+    const organization = user?.organization || optionalUser?.organization;
+    const [grants, setGrants] = useState<Grant[]>([]);
+
+    useEffect(() => {
+        if (user || optionalUser) {
+            if (organization)
+            {
+                GrantsController.fetchOrgGrants(organization).then((grants: Grant[] | undefined) => {
+                    if (grants) {
+                        setGrants(grants);
+                    }
+                });
+            }
+            
+        }
+    }, [user]);
+
+
     return(
-        <div>
+        <div className='overflow-auto py-10 px-20 h-[90vh]'>
+            <div className=" flex flex-col items-center bg-white pt-4 rounded-xl border-4 border-primary shadow-2xl shadow-black justify-around"> 
+                <div className="flex items-center">
+                    <h2 className="m-10 ml-20 text-center text-3xl">Total Active Grants: {grants.length}</h2>
+                </div>
+            </div>
         </div>
     )
 }
@@ -153,8 +177,6 @@ const countApplicationsSubmitted = (applications: Application[]) => applications
 
 const countApplicationsInProgress = (applications: Application[]) => applications.filter((application) => application.status === ApplicationStatus.inProgress).length;
 
-const countApplicationsResolved = (applications: Application[]) => applications.filter((application) => application.status === ApplicationStatus.resolved).length;
-
 const countApplicationsApproved = (applications: Application[]) => applications.filter((application) => application.status === ApplicationStatus.approved).length;
 
 const countApplicationsRejected = (applications: Application[]) =>  applications.filter((application) => application.status === ApplicationStatus.rejected).length;
@@ -174,4 +196,4 @@ const countTotalAppliedAmount = (grants: Grant[]) => grants.reduce((n, {maxAmoun
 
 const countTotalAwardedAmount = (applications: Application[]) => applications.filter((application) => application.status === ApplicationStatus.approved).reduce((n, {awarded}) => n + awarded, 0);
 
-export {GrantStatsPage, DisplayUserStats};
+export {GrantStatsPage, DisplayUserStats, DisplayGrantorStats};

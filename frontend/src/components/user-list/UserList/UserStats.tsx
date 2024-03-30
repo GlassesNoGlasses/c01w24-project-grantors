@@ -2,7 +2,7 @@ import { User } from '../../../interfaces/User'
 import React, { useEffect, useState } from 'react'
 import { useParams } from 'react-router'
 import UserController from '../../../controllers/UserController'
-import GranteeStats from '../GranteeStats'
+import {GranteeStats, GrantorStats} from '../GranteeStats'
 
 const UserStats = () => {
 
@@ -24,7 +24,7 @@ const UserStats = () => {
     if (!account) return <div> account not found</div>
 
     return (
-        account.isAdmin ? <div>admin stats</div> : <GranteeStats account={account}/> 
+        account.isAdmin ? <GrantorStats account={account}/> : <GranteeStats account={account}/> 
      )
 }
 
