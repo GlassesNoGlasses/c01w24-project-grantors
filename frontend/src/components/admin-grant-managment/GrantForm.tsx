@@ -94,7 +94,7 @@ const GrantForm: React.FC<GrantFormProps> = ({ type }) => {
         description: '',
         dueDate: new Date(),
         completed: false,
-        evidence: ''
+        evidence: {text:'', files:[]}
     });
 
     const questionTypes = [ GrantQuestionType.TEXT,
@@ -162,11 +162,11 @@ const GrantForm: React.FC<GrantFormProps> = ({ type }) => {
         const max = Math.max(0, ...grant.milestones.map(m => Number(m.id)));
 
         const addMilestone = (prev: GrantMilestone[], newMilestone: GrantMilestone): GrantMilestone[] => {
-            return [...prev, {id: String(max + 1), title: newMilestone.title, description: newMilestone.description, dueDate: newMilestone.dueDate, completed: false, evidence: ''}]
+            return [...prev, {id: String(max + 1), title: newMilestone.title, description: newMilestone.description, dueDate: newMilestone.dueDate, completed: false, evidence: {text:'', files:[]}}]
         };
 
         setGrant({ ...grant, milestones: addMilestone(grant.milestones, milestone)});
-        setMilestone({id: '0', title: '', description: '', dueDate: new Date(), completed: false, evidence: ''});
+        setMilestone({id: '0', title: '', description: '', dueDate: new Date(), completed: false, evidence: {text:'', files:[]}});
     }
 
     const handleRemoveMilestone = (id: string) => {
