@@ -306,7 +306,7 @@ Alex:
 Styled messaging system and enabled viewing grantee stats as admin
 
 Francis:
-
+Messaging System now has feedback.
 
 Ethan:
 Finished milestone system
