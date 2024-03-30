@@ -1,18 +1,18 @@
 import { useEffect, useState } from "react";
-import { SearchFilterProps } from "./SearchFilerProps";
+import { SearchFilterProps } from "./SearchFilterProps";
 
-function SearchFilter({label, onChange}: SearchFilterProps ) {
+function SearchFilter({label, setFilter, className}: SearchFilterProps ) {
     const [ search, setSearch ] = useState<string>("");
 
     useEffect(() => {
-        onChange(search);
+        setFilter(search)
     }, [search]);
 
     return (
-        <div className="flex flex-col gap-1">
-            <p className="text-base">{label}</p>
-            <input type="text" className="border border-black rounded-lg text-sm p-1 px-2"
-                value={search} onChange={(event) => setSearch(event.target.value)} />
+        <div className={`flex flex-col gap-1t ${className}`}>
+            <label id={`${label.split(' ')[0]}-search-filter`} className="text-base">{label}</label>
+            <input type="text" className="border border-black rounded-lg text-sm p-1 px-2 text-black"
+                value={search} onChange={(event) => setSearch(event.target.value)} aria-labelledby={`${label.split(' ')[0]}-search-filter `}/>
         </div>
     );
 };

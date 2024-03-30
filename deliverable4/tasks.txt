@@ -1,0 +1,52 @@
+Neil:
+    Updated grantor and grantee dashboards to view the home page.
+    Created and designed the file system uploads and downloads.
+    Developed the messaging system between grantors and grantees.
+    Fixed application fetching bug.
+
+Juno:
+    Created grantor statistics page with routing
+    Fetched information related to grantor’s applications, status, and integrated into Google Charts library
+    Finished grantee statistics page with routing
+    Fetched information related to grantor’s organisation’s active applications, amount released and other stats
+    Modified controllers and integrated the ability to view grantor statistics as a superAdmin
+
+Sean:
+    Save & Resume Application
+    Breadcrumbs
+    QA (w/ focus on frontend)
+    Record video for MagnifyAccess
+
+Zack:
+    Refactored frontend
+    Refactored backend
+    More grant question types
+    Application review system
+    User application list filter
+    Admin application list filter
+    Screen reader compatibility
+    Tab control compatibility
+    Fixed favouriting bug
+    Applicant names on admin application list
+
+Alex:
+    Refactored the entire UI in terms of styling and layout for the entire web app
+    Created frontend and backend for settings page and enabled graphical accessibility options and created keyboard shortcuts
+    Created frontend and backend for system admin, including:
+        Signing up and logging in as new system admin
+        Fetching and viewing all users
+        Editing account information such as username, email, first and last name, and changing password
+        Viewing statistics of Grantors and Grantees
+        Deleting accounts 
+    Added filter for viewing users
+
+Ethan:
+    Add cookie system to restore user data upon refreshes (or leaving the site and coming back)
+    Refactor login/signup system
+    Make the signup success modal be able to log you in directly after account creation
+    Add 404 page, a default page to show when an invalid page path is accessed
+    Add milestone system
+        Add milestones upon grant creation
+        View milestones in grant previews
+        View incomplete and complete milestones as a grantee and submit evidence of milestone completion
+        View milestones as grantor and review grantee evidence, marking milestones as completed when satisfied with the evidence

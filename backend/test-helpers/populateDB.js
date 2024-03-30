@@ -72,7 +72,7 @@ const PopulateGrants = () => {
 const PopulateApplications = () => {
     try {
         applications.forEach(async (app) => {
-            const resp = await fetch(`${SERVER_URL}/submitApplication`, {
+            const resp = await fetch(`${SERVER_URL}/application`, {
                 method: "POST",
                 headers: {
                   "Content-Type": "application/json",

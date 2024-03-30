@@ -1,14 +1,16 @@
-import { GrantQuestion } from "./Grant";
+import { GrantMilestone, GrantQuestion } from "./Grant";
 
 export enum ApplicationStatus {
     submitted = "Submitted",
     inProgress = "In Progress",
     resolved = "Resolved",
+    approved = "Approved",
+    rejected = "Rejected",
 }
 
 export interface Application {
-    id: number,
-    userID: number,
+    id: string,
+    applicantID: string,
     grantID: string,
     grantTitle: string, 
     grantCategory: string,
@@ -17,4 +19,5 @@ export interface Application {
     status: ApplicationStatus,
     awarded: number,
     responses: GrantQuestion[];
+    milestones: GrantMilestone[];
 }

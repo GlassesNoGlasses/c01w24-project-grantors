@@ -6,3 +6,11 @@ data
 
 # misc
 .DS_Store
+
+# admin/client files
+uploads/admin/*
+uploads/client/*
+
+# keep admin and client directory
+!uploads/admin/.gitkeep 
+!uploads/client/.gitkeep 
