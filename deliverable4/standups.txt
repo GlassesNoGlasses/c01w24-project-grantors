@@ -1,0 +1,321 @@
+Monday March 18th
+
+Neil:
+Updated grantor and grantee dashboard to be able to view home pages.
+
+Juno:
+Attempt to create donut graph component from scratch
+
+Alex:
+Refactored colour scheme and background
+
+Francis:
+Figuring out why the calendar kept on bugging.
+
+Ethan:
+Research react-cookie npm package
+
+Sean:
+Research how to optional params for rerouting
+
+Zack: 
+Finished refactoring frontend
+Started refactoring backend
+
+
+Tuesday March 19th
+
+Neil:
+Researched on NodeJS file system.
+
+Juno:
+Attempted to create donut graph component from scratch, looked really bad so i scrapped it and tried something else. Also tailwind stylings don’t really support dynamic colours/values for the graph
+
+Alex:
+Refactored design grant creation form
+
+Francis:
+Fixed Calendar bug
+
+Ethan:
+Implement cookie saving user token so users can stay signed in after refresh
+Add backend route to get user information by the access token
+
+Sean:
+Working on reworking where `Back` buttons reroute User to. (Somewhere different than just the hompage)
+
+Zack: 
+Fixed bug where favouriting a grant was not working
+More refactoring
+
+
+Wednesday March 20th
+
+Neil:
+Practiced with multer and dropzone files for file system.
+
+Juno:
+Attempt to create bar graph from scratch, also looked pretty bad so I decided on using a library that works with base CSS instead
+
+Alex: 
+Refactored UI for admin dashboard and application form
+
+Francis:
+Created a view page for approved applications, when status is approved, and modified user table to show the status of the application.
+
+Ethan:
+Research react suspense boundaries
+
+Sean:
+Changed back buttons to send User back to Applications page, as opposed to Home page
+
+Zack: 
+Created application review page, interface, and backend endpoint
+Created applicant interface
+Enhanced table component
+
+
+Thursday March 21st
+
+Neil:
+Began work on dropzone files frontend components.
+
+Juno:
+Researching graph libraries
+
+Alex:
+Refactored UI for grant browse  and client dashboard
+
+Francis:
+Created Submitted application view page and fixed bugs with saving application such that only in progress applications can be saved.
+
+Ethan:
+QA revamped UI
+
+Sean:
+Saving an Application labels an Application as `inProgress`. (Resuming WIP)
+
+Zack: 
+Fixed react warning in table components
+Created UserController
+Applicant name is now shown in the admin application list
+
+
+Friday March 22nd
+
+Neil:
+Finished dropzone frontend.
+Started multer upload files backend.
+
+Juno:
+Decided on using Google Charts api for simplicity
+
+Alex:
+Refactored UI for admin view grants
+
+Francis:
+Merging the two tickets
+
+Ethan:
+More UI QA
+
+Sean:
+Working further on Saving&Resuming Application…
+
+Zack: 
+Started working on filter components
+Created search filter component
+
+
+Saturday March 23rd
+
+Neil:
+Continued with multer file upload backend.
+
+Juno:
+Refactored code to format data properly to prepare for use in Google Charts
+
+Alex:
+Finished refactoring entire UI
+
+Francis:
+QA, and realised that admin can apply to grants, fixed that and other bugs over the application.
+
+Ethan:
+Plan milestone system
+
+Sean:
+Got optional param for Application working. (Now correctly reroutes User to their inProgress application). Planning to work on filling the form w/ previously entered data tomorrow. (i.e., the “Resume” part of the task)
+
+Zack: 
+Added filter to client application list
+Created date range filter component
+Created dropdown filter component
+
+
+Sunday March 24th
+
+Neil:
+Finished uploading files.
+Researched downloading files.
+
+Juno:
+Started development on user statistics page, created 3 graphs with mock data, and styled.
+
+Alex:
+Frontend and backend for settings for all users
+
+Francis:
+Created a funding page where once a grant is approved an amount must be provided.
+
+Ethan:
+Create 404 page
+
+Sean:
+Save & Resume fully working!
+
+Zack: 
+Readded filter to client application list
+Enhanced dropdown filter
+Added filter to admin application list
+Added status to admin application list
+Fixed approving / denying applications not updating their status
+Enhanced review page to show new options after reviewing
+
+
+Monday March 25th
+
+Neil:
+Finished downloading files ability.
+
+Juno:
+Finished user statistics page, moving on to grantor statistics page
+
+Alex:
+Finished accessibility and settings
+
+Francis:
+Continued working on the funding page
+
+Ethan:
+Work on milestone system
+
+Sean:
+Testing Save & Resume for bugs (Frontend Testing)
+
+Zack: 
+Factored out dropdown component from filter
+
+
+Tuesday March 26th
+
+Neil:
+Started messaging system between grantors and grantees.
+
+Juno:
+Incorporated feedback into user statistics page (changing grants applied/grants awarded section to just be values, make the values more accurate)
+
+Alex:
+Started building page system admin
+
+Francis:
+Found problems with merge requests and other existing issues and fixed them. Also did error handling for grant funding where grantors can only choose a number between the min grant amount and the max.
+
+Ethan:
+Review, QA, and merge pull requests
+Start on milestone system, adding milestones to grants during creation
+
+Sean:
+Researching how to integrate loading screens into the website
+
+Zack: 
+Refactored grant form
+
+
+Wednesday March 27th
+
+Neil:
+Fixed bugs and worked on messaging system.
+
+Juno:
+Caught up on current system for implementing milestones
+Started work on grantor statistics
+
+Alex:
+Frontend and backend for displaying and deleting users
+
+Francis:
+Started creating a modal to provide feedback to users, admins and grantors.
+
+Ethan:
+Continued milestone system, user milestone submission and admin milestone approval
+
+Sean:
+Fiddling w/ the CSS of the breadcrumbs
+
+Zack: 
+Added new question types for grants
+Added new question types to applications
+Enhanced dropdown
+Added multi option answers to review page
+Added filter back to client application list
+Started adding aria labels to all buttons and forms
+
+
+Thursday March 28th
+
+Neil:
+Finished frontend and started backend for messages.
+
+Juno:
+Working on grantor statistics
+
+Alex:
+frontend and backend for system admin editing users
+
+Francis:
+Continued working on the feedback for users
+
+Ethan:
+Continued milestone system
+QA for messaging system
+
+Sean:
+Spoke w/ Alex about potential re-designs for breadcrumbs
+
+Zack: 
+Added file grant question type to create grant and application forms
+Added button to delete grant question options
+Added feedback for adding question errors
+Added required option for grant questions
+Added ability to download files from review page
+Continued adding aria labels to buttons and forms
+Fixed tabbing on some elements
+
+
+Friday March 29th
+
+Neil:
+Finished messaging systems.
+
+Juno:
+Styled grantor statistics
+Changed controller and superAdmin view to be able to view grantor statistics correctly
+
+Alex:
+Styled messaging system and enabled viewing grantee stats as admin
+
+Francis:
+
+
+Ethan:
+Finished milestone system
+General site QA
+
+Sean:
+Finalized breadcrumb design (w/ Alex)
+
+Zack: 
+Finished adding aria-labels to all buttons and forms
+Made sure entire site is traversable using tab controls
+Made sure all headings were properly labelled in order of importance
