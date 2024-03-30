@@ -120,7 +120,6 @@ const DisplayUserStats = ({optionalUser} : DisplayStatsProps) => {
             <div className=" flex flex-col items-center bg-white pt-4 rounded-xl border-4 border-primary shadow-2xl shadow-black justify-around"> 
                 <h1 className="text-4xl ">Grant Statistics</h1>
                 <div className="flex items-center mt-10">
-                    <div className="m-10 text-center text-3xl">Total Grant Funding Applied (Max Estimate): ${countTotalAppliedAmount(grants)}</div>
                     <div className="m-10 text-center text-3xl">Total Grant Funding Received: ${grantsAwarded}</div>
                 </div>
                 
