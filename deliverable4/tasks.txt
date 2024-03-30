@@ -50,3 +50,11 @@ Ethan:
         View milestones in grant previews
         View incomplete and complete milestones as a grantee and submit evidence of milestone completion
         View milestones as grantor and review grantee evidence, marking milestones as completed when satisfied with the evidence
+
+Francis:
+    Given a user, the page loads a saved grant list view where you can still remove saved grants or just browse them.
+    Created a view for submitted applications, in progress applications and approved applications.
+    Frontend and backend of the funding page where a grantor gives a grantee the grant amount.
+    Users can view status of application in user table
+    Created a modal for many different kinds of situations when a task is successfully complete.
+
