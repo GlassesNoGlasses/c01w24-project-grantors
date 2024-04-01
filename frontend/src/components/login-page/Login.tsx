@@ -103,7 +103,8 @@ const Login: React.FC<LoginProps> = () => {
 					</div>
 					<div className="form-footer-container" style={{ marginTop: '5%' }}>
 						<Link to="/signup" className="underline" style={{ textDecoration: 'underline' }}>Sign Up</Link>
-						<a role="button" href="#" className="forgot-password text-sm text-primary hover:underline sm:text-base " style={{ display: 'flex', float: 'right' }}>
+						<a role="button" href="https://www.magnifyaccess.ai/contact-us" target='_blank'
+						className="forgot-password text-sm text-primary hover:underline sm:text-base " style={{ display: 'flex', float: 'right' }}>
 							Forgot password?
 						</a>
 					</div>
