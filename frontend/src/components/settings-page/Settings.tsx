@@ -7,10 +7,6 @@ import firefox from '../../images/firefox.png'
 import edge from '../../images/edge.png'
 import safari from '../../images/safari.png'
 
-
-const SERVER_PORT = 8000
-
-
 const Settings = () => {
     
     const { user, setUser } = useUserContext()
@@ -163,7 +159,7 @@ const Settings = () => {
                                         - <b>Home Page</b>: <b className='underline'>ALT + H</b> &nbsp;(<b className='underline'>COMMAND + H</b> for <b>Mac</b>)
                                     </li>
                                     {
-                                        user?.isAdmin ? <></> :
+                                        user?.isAdmin || user?.isSysAdmin ? <></> :
                                         <div>
                                             <li>
                                                 - <b>View Grants</b>: <b className='underline'>ALT + G</b> &nbsp;(<b className='underline'>COMMAND + G</b> for <b>Mac</b>)
